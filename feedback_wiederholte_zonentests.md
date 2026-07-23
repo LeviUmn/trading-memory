@@ -1,0 +1,18 @@
+---
+name: feedback-wiederholte-zonentests
+description: Mehrfache, schwächer werdende Tests derselben Widerstandszone (auch die, die den eigenen Entry ausgelöst hat) sofort als Erschöpfungssignal flaggen, nicht erst auf MACD-H-Verfall warten
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: session-2026-07-08
+---
+
+Bei Trade #14 (08.07.2026) wurde die Zone 29.150-29.183 dreimal in Folge angelaufen, mit jedes Mal niedrigerem Hoch: 29.175 (Kerze vor Entry, löste den Pullback zur EMA/Hammer-Entry aus) → 29.170 (Entry-Kerze selbst) → 29.163 (direkt danach). Erst ~30-40 Minuten später, als MACD-H über viele Ticks langsam auf negativ fiel und RSI unter 50 rutschte, wurde die Schwäche klar benannt.
+
+**Why:** User-Feedback im Nachgang: Die dritte, niedrigste Spitze direkt nach dem Entry war im Rückblick schon ein klares Erschöpfungsmuster (jeder Versuch schwächer als der vorherige, an derselben Zone, die den Entry selbst ausgelöst hatte) — das hätte sofort als Warnsignal/Short-Beobachtung gereicht, statt auf die langsamere Indikator-Verschlechterung zu warten. Der Verlust auf den Long (-60,24€) wäre bei früherem Erkennen kleiner ausgefallen oder der Umstieg auf Short früher möglich gewesen (unabhängig vom separaten Broker-Ausfall).
+
+**How to apply:** Bei jedem Test einer Zone, die bereits vorher eine Ablehnung/einen Pullback verursacht hat (egal ob vor oder nach dem eigenen Entry), aktiv die Höhe jedes neuen Hochs gegen die vorherigen vergleichen. Zeigen zwei oder mehr aufeinanderfolgende Tests derselben Zone **fallende Hochs**, das sofort und proaktiv als Erschöpfungssignal benennen ("Zone wird schwächer angelaufen, X→Y→Z, Vorsicht") — nicht erst wenn RSI/MACD-H das über viele Ticks langsam bestätigen. Gilt besonders, wenn die Zone identisch mit der ist, die den eigenen Entry ausgelöst hat (siehe [[feedback_chartanalyse]] Punkt 9d) — dort ist ein erneuter Fehlschlag ein direkter Rückschlag auf die eigene These, nicht nur ein generisches Chartmuster.
+
+**Ergänzung 08.07.2026 (User-Präzisierung nach Rückblick):** Das reine Benennen des Erschöpfungsmusters reicht nicht — es muss eine konkrete Handlungs-Konsequenz daraus folgen. Beim Erkennen der fallenden Hochs hätte die Schlussfolgerung explizit sein müssen: "Das war doch nicht das richtige Signal für den Long" → aktiv prüfen, ob die Position vorzeitig geschlossen werden sollte, statt sie einfach weiterlaufen zu lassen und nur zu beobachten. Zusätzlich hätte an diesem Punkt die Chop-Erkennung (siehe [[feedback_chartanalyse]] Punkt 7) gegriffen: mehrfaches Scheitern an derselben Zone mit fallenden Hochs ist ein Chop-artiges Muster, aus dem sich eine Tendenz-Umkehr (hier: Richtung Short) ableiten lässt. **How to apply (präzisiert):** Sobald 2+ fallende Hochs an derselben Zone erkannt sind, nicht nur warnen, sondern explizit zwei Fragen beantworten: (1) Ist die ursprüngliche Entry-These noch gültig, oder war das Signal falsch/verfrüht? (2) Deutet das Muster (Chop + fallende Hochs) auf eine Tendenz-Umkehr hin, die eine Short-Beobachtung rechtfertigt? Beide Fragen aktiv und laut beantworten, nicht nur die reine Beobachtung mitteilen.
+
+**Kein Widerspruch zu bestehenden Regeln, kein TP1-Zwang (ergänzt 08.07.2026, User-Klarstellung):** Diese Regel ist keine neue, separate Logik, sondern eine konkrete Ausprägung von [[feedback_chartanalyse]] Punkt 9d1/4a (Umkehrkerze + Chartmuster = aktionables Exit-Signal, unabhängig von TP/SL). Der Trade darf und soll bei erkanntem Erschöpfungsmuster abgebrochen werden, auch wenn TP1 noch nicht erreicht wurde — das Warten auf TP1 ist keine Voraussetzung dafür, eine nicht mehr funktionierende These zu erkennen und die Position zu verlassen.

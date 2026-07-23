@@ -1,0 +1,40 @@
+---
+name: feedback-pane-sync-bug
+description: "REAKTIVIERT 21.07.2026 (vorher fälschlich GELÖST 16.07.) — pane_focus-Fix reduziert Häufigkeit, verhindert aber nicht zuverlässig, dass Fokus/Timeframe in langen Sessions unbemerkt zurückspringen (4x Pane-Drift + 1x Timeframe-Drift in einer ~2h-Session). Werte aktiv auf Plausibilität für erwartetes Instrument/Timeframe prüfen, nicht blind vertrauen."
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: session-2026-07-07
+  modified: 2026-07-21T15:50:44.134Z
+---
+
+Beim 2-Pane-Setup (heute NAS100 + QQQ, damals NAS100 + NQ1!, siehe [[feedback_chart_layout]]) kam es am 07.07.2026 wiederholt vor, dass `pane_focus` Erfolg meldet (`focused_index` korrekt), aber der nächste `data_get_study_values`- oder `quote_get`-Call trotzdem noch Daten der vorher aktiven Pane liefert. Insgesamt 6+ Vorfälle in 5 Sessions.
+
+**Why:** Führt zu falsch zugeordneten Werten, wenn man sich blind auf `pane_focus` verlässt — z.B. NAS100-Indikatoren (BB/EMA/RSI/MACD) werden fälschlich als QQQ-Werte (EMA50/VWAP/Volume) interpretiert oder umgekehrt.
+
+## Struktureller Code-Fix (16.07.2026, Fable — Fix 5 aus [[project_fable_tiefendiagnose_2026-07-15]])
+
+**Ursache im Code gefunden:** `pane_focus` (in `C:\Users\umnus\tradingview-mcp\src\core\pane.js`, Funktion `focus()`) hat nur `_mainDiv.click()` ausgeführt und sofort Erfolg gemeldet — ohne zu prüfen, ob `window.TradingViewApi._activeChartWidgetWV` (die Quelle, aus der ALLE Daten-Tools lesen) tatsächlich umgeschaltet hat.
+
+**Fix implementiert:** `focus()` enthält jetzt eine eingebaute Verifikations-/Retry-Schleife: nach dem Klick wird bis zu ~1s (10×100ms, mit Re-Klick alle 3 Versuche) gepollt, ob das aktive Chart-Widget wirklich die Ziel-Pane ist. Ergebnis-Verhalten:
+- Wechsel verifiziert → `success: true, verified: true` + `symbol` der Pane im Response (Symbol im Response IMMER gegen das erwartete Instrument gegenchecken!)
+- Wechsel nachweislich NICHT erfolgt → **Fehler statt stillem Falsch-Erfolg** ("active pane did not switch")
+- Aktives Widget nicht introspektierbar → altes Verhalten, aber mit `verified: false` + Warnung geflaggt
+
+**Status: LIVE VERIFIZIERT (16.07.2026).** Erster Test direkt nach dem MCP-Server-Neustart (`/mcp` reconnect + `tv_launch` mit `kill_existing: false` zum Wiederanbinden an die laufende Instanz): `pane_focus(1)` → `{verified: true, symbol: "BATS:QQQ"}`, `pane_focus(0)` → `{verified: true, symbol: "FOREXCOM:NAS100"}` — beide Richtungen korrekt, kein einziger Fehlschlag. Zusätzlich unabhängig per `pane_list` gegengecheckt (`active_index` stimmte beide Male).
+
+**Workaround nicht mehr nötig — neue Praxis:** `verified: true` + passendes `symbol` im `pane_focus`-Response reicht jetzt als Bestätigung, kein zusätzlicher `chart_get_state`-Aufruf mehr zur reinen Pane-Verifikation nötig (spart einen Tool-Call pro Wechsel). Trotzdem: taucht `verified: false` oder eine Warnung auf, oder passt das gemeldete `symbol` nicht zum erwarteten Instrument, dann wie bisher zur Sicherheit `pane_list`/`chart_get_state` gegenprüfen, bevor die Daten verwendet werden — der Fix ersetzt gesunden Menschenverstand nicht, nur den alten blinden Doppel-Klick-Workaround.
+
+**Zweiter Nebenfund (16.07.2026, zweite Session):** Der aktive Pane-Fokus kann auch OHNE erkennbaren `pane_focus`-Fehlaufruf von selbst zurückspringen (live beobachtet: Fokus lag verifiziert auf QQQ/Pane 1, nach einem dazwischenliegenden `capture_screenshot`-Aufruf zeigte `pane_list` wieder `active_index: 0`/NAS100). Konsequenz: `verified: true` aus einem `pane_focus`-Call ist nur eine Momentaufnahme, keine Garantie für nachfolgende Calls, wenn dazwischen andere Tool-Aufrufe (auch scheinbar harmlose wie Screenshots) liegen. **How to apply:** Bei jeder Pane-spezifischen Aktion (Indikator hinzufügen/entfernen, Werte lesen) `pane_focus` unmittelbar davor erneut aufrufen, nicht auf einen früheren Fokus-Call im selben Loop-Durchlauf verlassen — besonders wenn dazwischen ein Screenshot oder eine längere Auswertung lag.
+
+**Wichtiger Nebenfund beim Reconnect:** Nach `/mcp reconnect` allein war die CDP-Verbindung zunächst tot (`tv_health_check` schlug fehl) — ein zusätzlicher `tv_launch`-Aufruf mit `kill_existing: false` war nötig, um den neu gestarteten MCP-Server wieder an die bereits laufende TradingView-Instanz anzubinden, ohne sie neu zu starten. Für künftige MCP-Neustarts während einer laufenden Session: `/mcp reconnect` lädt den Code neu, aber `tv_launch(kill_existing:false)` ist danach ein notwendiger zweiter Schritt, kein optionaler.
+
+**Abschluss-Verifikation im echten 1-Min-Loop (16.07.2026, 14:35-14:40 UTC):** Zusätzlich zum isolierten Test oben lief der Fix über einen kompletten `CronCreate`-Loop mit 2 vollen Voll-Checks (je NAS100 15min/60min/5min + QQQ 15min/60min/5min, insgesamt 6 Pane-Wechsel). Ergebnis: 6/6 `pane_focus`-Calls mit `verified: true` und korrektem `symbol`, keine einzige Fehlmeldung. Fix gilt damit als vollständig unter Live-Bedingungen bestätigt, nicht nur punktuell getestet.
+
+**Neuer Vorfall 20.07.2026 — anderer Mechanismus, gleiche Fehlerklasse: `chart_set_symbol` ohne vorherigen `pane_focus` trifft die zuletzt aktive Pane, nicht zwingend Pane 0.** Für einen Ad-hoc-Check (WTI-Preisverlauf, Ceasefire-Gerücht verifizieren) wurde `chart_set_symbol(NYMEX:CL1!)` und danach `chart_set_symbol(FOREXCOM:NAS100)` aufgerufen, ohne vorher explizit `pane_focus(0)` zu setzen — der Fokus lag zu dem Zeitpunkt (nach einem dazwischenliegenden Screenshot, siehe Nebenfund oben) unbemerkt auf Pane 1. Ergebnis: Pane 1 (sollte `BATS:QQQ` sein) wurde stillschweigend auf `FOREXCOM:NAS100` überschrieben, während Pane 0 unangetastet blieb. Fiel erst beim nächsten Voll-Check auf, weil `chart_get_state`/`data_get_study_values` auf der (falsch fokussierten) Pane 1 nur 1-3 Indikatoren statt der erwarteten 5 zeigten. Wurde per `pane_focus(1)` + `chart_set_symbol(BATS:QQQ)` repariert.
+
+**How to apply (ergänzt 20.07.2026):** Vor JEDEM `chart_set_symbol`-Call, der nicht offensichtlich schon auf der richtigen Pane steht, zuerst `pane_focus(<ziel-index>)` aufrufen und `verified`+`symbol` prüfen — auch für kurze Ad-hoc-Checks außerhalb des normalen NAS100/QQQ-Setups. Nach jedem Ad-hoc-Symbol-Wechsel (z.B. Öl/Gold/Rohstoff-Check zwischendurch) vor der Rückkehr zum normalen Loop einmal `pane_list` gegenchecken, dass BEIDE Panes noch die erwarteten Symbole zeigen (`FOREXCOM:NAS100` / `BATS:QQQ`), nicht nur die eine, die man gerade zurückgesetzt hat.
+
+**Reaktivierung 21.07.2026 — der "gelöst"-Status war zu optimistisch.** Im langen 1-Min-Loop (13:35-15:48 UTC, ~2h) sprang der Fokus mind. 4x unerwartet von NAS100 (Pane 0) auf QQQ (Pane 1) zurück, obwohl zwischendurch normale `pane_focus(0)`-Calls liefen — genau der bereits dokumentierte Nebenfund, aber deutlich häufiger als beim ursprünglichen Test (16.07., 6/6 korrekt). Zusätzlich neu beobachtet: **auch der Chart-Timeframe** sprang einmal unerwartet von 5min auf 15min zurück (14:44 UTC), ohne dass ein erkennbarer `chart_set_timeframe`-Fehlaufruf vorlag — offenbar derselbe Klasse von Zustands-Drift, nicht nur auf Pane-Fokus beschränkt. Jedes Mal fiel es auf, weil die zurückgelieferten Werte (QQQ-Kennzahlen wie EMA/VWAP statt NAS100 RSI/MACD/BB, bzw. deutlich andere Kerzenbreiten) offensichtlich nicht zum erwarteten Instrument/Zeitrahmen passten.
+
+**How to apply (verschärft 21.07.2026):** Status "gelöst" zurückgenommen — der Fix reduziert die Häufigkeit, verhindert Drift aber nicht zuverlässig bei langen Sessions. Bei JEDER Dateninterpretation aktiv gegenchecken, ob `data_get_study_values`/`data_get_ohlcv` plausible Werte für das erwartete Instrument UND den erwarteten Timeframe liefern (z.B. NAS100-Kerzenbreiten ~200-500 Punkte Tagesrange vs. QQQ ~10-15 Punkte; 5min-Bar-Abstände 300s vs. 15min 900s) — nicht blind vertrauen, dass der letzte `pane_focus`/`chart_set_timeframe`-Call noch gilt, besonders nach mehreren Minuten und vielen Tool-Calls dazwischen.
