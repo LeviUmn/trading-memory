@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: fable-review-2026-07-04
-  modified: 2026-07-23T09:56:10.057Z
+  modified: 2026-07-24T08:42:30.234Z
 ---
 
 Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je ein Take-Profit erreicht**. Jeder Gewinn war ein vorzeitiger manueller Exit (Divergenz-Erkennung, 3h-Regel, Session-Ende, Quarter-End), jeder Verlust lief bis zum SL (bzw. Breakeven-Stop). Realisiert: Ø-Gewinn ~9,70€ vs. Ø-Verlust ~12,50€ → **realisiertes RR ≈ 0,78:1**, obwohl die Regel in [[project_risikomanagement]] mindestens 1:2 vorschreibt.
@@ -27,3 +27,13 @@ Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je e
 **Fortschreibung 23.07.2026 (Fable-Audit, nach Trade #24 — nachgeholt, war seit Trade #17 überfällig):** Über alle 24 Trades (Basis: [[trades/trade_log]], Ø-% pro Win-/Loss-Trade, BE-Trades #2/#11 ausgeklammert wie bisher): **Ø-Gewinn ≈+1,36%/Win-Trade** (14 Wins, Summe 19,00%), **Ø-Verlust ≈-1,10%/Loss-Trade** (8 Losses, Summe -8,815%) → **realisiertes RR ≈1,23:1** — verbessert ggü. den 1,09:1 vom 13.07.2026 (nach Trade #17), aber weiterhin klar unter der 1:2-Pflicht aus Punkt 8b. Sowohl Ø-Gewinn (1,49%→1,36%) als auch Ø-Verlust (1,37%→1,10%) sind seit dem 13.07. leicht gesunken — die RR-Verbesserung kommt also überwiegend aus kleineren Verlusten (u.a. SL-Nachzug-Disziplin, proaktive Teilexits), nicht aus größeren Gewinnen. Zwei neue Verlust-Trades seit dem letzten Stand (#21 -1,04%, #24 -0,665%) sind bereits in dieser Zahl enthalten.
 
 **Einordnung:** 1,23:1 ist ein echter Fortschritt, bleibt aber weit von der eigenen Rechnung entfernt (2:1 RR bei gehaltener Win-Rate würde den Ø-Ertrag/Trade fast verdreifachen, siehe oben). Diese Berechnung war laut eigener "How to apply"-Pflicht bereits ab dem nächsten Phasen-Review fällig und wurde erst mit 7 Trades Verspätung nachgeholt (siehe Fable-Audit 23.07.2026) — künftig konsequenter bei jedem Review mitführen, nicht erst auf Nachfrage.
+
+**Fortschreibung 23.07.2026 (nach Trade #25, Phase-2-Abschluss):** Trade #25 (+1,96%, Win, TP1 real erreicht + diszipliniertes SL-Trailing statt TP2-Warten) hebt den Ø-Gewinn auf **≈1,40%/Win-Trade** (15 Wins, Summe ≈20,96%), Ø-Verlust unverändert ≈-1,10%/Loss-Trade (8 Losses) → **realisiertes RR jetzt ≈1,27:1**. Für das für morgen (24.07.2026) geplante Phase-2-Abschluss-Review als aktuellster Stand verwenden.
+
+**Wichtiger neuer Befund 24.07.2026 (Fable Phase-2-Abschluss-Review, siehe [[project_phase2_abschluss_review_2026-07-24]]): die blendete Lifetime-Zahl verdeckt eine reale Verbesserung innerhalb von Phase 2.** Getrennt nach Phase gerechnet (nicht kumulativ):
+- **Phase 1 (isoliert, Trades #1-15): RR ≈1,18:1**
+- **Phase 2 (isoliert, Trades #16-25): RR ≈1,75:1** — Ø-Gewinn 1,15%/Win (7 Wins), Ø-Verlust nur 0,66%/Loss (3 Losses)
+
+Die RR-Verbesserung kommt in Phase 2 überwiegend aus deutlich kleineren, disziplinierter geführten Verlusten (0,66% Ø ggü. 1,365% Ø in Phase 1) — nicht aus größeren Gewinnen. Das ist das ermutigendste Einzelsignal aus dem Phase-2-Review, war aber in der bisherigen Blended-Zahl (1,27:1) unsichtbar.
+
+**How to apply (ergänzt 24.07.2026):** Ab Phase 3 (Trade #26) eine eigene, separat getrackte RR-Zahl NUR für Phase 3 führen, zusätzlich zur laufenden Lifetime-Zahl — damit künftige Reviews nicht wieder von einer trägen Blended-Zahl verzerrt werden, die reale Phasen-Fortschritte verdeckt.

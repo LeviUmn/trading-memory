@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-23T10:20:39.680Z
+  modified: 2026-07-27T18:06:40.606Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -76,6 +76,21 @@ Der 1H-Schritt (NAS100) UND der QQQ-Schritt (falls Gate offen) sind NICHT option
 Voll-Check ohne den 60-Min-Wechsel bzw. ohne den QQQ-Durchlauf gilt als NICHT durchgeführt
 und wird beim nächsten Fire nachgeholt und als Lücke gemeldet.
 Sonst (Minute % 5 != 0) → Quick-Tick (Punkt 3).
+```
+
+**Erweiterung 27.07.2026 (nach zwei Prozessfehlern — Format-Drift zur Tabelle + zweimaliger Tweet-Fetch-Ausfall, siehe Punkt 9 "Struktureller Anti-Drift-Fix"):** Direkt im selben Pflichtbaustein zusätzlich wörtlich mitgeben, nicht als separate Erinnerung an anderer Stelle:
+
+```
+Am Ende JEDES Voll-Checks zusätzlich zwingend:
+(1) Output-Vorlage aus [[feedback_vollcheck_format]] Zeile für Zeile kopieren und befüllen,
+    NIE aus dem Gedächtnis neu formulieren/als Tabelle umbauen. Letzte Zeile immer
+    "Format: Fließtext ✓".
+(2) x_last_fetch.json lesen, Minuten seit letztem Tweet-Fetch aus dem Zeitstempel berechnen
+    (NICHT mental mitzählen) → bei ≥10 Min Pflicht-Fetch + Pflicht-Ausgabezeile
+    "Tweet-Check: ..." (siehe Punkt 9) — IMMER ausgeben, auch bei "nichts Neues" oder
+    "noch nicht fällig", nie stillschweigend weglassen.
+Fehlt eine der beiden Zeilen im Output, gilt der Voll-Check als NICHT durchgeführt —
+exakt dieselbe Behandlung wie beim fehlenden 1H-/QQQ-Schritt oben.
 ```
 
 Diese Formulierung wurde am 15.07.2026 live erarbeitet (Cron-Job-Korrektur 16:26 UTC während Trade #19), am 16.07.2026 um den QQQ-Schritt erweitert (siehe Punkt 3a), und ist ab jetzt der Standard — nicht in jeder Session neu erfinden.
@@ -295,6 +310,22 @@ TP2: <NAS100-Kurs> (≈<Zert.-Preis>€) — Rest, mit laufenden Schutzsignalen
 
 **Offenlegungspflicht (neu, nicht verhandelbar):** Im Voll-Check-Output immer kurz kennzeichnen, was geprüft wurde und was bewusst ausgelassen wurde, z.B. "Voll-Check: Double-Top/Flag geprüft (kein Muster erkennbar), Fibonacci nicht berechnet (kein neuer Impuls)." Ein stillschweigendes Auslassen ohne diese Kennzeichnung gilt ab jetzt selbst als Regelbruch — unabhängig vom Ergebnis des Trades, analog zur bestehenden Regelbruch-Klassifizierung in [[trades/trade_log]].
 
+**Struktureller Anti-Drift-Fix nach zwei Prozessfehlern am 27.07.2026 (dritter Fable-Review, Tagesabschluss — siehe [[feedback_prozessfehler_27_07_fuer_fable]]):**
+
+Am 27.07.2026 liefen über 100 Ticks in einem einzigen langen 1-Min-Loop. Dabei sind zwei im Regelwerk längst stehende Pflichten wiederholt untergegangen — das Voll-Check-Ausgabeformat (Drift zur Tabelle statt Fließtext, siehe [[feedback_vollcheck_format]]) und der Minute%10-Tweet-Fetch (siehe unten, "How to apply" 13.07.2026), Letzterer musste der User zweimal (18:11 UND erneut 19:16 Uhr, nach dazwischenliegenden Voll-Checks) aktiv einfordern. **Root-Cause — beide Fehler teilen dieselbe Struktur, unabhängig vom jeweiligen Inhalt:**
+
+1. **Beide sind "stille" Prüfungen.** Der Output bei "nichts zu tun/nichts Neues" sah identisch aus wie der Output bei "gar nicht geprüft" — es gab keinen erzwungenen sichtbaren Beleg, dass die Prüfung überhaupt stattfand. Genau dieses Muster hat schon einmal denselben Fehlertyp verursacht (Punkt 2b, 1H-MTF-Vergessen bei Trade #18/#19) und wurde dort gelöst, indem der Schritt PFLICHT-sichtbar gemacht wurde ("gilt als NICHT durchgeführt, wenn er fehlt"). Für Format und Tweet-Fetch fehlte dieser erzwungene sichtbare Beleg bisher.
+2. **Beide verlassen sich auf reine Ausführungsdisziplin über eine sehr lange, repetitive Tick-Folge**, statt auf einen persistierten, prüfbaren Zustand. Die Minute%10-Regel musste bei jedem der 100+ Ticks neu korrekt mental nachvollzogen werden, mitten in einer langen Liste anderer Punkt-9-Teilschritte (MTF, QQQ, Chartmuster, Fibonacci, Regime-Gate, Offenlegung) — ein einziges Aussetzen reicht, damit die Lücke entsteht, und blieb dann unbemerkt bis zur nächsten Zufalls-Nachfrage des Users.
+3. Das erste Mal (18:11 Uhr) wurde die Lücke mit einem reinen "ab jetzt dran denken" geschlossen — genau das ist beim zweiten Mal (19:16 Uhr) trotzdem wieder passiert. Ein Versprechen ist kein struktureller Fix, solange die Ursache (still + rein gedächtnisbasiert über 100+ Ticks) unverändert bleibt.
+
+**Der Fix — wendet den bei Punkt 2b bereits bewährten Mechanismus auf beide Fehler an, statt ein neues Prinzip zu erfinden:**
+
+a) **Format wird Teil des Pflicht-Outputs selbst, nicht nur eine externe Stilregel.** Jeder Voll-Check-Output übernimmt ab jetzt die Vorlage aus [[feedback_vollcheck_format]] Zeile für Zeile (kopieren + befüllen, NIE aus dem Gedächtnis neu formulieren) und endet zwingend mit der Meta-Zeile `Format: Fließtext ✓` — eine Tabelle hat strukturell keinen natürlichen Platz für diese abschließende Prosa-Zeile, das Fehlen der Zeile ist selbst schon ein Warnsignal.
+b) **Tweet-Fetch-Fälligkeit wird aus dem persistierten `x_last_fetch.json`-Zeitstempel berechnet, nicht aus mentalem Minute%10-Mitzählen.** Bei JEDEM Voll-Check zuerst die Datei lesen, Differenz zur echten Systemzeit (`Bash date`, Punkt 9a) bilden. ≥10 Minuten → Fetch fällig — robuster als reine Modulo-Prüfung, die nach nur einem übersprungenen Voll-Check sofort um 5 Minuten verschieben kann. Ergebnis erscheint als PFLICHT-Zeile im Output, in JEDEM Fall, auch bei "nichts Neues" oder "noch nicht fällig": `Tweet-Check: fällig+durchgeführt ✓ (nichts Neues)` / `Tweet-Check: noch nicht fällig (zuletzt vor Xmin)` / `Tweet-Check: ÜBERFÄLLIG ✗ → jetzt nachgeholt`. Eine fehlende Tweet-Check-Zeile gilt ab jetzt genauso als Regelbruch wie ein fehlender 1H-MTF-Schritt — das bisher erlaubte "bei nichts Neues reicht auch gar keine Erwähnung" (siehe unten, altes "How to apply") ist damit für den Fälligkeits-Status selbst aufgehoben; es gilt weiterhin NUR für den Tweet-Inhalt (keine Tweet-Liste bei Nicht-Relevanz), nicht mehr für die Statuszeile.
+c) **Beide Pflicht-Zeilen werden zusätzlich wörtlich in den CronCreate-Pflichtbaustein aus Punkt 2b aufgenommen** (siehe dort, aktualisierte Fassung) — derselbe Mechanismus, der das 1H-MTF-Vergessen seit 16.07.2026 nachweislich gelöst hat (kein Vorfall seither dokumentiert), wird hiermit auf die beiden neuen Fehlerquellen erweitert, statt eine dritte, unabhängige Lösung zu erfinden.
+
+**Ehrliche Einordnung (dem Auftrag entsprechend):** Ein Rest-Risiko bleibt — eine Pflicht-Zeile kann im Prinzip mechanisch mitgeschrieben werden, ohne dass die Prüfung dahinter ehrlich stattfand. Der Unterschied zum bisherigen Zustand: eine fehlende oder erkennbar falsch befüllte Pflicht-Zeile ist für den User ab jetzt sofort sichtbar und gegenprüfbar (z.B. "Tweet-Check: noch nicht fällig" lässt sich gegen die echte Uhrzeit checken) — vorher war der Fehler komplett unsichtbar, bis er zufällig nachfragte. Das verschiebt die Fehlerklasse von "unsichtbar, nur durch Zufall entdeckt" zu "sichtbar, prüfbar, aber theoretisch fälschbar" — eine echte Verbesserung, kein vollständiger Ausschluss. Falls sich in den nächsten Sessions zeigt, dass die Pflicht-Zeilen trotzdem mechanisch ohne echte Prüfung mitlaufen, ist das explizit als Fortbestehen des Problems zu benennen, nicht erneut nur als "ab jetzt besser aufpassen" zu verbuchen.
+
 ## 9a. Minute für den Voll-Check-Rhythmus IMMER per echter Systemzeit bestimmen, nie selbst hochzählen (ergänzt 13.07.2026)
 
 Bei jedem `CronCreate`-Fire die tatsächliche Minute NICHT aus einer eigenen mitgeführten Zählung ("letzter Fire war 16:41, also ist das jetzt 16:42") ableiten — das driftet unbemerkt auseinander von der echten Uhrzeit, weil Cron-Jitter, Bearbeitungsdauer und gelegentliche Zwischenfragen die Zählung verschieben können, ohne dass ein Fire übersprungen wird.
@@ -342,7 +373,12 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 
 **Regel (überarbeitet):**
 1. **Vorrangklausel zuerst prüfen:** Zeigt der Chart parallel ein erkennbares Fortsetzungsmuster nach 9d1 (Flag, Pennant, Rectangle, Channel) in Positionsrichtung? Wenn ja, **gewinnt 9d1 (halten)** — Punkt 12 greift in diesem Fall NICHT, unabhängig vom Kerzen-/RSI-Stand.
-2. Nur wenn kein solches Fortsetzungsmuster erkennbar ist: Wenn **3 aufeinanderfolgende 5-Min-Kerzenschlüsse** kein neues Hoch (bei Long, spiegelbildlich Tief bei Short) über das bisherige Bewegungs-Hoch machen UND der RSI dabei **mindestens 8-10 Punkte von seinem lokalen Extrem** gefallen ist (fester Zahlenanker statt "spürbar") → aktiv einen **Teilgewinn (25-50% der Restposition, analog Punkt 8e)** vorschlagen, NICHT automatisch den Vollexit.
+
+**1a. Zeitlich begrenztes Override-Ventil innerhalb der Vorrangklausel (ergänzt 27.07.2026, Fable-Review, nach Trade #25):** Die Vorrangklausel aus Punkt 1 gilt unverändert für die ersten 3 Kerzen — sie schützt echte kurze Konsolidierungen weiterhin vollständig. Ab der **4. aufeinanderfolgenden 5-Min-Kerze ohne neues Hoch/Tief** (Long, spiegelbildlich Tief bei Short), kombiniert mit RSI weiterhin **≥8-10 Punkte vom lokalen Extrem entfernt** (gleiche Schwelle wie Punkt 2, nur die Kerzenzahl auf 4 erhöht), greift der Teilgewinn-Vorschlag aus Punkt 2 **trotz technisch intaktem 9d1-Fortsetzungsmuster**. Das Fortsetzungsmuster verliert damit sein zeitlich unbegrenztes Veto, behält es aber vollständig für die ersten 3 Kerzen. Siehe [[trades/trading_2026-07-23]] für den auslösenden Fall.
+
+**Why (1a):** Flags/Keile/Pennants haben in der klassischen TA-Lehre eine begrenzte "Lebensdauer" (Faustregel 5-20 Kerzen bis zur Auflösung) — ein technisch "noch nicht gebrochenes" Muster ist nach 4+ Kerzen ohne Auflösung kein verlässlicher Haltegrund mehr, das Fehlschlagsrisiko steigt mit der Dauer. Bei Trade #25 (23.07.2026) waren die Stall-Kriterien (3 Kerzen ohne neues Extrem + RSI-Abkühlung) während der Flag/Keil-Konsolidierung (17:35-17:54 Uhr) mehrfach zahlenmäßig fast erfüllt, wurden aber durch die bis dahin zeitlich unbegrenzte Vorrangklausel nie geprüft — kein Teilgewinn wurde realisiert, bevor der (glücklicherweise im Profit liegende) SL griff. Reine Kerzenzahl allein würde intakte, aber nur langsame Trends fälschlich abstrafen — deshalb Kopplung an dieselbe RSI-Schwelle wie das reguläre Stall-Kriterium, nicht ein reiner Zeitablauf.
+
+2. Nur wenn kein solches Fortsetzungsmuster erkennbar ist (oder das Override aus 1a greift): Wenn **3 aufeinanderfolgende 5-Min-Kerzenschlüsse** kein neues Hoch (bei Long, spiegelbildlich Tief bei Short) über das bisherige Bewegungs-Hoch machen UND der RSI dabei **mindestens 8-10 Punkte von seinem lokalen Extrem** gefallen ist (fester Zahlenanker statt "spürbar") → aktiv einen **Teilgewinn (25-50% der Restposition, analog Punkt 8e)** vorschlagen, NICHT automatisch den Vollexit.
 3. Rest-Position läuft mit den bestehenden Schutzsignalen (9d1, Punkt 11, SL) weiter — Punkt 12 ersetzt keinen Vollexit-Mechanismus, sondern ergänzt ihn um einen frühen Teilverkauf.
 
 **Warum 3 Kerzen:** Lang genug, um normales kurzes Verschnaufen (mehrfach an diesem Tag beobachtet) nicht fälschlich als Stillstand zu werten, kurz genug (~15 Min), um bei echtem Bewegungsende nicht unnötig Gewinn verstreichen zu lassen.
@@ -355,7 +391,7 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 
 **Bewährt bei Trade #23 (erster, noch nicht nach neuer Fassung geprüfter Fall):** Nach dem Ausbruch über 29.076/29.144 (neues Hoch) gab es keine bekannten Widerstände mehr, TP1/TP2 lagen weit und ohne echtes Level. Die (damals noch als Vollexit gefasste) Stall-Regel griff nach der 3. Kerze ohne neues Hoch (kombiniert mit einsetzender Eskalations-News, also nicht rein durch die Stall-Logik selbst bestätigt) und ermöglichte einen Exit bei +0,81%.
 
-**How to apply:** Bei jedem Check-in während einer offenen Position (zusätzlich zu Punkt 11) den Abstand zum letzten bestätigten Hoch/Tief mitzählen. Nach der 3. Kerze ohne neuen Extremwert, kombiniert mit erkennbarer RSI-Abkühlung, aktiv einen Exit vorschlagen — unabhängig davon, ob TP1/TP2 erreicht sind oder ein hartes Reversal-Kriterium (Punkt 11) bereits vorliegt.
+**How to apply:** Bei jedem Check-in während einer offenen Position (zusätzlich zu Punkt 11) den Abstand zum letzten bestätigten Hoch/Tief mitzählen. Nach der 3. Kerze ohne neuen Extremwert, kombiniert mit erkennbarer RSI-Abkühlung, aktiv einen Teilgewinn vorschlagen — unabhängig davon, ob TP1/TP2 erreicht sind oder ein hartes Reversal-Kriterium (Punkt 11) bereits vorliegt. **Ergänzung 27.07.2026 (siehe 1a):** Blockiert die 9d1-Vorrangklausel den Vorschlag bei der 3. Kerze, das Mitzählen trotzdem fortsetzen — ab der 4. Kerze ohne neuen Extremwert (weiterhin mit RSI-Abkühlung) greift der Teilgewinn-Vorschlag auch dann, wenn 9d1 noch ein technisch intaktes Fortsetzungsmuster meldet.
 
 **Deckelung — Rest bewusst weiterlaufen lassen, wenn der Trend intakt bleibt (ergänzt 23.07.2026, Fable-Review + Levi-Entscheidung):** Der Teilgewinn-Vorschlag nach Punkt 12 bleibt **auf 25-50% begrenzt, NIE Vollexit**, solange (a) der übergeordnete 1H/15min-Bias ([[feedback_chartanalyse]] Punkt 8) weiterhin klar in Positionsrichtung zeigt UND (b) keines der vier Punkt-11-Reversal-Kriterien erfüllt ist. Ein Vollexit vor TP2 ist unter diesen Bedingungen nur über Punkt 11 selbst (echtes Reversal, 2-3 von 4 Kriterien) oder ein hartes 9d1/4a-Muster+Kerze-Signal möglich, nicht über den Stall-Exit allein. **Why:** Fable-Audit 23.07.2026 stellte fest, dass die proaktiven Exit-Regeln (8e, 9d1/4a, 11, 12) einseitig Richtung "früher raus" ziehen, ohne dass irgendwo aktiv ausgesprochen wurde, wann der Rest bewusst weiterlaufen soll — das bremst das realisierte RR (siehe [[feedback_realisiertes_rr]]), obwohl Punkt 12 selbst schon immer nur "Teilgewinn, KEIN Vollexit" verlangte. Diese Ergänzung macht das nur explizit, ändert die bestehende Logik nicht, gilt zusätzlich zur bereits bestehenden Vorrangklausel (9d1-Fortsetzungsmuster schlägt Punkt 12).
 

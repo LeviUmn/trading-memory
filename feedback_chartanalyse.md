@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-23T10:58:11.557Z
+  modified: 2026-07-27T10:54:23.180Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -136,7 +136,9 @@ Entry wenn Kurs Fib-Level + Bounce-/Bestätigungskerze zeigt (siehe Punkt 4).
 
 **Einordnung nach Fable-Review:** Diese Regel ist kein neues Prinzip, sondern eine konkrete Methode für das bereits bestehende Punkt 8c (Schock-Tag-Multiplikator: SL-Abstand an Schock-/Chop-Tagen auf das 2,5-3-fache der Rausch-Kerze erhöhen). 7a beantwortet nur die Frage "wohin genau", wenn 8c bereits "weiter" fordert: nicht zum nächsten kleinen Swing-Low, sondern zum letzten mehrfach bestätigten strukturellen Level (z.B. ein Tagestief, das schon 2-3x angelaufen und verteidigt wurde).
 
-**Zwingende Ergänzung (Fable-Review, nachdem Trade #17 selbst dagegen verstieß):** Ein weiterer SL nach dieser Methode ist NUR zulässig, wenn TP1 und TP2 die RR-Minima aus Punkt 8b weiterhin erfüllen (TP1 ≥1:1, TP2 ≥1:2 zum neuen, weiteren SL-Abstand). Bei Trade #17 wurde der SL auf das Tagestief (29.291) gelegt, ohne die TP-Level entsprechend anzupassen — das ergab nur RR 0,32:1 (TP1) bzw. 0,56:1 (TP2), ein klarer Verstoß gegen 8b, der zunächst unerkannt blieb. **Wenn ein weiterer Chop-SL die RR-Minima reißt: entweder ein ferneres TP1/TP2 suchen, oder den Trade auslassen — nicht den SL verbreitern ohne die TPs mitzuziehen.**
+**Zwingende Ergänzung (Fable-Review, nachdem Trade #17 selbst dagegen verstieß):** Ein weiterer SL nach dieser Methode ist NUR zulässig, wenn TP1 die RR-Minima aus Punkt 8b weiterhin erfüllt (TP1 ≥1:1 zum neuen, weiteren SL-Abstand). Bei Trade #17 wurde der SL auf das Tagestief (29.291) gelegt, ohne die TP-Level entsprechend anzupassen — das ergab nur RR 0,32:1 (TP1) bzw. 0,56:1 (TP2), ein klarer Verstoß gegen die damals gültige 8b-Fassung, der zunächst unerkannt blieb. **Wenn ein weiterer Chop-SL die TP1-RR-Minima reißt: entweder ein ferneres TP1-Level suchen, auf einen engeren Entry warten, oder den Trade auslassen — nicht den SL verbreitern ohne TP1 mitzuziehen.**
+
+**Update 27.07.2026:** Die TP2≥1:2-Pflicht aus der historischen Trade-#17-Analyse oben ist überholt — seit dem Fable-Review vom 27.07.2026 gilt für TP2 keine RR-Mindestpflicht mehr, siehe aktualisiertes Punkt 8b. Die Kernlehre aus Trade #17 (SL und TP nicht isoliert voneinander verschieben, feste Reihenfolge Struktur→SL→RR-Check) bleibt unverändert gültig, nur bezogen auf TP1 statt TP1+TP2.
 
 **Why:** Bei Trade #17 (13.07.2026) fiel der Kurs direkt nach dem Entry in einer typischen Chop-Sequenz (4 Kerzen hin und her) bis auf ein Tief, das ein enger SL am nächsten kleinen Swing-Low mit hoher Wahrscheinlichkeit ausgelöst hätte — der tatsächlich gesetzte SL lag deutlich weiter unten, am mehrfach getesteten Tagestief, und überlebte die Chop-Phase. Der anschließende echte Move kam erst danach. Ein enger SL hätte den Trade in reinem Rauschen beendet, bevor die eigentliche Bewegung überhaupt begann — aber der weitere SL selbst erzeugte den RR-Bruch oben, weil die TP-Seite nicht mitgedacht wurde.
 
@@ -206,10 +208,12 @@ TP wird IMMER technisch bestimmt, nie als Wunsch-%:
 **Warum überarbeitet:** Nach 12 Trades hat KEIN einziger Trade je ein TP erreicht — jeder Gewinn war ein vorzeitiger manueller Exit durch ein legitimes Schutzsignal (Divergenz, 3h-Regel, Breakeven nach RSI-Extrem, Chop/Muster-Exit), das fast immer vor dem fernen TP auslöste. Realisiertes RR lag bei ~0,78:1 statt geplanter 1:2. Die Schutzsignale selbst waren nicht das Problem (sie haben mehrfach Round-Trips verhindert, z.B. Trade #2) — das Problem war ein einzelnes, zu fernes TP-Ziel ohne Zwischenstufe.
 
 **Neuer Ablauf — IMMER zwei TP-Stufen definieren, nicht nur bei Gelegenheit:**
-1. SL am Level festlegen
-2. **TP1** = das nächste technische Level zwischen Entry und dem alten Fernziel (z.B. erste Fibonacci-Extension 1.272, nächste kleinere Zwischenzone, naher runder Preis) — muss mindestens RR 1:1 zum SL bieten
-3. **TP2** = das strukturelle Fernziel wie bisher (nächste große Resistance/Support, Fib 1.618, Vortages-/Wochenhoch/-tief) — muss RR ≥1:2 zum SL bieten
-4. Wenn schon TP1 kein RR ≥1:1 erreicht → Trade auslassen oder weiter entferntes TP1-Level suchen, genau wie bisher bei einem einzelnen TP
+1. Struktur/Levels bestimmen → SL am Level festlegen → **erst danach** RR-Check (feste Reihenfolge, siehe Update 27.07.2026 unten — nicht iterativ hin- und herschieben)
+2. **TP1** = das nächste technische Level zwischen Entry und dem alten Fernziel (z.B. erste Fibonacci-Extension 1.272, nächste kleinere Zwischenzone, naher runder Preis) — MUSS mindestens RR 1:1 zum SL bieten (hart, unverändert)
+3. **TP2** = das strukturelle Fernziel wie bisher (nächste große Resistance/Support, Fib-Extension 1.618/2.0, Vortages-/Wochenhoch/-tief) — **keine RR-Mindestpflicht mehr seit 27.07.2026** (die frühere "≥1:2"-Pflicht entfällt, siehe Update unten), offen nach oben, kein Deckel
+4. Wenn schon TP1 kein RR ≥1:1 erreicht → **entweder** Trade auslassen, **oder** auf einen besseren/engeren Entry näher an der echten Struktur warten, bei dem ein regelkonformer (ATR-basierter), aber engerer SL möglich wird (siehe Update 27.07.2026) — NICHT das TP-Ziel künstlich weiter hinausschieben, um RR≥1:1 formal zu erzwingen
+
+**Update 27.07.2026 (Fable-Review, Levi-Entscheidung — RR als Auswahlfilter statt Ziel-Diktat):** Die alte starre Pflicht "TP1≥1:1 UND TP2≥1:2" führte praktisch dazu, dass bei notwendig breitem SL (Chop-/Schock-Tag, siehe 7a/8c) TP2 auf ein technisch nicht vorhandenes, unrealistisch fernes Level gezogen werden musste (Levi-Beobachtung, 1-2 konkrete Praxisfälle), oder der Trade ausgelassen wurde, obwohl ein valider, näherer TP1 durchaus erreichbar gewesen wäre. Nach gemeinsamer Analyse mit Fable: **RR ist ein Auswahlfilter (TP1-Untergrenze), keine Ziel-Vorschrift.** TP kommt IMMER aus echter Marktstruktur (Fib-Extension, Measured Move, S/R) — RR ist das Ergebnis dieser Rechnung, kein Eingabewert, der die TP-Position bestimmt. Deshalb: TP1 bleibt hart bei RR≥1:1 (niedrige, meist erreichbare Hürde — anders als die alte TP2-1:2-Pflicht, die oft strukturell gar nicht vorhanden war), TP2 wird komplett von jeder RR-Pflicht befreit und läuft offen nach oben unter den bestehenden Schutzsignalen (Divergenz 9b, Reversal-Kriterien Punkt 11, Stall-Regel Punkt 12, Widerstandstest+RSI 8e). Feste Reihenfolge bei der Trade-Vorbereitung: **Struktur/Levels bestimmen → SL festlegen → RR-Check (nur TP1 gegen 1:1) → Go/No-Go** — nicht iterativ hin- und herschieben (das war der Kernfehler bei Trade #17, siehe 7a). Ist selbst TP1 bei notwendig breitem SL nicht bei RR≥1:1 erreichbar: NICHT das TP künstlich weiter hinausschieben, sondern entweder auslassen oder auf einen besseren/engeren Entry näher an der echten Struktur warten, an dem ein regelkonformer, aber engerer ATR-SL möglich wird.
 
 **Ausführung bei TP1-Erreichen:** 50% der Position schließen, SL auf dem Rest sofort auf Breakeven nachziehen. Die verbleibenden 50% laufen weiter Richtung TP2 — dabei gelten alle bisherigen Schutzsignale unverändert und uneingeschränkt (Divergenz 9b, Chartmuster 9d1/4a, 3h-Regel, Chop-Erkennung) für diese Restposition. Kein neuer Mechanismus für den Rest, nur die bisherige Logik auf eine kleinere Position angewendet.
 
@@ -223,7 +227,7 @@ Kein Trade wird genommen, wenn SL zu nah am aktuellen Kurs liegt (würde durch n
 **Methode (aktualisiert):**
 1. Aktuellen ATR(14)-Wert vom Chart ablesen (`data_get_study_values`, seit 23.07.2026 fester Bestandteil des NAS100-Indikatoren-Sets, siehe [[feedback_chart_layout]]) — ersetzt die vorherige manuelle Schätzung der "größten Rausch-Kerze". Grund: Diese Schätzung fiel bei Trade #21 zu eng aus (55 statt nötiger 109-145 Pkt) und machte den anschließenden RR-Check ungültig.
 2. Mindest-SL-Abstand = 1,5-2× ATR(14)
-3. Mindest-TP (bei RR 1:2) ergibt sich daraus automatisch
+3. Mindest-TP1 (bei RR 1:1) ergibt sich daraus automatisch — TP2 folgt eigenständig aus der Marktstruktur, keine RR-Kopplung an den SL mehr (siehe Punkt 8b, Update 27.07.2026)
 
 **Alte Methode (bis 22.07.2026, nur noch als Fallback falls ATR ausnahmsweise nicht verfügbar ist):** Größte "Rausch-Kerze" der letzten Kerzen im 5min-Chart manuell ermitteln (z.B. 12.06.2026: bis zu 120 Punkte / 0,41% Nasdaq ohne Trendwechsel), dann wie oben 1,5-2× als Mindest-SL-Abstand.
 
@@ -235,6 +239,8 @@ Kein Trade wird genommen, wenn SL zu nah am aktuellen Kurs liegt (würde durch n
 **Dynamisch anpassen:** Bei VIX > 25 → größere Abstände nötig. Bei VIX < 15 → engere Ziele evtl. möglich. Schwelle bei jedem Setup neu anhand aktueller Kerzen berechnen, nicht statisch verwenden.
 
 **Schock-Tag-Multiplikator (ergänzt 02.07.2026):** An erkannten News-Schock-Tagen (siehe 9e) ist die "Rausch-Kerze" selbst oft deutlich größer als an ruhigen Tagen (z.B. 02.07.2026: 100-150 Pkt statt der üblichen 30-60 Pkt). An solchen Tagen den Multiplikator aus Schritt 2 auf **2,5-3× statt 1,5-2×** erhöhen, damit der SL nicht formal regelkonform, aber im Tageskontext trotzdem zu eng ist (siehe Trade #12, 02.07.2026 — SL bei 90 Pkt war rechnerisch regelkonform, aber im Kontext des Schock-Tags knapp).
+
+**Positionsgrößen-Kopplung (ergänzt 27.07.2026, Fable-Review):** Sobald der Mindest-SL-Abstand den Schock-/Chop-Tier (2,5-3× ATR) statt des Normal-Tiers (1,5-2×) zieht, gilt automatisch ein 50%-Floor der Positionsgröße — reiht sich als vierter Trigger in die bestehende Stacking-Regel ein, siehe [[project_risikomanagement]] Abschnitt "Stacking-Regel für gleichzeitige Halbierungs-Gründe". **Why:** Ein weiter SL hält das €-Risiko über die Positionsgrößen-Formel zwar bereits automatisch konstant (solange der Risiko-Limit-Term bindet) — die zusätzliche Halbierung ist trotzdem sinnvoll, weil ein SL im Schock-/Chop-Tier primär ein Konfidenz-Abschlag ist (unschärfere Level, mehr Fehlausbrüche, siehe #17/#19/#21), kein reines Risiko-Zahlen-Problem. **Nicht doppelt zählen:** Stammen Chop-Erkennung UND der Schock-ATR-Tier aus demselben Marktregime, gilt trotzdem nur EINMAL der 50%-Floor, kein Multiplizieren.
 
 **Kein Automatismus — trade-abhängig, mit echten 5-Min-Bars verifiziert (ergänzt 03.07.2026, siehe [[feedback_backtest_ergebnis_2026-07-03]] Teil 3).** Der Multiplikator ist kein Freifahrtschein, der jeden Verlust verhindert: Bei Trade #8 hätte ein 2,5-3x weiterer SL den Whipsaw überlebt (Kurs erholte sich 45 Min. später bis zum Tageshoch) — bei Trade #12 hätte er NICHT geholfen, weil der Kurs danach ungebremst weiterfiel und der Verlust nur größer geworden wäre. **How to apply:** 8c reduziert Rauschen-Stopps, ersetzt aber nicht die aktive Beobachtung — 9d1/4a (Muster+Kerze live erkennen und aussteigen) bleibt die zuverlässigere Regel, weil sie unabhängig davon funktioniert, ob sich der Markt danach erholt oder weiter fällt.
 

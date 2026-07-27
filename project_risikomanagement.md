@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-23T10:19:31.595Z
+  modified: 2026-07-27T10:53:15.204Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -27,7 +27,7 @@ Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
 | Risiko pro Trade | 2% = 300€ max. Verlust (Phase-4-Zielwert, siehe Hinweis oben) |
 | Max. Positionsgröße | ~40% des Kapitals = 5.000-6.500€ |
 | Hebel | Situationsabhängig 5-10x, siehe VIX-Staffelung unten |
-| Min. Risk-Reward | TP1 ≥1:1, TP2 ≥1:2 (Ziel 1:3) — Teilverkauf-Standard seit 04.07.2026, siehe [[feedback_chartanalyse]] Punkt 8b |
+| Min. Risk-Reward | TP1 ≥1:1 (hart, Auswahlfilter), TP2 offen ohne RR-Mindestpflicht (kein Deckel) — Teilverkauf-Standard seit 04.07.2026, RR-Entkopplung von TP2 seit 27.07.2026 (Fable-Review), siehe [[feedback_chartanalyse]] Punkt 8b |
 | Max. Tagesverlust | 4% = 600€ → Trading-Stopp für den Tag |
 | Max. gleichzeitige Positionen | 1-2 |
 | Trades pro Tag | **Bis zu 3 Trades regulär erlaubt** (geändert 23.06.2026, ersetzt frühere "1 Haupttrade"-Regel). 4. Trade nur nach vorheriger Prüfung + wirklich starkem technischem Signal (Ausnahme, nicht Standard). 5. Trade an einem Tag generell nicht erlaubt. |
@@ -53,7 +53,7 @@ Ziel ist NICHT dauerhaft aggressive Monatsrenditen (15-20%) zu fahren, sondern d
 
 **Sinn der 3 Trainings-Phasen (bestätigt 01.07.2026):** User-Zitat: "Deswegen haben wir 3 Trainings-Phasen, damit wir, wenn alles abgeschlossen ist, mit großen € Positionen traden können (>5-stellig)." Die Phasen 1-3 sind explizit kein Selbstzweck, sondern der Nachweis, dass System + Disziplin (Doppelkriterien, Chop-Erkennung, Regeldisziplin — siehe [[feedback_regeldisziplin]]) auch bei kleinen Positionen zuverlässig funktionieren, BEVOR mit deutlich größeren Positionen (mehr als 5-stellig, also >10.000€ pro Position) gehandelt wird. Verluste in dieser Trainingszeit (wie 01.07.2026) sind Teil des Zwecks, nicht ein Rückschlag vom eigentlichen Ziel.
 
-### Skalierungs-Fahrplan (festgelegt 22.06.2026) — AKTUELLER STATUS: Phase 2 (formal gestartet 09.07.2026, ab Trade #16)
+### Skalierungs-Fahrplan (festgelegt 22.06.2026) — AKTUELLER STATUS: Phase 3 gestartet (24.07.2026, Fable-GO mit Bedingungen), gestaffelter Einstieg für Trades #26-#30
 Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand echter Trade-Daten.
 
 | Phase | Trades | Positionsgröße | Risiko/Trade | Ziel |
@@ -66,6 +66,10 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 **Korrektur 21.07.2026 (User-Klarstellung):** Jede Phase war im Ursprungsplan (22.06.2026) einheitlich auf **10 Trades** ausgelegt (Phase 1 ursprünglich 1-10, Phase 2 11-20, Phase 3 21-30, Phase 4 ab 31). Die Tabelle hatte Phase 2/3 zwischenzeitlich fälschlich mit 15 bzw. 25 Trades Breite geführt (16-30 / 31-55) — vermutlich eine unbemerkte Übernahme der Phase-1-Verlängerung auf die Folge-Phasen, ohne dass dafür je eine bewusste Entscheidung getroffen wurde (anders als bei Phase 1, wo die Verlängerung nach Trade #10 explizit begründet und entschieden wurde, siehe unten). Jetzt korrigiert: Phase 1 bleibt bei ihrer bewusst verlängerten Breite (15 Trades, 1-15), Phase 2 und 3 sind wieder auf die ursprüngliche 10-Trades-Breite zurückgesetzt, nur um die 5 Trades der Phase-1-Verlängerung nach hinten verschoben (16-25, 26-35). Falls sich nach dem Phase-2-Abschluss-Review zeigt, dass auch hier eine Verlängerung nötig ist (analog Phase 1 nach der Verlustserie um Trade #10), wird das genauso gemeinsam und bewusst entschieden, nicht automatisch mitgezogen.
 
 **Bestätigt 04.07.2026:** Nächste Session Montag, 06.07.2026, mit Trade #13 (Teilverkauf-Standard TP1/TP2 erstmals live, siehe [[feedback_chartanalyse]] Punkt 8b). Nach Trade #15 erneute Tiefenanalyse (Win-Rate, realisiertes RR, Expectancy) vor dem Übergang in Phase 2 — kein automatisches Hochstufen, siehe Phasenübergang-Review-Regel unten.
+
+**Phase 2 formal abgeschlossen (23.07.2026, nach Trade #25):** Alle 10 Trades der Phase 2 (#16-25) komplett — siehe [[trades/trade_log]] für die vollständige Tabelle. Endstand: 7 Win / 0 BE / 3 Loss in diesem Fenster, Win-Rate 70% (7/10), Ø-Rendite 0,61%/Trade (korrigiert 24.07., siehe [[project_performance_ziele]]) — trifft das Win-Rate-Ziel exakt, verfehlt das Rendite-Ziel (1-1,5%) weiterhin deutlich.
+
+**Phase-3-Übergang-Review abgeschlossen (24.07.2026, Fable — volles Ergebnis siehe [[project_phase2_abschluss_review_2026-07-24]]):** GO für Phase 3, aber mit Bedingungen statt vollem Sprung auf die maximale Bandbreite. **Gestaffelter Phase-3-Start:** Erste 3-5 Trades (#26-#30) am UNTEREN Ende der Phase-3-Bandbreite (~4.000€, nicht sofort 5.000€/volles 2%-Risiko) — erst nach diesem Bewährungsfenster (und nur wenn kein schwerer Regelbruch vom #21-Typ auftritt) auf volle Phase-3-Größe hochfahren. Weitere Bedingungen: RR-Minima als echte Hard-Gates (kein "offen deklariert = okay" mehr wie bei Trade #23), symmetrische Regelbruch-Konsequenz auch bei Gewinn-Trades, User-Eigenentries brauchen sofortiges Loop-Retro-Check, Phase-3-RR separat von der Lifetime-Zahl tracken.
 
 **Phase-1-Abschluss erreicht (08.07.2026):** Trade #15 abgeschlossen, damit sind alle 15 Trades der (verlängerten) Phase 1 komplett — siehe [[trades/trade_log]] für die vollständige Tabelle. **Großes Phasen-Review geplant für morgen Mittag, 09.07.2026**, danach Entscheidung über den Übergang in Phase 2.
 
@@ -145,13 +149,15 @@ Siehe auch [[feedback_live_trading]] Punkt 8 für das Anzeigeformat (Positions-K
 | Chop-Erkennung (ergänzt 01.07.2026, live bewährt 09.07.2026 Trade #16) | Wenn RSI/MACD innerhalb weniger 5-Min-Kerzen mehrfach hin- und zurückkippen und VIX dabei flach bleibt (Definition siehe [[feedback_chartanalyse]] Marktregime-Filter) → **Position halbieren ODER Trade komplett auslassen**. Ein technisch erfülltes Kriterium kurz nach erkanntem Chop überschreibt diese Einschätzung NICHT automatisch. Bei Trade #16 (choppy Session-Start, Short/Long lange unklar) wurde die Position bewusst auf 50% reduziert (977€ statt 2.000€) — User bestätigte das im Debriefing explizit als richtige Anwendung, nicht als Fehler. |
 | Rollierender Verlustserien-Schutz (ergänzt 02.07.2026) | Wenn **4 von den letzten 5 Trades Verluste sind — unabhängig vom Kalendertag** (also über mehrere Tage rollierend gezählt, nicht nur der tagesbezogene Cooldown) → sofortige Pause + Pflicht-Review (Ruhe verschaffen, jeden Verlust einzeln klassifizieren: Prozessfehler vs. Marktregime, siehe [[feedback_regime_wechsel]]). Erst NACH abgeschlossener Analyse und nur wenn sich danach ein erkennbar besseres/klareres Setup ergibt, wieder weitermachen — kein automatisches Fortsetzen nach Zeitablauf. |
 
-### Stacking-Regel für gleichzeitige Halbierungs-Gründe (ergänzt 23.07.2026, Fable-Audit + Levi-Entscheidung)
+### Stacking-Regel für gleichzeitige Halbierungs-Gründe (ergänzt 23.07.2026, Fable-Audit + Levi-Entscheidung; vierter Trigger ergänzt 27.07.2026)
 
-Es gibt mittlerweile drei unabhängig voneinander entstandene Regeln, die jede für sich "Position halbieren" verlangen: Chop-Erkennung (Tabelle oben), Chasing-Situation ([[feedback_live_trading]] Punkt 13) und das 15:30-16:00-Zeit-Gate ([[feedback_trading_zeitfenster]]). **Trifft mehr als einer dieser Gründe gleichzeitig zu, wird trotzdem nur EINMAL halbiert — 50% der jeweiligen Phasen-Positionsgröße ist der Floor, kein Multiplizieren mehrerer Gründe (kein 25%, kein 12,5%).**
+Es gibt mittlerweile vier unabhängig voneinander entstandene Regeln, die jede für sich "Position halbieren" verlangen: Chop-Erkennung (Tabelle oben), Chasing-Situation ([[feedback_live_trading]] Punkt 13), das 15:30-16:00-Zeit-Gate ([[feedback_trading_zeitfenster]]) und seit 27.07.2026 **SL-Breite** (Schock-/Chop-ATR-Tier 2,5-3× statt 1,5-2×, siehe [[feedback_chartanalyse]] Punkt 8c). **Trifft mehr als einer dieser Gründe gleichzeitig zu, wird trotzdem nur EINMAL halbiert — 50% der jeweiligen Phasen-Positionsgröße ist der Floor, kein Multiplizieren mehrerer Gründe (kein 25%, kein 12,5%).**
 
-**Why:** Fable-Audit 23.07.2026 deckte auf, dass keine der drei Regeln beim Entstehen definierte, was bei gleichzeitigem Zutreffen passiert — z.B. ein Chasing-Entry im 15:30-16:00-Fenster an einem Chop-Tag. Dieselbe Art Lücke wie der frühere 8b/7a1-RR-Konflikt bei Trade #17, nur präventiv statt nach einem Vorfall aufgelöst. Levi hat sich am 23.07.2026 bewusst für einen festen Floor statt Multiplikation entschieden.
+**Why:** Fable-Audit 23.07.2026 deckte auf, dass keine der drei ursprünglichen Regeln beim Entstehen definierte, was bei gleichzeitigem Zutreffen passiert — z.B. ein Chasing-Entry im 15:30-16:00-Fenster an einem Chop-Tag. Dieselbe Art Lücke wie der frühere 8b/7a1-RR-Konflikt bei Trade #17, nur präventiv statt nach einem Vorfall aufgelöst. Levi hat sich am 23.07.2026 bewusst für einen festen Floor statt Multiplikation entschieden. **Ergänzung 27.07.2026 (Fable-Review, im Zug der RR-Entkopplungs-Reform bei TP1/TP2):** Ein notwendig breiter SL (Schock-/Chop-ATR-Tier) hält das €-Risiko über die Positionsgrößen-Formel zwar bereits automatisch konstant, ist aber zusätzlich ein Konfidenz-Abschlag (unschärfere Level, mehr Fehlausbrüche) — deshalb reiht sich "SL-Breite" als vierter, gleichrangiger Trigger in dieselbe Stacking-Logik ein, statt eine neue eigenständige Schwelle zu erfinden.
 
-**How to apply:** Bei der Positionsgrößen-Berechnung (Workflow Schritt 0-2 oben) prüfen, ob einer oder mehrere Halbierungs-Trigger zutreffen — bei jeder Anzahl ≥1 gilt derselbe Floor: 50% der Phasen-Positionsgröße, unabhängig davon wie viele Gründe gleichzeitig vorliegen.
+**Nicht doppelt zählen:** Stammen Chop-Erkennung UND der Schock-ATR-Tier aus demselben Marktregime (häufiger Fall, da beide oft gemeinsam auftreten), gilt trotzdem nur EINMAL der 50%-Floor — sie zählen als EIN Trigger-Grund, nicht als zwei.
+
+**How to apply:** Bei der Positionsgrößen-Berechnung (Workflow Schritt 0-2 oben) prüfen, ob einer oder mehrere der vier Halbierungs-Trigger zutreffen — bei jeder Anzahl ≥1 gilt derselbe Floor: 50% der Phasen-Positionsgröße, unabhängig davon wie viele Gründe gleichzeitig vorliegen.
 
 ### Definition "1 Trade" (festgelegt 22.06.2026)
 Ein kompletter Trade-Zyklus zählt als EIN Trade für die Phasen-Zählung (1-10, 11-25, 26-50) — unabhängig von der Anzahl der Teil-Orders.

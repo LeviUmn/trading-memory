@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: trading-session-2026-06-26
+  modified: 2026-07-27T12:08:47.048Z
 ---
 
 ## Das Ziel (formuliert 26.06.2026)
@@ -52,8 +53,9 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 - **Zweites Instrument:** DAX oder Gold als Ergänzung erst nach Trade 15-20 (laut [[feedback_instrumenten_fokus]])
 
 **Phase 3 (ab Trade 26):**
-- **UnusualWhales (~$50/Monat):** Kombiniert Dark Pool Flow + Options Data. Dark Pool = wo Institutionelle heimlich große Positionen aufbauen (vor Kursreaktion). Options = Put/Call Ratio, Unusual Activity, Max Pain, Gamma Exposure (GEX als unsichtbare S/R-Zonen). Erst sinnvoll wenn eigener Track Record statistisch belastbar ist. **User folgt UnusualWhales bereits auf X** — kennt den Content, Entscheidung für Phase 3 praktisch gesetzt.
-  - **Integrationsplan (geklärt 10.07.2026):** UnusualWhales hat eine eigene REST-API (separater Tarif vom Consumer-Zugang). Technischer Weg: eigener kleiner MCP-Server analog zum bestehenden X/xapi-MCP, der die API wrapt (Tools wie `get_flow_alerts`, `get_dark_pool_prints`, `get_gex`) — damit live im Chat abrufbar statt manuellem Dashboard-Check. Bauen erst kurz vor Phase-3-Start sinnvoll (grob ab Trade ~25-28), nicht jetzt schon.
+- **UnusualWhales (~$50/Monat) — Integration verschoben (27.07.2026, Fable-Review + Levi-Entscheidung), NICHT mehr "praktisch gesetzt" für den Phase-3-Start:** Kombiniert Dark Pool Flow + Options Data (Put/Call Ratio, Unusual Activity, Max Pain, Gamma Exposure/GEX als unsichtbare S/R-Zonen). Ursprünglicher Plan (10.07.2026) sah den Bau kurz vor Phase-3-Start vor (grob ab Trade ~25-28) — dieser Trigger war aber ein reiner Kalender-Meilenstein, keine inhaltliche Reife-Prüfung. Fables Gegenargument (27.07.2026): Genau am Tag dieser Entscheidung mussten zwei Kernregeln (TP1/TP2-RR-Logik, Stall-Exit-Vorrangklausel) nachgeschärft werden, die Ø-Rendite verfehlt weiterhin das Ziel (0,61% vs. 1-1,5%), und dieses Projekt hat wiederholt das Muster "neue Datenquelle/Regel wird eingeführt, aber im heißen Loop nicht konsequent genutzt" gezeigt (Scheincompliance bei Punkt 9, MTF-Lücken, ausgelassene Voll-Checks). Eine vierte Datenquelle vor gesicherter Ausführungsdisziplin bei den bestehenden drei (Chart-TA, Intermarket, Dual-Gate) würde dieses Risiko verstärken, nicht die eigentliche Schwachstelle (Ausführung, nicht Datenmangel) beheben.
+  - **Neuer Fahrplan:** Erst Phase 3 komplett durchlaufen (Trades #26-#35) → danach ein Gesamt-Review über ALLE Phasen (1-3), das bewertet, was am sinnvollsten für die Weiterentwicklung ist → NUR wenn danach UnusualWhales weiterhin sinnvoll erscheint, Integration angehen UND dafür eine eigene Test-Phase einplanen, die explizit prüft, ob es den Track Record wirklich verbessert (nicht automatisch als Daueranschaffung übernehmen).
+  - **Priorisierung falls/wenn integriert (Fable-Empfehlung 27.07.2026):** 1) GEX/Max Pain (höchster Mehrwert, strukturell kompatibel mit 8b/7a1a — sind im Kern zusätzliche S/R-Level), 2) Dark Pool Prints (Frühindikator fürs Regime-Gate 8d, aber schwerer objektiv quantifizierbar), 3) Options Flow/Unusual Activity (niedrig, ohne eigenen Optionshandel schwer in harte Regeln übersetzbar), 4) Put/Call-Ratio (niedrigste Priorität, zu viel Redundanz mit VIX/VXN aus dem Intermarket-Scan). Einbauort falls umgesetzt: NIE im 1-Min-Loop, nur als zusätzlicher Schritt im täglichen "Start Update Dich"/Voll-Check (analog zur einmal-täglichen Pivot-Berechnung 7a1a). Günstiger Vortest vor jeder Automatisierung: GEX-Level manuell vom bereits genutzten UW-X-Account für 5-10 Trades gegenchecken, bevor $50/Monat + eigener MCP-Server-Bau investiert werden.
 - **Intermarket-Divergenzen aktiv traden** (nicht nur als Kontext lesen)
 
 **Dauerhaft gestrichen:**
@@ -61,3 +63,4 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 
 **Phase 4 (ab Trade 50):**
 - **IBKR / Futures (MNQ):** Vorbereitung auf Schweiz-Umzug — parallel testen bevor Umzug ansteht. IBKR bietet keine deutschen Hebelzertifikate, Alternative wäre Micro Nasdaq Futures.
+- **Scope-Klarstellung (27.07.2026, Levi-Entscheidung):** Falls IBKR (oder eine andere API-Anbindung) kommt, ist der Zweck ausschließlich **automatischer Fill-Rückabgleich** (echter Fill-Preis/Stückzahl/Timing direkt aus dem Konto lesen, löst das in der heutigen Fable-Bewertung genannte "Kein Fill-Abgleich"-Problem, siehe [[feedback_broker_wert_prioritaet]]) — NICHT automatische Order-Ausführung. Levi will die Order weiterhin bewusst selbst auslösen, das Vertrauen in eine autonome Order-Platzierung durch das System ist explizit (noch) nicht gewünscht. Nur die Rückübertragung der tatsächlichen Trade-Daten (statt manueller Chat-Meldung) soll automatisiert werden.

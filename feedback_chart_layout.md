@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 028ce287-5d0c-400c-bf08-bdc1d4c4670c
-  modified: 2026-07-23T09:01:09.623Z
+  modified: 2026-07-24T11:42:29.106Z
 ---
 
 Kein dauerhaftes 2-Pane-Layout mit VIX mehr verwenden. NAS100 bekommt grundsätzlich die volle Chart-Höhe (Layout "single"), VIX-Kurs wird bei Bedarf per `quote_get` abgefragt statt permanent gechartet zu sein.
@@ -36,3 +36,11 @@ Das Symbol `FOREXCOM:NAS100` ist ein CFD-Feed **ohne echte Volumendaten**. `Volu
 **Why (alter Kontext, weiterhin gültig für den Rest des Sets):** Am 02.07. schon einmal gegen Bollinger Bands getauscht, aber nach MCP-Neustart am 03.07. gingen beide Ersatz-Infos verloren (Chart lud initial ohne Indikatoren, dann kurz das alte gecachte Setup inkl. Pivot Points Standard + Bollinger Bands — dabei wurde erkannt, dass das der echte Vortages-Stand war).
 
 **How to apply:** Bei jedem Neustart/`tv_launch` NICHT versuchen, `Volume` oder `VWAP` neu hinzuzufügen (schlägt fehl/bleibt leer) — direkt Bollinger Bands + ATR(14) als Teil des Sets aufbauen (nicht mehr Pivot Points). Indikatoren nacheinander (nicht parallel) hinzufügen — parallele `chart_manage_indicator`-Calls können sich die Such-UI gegenseitig kaputt machen.
+
+## Split-Screen-Persistenz nach TradingView-Abo-Update — GELÖST (24.07.2026)
+
+Nach einem TradingView-Update/Abo-Wechsel öffnete die Desktop-App kurzzeitig nicht mehr automatisch mit dem gespeicherten 2v-Split (NAS100+QQQ), sondern fiel auf Single-Chart zurück. Levi hat das Layout daraufhin manuell in TradingView selbst gespeichert (Layout-Speichern-Funktion in der App, nicht über MCP) — **seitdem übersteht der 2v-Split Neustarts wieder zuverlässig**, live doppelt verifiziert (24.07.2026, `tv_launch(kill_existing: true)` → Split war nach Neustart korrekt vorhanden, Screenshot bestätigt NAS100 oben mit 5er-Set + QQQ unten mit VWAP/EMA/Volume).
+
+**Kein MCP-seitiger Fix nötig/vorhanden** — es gibt kein `layout_save`-Tool, die Lösung lag rein auf TradingView-Seite (User hat das Layout einmalig manuell gespeichert). Kein Pflicht-Rebuild-Schritt mehr bei `tv_launch` nötig.
+
+**Bekannte Falle beim Prüfen, kein echter Bug (24.07.2026):** `pane_list` kann direkt nach `tv_launch` kurzzeitig fälschlich `layout: "s"` / `chart_count: 1` melden, obwohl der Chart tatsächlich schon korrekt im 2v-Split lädt (per Screenshot bestätigt) — beim zweiten `pane_list`-Aufruf wenige Sekunden später kommt korrekt `"2v"` zurück. Das ist eine Sync-Verzögerung des Tools direkt nach dem Start, kein Layout-Problem. **How to apply:** Zeigt `pane_list` direkt nach `tv_launch` unerwartet "Single-Chart", nicht sofort neu aufbauen — einmal per Screenshot oder erneutem `pane_list`-Call gegenchecken, bevor man von einem echten Problem ausgeht.

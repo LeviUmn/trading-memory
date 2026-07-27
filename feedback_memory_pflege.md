@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
+  modified: 2026-07-27T11:55:24.604Z
 ---
 
 Nach JEDER Änderung, neuem Trade oder neuer Erkenntnis sofort die Memory-Dateien und NEUSTART.md aktualisieren.
@@ -21,7 +22,7 @@ Erst DANN mit Briefing und Trading beginnen — nie ohne Memory-Check starten!
 **How to apply — Bei folgenden Ereignissen immer speichern:**
 
 1. **Neues Script / Tool gebaut** → NEUSTART.md + MEMORY.md updaten
-2. **Trade abgeschlossen** → trading_YYYY-MM-DD.md erstellen (via "Tag Zusammenfassung speichern")
+2. **Trade abgeschlossen** → trading_YYYY-MM-DD.md erstellen (via "Tag Zusammenfassung speichern") UND seit 27.07.2026 zusätzlich `node scripts/add_trade.cjs` im Projektordner ausführen (siehe unten) — die Markdown-Datei bleibt die narrative Quelle, die neue SQLite-DB ist für Zahlen/Filter/künftige Auswertungen
 3. **Neue Strategie-Erkenntnis** → passende Regel-Datei updaten ([[feedback_live_trading]], [[feedback_chartanalyse]] etc.) oder neue Feedback-Datei (nicht mehr trading_session_nasdaq.md — Archiv)
 4. **Neue API / Integration** → project_news_system.md oder neue Datei
 5. **Fehler gemacht** → Als Feedback-Memory speichern damit es nicht nochmal passiert
@@ -36,6 +37,16 @@ Mit der Zeit entsteht eine vollständige Trading-Historie die für Backtesting g
 - Win-Rate pro Strategie
 - Optimale Entry/Exit-Punkte
 - Fehler-Muster die wir vermeiden
+
+### Strukturierte Trade-DB (ergänzt 27.07.2026, Fable-Build)
+
+Zusätzlich zur Markdown-Historie gibt es jetzt eine echte, abfragbare SQLite-DB im Code-Projekt (`C:\Users\umnus\tradingview-mcp\scripts\`, NICHT im Memory-Ordner):
+- `trade_db.cjs` — Schema (Node's eingebautes `node:sqlite`, keine neue Abhängigkeit)
+- `trade_stats.cjs` — Win-Rate, Ø-Gewinn/-Verlust, realisiertes RR, Erwartungswert, Phasen-Aufschlüsselung, filterbar (`--phase`/`--outcome`/`--since`/`--violations`)
+- `add_trade.cjs` — CLI zum Eintragen neuer Trades
+- `migrate_trade_log.cjs` — einmaliger Import-Lauf der historischen 25 Trades (bereits erledigt, Verifikation gegen die dokumentierten Summen bestanden: 25 Trades, 15W/2BE/8L, +138,86€, 65,2%/60% Win-Rate)
+
+**How to apply:** Nach jedem abgeschlossenen Trade zusätzlich zur gewohnten `trading_YYYY-MM-DD.md`-Notiz `node scripts/add_trade.cjs --date ... --phase ... --dir ... --result-eur ... --outcome ...` (weitere Felder siehe Kopfkommentar der Datei) im Projektordner ausführen. Die Markdown-Datei bleibt die Quelle für die volle Geschichte (Setup-Begründung, Regelbrüche im Detail, Lehren) — die DB ist nur für schnelle Zahlen-Abfragen und die künftige Monte-Carlo-Auswertung ab ~50 Trades (siehe [[project_robustheit_monte_carlo]]) gedacht, ersetzt die Markdown-Historie nicht.
 
 ## Zitierpflicht für Permanent-Records (ergänzt 16.07.2026, nach Trade #21 — Fable-Empfehlung)
 

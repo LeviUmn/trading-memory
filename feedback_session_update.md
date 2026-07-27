@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-23T09:06:22.674Z
+  modified: 2026-07-24T11:42:36.701Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -63,6 +63,8 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 
 ### Schritt 5 — TradingView öffnen: Intermarket-Scan
 TradingView IMMER starten (`tv_launch`), nicht optional. Chart läuft auch vorbörslich.
+
+**Split-Screen-Persistenz (Stand 24.07.2026):** NAS100+QQQ-Split übersteht Neustarts zuverlässig, siehe [[feedback_chart_layout]] für die Lösung und eine bekannte Falle (kurzzeitig falsches `pane_list`-Ergebnis direkt nach `tv_launch`, kein echtes Problem).
 
 #### 5a — Intermarket-Dashboard (20 Instrumente via `quote_get`)
 Alle Kurse abrufen und mit Cheat-Sheet auswerten:
