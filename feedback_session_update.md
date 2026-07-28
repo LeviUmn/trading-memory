@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-24T11:42:36.701Z
+  modified: 2026-07-28T14:08:59.872Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -50,16 +50,19 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 
 **Market-Moving Events (immer prüfen):**
 - PCE / Core PCE — Fed-kritisch (typisch letzter Freitag des Monats, 14:30 CET)
-- CPI — ähnlich PCE (14:30 CET)
+- CPI / Core CPI — ähnlich PCE (14:30 CET)
+- PPI — Erzeugerpreise, Fed-relevant
 - NFP (Non-Farm Payrolls) — erster Freitag des Monats, 14:30 CET — sehr stark
-- ISM Manufacturing/Services — 16:00 CET (erster/dritter Werktag des Monats)
-- JOLTs Job Openings — 16:00 CET, monatlich
-- CB Consumer Confidence — 16:00 CET, monatlich
+- Jobless Claims — wöchentlich, 14:30 CET
 - ADP Employment — monatlich, 14:15 CET
-- FOMC-Protokolle / Fed-Entscheidungen
+- FOMC-Protokolle / Fed-Entscheidungen / Fed-Reden
 - GDP-Daten (Revisionen beachten!)
 - **Doppel-Events gleichzeitig 16:00:** Spike-Volatilität in beide Richtungen → kein Entry vor 16:15-16:30
 - Grundregel: Kein Entry bis 30 min nach Veröffentlichung + Volatilität beruhigt
+
+**Korrigiert 28.07.2026 (User-Feedback, live während Trading-Session):** Die Entry-Sperrfrist gilt NUR für die oben gelisteten Events — das sind die tatsächlich marktbewegenden Releases. Andere Kalender-Einträge, die investing.com formal als "High Impact" (3 Sterne) markiert — z.B. **CB Consumer Confidence, ISM Manufacturing/Services, JOLTs Job Openings** — haben laut User in der Praxis keine ausreichende Marktgewichtung, um eine Entry-Sperre zu rechtfertigen. Die investing.com-Stern-Bewertung ist NICHT die Entscheidungsgrundlage für die Sperrfrist. Konkreter Anlass: CB Consumer Confidence (28.07., 16:00 Uhr, Miss 90,8 vs. 92,4) hatte keine erkennbare Marktreaktion, die Sperrfrist wurde dennoch fälschlich angesetzt.
+
+**Quelle für Event-Wichtigkeit ab jetzt tradingeconomics.com, nicht investing.com:** User bezieht sich explizit auf tradingeconomics' eigene Kennzeichnung der wichtigen Daten. Schritt 4 (Live-Kalender) künftig nach Möglichkeit von tradingeconomics.com abrufen bzw. dessen Impact-Kennzeichnung als Referenz für "gehört das auf die Sperrfrist-Liste" heranziehen, nicht investing.com's Sterne.
 
 ### Schritt 5 — TradingView öffnen: Intermarket-Scan
 TradingView IMMER starten (`tv_launch`), nicht optional. Chart läuft auch vorbörslich.

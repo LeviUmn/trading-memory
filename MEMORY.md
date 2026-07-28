@@ -1,5 +1,10 @@
 # Memory Index
 
+- [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung 20 Uhr, PK 20:30 Uhr. Fed-Level-Event, volle Entry-Sperrfrist gilt (siehe [[feedback_session_update]])
+- [Fable-Tagesabschluss-Review 28.07.2026](trades/trading_2026-07-28.md) — Trade #26/#27 geprüft: kein Regelbruch, aber Script-Test-Lücke (size.cjs) + Punkt-12-Stall-Regel nicht vollständig angewendet (nur SL-Nachzug statt Teilgewinn), siehe [[feedback_live_trading]] Punkt 12.2
+- [Punkt-12-Präzisierung: SL-Nachzug ≠ Teilgewinn](feedback_live_trading.md) — 28.07. nach Trade #27: bei Stall-Trigger BEIDE Optionen (Teilgewinn + SL-Nachzug) anbieten, nicht nur SL-Variante — siehe Punkt 12.2
+- [size.cjs Short-SL-Bug (GEFIXT)](feedback_size_script_short_bug.md) — Vorzeichenfehler lieferte zu hohen SL-Preis bei Short-Positionen, 28.07. vor Live-Nutzung erkannt+gefixt, SL-Preis immer < Entry prüfen. Nachtrag 28.07.: kein TP-Analogon im Script, neue Pflicht für Script-Testläufe vor Live-Nutzung
+- [Session 28.07.2026](trades/trading_2026-07-28.md) — Chip-Crash-Tag: Trade #26 Short Loss -55,63€ (SL-Bug in size.cjs vor Nutzung gefixt), Trade #27 Long Win +72,66€ (TP1+Free-Roll, TP2-Fib-Revision, SL nach 3. Stall ausgelöst). Tagesbilanz +17,03€, 27 Trades gesamt +155,89€
 - [Voll-Check-Format](feedback_vollcheck_format.md) — Fließtext mit ✓/✗ pro geprüftem Punkt, keine Tabelle (27.07., User-Korrektur zurück zum bewährten Design)
 - [Prozessfehler 27.07. für Fable (GELÖST)](feedback_prozessfehler_27_07_fuer_fable.md) — Root-Cause: stille Prüfungen ohne sichtbaren Beleg über 100+ Loop-Ticks. Fix im Tagesabschluss umgesetzt: Pflicht-Ausgabezeilen `Tweet-Check`/`Format` in jedem Voll-Check, siehe [[feedback_live_trading]] Punkt 9
 - [Modellwahl Trading](feedback_modellwahl_trading.md) — Sonnet 5 für aktives Trading (Loop+Voll-Check), Fable 5 für Analyse/Reviews/Tagesabschluss. Fable-Deprecation-Status im Blick behalten
@@ -70,7 +75,7 @@
 - [Backtest-Ablauf](feedback_backtest_ablauf.md) — Trigger "Backtest machen". **27.07.:** zweistufig — DB-Delta-Check (Standard) vs. echter TradingView-Replay (nur Reformen/Phasenübergänge/ungeklärte Verluste), Stichprobe statt Vollreplay
 - [Chart-Layout-Präferenz](feedback_chart_layout.md) — NAS100 Single-Pane volle Höhe, VIX per quote_get
 - [Backtest-Ergebnis 03.07.2026](feedback_backtest_ergebnis_2026-07-03.md) — 5 Regeln geprüft, hypothetisch ≈+60€ statt -4,22€
-- [Realisiertes RR](feedback_realisiertes_rr.md) — Kernkennzahl ≈1,27:1 blended (Phase 2 isoliert 1,75:1), weiter unter alter 1:2-Pflicht (siehe Reform 27.07.)
+- [Realisiertes RR](feedback_realisiertes_rr.md) — Kernkennzahl 28.07. ≈1,16:1 blended (27 Trades, leicht gesunken von 1,27:1 nach Trade #26-Verlust), Phase 3 isoliert ≈0,81:1 (n=2, noch nicht belastbar)
 - [Session 06.07.2026](trades/trading_2026-07-06.md) — Kein Trade, erschöpfter Ausbruch diszipliniert nicht gejagt
 - [Indikator-/Pane-Check](feedback_indikator_check.md) — isFailed-EMA-Bug root-gecaust und strukturell gefixt (16.07.)
 - [Trade 07.07.2026](trades/trading_2026-07-07.md) — Trade #13 Win +46,25€, TP1+TP2 erreicht, löst Verlustserie #8-12 auf

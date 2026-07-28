@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 028ce287-5d0c-400c-bf08-bdc1d4c4670c
-  modified: 2026-07-24T11:42:29.106Z
+  modified: 2026-07-28T15:01:21.158Z
 ---
 
 Kein dauerhaftes 2-Pane-Layout mit VIX mehr verwenden. NAS100 bekommt grundsätzlich die volle Chart-Höhe (Layout "single"), VIX-Kurs wird bei Bedarf per `quote_get` abgefragt statt permanent gechartet zu sein.
@@ -44,3 +44,19 @@ Nach einem TradingView-Update/Abo-Wechsel öffnete die Desktop-App kurzzeitig ni
 **Kein MCP-seitiger Fix nötig/vorhanden** — es gibt kein `layout_save`-Tool, die Lösung lag rein auf TradingView-Seite (User hat das Layout einmalig manuell gespeichert). Kein Pflicht-Rebuild-Schritt mehr bei `tv_launch` nötig.
 
 **Bekannte Falle beim Prüfen, kein echter Bug (24.07.2026):** `pane_list` kann direkt nach `tv_launch` kurzzeitig fälschlich `layout: "s"` / `chart_count: 1` melden, obwohl der Chart tatsächlich schon korrekt im 2v-Split lädt (per Screenshot bestätigt) — beim zweiten `pane_list`-Aufruf wenige Sekunden später kommt korrekt `"2v"` zurück. Das ist eine Sync-Verzögerung des Tools direkt nach dem Start, kein Layout-Problem. **How to apply:** Zeigt `pane_list` direkt nach `tv_launch` unerwartet "Single-Chart", nicht sofort neu aufbauen — einmal per Screenshot oder erneutem `pane_list`-Call gegenchecken, bevor man von einem echten Problem ausgeht.
+
+## QQQ-Pane nach jedem Check zurück auf 15min stellen, NICHT 5min (ergänzt 28.07.2026, User-Korrektur; noch am selben Tag korrigiert)
+
+Beim MTF-Block auf QQQ (15min/60min lesen) bleibt die Pane 1 danach oft auf dem zuletzt gesetzten Timeframe stehen, wenn nur zurück auf Pane 0 fokussiert wird, ohne QQQ explizit zurückzusetzen.
+
+**Korrigiert (noch 28.07.2026, direkt im Anschluss):** Erste Version dieser Regel sagte "immer auf 5min zurückstellen" — das war falsch. User-Klarstellung: "Dann kannst du QQQ Standardmäßig immer auf 15min stellen, dann macht 5min kein Sinn bei mir bei TradingView" — der Ruhezustand von QQQ soll **15min** sein, nicht 5min. Das deckt sich auch mit dem Pflicht-Gate selbst (QQQ-EMA50 wird auf 15min geprüft, siehe Abschnitt "QQQ-Pflicht-Gate: unterschiedliche Timeframes" weiter unten) — 15min als Ruhezustand ist also sowieso die relevante Ebene, keine zusätzliche Umschaltung nötig.
+
+**Why:** User sieht QQQ live in der eigenen TradingView-Instanz mit, 5min ist dort visuell nicht der gewünschte Standard-Blick.
+
+**How to apply:** Nach JEDEM QQQ-MTF-Check (15min+60min lesen) den letzten Schritt vor dem Zurück-Fokussieren auf Pane 0 immer `chart_set_timeframe(15)` auf Pane 1 sein (NICHT 5) — erst dann `pane_focus(0)`. Reihenfolge: pane_focus(1) → 15min lesen → 60min lesen → **chart_set_timeframe(15)** → pane_focus(0). Mit `pane_list` gegenchecken, dass QQQ auf "15" steht, bevor der Check als abgeschlossen gilt.
+
+## QQQ-Pflicht-Gate: unterschiedliche Timeframes für NAS100 und QQQ (ergänzt 28.07.2026, User-Nachfrage)
+
+NAS100 und QQQ werden bewusst NICHT auf demselben Timeframe geprüft: **NAS100-EMA50 läuft auf 5min** (nativer Trigger-Timeframe, dort fällt die Kerzenschluss-Entscheidung), **QQQ-EMA50 läuft auf 15min** (Haupt-Check) **plus 60min** als zusätzlicher Cross-Check (siehe [[feedback_live_trading]] Punkt 3a/7b). QQQ ist die langsamere, unterstützende Bestätigungsebene, kein eigener Trigger — ein 5min-QQQ-Signal wäre zu schnell/flackerig für diese Rolle (am 28.07.2026 live beobachtet: QQQ-5min-EMA50 wurde Stunden vor der 15min-Version erreicht).
+
+**How to apply:** Bei Dual-Gate-Fragen NICHT davon ausgehen, dass beide Instrumente auf demselben Timeframe verglichen werden — NAS100 = 5min, QQQ = 15min/60min ist der korrekte, asymmetrische Standard.

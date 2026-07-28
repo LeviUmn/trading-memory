@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: fable-review-2026-07-04
-  modified: 2026-07-24T08:42:30.234Z
+  modified: 2026-07-28T16:40:39.919Z
 ---
 
 Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je ein Take-Profit erreicht**. Jeder Gewinn war ein vorzeitiger manueller Exit (Divergenz-Erkennung, 3h-Regel, Session-Ende, Quarter-End), jeder Verlust lief bis zum SL (bzw. Breakeven-Stop). Realisiert: Ø-Gewinn ~9,70€ vs. Ø-Verlust ~12,50€ → **realisiertes RR ≈ 0,78:1**, obwohl die Regel in [[project_risikomanagement]] mindestens 1:2 vorschreibt.
@@ -37,3 +37,7 @@ Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je e
 Die RR-Verbesserung kommt in Phase 2 überwiegend aus deutlich kleineren, disziplinierter geführten Verlusten (0,66% Ø ggü. 1,365% Ø in Phase 1) — nicht aus größeren Gewinnen. Das ist das ermutigendste Einzelsignal aus dem Phase-2-Review, war aber in der bisherigen Blended-Zahl (1,27:1) unsichtbar.
 
 **How to apply (ergänzt 24.07.2026):** Ab Phase 3 (Trade #26) eine eigene, separat getrackte RR-Zahl NUR für Phase 3 führen, zusätzlich zur laufenden Lifetime-Zahl — damit künftige Reviews nicht wieder von einer trägen Blended-Zahl verzerrt werden, die reale Phasen-Fortschritte verdeckt.
+
+**Fortschreibung 28.07.2026 (Fable-Tagesabschluss-Review, nach Trade #26/#27, erste 2 Phase-3-Trades):** Blended Lifetime über alle 27 Trades: Win-Sum 20,96% (15 Wins bis #25) + 1,81% (Trade #27) = 22,77% bei 16 Wins → **Ø-Gewinn ≈1,42%/Win-Trade**. Loss-Sum 8,815% (8 Losses bis #25) + 2,235% (Trade #26) = 11,05% bei 9 Losses → **Ø-Verlust ≈1,23%/Loss-Trade**. **Realisiertes RR blended jetzt ≈1,16:1** — leichter Rückgang gegenüber 1,27:1 vom 23.07., weil Trade #26 (RR-Grenzfall 1,0:1, SL griff voll) größer war als der bisherige Ø-Verlust und Trade #27 (+1,81%) kleiner als der bisherige Ø-Gewinn. Kein Alarmsignal bei n=2 — einzelne Trades bewegen die Blended-Zahl bei diesem Sample-Umfang noch spürbar, siehe [[project_robustheit_monte_carlo]] (Schwelle für belastbare Aussagen liegt bei ~50 Trades, aktuell 27).
+
+**Phase 3 isoliert (Trades #26-27, n=2, laut how-to-apply oben separat zu führen):** Ø-Gewinn 1,81% (1 Win), Ø-Verlust 2,235% (1 Loss) → **RR Phase 3 bislang ≈0,81:1** (bestätigt durch `trade_stats.cjs --phase 3`). Bei n=2 nicht überinterpretieren — Phase 3 ist gerade erst gestartet (gestaffelter Einstieg, siehe [[project_risikomanagement]]), diese Zahl wird sich mit jedem weiteren Trade stark bewegen. Weiter mitführen, aber noch keine Rückschlüsse auf die Qualität der Phase-3-Reform (RR-Entkopplung TP1/TP2 vom 27.07.) ziehen.

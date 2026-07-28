@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-27T18:06:40.606Z
+  modified: 2026-07-28T16:40:09.058Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -394,6 +394,12 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 **How to apply:** Bei jedem Check-in während einer offenen Position (zusätzlich zu Punkt 11) den Abstand zum letzten bestätigten Hoch/Tief mitzählen. Nach der 3. Kerze ohne neuen Extremwert, kombiniert mit erkennbarer RSI-Abkühlung, aktiv einen Teilgewinn vorschlagen — unabhängig davon, ob TP1/TP2 erreicht sind oder ein hartes Reversal-Kriterium (Punkt 11) bereits vorliegt. **Ergänzung 27.07.2026 (siehe 1a):** Blockiert die 9d1-Vorrangklausel den Vorschlag bei der 3. Kerze, das Mitzählen trotzdem fortsetzen — ab der 4. Kerze ohne neuen Extremwert (weiterhin mit RSI-Abkühlung) greift der Teilgewinn-Vorschlag auch dann, wenn 9d1 noch ein technisch intaktes Fortsetzungsmuster meldet.
 
 **Deckelung — Rest bewusst weiterlaufen lassen, wenn der Trend intakt bleibt (ergänzt 23.07.2026, Fable-Review + Levi-Entscheidung):** Der Teilgewinn-Vorschlag nach Punkt 12 bleibt **auf 25-50% begrenzt, NIE Vollexit**, solange (a) der übergeordnete 1H/15min-Bias ([[feedback_chartanalyse]] Punkt 8) weiterhin klar in Positionsrichtung zeigt UND (b) keines der vier Punkt-11-Reversal-Kriterien erfüllt ist. Ein Vollexit vor TP2 ist unter diesen Bedingungen nur über Punkt 11 selbst (echtes Reversal, 2-3 von 4 Kriterien) oder ein hartes 9d1/4a-Muster+Kerze-Signal möglich, nicht über den Stall-Exit allein. **Why:** Fable-Audit 23.07.2026 stellte fest, dass die proaktiven Exit-Regeln (8e, 9d1/4a, 11, 12) einseitig Richtung "früher raus" ziehen, ohne dass irgendwo aktiv ausgesprochen wurde, wann der Rest bewusst weiterlaufen soll — das bremst das realisierte RR (siehe [[feedback_realisiertes_rr]]), obwohl Punkt 12 selbst schon immer nur "Teilgewinn, KEIN Vollexit" verlangte. Diese Ergänzung macht das nur explizit, ändert die bestehende Logik nicht, gilt zusätzlich zur bereits bestehenden Vorrangklausel (9d1-Fortsetzungsmuster schlägt Punkt 12).
+
+**12.2 SL-Nachzug ist kein Ersatz für den Teilgewinn-Vorschlag (ergänzt 28.07.2026, Fable-Tagesabschluss-Review nach Trade #27):** Bei Trade #27 (28.07.2026) erfüllte der dritte Stall an der 27.900-27.918-Zone exakt den Punkt-12-Trigger (3+ Kerzenschlüsse ohne neues Hoch), ausgelöst wurde aber ausschließlich ein manueller SL-Nachzug (auf 27.842) — kein Teilgewinn-Vorschlag für die Restposition. Folge war eine ~20-minütige, im Trade-Log explizit als "extreme Anspannung" beschriebene Phase mit MACD-H-Pendeln um die Nulllinie (kein bestätigtes Punkt-11-Reversal), bis der SL schließlich auslöste. Kein Regelbruch — SL-Nachzug ist ein legitimes, an keiner Stelle verbotenes Werkzeug —, aber eine unvollständige Anwendung von Punkt 12, dessen eigentlicher Zweck (frühe Teilrealisierung, um genau diese Anspannungsphase zu verkürzen/vermeiden) dadurch nicht griff.
+
+**How to apply:** Sobald der Punkt-12-Trigger (3+ Kerzenschlüsse ohne neues Extrem + RSI-Abstand) erfüllt ist, aktiv BEIDE Optionen gleichzeitig anbieten — Teilgewinn (25-50% der Restposition, wie in Punkt 12 vorgesehen) UND/ODER SL-Nachzug —, nicht nur eine davon automatisch wählen. Der User entscheidet dann bewusst, welche Kombination passt, statt dass der SL-Nachzug den Teilgewinn-Vorschlag stillschweigend ersetzt.
+
+**Review-Pflicht:** Läuft wie die ursprüngliche Punkt-12-Fassung unter der bestehenden 5-Anwendungsfälle-Prüfung (siehe oben) mit — kein separater neuer Zähler, diese Präzisierung ist Teil derselben Regel.
 
 ## 13. Chasing-Situation vor Entry — halbierte Position statt Vollentry, kein separates Konsolidierungs-Add (ergänzt 22.07.2026, nach Trade #24, Fable-Review)
 

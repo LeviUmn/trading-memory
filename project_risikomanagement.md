@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-27T10:53:15.204Z
+  modified: 2026-07-28T15:05:02.005Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -52,6 +52,10 @@ Ziel ist NICHT dauerhaft aggressive Monatsrenditen (15-20%) zu fahren, sondern d
 **How to apply:** Nicht versuchen mit kleinem Kapital über höheren Hebel ans Ziel zu kommen — stattdessen Kapital organisch wachsen lassen (Reinvest + ggf. Kapitalspritzen) bei gleichbleibender Risikodisziplin.
 
 **Sinn der 3 Trainings-Phasen (bestätigt 01.07.2026):** User-Zitat: "Deswegen haben wir 3 Trainings-Phasen, damit wir, wenn alles abgeschlossen ist, mit großen € Positionen traden können (>5-stellig)." Die Phasen 1-3 sind explizit kein Selbstzweck, sondern der Nachweis, dass System + Disziplin (Doppelkriterien, Chop-Erkennung, Regeldisziplin — siehe [[feedback_regeldisziplin]]) auch bei kleinen Positionen zuverlässig funktionieren, BEVOR mit deutlich größeren Positionen (mehr als 5-stellig, also >10.000€ pro Position) gehandelt wird. Verluste in dieser Trainingszeit (wie 01.07.2026) sind Teil des Zwecks, nicht ein Rückschlag vom eigentlichen Ziel.
+
+**Bild "3. Lehrjahr einer Ausbildung" (ergänzt 28.07.2026, User-Formulierung nach Trade #26):** User beschreibt Phase 3 explizit als erweiterten Lernmodus, nicht als Endstufe — Analogie zum letzten Ausbildungsjahr, in dem man schon viel kann, aber noch nicht "ausgelernt" ist. Anlass: Trade #26 verlor trotz vollständig regelkonformer Ausführung (V-Reversal direkt nach Entry), gleichzeitig wurden am selben Tag zwei echte Systemfehler live gefunden und behoben (Vorzeichen-Bug in size.cjs bei Short-SL-Preisen, Klarstellung welche Kalender-Events wirklich eine Entry-Sperrfrist rechtfertigen). User wertet das explizit positiv: genau diese Art Erfahrung — Regeln 100% befolgen, dabei trotzdem verlieren, daraus lernen, kein FOMO/Chasing trotz Rückschlag — ist der eigentliche Zweck der Phase, nicht ein Umweg davon.
+
+**How to apply:** Verluste trotz korrekter Regelanwendung nicht als Rückschlag framen, sondern als erwarteten, wertvollen Teil des "3. Lehrjahrs" — der Fokus bleibt auf Prozessqualität (wurden die Regeln eingehalten?), nicht auf das einzelne Trade-Ergebnis. Live gefundene Systemfehler (wie der size.cjs-Bug) sind ebenfalls Teil des Lernfortschritts, nicht Anlass zur Sorge über die Systemreife.
 
 ### Skalierungs-Fahrplan (festgelegt 22.06.2026) — AKTUELLER STATUS: Phase 3 gestartet (24.07.2026, Fable-GO mit Bedingungen), gestaffelter Einstieg für Trades #26-#30
 Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand echter Trade-Daten.
