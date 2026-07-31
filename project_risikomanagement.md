@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-31T15:56:52.758Z
+  modified: 2026-07-31T15:59:26.052Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -65,9 +65,9 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 | 1 — Bewährung | 1-15 (verlängert von ursprünglich 1-10) | ~500-1.500€ | 1% vom Gesamtkapital (150€) | Win-Rate & Erwartungswert ermitteln |
 | 2 — Aufbau | 16-25 | ~2.000-3.000€ | 1,5% (225€) | Konstanz über mehr Trades beweisen |
 | 3 — Skalierung | 26-35 | ~4.000-5.000€ | 2% (300€) | Näher ans Vollsystem |
-| 4 — Datenerweiterung | ab 36, Umfang noch offen (kein festes Enddatum, siehe unten) | ~10.000€ pro Trade | 2% vom gewachsenen Kapital | UnusualWhales-Integration (konditional) unter echten Live-Bedingungen testen, bevor der Kapital-Sprung auf 50.000€ kommt |
+| 4 — Datenerweiterung | 36-40 (5 Trades) | ~10.000€ pro Trade | 2% vom gewachsenen Kapital | UnusualWhales-Integration (konditional) unter echten Live-Bedingungen testen, bevor der Kapital-Sprung auf 50.000€ kommt |
 
-**Phase 4 neu definiert (ergänzt 31.07.2026, User-Entscheidung):** Ersetzt die alte "Vollsystem ab Trade 36"-Zeile. Phase 4 startet erst NACH Phase-3-Abschluss (#35) UND einem großen, mehrfach hinterfragten Gesamt-Review über alle bisherigen Phasen (siehe [[project_vision]] für den bereits dokumentierten Review-Fahrplan vor UnusualWhales). Zwei Bedingungen für Phase 4:
+**Phase 4 neu definiert (ergänzt 31.07.2026, User-Entscheidung; Trade-Anzahl korrigiert 31.07.2026 nach User-Korrektur — Phase 4 hat wie die anderen Phasen eine feste Trade-Range, 5 Trades):** Ersetzt die alte "Vollsystem ab Trade 36"-Zeile. Phase 4 startet erst NACH Phase-3-Abschluss (#35) UND einem großen, mehrfach hinterfragten Gesamt-Review über alle bisherigen Phasen (siehe [[project_vision]] für den bereits dokumentierten Review-Fahrplan vor UnusualWhales). Zwei Bedingungen für Phase 4:
 1. **UnusualWhales erfolgreich angebunden** (konditional — siehe [[project_vision]] Priorisierung GEX/Max Pain zuerst; falls die Integration technisch/inhaltlich scheitert, wird Phase 4 ohne UW mit reinem 10k€-Kapitaltest fortgesetzt, kein Blocker für den Kapital-Fortschritt)
 2. **10.000€-Positionsgröße** als eigener Bewährungsschritt, bevor der große Sprung auf 50.000€ Realkapital kommt
 

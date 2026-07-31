@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-31T15:57:32.953Z
+  modified: 2026-07-31T15:59:52.584Z
 ---
 
 ## Das Ziel (formuliert 26.06.2026)
@@ -30,7 +30,7 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 | 1 (abgeschlossen, 15/15, Stand 09.07.) | Regelbasiert, 1% Risiko, NAS100 | RSI/MACD/VWAP/EMA50, MTF 1H→15min→5min, **Intermarket (VIX/VXN/DXY/10Y/Öl) als täglicher Kontext** | X MCP (aktiv, löst RSS ab) + Makrokalender + FRED |
 | 2 (abgeschlossen, 10/10, Stand 23.07.) | Größere Positionen (2.000-3.000€), Multi-Setup | Fibonacci präziser, Orderflow-Ansätze | X API evaluieren (Breaking News Latenz) |
 | 3 (läuft, Trade 26-35, Stand 31.07. bei #28) | Mehrere Instrumente, gestaffelter Start #26-30 | Intermarket-Divergenzen aktiv traden | Sentiment-Daten, erweiterte Makro-Integration |
-| 4 (ab Trade 36, siehe unten) | 10.000€ pro Trade, 2% Risiko | Komplettes bisheriges Toolkit | UnusualWhales (konditional) |
+| 4 (Trade 36-40, 5 Trades) | 10.000€ pro Trade, 2% Risiko | Komplettes bisheriges Toolkit | UnusualWhales (konditional) |
 | **Danach: normales Trading** (kein Phasensystem mehr) | 50.000€ Kapital, volle Motivation | — | Alle Quellen integriert |
 
 **Korrigiert 31.07.2026 (User-Entscheidung, ersetzt die vorherige Korrektur vom 09.07.):** Nummerierung jetzt konsistent mit [[project_risikomanagement]] (Phase 2 = 16-25, Phase 3 = 26-35, Phase 4 = ab 36). Phase 4 ist jetzt final definiert als eigene 10.000€-Zwischenstufe (nicht mehr "Vollsystem") — siehe Abschnitt "Phase 4 & danach" unten für die volle Begründung.
@@ -64,7 +64,7 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 
 **Phase 4 (ab Trade 36) — final definiert 31.07.2026, User-Entscheidung:**
 - **Zwei Bedingungen, beide an Phase 4 gekoppelt:** (1) UnusualWhales erfolgreich angebunden — konditional, siehe Priorisierung oben (GEX/Max Pain zuerst); scheitert die Integration, läuft Phase 4 trotzdem weiter, nur ohne UW. (2) 10.000€-Positionsgröße als eigener Bewährungsschritt vor dem großen Kapitalsprung.
-- **Kein festes Enddatum/keine feste Trade-Anzahl** für Phase 4 — Umfang wird erst beim Start festgelegt (anders als Phase 1-3, die von Anfang an eine Trade-Range hatten).
+- **Feste Trade-Range wie die vorherigen Phasen: 5 Trades (#36-40)** — korrigiert 31.07.2026, ursprünglich fälschlich als "offen/kein Enddatum" festgehalten.
 - **Danach: Übergang ins normale Trading, kein Phasensystem mehr, 50.000€ Kapital, "volle Motivation"** (User-Formulierung). Das ist der eigentliche Zielpunkt des gesamten Fahrplans, kein weiterer Zwischenschritt.
 - **Harte Vorbedingung für den 50k-Übergang:** Wochen- und Monatsabschlüsse müssen als Tracking-Ebene ergänzt werden (zusätzlich zu den bestehenden Tagesabschlüssen, siehe [[feedback_tagesabschluss]]), BEVOR auf 50.000€ gewechselt wird — nicht erst währenddessen nachgebaut. Volle Begründung + Detail-Regel in [[project_risikomanagement]], Abschnitt "Skalierungs-Fahrplan".
 - **IBKR / Futures (MNQ):** Vorbereitung auf Schweiz-Umzug — parallel testen bevor Umzug ansteht. IBKR bietet keine deutschen Hebelzertifikate, Alternative wäre Micro Nasdaq Futures.
