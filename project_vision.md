@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-27T12:08:47.048Z
+  modified: 2026-07-31T15:57:32.953Z
 ---
 
 ## Das Ziel (formuliert 26.06.2026)
@@ -28,11 +28,12 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 | Phase | Trading | Analyse-Tools | Datenzugang |
 |---|---|---|---|
 | 1 (abgeschlossen, 15/15, Stand 09.07.) | Regelbasiert, 1% Risiko, NAS100 | RSI/MACD/VWAP/EMA50, MTF 1H→15min→5min, **Intermarket (VIX/VXN/DXY/10Y/Öl) als täglicher Kontext** | X MCP (aktiv, löst RSS ab) + Makrokalender + FRED |
-| 2 (Trade 16-30) | Größere Positionen, Multi-Setup | Fibonacci präziser, Orderflow-Ansätze | X API evaluieren (Breaking News Latenz) |
-| 3 (Trade 31-55) | Mehrere Instrumente | Intermarket-Divergenzen aktiv traden | Sentiment-Daten, erweiterte Makro-Integration |
-| 4 (ab Trade 55) | Vollsystem, 2% Risiko | Komplettes Toolkit | Alle Quellen integriert |
+| 2 (abgeschlossen, 10/10, Stand 23.07.) | Größere Positionen (2.000-3.000€), Multi-Setup | Fibonacci präziser, Orderflow-Ansätze | X API evaluieren (Breaking News Latenz) |
+| 3 (läuft, Trade 26-35, Stand 31.07. bei #28) | Mehrere Instrumente, gestaffelter Start #26-30 | Intermarket-Divergenzen aktiv traden | Sentiment-Daten, erweiterte Makro-Integration |
+| 4 (ab Trade 36, siehe unten) | 10.000€ pro Trade, 2% Risiko | Komplettes bisheriges Toolkit | UnusualWhales (konditional) |
+| **Danach: normales Trading** (kein Phasensystem mehr) | 50.000€ Kapital, volle Motivation | — | Alle Quellen integriert |
 
-**Korrigiert 09.07.2026:** Phase-1-Verlängerung (02.07., 10→15 Trades) war hier noch nicht nachgezogen — Nummerierung jetzt konsistent mit [[project_risikomanagement]] (Phase 2 = 16-30, Phase 3 = 31-55, Phase 4 = ab 55).
+**Korrigiert 31.07.2026 (User-Entscheidung, ersetzt die vorherige Korrektur vom 09.07.):** Nummerierung jetzt konsistent mit [[project_risikomanagement]] (Phase 2 = 16-25, Phase 3 = 26-35, Phase 4 = ab 36). Phase 4 ist jetzt final definiert als eigene 10.000€-Zwischenstufe (nicht mehr "Vollsystem") — siehe Abschnitt "Phase 4 & danach" unten für die volle Begründung.
 
 ---
 
@@ -61,6 +62,10 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 **Dauerhaft gestrichen:**
 - Bloomberg Terminal (~$2.000/Monat) — wirtschaftlich nicht realistisch für Retail-Phase
 
-**Phase 4 (ab Trade 50):**
+**Phase 4 (ab Trade 36) — final definiert 31.07.2026, User-Entscheidung:**
+- **Zwei Bedingungen, beide an Phase 4 gekoppelt:** (1) UnusualWhales erfolgreich angebunden — konditional, siehe Priorisierung oben (GEX/Max Pain zuerst); scheitert die Integration, läuft Phase 4 trotzdem weiter, nur ohne UW. (2) 10.000€-Positionsgröße als eigener Bewährungsschritt vor dem großen Kapitalsprung.
+- **Kein festes Enddatum/keine feste Trade-Anzahl** für Phase 4 — Umfang wird erst beim Start festgelegt (anders als Phase 1-3, die von Anfang an eine Trade-Range hatten).
+- **Danach: Übergang ins normale Trading, kein Phasensystem mehr, 50.000€ Kapital, "volle Motivation"** (User-Formulierung). Das ist der eigentliche Zielpunkt des gesamten Fahrplans, kein weiterer Zwischenschritt.
+- **Harte Vorbedingung für den 50k-Übergang:** Wochen- und Monatsabschlüsse müssen als Tracking-Ebene ergänzt werden (zusätzlich zu den bestehenden Tagesabschlüssen, siehe [[feedback_tagesabschluss]]), BEVOR auf 50.000€ gewechselt wird — nicht erst währenddessen nachgebaut. Volle Begründung + Detail-Regel in [[project_risikomanagement]], Abschnitt "Skalierungs-Fahrplan".
 - **IBKR / Futures (MNQ):** Vorbereitung auf Schweiz-Umzug — parallel testen bevor Umzug ansteht. IBKR bietet keine deutschen Hebelzertifikate, Alternative wäre Micro Nasdaq Futures.
 - **Scope-Klarstellung (27.07.2026, Levi-Entscheidung):** Falls IBKR (oder eine andere API-Anbindung) kommt, ist der Zweck ausschließlich **automatischer Fill-Rückabgleich** (echter Fill-Preis/Stückzahl/Timing direkt aus dem Konto lesen, löst das in der heutigen Fable-Bewertung genannte "Kein Fill-Abgleich"-Problem, siehe [[feedback_broker_wert_prioritaet]]) — NICHT automatische Order-Ausführung. Levi will die Order weiterhin bewusst selbst auslösen, das Vertrauen in eine autonome Order-Platzierung durch das System ist explizit (noch) nicht gewünscht. Nur die Rückübertragung der tatsächlichen Trade-Daten (statt manueller Chat-Meldung) soll automatisiert werden.

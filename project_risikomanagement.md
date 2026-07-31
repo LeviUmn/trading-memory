@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-28T15:05:02.005Z
+  modified: 2026-07-31T15:56:52.758Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -65,7 +65,15 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 | 1 — Bewährung | 1-15 (verlängert von ursprünglich 1-10) | ~500-1.500€ | 1% vom Gesamtkapital (150€) | Win-Rate & Erwartungswert ermitteln |
 | 2 — Aufbau | 16-25 | ~2.000-3.000€ | 1,5% (225€) | Konstanz über mehr Trades beweisen |
 | 3 — Skalierung | 26-35 | ~4.000-5.000€ | 2% (300€) | Näher ans Vollsystem |
-| 4 — Vollsystem | ab 36 | 5.000-6.500€ | 2% vom gewachsenen Kapital | Ursprünglicher Plan, fundiert |
+| 4 — Datenerweiterung | ab 36, Umfang noch offen (kein festes Enddatum, siehe unten) | ~10.000€ pro Trade | 2% vom gewachsenen Kapital | UnusualWhales-Integration (konditional) unter echten Live-Bedingungen testen, bevor der Kapital-Sprung auf 50.000€ kommt |
+
+**Phase 4 neu definiert (ergänzt 31.07.2026, User-Entscheidung):** Ersetzt die alte "Vollsystem ab Trade 36"-Zeile. Phase 4 startet erst NACH Phase-3-Abschluss (#35) UND einem großen, mehrfach hinterfragten Gesamt-Review über alle bisherigen Phasen (siehe [[project_vision]] für den bereits dokumentierten Review-Fahrplan vor UnusualWhales). Zwei Bedingungen für Phase 4:
+1. **UnusualWhales erfolgreich angebunden** (konditional — siehe [[project_vision]] Priorisierung GEX/Max Pain zuerst; falls die Integration technisch/inhaltlich scheitert, wird Phase 4 ohne UW mit reinem 10k€-Kapitaltest fortgesetzt, kein Blocker für den Kapital-Fortschritt)
+2. **10.000€-Positionsgröße** als eigener Bewährungsschritt, bevor der große Sprung auf 50.000€ Realkapital kommt
+
+**Danach: Übergang ins normale Trading (kein Phasensystem mehr), 50.000€ Kapital.** Sobald Phase 4 erfolgreich abgeschlossen ist, endet die Phasen-Logik komplett — kein "Phase 5", sondern der eigentliche Übergang zum regulären Trading mit voller Motivation und vollem Kapital. **Harte Vorbedingung für diesen Übergang:** Vor dem Wechsel auf 50.000€ muss die Tracking-Infrastruktur erweitert werden — bisher gibt es nur Tagesabschlüsse ([[feedback_tagesabschluss]]), für die 50k-Stufe braucht es zusätzlich **Wochenabschlüsse und Monatsabschlüsse**, damit die Performance auf dieser Kapitalstufe ehrlich und greifbar trackbar ist (Win-Rate/Expectancy/Drawdown nicht nur pro Tag, sondern aggregiert über Woche/Monat, analog zum bestehenden Phasen-Review-Muster). Diese Wochen-/Monats-Abschluss-Struktur muss VOR dem 50k-Start stehen, nicht erst währenddessen nachgebaut werden.
+
+**Why:** User-Zitat 31.07.2026: "Weil dann müssen wir alles ehrlich tracken, damit wir eine greifbare Performance hinbekommen." Bei 50.000€ Kapital sind die Beträge pro Trade groß genug, dass ungenaues/lückenhaftes Tracking echte Konsequenzen hätte — die bisherige Tagesabschluss-Granularität reicht für diese Stufe nicht mehr aus.
 
 **Korrektur 21.07.2026 (User-Klarstellung):** Jede Phase war im Ursprungsplan (22.06.2026) einheitlich auf **10 Trades** ausgelegt (Phase 1 ursprünglich 1-10, Phase 2 11-20, Phase 3 21-30, Phase 4 ab 31). Die Tabelle hatte Phase 2/3 zwischenzeitlich fälschlich mit 15 bzw. 25 Trades Breite geführt (16-30 / 31-55) — vermutlich eine unbemerkte Übernahme der Phase-1-Verlängerung auf die Folge-Phasen, ohne dass dafür je eine bewusste Entscheidung getroffen wurde (anders als bei Phase 1, wo die Verlängerung nach Trade #10 explizit begründet und entschieden wurde, siehe unten). Jetzt korrigiert: Phase 1 bleibt bei ihrer bewusst verlängerten Breite (15 Trades, 1-15), Phase 2 und 3 sind wieder auf die ursprüngliche 10-Trades-Breite zurückgesetzt, nur um die 5 Trades der Phase-1-Verlängerung nach hinten verschoben (16-25, 26-35). Falls sich nach dem Phase-2-Abschluss-Review zeigt, dass auch hier eine Verlängerung nötig ist (analog Phase 1 nach der Verlustserie um Trade #10), wird das genauso gemeinsam und bewusst entschieden, nicht automatisch mitgezogen.
 
