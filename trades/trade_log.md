@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-28T16:32:48.083Z
+  modified: 2026-07-31T15:42:59.060Z
 ---
 
 Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe jeweilige trading_YYYY-MM-DD.md Datei.
@@ -72,6 +72,10 @@ Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe
 | 27 | 28.07.2026 | 3 (User-Eigenentry) | Long nach V-Reversal aus dem Chip-Ausverkauf, Entry über EMA50/S1-Pivot mit bestätigter Struktur (5min/15min bullisch, 1H frisches höheres Hoch), QQQ-Gate beim Entry NICHT erfüllt (knapp <1 Pkt, holte ~17:40 Uhr selbst auf). TP1 nach RR≈1:1 realisiert, SL auf BE, TP2 auf 50%-Fib (28.025) revidiert (User-Wunsch, realistischeres Tagesziel statt starrem PP-Pivot). Dritter Stall an 27.900-27.918-Zone, User zog SL manuell auf 27.842 nach, ~20 Min extreme Anspannung (MACD-H pendelte um Null), SL am Ende ausgelöst | 27.764 / 10,319€ | BE 27.764/10,319€ → manuell auf 27.842/≈10,464€ nachgezogen, ausgelöst zu 10,424€ (Slippage) | TP1 27.930/≈10,63€ erreicht (194 Stk, 18:00:48 Uhr); TP2 28.025 nicht erreicht, Rest per SL geschlossen (195 Stk @ 10,424€) | 5x | 4.014,09 | +52,19 (TP1) + 20,47 (SL-Exit) = **+72,66 gesamt** | +1,81% | Win | Free-Roll-Prinzip funktionierte: TP1 sicherte genug ab, um den späteren Rückgang mehr als auszugleichen. Kein Prozessfehler in der Positionsführung, QQQ-Gate-Lücke beim Entry dokumentiert |
 
 **Stand (28.07.2026):** 27 Trades abgeschlossen — 16 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +155,89€** (+83,23€ nach Trade #26 + 72,66€ Trade #27). Win-Rate **64% (16/25, BE ausgeklammert)** bzw. 59,3% (16/27, BE mitgezählt).
+
+| 28 | 31.07.2026 | 3 | Short EMA50-Break Dual-Gate nach AI-Chip-Melt-up-Reversal, NAS100+QQQ 5min/15min/1H synchron bärisch bei Entry. Punkt-12-Stall-Teilverkauf bei RSI-Erholung (~16:30), SL auf BE nachgezogen. Vollständiger Bounce lief bis exakt zur Breakeven-Marke durch, bevor TP1 erreicht wurde — Anlass für Regelschärfung [[feedback_live_trading]] Punkt 12.3 (2 Kerzen+RSI≥5 statt 3/8-10) + Scope-Klärung Punkt 11 (Dreh) vs. Punkt 12/7c (Positionsschutz), siehe [[trades/trading_2026-07-31]] | 28.235 / 10,88€ | 28.344/10,67€ → 28.310/10,74€ (7a1) → BE 28.235/10,88€ nach Teilverkauf, ausgelöst | TP1 27.849,0/≈11,62€ nicht erreicht (Bounce vor Zielerreichung) | 5x | 2.491,52 | 115 Stk @11,00€ (+13,80) + 114 Stk @10,88€ BE (+0) = **+13,80 gesamt** | +0,55% | Win | Kein TP1 erreicht — realisiertes RR auf die Restposition ≈0:1 statt geplanter 3,5:1, weil kein aktiver Positionsschutz-Trigger während des Bounces existierte (jetzt durch Punkt 12.3 gefixt) |
+
+**Stand (31.07.2026):** 28 Trades abgeschlossen — 17 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +169,69€** (+155,89€ + 13,80€ Trade #28). Win-Rate **65,4% (17/26, BE ausgeklammert)** bzw. 60,7% (17/28, BE mitgezählt).
 
 **Stand (22.07.2026):** 24 Trades abgeschlossen — 14 Wins, 2 Breakeven, 8 Verluste. **Gesamtgewinn: +95,72€** (+115,75€ nach Trade #23 - 20,03€ Trade #24). Win-Rate **63,6% (14/22, BE ausgeklammert)** bzw. 58,3% (14/24, BE mitgezählt).
 

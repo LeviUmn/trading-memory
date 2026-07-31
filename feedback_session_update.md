@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-28T14:08:59.872Z
+  modified: 2026-07-30T11:39:10.732Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -61,6 +61,8 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 - Grundregel: Kein Entry bis 30 min nach Veröffentlichung + Volatilität beruhigt
 
 **Korrigiert 28.07.2026 (User-Feedback, live während Trading-Session):** Die Entry-Sperrfrist gilt NUR für die oben gelisteten Events — das sind die tatsächlich marktbewegenden Releases. Andere Kalender-Einträge, die investing.com formal als "High Impact" (3 Sterne) markiert — z.B. **CB Consumer Confidence, ISM Manufacturing/Services, JOLTs Job Openings** — haben laut User in der Praxis keine ausreichende Marktgewichtung, um eine Entry-Sperre zu rechtfertigen. Die investing.com-Stern-Bewertung ist NICHT die Entscheidungsgrundlage für die Sperrfrist. Konkreter Anlass: CB Consumer Confidence (28.07., 16:00 Uhr, Miss 90,8 vs. 92,4) hatte keine erkennbare Marktreaktion, die Sperrfrist wurde dennoch fälschlich angesetzt.
+
+**Fehler 30.07.2026 (User-Korrektur) — WebFetch-Kalenderzeiten gegen die eigene Standard-Liste prüfen, nicht blind übernehmen:** Ein Kalender-Fetch zeigte für GDP/PCE/Personal Income/Initial Jobless Claims "12:30 PM US" und wurde fälschlich als 18:30 DE-Zeit (12:30 ET) interpretiert. Tatsächlich laufen diese vier Reports als gebündelter Donnerstags-Release **immer um 8:30 Uhr ET = 14:30 Uhr DE-Zeit** — exakt die Standardzeit, die oben in diesem Memory bereits für PCE/CPI/NFP/Jobless Claims/ADP dokumentiert ist. Der Fehler entstand, weil die gefetchte Zeitangabe unhinterfragt übernommen wurde, statt sie gegen die eigene bereits korrekte Referenzliste (14:30 CET) gegenzuchecken. **How to apply:** Bei jedem Live-Kalender-Fetch die Uhrzeit der Standard-US-Reports (GDP/PCE/CPI/PPI/NFP/Jobless Claims/ADP) immer gegen die oben gelistete 14:30-CET-Regel spiegeln — weicht der Fetch davon ab, gilt das als Fetch-Artefakt/Fehlinterpretation, nicht als neue Information, außer der User bestätigt explizit eine Abweichung (z.B. Sommerzeit-Wechsel-Tag).
 
 **Quelle für Event-Wichtigkeit ab jetzt tradingeconomics.com, nicht investing.com:** User bezieht sich explizit auf tradingeconomics' eigene Kennzeichnung der wichtigen Daten. Schritt 4 (Live-Kalender) künftig nach Möglichkeit von tradingeconomics.com abrufen bzw. dessen Impact-Kennzeichnung als Referenz für "gehört das auf die Sperrfrist-Liste" heranziehen, nicht investing.com's Sterne.
 

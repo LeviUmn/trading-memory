@@ -1,0 +1,19 @@
+---
+name: review-4h-timeframe-und-indikator-ranking
+description: "31.07.2026 Fable-Review zu 4H-MTF-Schritt und externer Indikator-Rangliste (RSI=1...Order Flow=10) — beide Ideen abgelehnt, ein offener To-do (depth_get testen)"
+metadata: 
+  node_type: memory
+  type: project
+  originSessionId: d8d3fabc-529f-4d5b-ac61-4eb03132b34a
+  modified: 2026-07-31T10:07:51.538Z
+---
+
+**Entscheidung (31.07.2026, nach Fable-Review):** Kein 4H-Timeframe-Schritt im bestehenden MTF-Ablauf ([[feedback_chartanalyse]] Punkt 8, aktuell 1H/15min/5min), keine Änderung am aktuellen Indikator-Set (RSI/MACD/EMA50 auf NAS100, VWAP/Volumen/EMA50 auf QQQ) aufgrund einer extern gelesenen Indikator-Rangliste (RSI=1, Trading Patterns=2, Fibonacci=3, Supply/Demand=4, FVG=5, ICT/SMC=5, SMA=6, Volume Profile=10, Order Flow=10).
+
+**Why:**
+- **4H-Frage:** Der eigene Backtest vom 03.07.2026 zeigt, Profitabilität in diesem System hängt an Regeldisziplin, nicht an mehr Zeitebenen (~+60€ hypothetisch bei sturer Regeltreue vs. tatsächlich -4,22€ bei Regelabweichung, gleiches Setup). 1H und 4H korrelieren stark, kaum echter Zusatz-Informationsgehalt, aber realer Tooling-Mehraufwand im ohnehin vollen 5-Min-Voll-Check. Kernhandelszeit 16-18 Uhr DE-Zeit liegt selten direkt an einem 4H-Kerzenschluss → ein 4H-Bias wäre in diesem Fenster meist "alt". Echte Supply/Demand-/Order-Block-Zonen haben kein Tool im Setup, wären reine Screenshot-Interpretation und ein zusätzliches Risiko für die ohnehin knappen Essential-Plan-Indikator-Slots (siehe Pivot-Points-Standard-Rauswurf in [[feedback_chartanalyse]] Punkt 7a1).
+- **Ranking-Frage:** Die Skala verwechselt theoretische Datenhärte mit belegter Edge in diesem konkreten System. RSI=1 widerspricht der eigenen Historie — RSI-Divergenz ist bei uns mehrfach als stärkstes Signal dokumentiert (siehe [[feedback_chartanalyse]] Punkt 6). Volume Profile/Order Flow=10 unterstellt echten Transaktionsdatenzugang — NAS100 ist CFD ohne echtes Volumen, ein CFD-Orderbuch (falls überhaupt vorhanden) zeigt höchstens das synthetische Broker-Buch, keinen realen Marktorderfluss. FVG/ICT/SMC=5 ist größtenteils Relabeling von Supply/Demand mit wenig belastbarem Beleg — würde dieselbe Interpretationslast wie die 4H-Order-Blocks reinholen.
+
+**How to apply:** Bei künftig gelesenen ähnlichen Quellen (weitere Timeframes, weitere "bessere" Indikatoren) zuerst diese Kernfrage stellen: verbessert es nachweisbar die Regeldisziplin/Prozessqualität, oder fügt es nur zusätzliche Komplexität ohne Bezug zum bereits identifizierten Haupttreiber (Regeltreue) hinzu? Diese Entscheidung nicht bei jeder neuen Quelle von vorne aufrollen, außer es gibt neue konkrete Evidenz (z.B. echten Order-Flow-Datenzugang oder einen belegten Fall, in dem RSI im System versagt hat).
+
+**To-do erledigt (31.07.2026, live getestet):** `mcp__tradingview__depth_get` liefert auf BEIDEN Panes (NAS100 und QQQ) den Fehler "DOM / Depth of Market panel not found" — kein CFD-spezifisches Datenproblem, sondern strukturell: es gibt in dieser TradingView-Instanz gar kein DOM-Panel zum Öffnen (kein "Depth of Market"/"Marktiefe"/"DOM"-UI-Element auffindbar, auch das allgemeine "trading"-Panel öffnet nicht). Grund: TradingViews DOM-Widget braucht eine aktive Broker-/Trading-Kontoverbindung in TradingView selbst (Paper Trading oder echter Broker) — die ist bewusst nicht eingerichtet, da IBKR nur für Fill-Rückabgleich dient, siehe [[project_vision]] ("KEINE automatische Order-Ausführung gewünscht"). **Order Flow/DOM ist damit für dieses Setup dauerhaft nicht verfügbar**, unabhängig vom Symbol — bestätigt zusätzlich die Skepsis aus der Ranking-Bewertung oben (Volume Profile/Order Flow=10 war für dieses System ohnehin schon als praktisch unerreichbar eingeschätzt worden). Nur erneut prüfen, falls sich die bewusste Entscheidung gegen eine TradingView-Broker-Anbindung ändert.

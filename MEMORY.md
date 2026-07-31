@@ -1,5 +1,9 @@
 # Memory Index
 
+- [Trade #28 & Fable-Review: Positions-Verteidigung vs. Dreh-Schwelle](trades/trading_2026-07-31.md) — 31.07., Short NAS100 Win nur +13,80€ statt möglichem Mehrfachen. User-Kritik bestätigt: Punkt 11 (2-3/4, für Dreh) wurde fälschlich als einzige Schwelle für reinen Positions-Schutz benutzt. **Finale Fassung nach mehreren verworfenen Zwischenschritten:** [[feedback_live_trading]] Punkt 12.3 (Stall-Regel geschärft: 2 Kerzenschlüsse + RSI≥5 Pkt statt 3/8-10, inkl. Rekursions-Logik für Restpositionen) PLUS Punkt 7c 5. Erweiterung (paralleler, schnellerer 1-Min-Tick-Trigger für aktive Gegenbewegung, 5/3 Checks) — beide dokumentiert als komplementär, nicht redundant. Scope-Klarstellung: nie mit Punkt 11 (Dreh-Schwelle) vermischen. TP1-Rekalibrierung geprüft und als Hindsight Bias verworfen. Rückwirkende Prüfung gegen Trade-Historie: Trade #19 (15.07.) plausibler Kandidat für früheren Trigger, Trade #21/#26/#27 nicht einschlägig (andere Fehlerursache)
+- [4H-Timeframe & Indikator-Ranking Review](project_review_4h_und_indikator_ranking_2026-07-31.md) — 31.07., Fable-Review: beide abgelehnt (Regeldisziplin > mehr Zeitebenen/Indikatoren). depth_get live getestet: kein DOM-Panel verfügbar (keine Broker-Anbindung), Order Flow dauerhaft nicht nutzbar
+- [Tagesabschluss 30.07.2026](trades/trading_2026-07-30.md) — Kein Trade, aber Regel-Pflege-Tag: Gamma-Melt-up (+3,6%) nach PCE/GDP/MSFT-Schock, dann Korrektur+Chop. Fable-Review schärfte Punkt 13.1 (Chasing-Pflicht) + 7c-Erweiterung (Kipp-Anzeichen) nach, Chop-Pflichtzeile + Pane-Batching-Regel ergänzt
+- [Demo-Loop für Dritte](feedback_demo_trades.md) — 29.07.2026, erste Freunde-Demo: voller Regelsatz + aktive Blackouts gelten auch im Demo, aber keine Eintragung in Trade-DB/trade_log
 - [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung 20 Uhr, PK 20:30 Uhr. Fed-Level-Event, volle Entry-Sperrfrist gilt (siehe [[feedback_session_update]])
 - [Fable-Tagesabschluss-Review 28.07.2026](trades/trading_2026-07-28.md) — Trade #26/#27 geprüft: kein Regelbruch, aber Script-Test-Lücke (size.cjs) + Punkt-12-Stall-Regel nicht vollständig angewendet (nur SL-Nachzug statt Teilgewinn), siehe [[feedback_live_trading]] Punkt 12.2
 - [Punkt-12-Präzisierung: SL-Nachzug ≠ Teilgewinn](feedback_live_trading.md) — 28.07. nach Trade #27: bei Stall-Trigger BEIDE Optionen (Teilgewinn + SL-Nachzug) anbieten, nicht nur SL-Variante — siehe Punkt 12.2
@@ -55,7 +59,7 @@
 - [Order-Bestätigung](feedback_order_bestaetigung.md) — Order-Ausführung immer aktiv bestätigen lassen, nie annehmen
 - [Memory Pflege Regel](feedback_memory_pflege.md) — Sofort nach jedem Trade/Update speichern. Zitierpflicht: Zahlenbehauptungen brauchen frischen Tool-Call
 - [Chartanalyse Checkliste](feedback_chartanalyse.md) — Volle TA (Trend/S-R/Fib/Candlesticks/Volumen/RSI/MACD/MTF/RRR/Muster) am Voll-Check-Rhythmus. Punkt 8b/8c am 27.07. reformiert (RR-Entkopplung, SL-Breite-Floor)
-- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte: Memory→Tweets→FRED→Kalender→Intermarket→NAS100+QQQ-Chart→Bias
+- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte: Memory→Tweets→FRED→Kalender→Intermarket→NAS100+QQQ-Chart→Bias. 30.07.: WebFetch-Kalenderzeiten gegen eigene 14:30-CET-Standardliste prüfen, nicht blind übernehmen
 - [Session 30.06.2026](trades/trading_2026-06-30.md) — 3 Trades +9,72€
 - [Trade 12.06.2026](trades/trading_2026-06-12.md) — Erster Trade +20,32€, perfekt ausgeführt
 - [Trade Log Tabelle](trades/trade_log.md) — Narrative Übersicht aller Trades (Zahlen jetzt auch in der SQLite-DB, siehe oben)
@@ -64,7 +68,7 @@
 - [Trading Zeitfenster](feedback_trading_zeitfenster.md) — Beste Entry-Zone 16-18 Uhr DE-Zeit. 15:30-16:00 seit 23.07. aktive Suche mit Pflicht-Halbierung
 - [Instrumenten-Fokus](feedback_instrumenten_fokus.md) — Nasdaq Hauptinstrument, DAX/Gold nur Ergänzung, kein Doppelrisiko
 - [Vision & Fahrplan](project_vision.md) — Ziel: Bloomberg/GS-Niveau über alle Phasen. UnusualWhales-Plan siehe oben. **27.07.:** IBKR-Zweck nur Fill-Rückabgleich, KEINE automatische Order-Ausführung gewünscht
-- [Live-Trading-Protokoll](feedback_live_trading.md) — 1-Min-Loop, Entscheidungsbaum+Positions-Kasten, Voll-Check-Rhythmus. Punkt 12.1a-Update siehe oben. 27.07.: Punkt 9 Anti-Drift-Fix (Pflicht-Ausgabezeilen statt stiller Prüfung)
+- [Live-Trading-Protokoll](feedback_live_trading.md) — 1-Min-Loop, Entscheidungsbaum+Positions-Kasten, Voll-Check-Rhythmus. Punkt 12.1a-Update siehe oben. 27.07.: Punkt 9 Anti-Drift-Fix. 30.07.: Punkt 13.1 (Chasing-Pflicht, feste 2-Check-Schwelle statt "hält", Hindsight-Warnung) + Punkt 7c-Erweiterung (Kipp-Anzeichen nach Extrembewegung), beide mit Review-Pflicht nach Fable-Nachschärfung — siehe [[trades/trading_2026-07-30]]
 - [Datenquelle NAS100](feedback_datenquelle_nas100.md) — quote_get kann stale sein, immer Chart-Bars nutzen
 - [Trade 01.07.2026](trades/trading_2026-07-01.md) — 2 Verluste in Folge -32,97€, Cooldown aktiv
 - [Regeldisziplin](feedback_regeldisziplin.md) — Verlust trotz Regeleinhaltung = akzeptabel, durch Regelbruch = selbstgemacht

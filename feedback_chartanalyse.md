@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-27T10:54:23.180Z
+  modified: 2026-07-30T15:47:54.839Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -264,6 +264,8 @@ Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup
 **How to apply:** Bei jedem Voll-Check die Netto-Bewegung der letzten 2-3 Stunden gegen die Zwischen-Range gegenrechnen (frisch per `data_get_ohlcv`, nicht aus dem Gedächtnis — Zitierpflicht). Fällt die Netto-Bewegung deutlich kleiner aus als die Range (Faustregel: Netto <10% der Range), das Ergebnis aktiv als "Lehrbuch-Chop, kein Setup möglich" aussprechen — Beobachtung und Loop-Cadence bleiben voll aktiv, nur die Erwartungshaltung ist ehrlich auf "aktuell kein Trigger zu erwarten" statt einer aktiven Trigger-Jagd auf jeder Kerze.
 
 **Klarstellung (User-Formulierung, 16.07.2026):** Die Suche nach einem Trade läuft die GANZE Zeit ununterbrochen — Chop ist eine Wahrnehmung/Schlussfolgerung, die WÄHREND dieser laufenden Suche entsteht, kein Grund, die Beobachtung zu unterbrechen ("die Augen zuzumachen"). Die Lage kann sich jederzeit sofort ändern (News, Struktur-Bruch) — deshalb bleibt jeder Check so gründlich wie in der ruhigen Phase, auch wenn das wahrscheinliche Ergebnis "kein Setup" ist.
+
+**Pflicht-Ausgabezeile bei bestätigtem Lehrbuch-Chop (ergänzt 30.07.2026, Fable-Tagesabschluss-Review nach 30.07.2026):** Am 30.07.2026 wurde "Lehrbuch-Chop" beim ersten Erkennen (~17:08) einmalig explizit benannt, danach über ~45 Minuten nur noch mit dem generischen "kein Setup, weiter Beobachtung" wiederholt — strukturell dasselbe Muster wie der bereits diagnostizierte Prozessfehler vom 27.07. (stille Wiederholung ohne sichtbaren Beleg, siehe [[feedback_prozessfehler_27_07_fuer_fable]] und [[feedback_live_trading]] Punkt 9 "Struktureller Anti-Drift-Fix"), nur diesmal beim Regime-Status statt beim Tweet-Check. **Fix (derselbe Mechanismus, auf einen dritten Fall angewendet):** Solange ein Voll-Check innerhalb einer bereits erkannten Lehrbuch-Chop-Phase läuft, gehört eine Pflicht-Zeile in den Output: `Regime: Lehrbuch-Chop bestätigt (Netto X% bei Y Pkt Range)` — bei jedem einzelnen Voll-Check, nicht nur beim ersten Erkennen. Fehlt diese Zeile während einer laufenden Chop-Phase, gilt der Voll-Check als nicht vollständig, genau wie bei den bereits bestehenden Pflicht-Zeilen (1H-MTF-Schritt, Tweet-Check, Format).
 
 **Zusätzlicher Faktor Nr. 4 — letzter Handelstag vor Wochenende/Feiertag, bidirektional (ergänzt 02.07.2026, präzisiert nach User-Feedback):** Der letzte Handelstag vor einer mehrtägigen Schließzeit (normal Freitag, oder Donnerstag falls Freitag Feiertag ist — dann gilt der Risk-Modus schon am Donnerstag, weil am Freitag nicht mehr reagiert werden kann) zeigt verstärktes Positions-Management-Verhalten. **Wichtig: das ist NICHT automatisch bärisch — die Richtung folgt der vorherrschenden Nachrichtenlage:**
 

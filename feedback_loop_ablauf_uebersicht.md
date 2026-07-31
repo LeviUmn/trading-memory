@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: session-2026-07-21
-  modified: 2026-07-27T18:07:05.455Z
+  modified: 2026-07-31T13:43:28.167Z
 ---
 
 Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine zusammenhängende Referenz gespeichert, damit sich künftige Sessions konsistent daran halten — bündelt Regeln, die sonst über mehrere Dateien verteilt sind.
@@ -34,7 +34,7 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 ### Jede 5. Minute (5-Min-Kerze) — Voll-Check, Punkt 9 (korrigiert 21.07.2026)
 1. Echte Minute erneut bestätigen
 2. **MTF-Wechsel (uneingeschränkt Pflicht):** `chart_set_timeframe(15)` NAS100 → Werte lesen → `chart_set_timeframe(60)` → Werte + Struktur (HH-HL/LH-LL) letzter 5 Bars → zurück auf 5min
-3. **QQQ-Dual-Gate:** Zeitstempel-Vergleich NAS100/QQQ-Bar → falls Session-Gate offen (Punkt 7e): `pane_focus(1)`, dort 15min+60min → EMA50/VWAP/Volumen lesen → zurück auf Pane 0
+3. **QQQ-Dual-Gate:** Zeitstempel-Vergleich NAS100/QQQ-Bar → falls Session-Gate offen (Punkt 7e): `pane_focus(1)`, dort 15min+60min → EMA50/VWAP/Volumen lesen → **QQQ-Timeframe zurück auf 15min setzen** (ergänzt 31.07.2026, User-Korrektur — QQQ-Pane bleibt sonst auf 60min stehen, wenn direkt zu Pane 0 zurückgewechselt wird) → dann erst zurück auf Pane 0
 4. **Chartmuster (reduziert, NICHT mehr die volle [[feedback_chartanalyse]] 9d-Liste):** Screenshot + Prüfung auf die 3-4 zum Kontext wahrscheinlichsten Muster (z.B. Double-Top bei Zonentest, Flag/Pennant bei Konsolidierung, Keil bei Trendabschwächung)
 5. **Fibonacci:** nur wenn ein erkennbarer Impuls/Trend vorliegt, sonst ausgelassen
 6. **Tweet-Fetch-Fälligkeit aus `x_last_fetch.json` berechnen, nicht mental Minute%10 mitzählen** (ergänzt 27.07.2026, Anti-Drift-Fix nach zweimaligem Ausfall — siehe [[feedback_live_trading]] Punkt 9): Zeitstempel lesen, Differenz zur echten Systemzeit bilden. ≥10 Min → Fetch der 3 Accounts (DeItaone/KobeissiLetter/zerohedge) durchführen, Timestamp aktualisieren. Ergebnis IMMER als Pflicht-Zeile im Output (auch "noch nicht fällig" oder "nichts Neues") — nie stillschweigend weglassen, siehe Schritt 9
