@@ -1,5 +1,6 @@
 # Memory Index
 
+- [Mac-Umzug (Zukunft)](project_mac_umzug.md) — geplant ca. September 2026, Windows-Setup fällt weg, Mac Mini + mobiles MacBook-Pro/iPad-Setup simultan. Nichts tun bis User aktiv "Mac Mini ist da" meldet — dann Neuinstallation aller APIs/MCP + Live-Test des Memory-Sync-Problems
 - [Trade #29: Long Stop-Hunt-Reversal + ISM-Beat](trades/trading_2026-08-03.md) — 03.08., Win +105,21€ (+2,65%), TP1+TP2 beide erreicht, Phase 3 jetzt 3W/1L (75%). Fable-Review bestätigte Trade regelkonform, deckte 7. Fehler auf (fehlende Chop-Offenlegung am Entry, siehe [[project_risikomanagement]]) und bestätigte: 3 von 6 Tagesfehlern waren Rückfälle → struktureller Fix (Pre-Send-Checkliste auch für Quick-Ticks) in [[feedback_loop_ablauf_uebersicht]] umgesetzt
 - [X-Account-Idee (AiTrader/ClaudeTrader)](project_x_account_idee.md) — 03.08., öffentlicher Account für die AI-Trading-Journey (Aufbau/Tools/Regeln, keine Trade-Calls), reine Zukunfts-Idee, noch nicht entschieden
 - [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 03.08., 149$/Monat für Live-Kalenderdaten statt WebFetch-Scrape erwogen, noch nicht entschieden — bei wiederholten Fetch-Fehlern erneut vorschlagen
