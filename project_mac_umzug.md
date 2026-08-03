@@ -5,14 +5,16 @@ metadata:
   node_type: memory
   type: project
   originSessionId: session-2026-08-03
-  modified: 2026-08-03T15:01:34.681Z
+  modified: 2026-08-03T15:02:15.667Z
 ---
 
 Am 03.08.2026 besprochen, bewusst auf später verschoben.
 
 **Plan:** Sobald der Mac Mini da ist (voraussichtlich September 2026), verschwindet das Windows-Trading-Setup komplett. Drei Monitore für den Mac Mini bereits gekauft. Zusätzlich existiert ein mobiles Setup (MacBook Pro 2024 + iPad Air als Zusatzmonitor), das dann parallel/simultan mit demselben Sync-Mechanismus eingerichtet wird.
 
-**Offenes technisches Problem (noch ungelöst, erst am echten Gerät zu klären):** Der aktuelle Memory-Ordner ist an den Windows-Projektpfad gekoppelt (`C:\Users\umnus\...\C--Users-umnus-tradingview-mcp\memory\`). Unklar, ob Claude Code auf einem Mac automatisch denselben Memory-Kontext lädt (auch nach `git pull`) oder einen neuen leeren Kontext anlegt, weil sich der Pfad-Hash ändert. Gleiches Betriebssystem (Mac Mini + MacBook, beide macOS) reduziert das Risiko gegenüber Windows→Mac, löst es aber nicht zwangsläufig vollständig, da beide Geräte eigene Home-Verzeichnisse haben können.
+**Offenes technisches Problem (noch ungelöst, erst am echten Gerät zu klären):** Der aktuelle Memory-Ordner ist an den Windows-Projektpfad gekoppelt (`C:\Users\umnus\...\C--Users-umnus-tradingview-mcp\memory\`). Unklar, ob Claude Code auf einem Mac automatisch denselben Memory-Kontext lädt (auch nach `git pull`) oder einen neuen leeren Kontext anlegt, weil sich der Pfad-Hash ändert. Gleiches Betriebssystem (Mac Mini + MacBook, beide macOS) reduziert das Risiko gegenüber Windows→Mac.
+
+**Mitigation bereits geplant (User-Ergänzung 03.08.2026):** Mac Mini und MacBook Pro bewusst mit identischem Home-Verzeichnis-Namen/-Struktur aufsetzen (z.B. gleicher macOS-Benutzername), damit der Projektpfad (und damit der davon abgeleitete Memory-Ordner-Hash) auf beiden Geräten identisch ist — soll die Pfad-Diskrepanz von vornherein eliminieren statt sie nur zu reduzieren. Trotzdem am echten Gerät verifizieren, nicht blind darauf verlassen.
 
 **Why:** User will beim Geräte-Wechsel (z.B. heute auf einem Gerät getradet, morgen auf einem anderen) nie mit veraltetem Memory-Stand starten. Bisheriger GitHub-Backup ist nur Einbahnstraße (Push am Tagesende, kein automatischer Pull beim Start).
 
