@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-31T15:32:00.899Z
+  modified: 2026-08-03T13:50:22.789Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -193,6 +193,16 @@ Kurs: <aktueller Kurs>
 
 **How to apply:** Ab jetzt in der heißen Phase (Kurs nähert sich einer Trigger-Zone) dieses Wenn-Dann-Format statt Prosa verwenden. Sobald ein Trade offen ist oder noch keine Zone in Sichtweite ist, reicht das normale kompakte Format aus Punkt 2.
 
+**Chart-Linien (`draw_shape`) für die 🟢/🔴-Trigger erst kurz vor Entry zeichnen, nicht schon in der reinen Setup-Suche (ergänzt 03.08.2026, User-Korrektur):** Der Text-Entscheidungsbaum selbst darf schon früh gezeigt werden (siehe oben), aber die zugehörigen Linien im Chart erst dann einzeichnen, wenn fast alle Indikatoren + das Dual-Gate (Punkt 7b) erfüllt sind — also kurz vor dem eigentlichen Trigger, nicht schon während beide Zonen noch weit auseinanderliegen und sich die Level-Einschätzung noch verschieben kann. **Why:** User-Zitat: "Sonst machen die Linien kein Sinn, weil wir die sonst ständig neu setzen müssten" — vorschnell gezeichnete Linien erzeugen unnötigen Redraw-Aufwand, wenn sich die Setup-Struktur vor Erreichen der heißen Phase noch ändert.
+
+**7d0. Vor JEDER Trigger-Meldung prüfen, ob der letzte Bar aus `data_get_ohlcv` überhaupt schon geschlossen ist (ergänzt 03.08.2026, User-Korrektur nach Live-Fehler)**
+
+Bei Trade-Vorbereitung #29 (03.08.2026) wurde ein SHORT-Trigger als "AUSGELÖST" gemeldet, weil der letzte Bar im OHLCV-Pull (Startzeit 15:30, 5-Min-Timeframe) einen Schlusskurs unter dem Trigger-Level zeigte — dieser Bar lief zum Zeitpunkt der Meldung aber noch bis 15:35, war also gar keine abgeschlossene Kerze, sondern nur der aktuelle Zwischenstand. User musste live korrigieren ("Kerze läuft noch bis 15:35, nicht geschlossen").
+
+**Why:** `data_get_ohlcv` liefert für den letzten Bar immer den aktuellen Live-Stand, keine Kennzeichnung ob die Kerze bereits geschlossen ist. Ohne expliziten Zeit-Check sieht ein Wick/Zwischenstand optisch identisch aus wie ein echter Schlusskurs — genau die Verwechslung, die Punkt 7d (Kerzenfarbe/Schlusstyp) eigentlich schon adressiert, hier aber auf einer Ebene davor (ist die Kerze überhaupt fertig?).
+
+**How to apply:** Vor jeder Trigger-Meldung (🟢/🔴 ausgelöst) den Zeitstempel des letzten Bars gegen die echte Uhrzeit aus `Bash date` prüfen: Bar-Startzeit + Timeframe-Dauer (z.B. 5min-Bar von 15:30 läuft bis 15:35) muss ≤ aktuelle Zeit sein, sonst ist es kein abgeschlossener Schluss, sondern ein Zwischenstand/Wick-Test. Bei offener Kerze im Status explizit "Test läuft, Kerze offen bis HH:MM" schreiben statt "Trigger ausgelöst".
+
 **7d. Kerzenfarbe/Schlusstyp bei jedem Preis-Trigger explizit benennen, nicht nur das Level (ergänzt 13.07.2026, Konkretisierung von [[feedback_chartanalyse]] Punkt 9c — kein eigenständiges neues Prinzip)**
 
 Ein reines Preis-Level ("Bruch über 29.541") lässt offen, ob eine grün schließende Bestätigungskerze nötig ist (Schlusskurs über dem Level, bullische Kerze — stärkeres Signal) oder ob auch eine rot schließende Kerze reicht, solange der Schlusskurs über dem Level liegt (schwächeres, aber technisch noch gültiges Signal). Beide Fälle sind unterschiedlich aussagekräftig und dürfen nicht offen bleiben.
@@ -331,6 +341,8 @@ TP2: <NAS100-Kurs> (≈<Zert.-Preis>€) — Rest, mit laufenden Schutzsignalen
 **Verschärfung nach Trade #16 (ergänzt 09.07.2026):** Nach TP1-Erreichen (Teilverkauf) wurde der MTF-Voll-Check komplett vernachlässigt — nur der schnelle Zahlen-Loop lief bis zum SL-Exit, kein einziger echter 1H/15min-Timeframe-Wechsel während der gesamten Restlaufzeit der Position. Erst eine explizite User-Nachfrage deckte die Lücke auf. **TP1-Erreichen ändert NICHTS an der Voll-Check-Pflicht** — die Rest-Position (nach Teilverkauf) unterliegt denselben 4 Trigger-Punkten wie die volle Position, bis sie komplett geschlossen ist. User-Zitat: "das muss unbedingt beachtet werden."
 
 **Korrektur 21.07.2026 (zweiter Fable-Review nach Trade #23) — der Pflichtwortlaut "inkl. ... Fibonacci ... Chartmuster" war aspirativ, nicht real eingehalten.** Audit ergab: Fibonacci wurde nur opportunistisch (einmalig für eine TP-Ableitung) statt bei jedem Voll-Check berechnet, und die 9d-Musterliste wurde nur reaktiv benannt (erst nach explizitem User-Hinweis auf Double-Top-Verdacht), nicht proaktiv komplett durchgegangen — beides ohne Offenlegung. Fables Entscheidung (begründet mit dem wiederkehrenden Muster aus Punkt 9a/Trade #16: "vollständige" Pflichtlisten brechen strukturell unter Zeitdruck, egal wie sie formuliert sind): **lieber ein ehrlich reduzierter, realistisch einhaltbarer Standard als eine Vollständigkeit, die nur auf dem Papier steht.**
+
+**Reihenfolge bei Voll-Check auf einen exakten Makro-Release-Zeitpunkt (ergänzt 03.08.2026, User-Vorgabe vor dem 16:00-ISM-Doppel-Event):** Fällt ein 5-Min-Voll-Check-Zeitpunkt exakt mit einem bekannten Makro-Release zusammen (z.B. 16:00 ISM Manufacturing PMI + Employment), zuerst die frischen Makrodaten einholen (Tweet-Accounts, ggf. vom User bereitgestellter Screenshot), DANACH erst den eigentlichen Voll-Check durchführen — die Indikatoren-/MTF-Bewertung soll die neue Zahl bereits einpreisen, nicht hinterherhinken. Reihenfolge also: Makro-Zahl → dann Voll-Check (nicht umgekehrt, nicht parallel ohne Reihenfolge).
 
 **Realistischer Pflicht-Umfang pro Voll-Check (ersetzt den alten Wortlaut):**
 - **MTF-Wechsel** (15min + 1H, NAS100 + QQQ falls Session-Gate offen) — bleibt uneingeschränkt Pflicht, keine Abstriche

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-30T11:39:10.732Z
+  modified: 2026-08-03T14:03:26.708Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -57,14 +57,18 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 - ADP Employment — monatlich, 14:15 CET
 - FOMC-Protokolle / Fed-Entscheidungen / Fed-Reden
 - GDP-Daten (Revisionen beachten!)
-- **Doppel-Events gleichzeitig 16:00:** Spike-Volatilität in beide Richtungen → kein Entry vor 16:15-16:30
+- **Doppel-Events gleichzeitig 16:00:** Spike-Volatilität in beide Richtungen → kein Entry vor 16:15-16:30 — **gilt nur, wenn mindestens eines der beiden gleichzeitigen Events selbst auf dieser Liste steht** (siehe Korrektur 03.08.2026 unten)
 - Grundregel: Kein Entry bis 30 min nach Veröffentlichung + Volatilität beruhigt
 
 **Korrigiert 28.07.2026 (User-Feedback, live während Trading-Session):** Die Entry-Sperrfrist gilt NUR für die oben gelisteten Events — das sind die tatsächlich marktbewegenden Releases. Andere Kalender-Einträge, die investing.com formal als "High Impact" (3 Sterne) markiert — z.B. **CB Consumer Confidence, ISM Manufacturing/Services, JOLTs Job Openings** — haben laut User in der Praxis keine ausreichende Marktgewichtung, um eine Entry-Sperre zu rechtfertigen. Die investing.com-Stern-Bewertung ist NICHT die Entscheidungsgrundlage für die Sperrfrist. Konkreter Anlass: CB Consumer Confidence (28.07., 16:00 Uhr, Miss 90,8 vs. 92,4) hatte keine erkennbare Marktreaktion, die Sperrfrist wurde dennoch fälschlich angesetzt.
 
+**Korrigiert 03.08.2026 (User-Feedback, live während Trading-Session):** Die "Doppel-Events gleichzeitig 16:00"-Zeile wurde fälschlich auf den ISM Manufacturing PMI + Employment Release (03.08., 16:00 Uhr) angewendet, obwohl ISM laut der 28.07.-Korrektur explizit NICHT blackout-pflichtig ist. Root Cause: die Doppel-Event-Zeile stand direkt unter den hart gelisteten Events und wurde dadurch fälschlich als eigenständige, event-unabhängige Regel gelesen. **Klarstellung:** Die Doppel-Event-Regel ist kein eigener Blackout-Auslöser — sie verstärkt nur die Sperrfrist, falls eines der gleichzeitig veröffentlichten Events selbst auf der Liste steht (z.B. wenn NFP und ein zweiter Report zufällig zusammenfallen). Zwei gleichzeitige Nicht-Blackout-Events (wie ISM PMI + ISM Employment) lösen keine Sperrfrist aus, auch nicht in Kombination.
+
 **Fehler 30.07.2026 (User-Korrektur) — WebFetch-Kalenderzeiten gegen die eigene Standard-Liste prüfen, nicht blind übernehmen:** Ein Kalender-Fetch zeigte für GDP/PCE/Personal Income/Initial Jobless Claims "12:30 PM US" und wurde fälschlich als 18:30 DE-Zeit (12:30 ET) interpretiert. Tatsächlich laufen diese vier Reports als gebündelter Donnerstags-Release **immer um 8:30 Uhr ET = 14:30 Uhr DE-Zeit** — exakt die Standardzeit, die oben in diesem Memory bereits für PCE/CPI/NFP/Jobless Claims/ADP dokumentiert ist. Der Fehler entstand, weil die gefetchte Zeitangabe unhinterfragt übernommen wurde, statt sie gegen die eigene bereits korrekte Referenzliste (14:30 CET) gegenzuchecken. **How to apply:** Bei jedem Live-Kalender-Fetch die Uhrzeit der Standard-US-Reports (GDP/PCE/CPI/PPI/NFP/Jobless Claims/ADP) immer gegen die oben gelistete 14:30-CET-Regel spiegeln — weicht der Fetch davon ab, gilt das als Fetch-Artefakt/Fehlinterpretation, nicht als neue Information, außer der User bestätigt explizit eine Abweichung (z.B. Sommerzeit-Wechsel-Tag).
 
 **Quelle für Event-Wichtigkeit ab jetzt tradingeconomics.com, nicht investing.com:** User bezieht sich explizit auf tradingeconomics' eigene Kennzeichnung der wichtigen Daten. Schritt 4 (Live-Kalender) künftig nach Möglichkeit von tradingeconomics.com abrufen bzw. dessen Impact-Kennzeichnung als Referenz für "gehört das auf die Sperrfrist-Liste" heranziehen, nicht investing.com's Sterne.
+
+**Fehler 03.08.2026 — tradingeconomics.com-WebFetch zwei Zuverlässigkeitsprobleme an einem Tag, User musste korrigieren:** (1) Der Fetch zeigte für den noch nicht veröffentlichten ISM Manufacturing PMI (16:00 Uhr) bereits einen "Actual"-Wert an — technisch unmöglich vor Release, klarer Hinweis auf eine gecachte/veraltete Seite. (2) Der Fetch listete für Freitag "keine High-Impact-Events", obwohl an diesem Freitag (erster Freitag im Monat) die Non-Farm Payrolls + Unemployment Rate anstanden — einer der wichtigsten Termine überhaupt, komplett fehlend. User musste die vollständige Wochenübersicht (inkl. Di JOLTS, Mi ISM Services + EIA Crude Oil, Do Jobless Claims, Fr NFP+Unemployment) manuell nachliefern. **How to apply:** Den tradingeconomics-Fetch aus Schritt 4 nicht mehr als alleinige Quelle für die Wochenübersicht behandeln — die in Schritt 2 ohnehin bereits abgerufenen Tweet-Kalenderübersichten (DeItaone "THIS WEEK'S U.S. ECONOMIC CALENDAR", Kobeissi "Key Events This Week") aktiv als Cross-Check/Ergänzung heranziehen, besonders für Freitag-NFP-Wochen. Bei Diskrepanz zwischen den Quellen oder fehlenden erwarteten Standard-Terminen (NFP am 1. Freitag, ADP/Jobless Claims wöchentlich) aktiv beim User nachfragen statt den Fetch unhinterfragt als vollständig zu behandeln.
 
 ### Schritt 5 — TradingView öffnen: Intermarket-Scan
 TradingView IMMER starten (`tv_launch`), nicht optional. Chart läuft auch vorbörslich.

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-31T15:59:26.052Z
+  modified: 2026-08-03T14:50:01.271Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -170,6 +170,8 @@ Es gibt mittlerweile vier unabhängig voneinander entstandene Regeln, die jede f
 **Nicht doppelt zählen:** Stammen Chop-Erkennung UND der Schock-ATR-Tier aus demselben Marktregime (häufiger Fall, da beide oft gemeinsam auftreten), gilt trotzdem nur EINMAL der 50%-Floor — sie zählen als EIN Trigger-Grund, nicht als zwei.
 
 **How to apply:** Bei der Positionsgrößen-Berechnung (Workflow Schritt 0-2 oben) prüfen, ob einer oder mehrere der vier Halbierungs-Trigger zutreffen — bei jeder Anzahl ≥1 gilt derselbe Floor: 50% der Phasen-Positionsgröße, unabhängig davon wie viele Gründe gleichzeitig vorliegen.
+
+**Explizite Chop-Offenlegungspflicht am Entry-Moment (ergänzt 03.08.2026, Fable-Tagesabschluss-Review nach Trade #29):** Fable deckte auf, dass Trade #29 in einer zuvor selbst als "choppy/unklar" beschriebenen Suchphase (15:30-16:00) entstand, ohne dass beim tatsächlichen Entry (16:05) explizit dokumentiert wurde, ob die Chop-Erkennung zu diesem Zeitpunkt noch zutraf oder bewusst als aufgelöst gewertet wurde (z.B. durch einen zwischenzeitlichen Strukturbruch/Katalysator). Finanziell folgenlos bei Trade #29 (Positionsgröße lag ohnehin im gestaffelten Phase-3-Unterband), aber ein Dokumentationsgap, der bei einem knapperen Fall eine übersehene Halbierungspflicht verursachen könnte. **How to apply:** Bei JEDEM Vollentry explizit eine Zeile ausgeben, ob die Chop-Erkennung zum Entry-Zeitpunkt geprüft wurde und was das Ergebnis war (z.B. "Chop-Check: vorherige Phase choppy, aber durch [Strukturbruch/Katalysator] X aufgelöst, Chop-Trigger entfällt" oder "Chop-Check: aktuell zutreffend, Halbierung nach Stacking-Regel angewendet") — keine stillschweigende Auslassung, analog zur bestehenden Offenlegungspflicht aus [[feedback_loop_ablauf_uebersicht]].
 
 ### Definition "1 Trade" (festgelegt 22.06.2026)
 Ein kompletter Trade-Zyklus zählt als EIN Trade für die Phasen-Zählung (1-10, 11-25, 26-50) — unabhängig von der Anzahl der Teil-Orders.

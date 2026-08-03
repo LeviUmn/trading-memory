@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: session-2026-07-21
-  modified: 2026-07-31T13:43:28.167Z
+  modified: 2026-08-03T14:49:35.708Z
 ---
 
 Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine zusammenhängende Referenz gespeichert, damit sich künftige Sessions konsistent daran halten — bündelt Regeln, die sonst über mehrere Dateien verteilt sind.
@@ -29,7 +29,7 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 4. **Bei Zonentest (Kurs nähert sich einem bekannten S/R-Level):** taktische Vorwarnkriterien aus [[feedback_live_trading]] Punkt 7c prüfen — MACD-H-Beschleunigung Richtung erwarteter Ausbruchsrichtung, RSI-Annäherung an 50/weg von Extremzone, Bollinger-Band-Squeeze (richtungsneutral, nur "Ausbruch wahrscheinlicher"). Alle drei sind reine Zahlenwerte aus Schritt 2, kein Screenshot/Timeframe-Wechsel nötig — passt in den Quick-Tick-Rahmen. Bei erfüllter Vorwarnung: taktischer Mini-Entry NUR über das Zweistufen-System aus Punkt 8a1 (naher taktischer Trigger, reduzierte Positionsgröße), ersetzt NICHT die volle Bestätigungspflicht für die reguläre Position.
 5. **8a1 (Zweistufiges Trigger-System) laufend mitführen, wenn das strukturelle Ziellevel weit entfernt liegt:** naher taktischer Trigger (kleinere Position, engerer SL) vs. fernerer struktureller Trigger (volle Größe) — beide Stufen im Entscheidungsbaum-Kasten (Punkt 7) getrennt ausweisen, nicht nur den fernen Trigger nennen.
 6. **Vor jedem tatsächlichen Vollentry-Go-Signal:** Chasing-Check nach Punkt 13 — 4-5 klar gerichtete Kerzenschlüsse ohne frische Bestätigung genau am aktuellen Kurs? Wenn ja: kein Vollentry, nur die bereits halbierte Position (Chasing-Kennzeichnung im Entry-Signal explizit machen), kein zusätzliches separates Konsolidierungs-Add.
-7. Ausgabe: kompakter Entscheidungsbaum-Kasten (🟢/🔴/→warten) oder kurzer Status bei "unverändert" — kein Fließtext, keine Tick-Zähler
+7. Ausgabe: kompakter Entscheidungsbaum-Kasten (🟢/🔴/→warten) oder kurzer Status bei "unverändert" — kein Fließtext, keine Tick-Zähler. **Format ergänzt 03.08.2026 (User-Korrektur):** Keine Tabelle für den Quick-Tick — eine kompakte Zeile reicht, z.B. `15:02 | Kurs 28.328,2 | EMA50 28.371,2 (u) | RSI 45,8 | MACD-H +5,5 | Pivot mittig | 🔴 kein Setup`. Tabellen bleiben dem 5-Min-Voll-Check vorbehalten (siehe [[feedback_vollcheck_format]]), der Quick-Tick soll spürbar kleiner sein.
 
 ### Jede 5. Minute (5-Min-Kerze) — Voll-Check, Punkt 9 (korrigiert 21.07.2026)
 1. Echte Minute erneut bestätigen
@@ -54,6 +54,12 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 3. Stall-Zähler (Punkt 12) mitzählen — aber: **Exit-Vorschlag erst BEIM tatsächlichen 3. Kerzenschluss selbst**, nie vorgezogen auf Basis der Zwischen-Tick-Zahlen, auch wenn RSI/Kurs schon "reif" aussehen (Timing-Klarstellung nach zweitem Fable-Review)
 4. Punkt-11-Kriterien, soweit ohne Screenshot/Timeframe-Wechsel möglich (MACD-H-Vorzeichen, EMA-Bruch), grob im Blick behalten — volle Bestätigung folgt erst beim Voll-Check
 
+**Pre-Send-Mini-Checkliste, verbindlich für JEDEN Quick-Tick bei offener Position (ergänzt 03.08.2026, Fable-Tagesabschluss-Review nach Trade #29):** Bevor der Output abgeschickt wird, kurz intern gegenchecken — beide Punkte waren bisher nur für den Voll-Check als Pflicht verankert (Tweet-Check/Format), obwohl Fehler beim Zertifikatspreis genau bei einem laufenden Quick-Tick-Positions-Update passierten, nicht beim Voll-Check:
+- Zertifikatspreis bei SL/TP im Positions-Kasten dabei? (siehe Zertifikatspreis-Pflicht in [[feedback_live_trading]])
+- Letzter Bar in `data_get_ohlcv` bereits geschlossen oder noch offen? (siehe Punkt 7d0 in [[feedback_live_trading]]) — bei offenem Bar explizit "noch offen"/Zwischenstand kennzeichnen, nie als abgeschlossene Kerze werten
+
+**Why:** Fable-Review 03.08.2026 stellte fest, dass 3 von 6 an diesem Tag gefundenen Prozessfehlern Rückfälle in bereits am 27./28.07. gefixte Pflichtzeilen waren — reine Fließtext-Regeln halten unter Zeitdruck nicht zuverlässig. Eine harte, kurze Checkliste auch auf Quick-Tick-Ebene (nicht nur beim Voll-Check) soll die Lücke schließen, die zum wiederholten Auslassen führte.
+
 ### Jede 5. Minute — Voll-Check, gleicher reduzierter Standard wie Szenario 1, PLUS positionsspezifisch:
 1. MTF + QQQ-Dual-Gate + Chartmuster (reduziert) + Fibonacci (nur bei Impuls) + Offenlegung — **läuft unverändert weiter bis zum kompletten Exit**, auch nach TP1-Teilverkauf (Verschärfung nach Trade #16)
 2. **Punkt 11 (Reversal):** alle 4 Kriterien gegenchecken (MACD-H-Cross+Bestätigung über 2+ Checks, EMA-Bruch+Folgekerze, QQQ-EMA-Bruch, 15min/1H-Beschleunigung) — bei 2-3 erfüllt: aktiver Dreh-/Exit-Vorschlag
@@ -61,6 +67,8 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 4. **Punkt 8e:** Widerstandstest + 1H-RSI>65-70 → Teilgewinn-Vorschlag (25-50%), auch ohne erreichtes TP1
 5. **Punkt 12 (Stall):** zuerst prüfen, ob 9d1 ein Fortsetzungsmuster zeigt (dann halten, Punkt 12 greift NICHT) — sonst bei 3. Kerzenschluss ohne neues Hoch/Tief UND RSI ≥8-10 Punkte vom lokalen Extrem gefallen → Teilgewinn (25-50%) vorschlagen, KEIN Vollexit
 6. SL-Nachzug: strukturell begründet (bestätigte höhere Tiefs/Support mit Rausch-Puffer nach Punkt 8c/7a), nicht auf jeden kleinen Rücksetzer
+
+**Proaktive Anweisung statt nur Plan beschreiben (ergänzt 03.08.2026, User-Korrektur während Trade #29):** Wenn im Voraus ein Handlungsplan für einen möglichen Trigger besprochen wurde (z.B. "SL nachziehen, falls Level X bricht"), beim tatsächlichen Eintreten des Triggers die Anweisung AKTIV geben ("SL-Nachzug jetzt: neuer SL bei Y, bitte eintragen"), nicht nur den Status melden und abwarten, ob der User selbst danach fragt. **Why:** User-Zitat: "Du gibst mir aktiv Anweisungen, wenn etwas eintreten sollte" — die reine Status-Meldung reicht nicht, sobald ein zuvor vereinbarter Trigger-Fall eintritt, muss die konkrete Handlungsaufforderung von sich aus kommen. Gilt zusätzlich zur bestehenden Pflicht aus Punkt 7a (Indikatoren proaktiv freigeben) — erstreckt sich hier explizit auch auf zuvor abgesprochene Positions-Management-Trigger (SL-Nachzug, Teilgewinn), nicht nur auf Entry-Bedingungen.
 
 ---
 

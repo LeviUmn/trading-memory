@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-31T15:42:59.060Z
+  modified: 2026-08-03T14:45:09.576Z
 ---
 
 Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe jeweilige trading_YYYY-MM-DD.md Datei.
@@ -76,6 +76,10 @@ Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe
 | 28 | 31.07.2026 | 3 | Short EMA50-Break Dual-Gate nach AI-Chip-Melt-up-Reversal, NAS100+QQQ 5min/15min/1H synchron bärisch bei Entry. Punkt-12-Stall-Teilverkauf bei RSI-Erholung (~16:30), SL auf BE nachgezogen. Vollständiger Bounce lief bis exakt zur Breakeven-Marke durch, bevor TP1 erreicht wurde — Anlass für Regelschärfung [[feedback_live_trading]] Punkt 12.3 (2 Kerzen+RSI≥5 statt 3/8-10) + Scope-Klärung Punkt 11 (Dreh) vs. Punkt 12/7c (Positionsschutz), siehe [[trades/trading_2026-07-31]] | 28.235 / 10,88€ | 28.344/10,67€ → 28.310/10,74€ (7a1) → BE 28.235/10,88€ nach Teilverkauf, ausgelöst | TP1 27.849,0/≈11,62€ nicht erreicht (Bounce vor Zielerreichung) | 5x | 2.491,52 | 115 Stk @11,00€ (+13,80) + 114 Stk @10,88€ BE (+0) = **+13,80 gesamt** | +0,55% | Win | Kein TP1 erreicht — realisiertes RR auf die Restposition ≈0:1 statt geplanter 3,5:1, weil kein aktiver Positionsschutz-Trigger während des Bounces existierte (jetzt durch Punkt 12.3 gefixt) |
 
 **Stand (31.07.2026):** 28 Trades abgeschlossen — 17 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +169,69€** (+155,89€ + 13,80€ Trade #28). Win-Rate **65,4% (17/26, BE ausgeklammert)** bzw. 60,7% (17/28, BE mitgezählt).
+
+| 29 | 03.08.2026 | 3 | Long Stop-Hunt-Reversal unter Freitags-Tief (28.262, Extremum 28.192,95) + ISM-Manufacturing-Beat (55,6 vs. 54,0 Konsens, 4-Jahres-Hoch). Dual-Gate: QQQ kippte von bärisch auf bullisch, 15min-MACD-H-Cross positiv, 1H erstes höheres Hoch (Strukturbruch der LH-LL-Kette). Mehrere Prozessfehler live gefunden+korrigiert (Kerzenschluss-Verwechslung, Blackout-Regel-Fehlanwendung auf ISM), siehe [[trades/trading_2026-08-03]] | 28.434 / 2,36€ | 28.350/2,32€ → BE 28.434/2,36€ nach TP1 | TP1 28.523,45/R1/≈2,40€ erreicht, TP2 28.598,65/≈2,44€ erreicht | 6x | 3.972,88 | 841 Stk @2,40€ (+33,64) + 842 Stk @2,445€ (+71,57) = **+105,21 gesamt** | +2,65% | Win | Beide TP-Stufen sauber erreicht, RR-Rechnung (1,06:1/1,96:1) und Zertifikatspreis-Näherung bestätigten sich exakt beim Fill |
+
+**Stand (03.08.2026):** 29 Trades abgeschlossen — 18 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +274,90€** (+169,69€ + 105,21€ Trade #29). Win-Rate **66,7% (18/27, BE ausgeklammert)** bzw. 62,1% (18/29, BE mitgezählt).
 
 **Stand (22.07.2026):** 24 Trades abgeschlossen — 14 Wins, 2 Breakeven, 8 Verluste. **Gesamtgewinn: +95,72€** (+115,75€ nach Trade #23 - 20,03€ Trade #24). Win-Rate **63,6% (14/22, BE ausgeklammert)** bzw. 58,3% (14/24, BE mitgezählt).
 
