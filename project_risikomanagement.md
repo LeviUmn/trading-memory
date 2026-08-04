@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-03T14:50:01.271Z
+  modified: 2026-08-04T15:32:45.238Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -82,6 +82,8 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 **Phase 2 formal abgeschlossen (23.07.2026, nach Trade #25):** Alle 10 Trades der Phase 2 (#16-25) komplett — siehe [[trades/trade_log]] für die vollständige Tabelle. Endstand: 7 Win / 0 BE / 3 Loss in diesem Fenster, Win-Rate 70% (7/10), Ø-Rendite 0,61%/Trade (korrigiert 24.07., siehe [[project_performance_ziele]]) — trifft das Win-Rate-Ziel exakt, verfehlt das Rendite-Ziel (1-1,5%) weiterhin deutlich.
 
 **Phase-3-Übergang-Review abgeschlossen (24.07.2026, Fable — volles Ergebnis siehe [[project_phase2_abschluss_review_2026-07-24]]):** GO für Phase 3, aber mit Bedingungen statt vollem Sprung auf die maximale Bandbreite. **Gestaffelter Phase-3-Start:** Erste 3-5 Trades (#26-#30) am UNTEREN Ende der Phase-3-Bandbreite (~4.000€, nicht sofort 5.000€/volles 2%-Risiko) — erst nach diesem Bewährungsfenster (und nur wenn kein schwerer Regelbruch vom #21-Typ auftritt) auf volle Phase-3-Größe hochfahren. Weitere Bedingungen: RR-Minima als echte Hard-Gates (kein "offen deklariert = okay" mehr wie bei Trade #23), symmetrische Regelbruch-Konsequenz auch bei Gewinn-Trades, User-Eigenentries brauchen sofortiges Loop-Retro-Check, Phase-3-RR separat von der Lifetime-Zahl tracken.
+
+**Gestaffeltes Unterband-Fenster (#26-30) komplett (04.08.2026, nach Trade #30) — Fable-Empfehlung für #31-35, wartet auf Levis Go:** Kriterium "kein schwerer Regelbruch vom #21-Typ" ist über alle 5 Fenster-Trades erfüllt (keiner hatte eine ungültige SL/RR-Kombination, die den Trade selbst hätte ausschließen müssen). `trade_stats.cjs --phase 3`: 4 Win/1 Loss (80%), +169,79€, Erwartungswert +0,893%/Trade. Einschränkung: realisiertes RR im Fenster nur 0,75:1 (Ø-Verlust größer als Ø-Gewinn, Erwartung trägt sich über die Win-Rate) und n=5 ist eine dünne Stichprobe. **Fable empfiehlt GO auf volle Phase-3-Größe (5.000€/2%-Risiko) ab Trade #31**, gekoppelt an die Auflage, Zertifikatspreis-Live-Kalibrierung ([[feedback_zertifikat_pnl]]) und die neue Chop-Offenlegungszeile (siehe unten) fest in die Pre-Send-Checkliste für Vollentries aufzunehmen. Volles Review siehe [[trades/trading_2026-08-04]] Abschnitt "Fable-Tagesabschluss-Review". Keine eigenmächtige Entscheidung — Levi entscheidet final vor Trade #31.
 
 **Phase-1-Abschluss erreicht (08.07.2026):** Trade #15 abgeschlossen, damit sind alle 15 Trades der (verlängerten) Phase 1 komplett — siehe [[trades/trade_log]] für die vollständige Tabelle. **Großes Phasen-Review geplant für morgen Mittag, 09.07.2026**, danach Entscheidung über den Übergang in Phase 2.
 

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-03T14:45:09.576Z
+  modified: 2026-08-04T15:22:26.682Z
 ---
 
 Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe jeweilige trading_YYYY-MM-DD.md Datei.
@@ -80,6 +80,10 @@ Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe
 | 29 | 03.08.2026 | 3 | Long Stop-Hunt-Reversal unter Freitags-Tief (28.262, Extremum 28.192,95) + ISM-Manufacturing-Beat (55,6 vs. 54,0 Konsens, 4-Jahres-Hoch). Dual-Gate: QQQ kippte von bärisch auf bullisch, 15min-MACD-H-Cross positiv, 1H erstes höheres Hoch (Strukturbruch der LH-LL-Kette). Mehrere Prozessfehler live gefunden+korrigiert (Kerzenschluss-Verwechslung, Blackout-Regel-Fehlanwendung auf ISM), siehe [[trades/trading_2026-08-03]] | 28.434 / 2,36€ | 28.350/2,32€ → BE 28.434/2,36€ nach TP1 | TP1 28.523,45/R1/≈2,40€ erreicht, TP2 28.598,65/≈2,44€ erreicht | 6x | 3.972,88 | 841 Stk @2,40€ (+33,64) + 842 Stk @2,445€ (+71,57) = **+105,21 gesamt** | +2,65% | Win | Beide TP-Stufen sauber erreicht, RR-Rechnung (1,06:1/1,96:1) und Zertifikatspreis-Näherung bestätigten sich exakt beim Fill |
 
 **Stand (03.08.2026):** 29 Trades abgeschlossen — 18 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +274,90€** (+169,69€ + 105,21€ Trade #29). Win-Rate **66,7% (18/27, BE ausgeklammert)** bzw. 62,1% (18/29, BE mitgezählt).
+
+| 30 | 04.08.2026 | 3 (letzter gestaffelter Phase-3-Trade, #26-30 damit komplett) | Long Breakout-Continuation nach Markt-Open (15:30) über mehrfach getestetes Range-Hoch, dann Bruch von R2 (29.278,83, heutige Pivot-Berechnung) mit Doppelkerzen-Bestätigung (Kerze 1 Close ≈29.290, Kerze 2 hält den Bereich). QQQ-Dual-Gate durchgehend stark (über VWAP+oberem Band, reales Open-Volumen). Katalysator: Palantir +19% beim Open, S&P-Rekordhoch, breite Tech-Rally. RSI durchgehend extrem (80-89 über alle Timeframes) — bewusst mit taktisch reduzierter statt voller (ohnehin zeitgatehalbierter) Größe gehandelt. TP1 automatisch 50%-Teilverkauf + SL auf BE. Rest manuell komplett geschlossen bei wiederholtem Test einer Widerstandszone (29.438-29.445, 3x fast gleiches Hoch) + abnehmendem QQQ-Volumen (Punkt 8e), TP2 nicht abgewartet | 29.340 / 25,96€ | 29.260/25,46€ → BE 25,96€ nach TP1 | TP1 29.420/26,38€ erreicht (16:27:04, 38 Stk); Rest manuell bei 26,418€ geschlossen (16:45:14), TP2 29.577/27,20€ nicht abgewartet | 7x | 1.998,92 | 38 Stk @26,378€ (+15,88) + 39 Stk @26,418€ (+17,86) = **+33,75 gesamt** | +1,69% | Win | Kein Regelbruch. Erste TP1-Meldung um 16:15 fälschlich auf Intrabar-Spike statt Kerzenschluss gestützt (Regel 7d0), live korrigiert bevor gehandelt wurde. Zertifikatspreis mit Live-Broker-Abgleich neu kalibriert (effektiver Hebel ~5,9x statt nominell 7x wegen Spread/Kosten) |
+
+**Stand (04.08.2026):** 30 Trades abgeschlossen — 19 Wins, 2 Breakeven, 9 Verluste. **Gesamtgewinn: +308,65€** (+274,90€ + 33,75€ Trade #30). Win-Rate **67,9% (19/28, BE ausgeklammert)** bzw. 63,3% (19/30, BE mitgezählt). Nur das gestaffelte Einstiegs-Unterband-Fenster (#26-30) ist komplett — Phase 3 läuft weiter bis #35 (10 Trades gesamt). Review fällig, ob Trades #31-35 auf volle Phase-3-Größe (5.000€) hochgefahren werden.
 
 **Stand (22.07.2026):** 24 Trades abgeschlossen — 14 Wins, 2 Breakeven, 8 Verluste. **Gesamtgewinn: +95,72€** (+115,75€ nach Trade #23 - 20,03€ Trade #24). Win-Rate **63,6% (14/22, BE ausgeklammert)** bzw. 58,3% (14/24, BE mitgezählt).
 
