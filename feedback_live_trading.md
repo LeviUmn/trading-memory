@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-03T13:50:22.789Z
+  modified: 2026-08-05T16:15:41.260Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -202,6 +202,10 @@ Bei Trade-Vorbereitung #29 (03.08.2026) wurde ein SHORT-Trigger als "AUSGELÖST"
 **Why:** `data_get_ohlcv` liefert für den letzten Bar immer den aktuellen Live-Stand, keine Kennzeichnung ob die Kerze bereits geschlossen ist. Ohne expliziten Zeit-Check sieht ein Wick/Zwischenstand optisch identisch aus wie ein echter Schlusskurs — genau die Verwechslung, die Punkt 7d (Kerzenfarbe/Schlusstyp) eigentlich schon adressiert, hier aber auf einer Ebene davor (ist die Kerze überhaupt fertig?).
 
 **How to apply:** Vor jeder Trigger-Meldung (🟢/🔴 ausgelöst) den Zeitstempel des letzten Bars gegen die echte Uhrzeit aus `Bash date` prüfen: Bar-Startzeit + Timeframe-Dauer (z.B. 5min-Bar von 15:30 läuft bis 15:35) muss ≤ aktuelle Zeit sein, sonst ist es kein abgeschlossener Schluss, sondern ein Zwischenstand/Wick-Test. Bei offener Kerze im Status explizit "Test läuft, Kerze offen bis HH:MM" schreiben statt "Trigger ausgelöst".
+
+**Strukturelle Verschärfung (05.08.2026, Fable-Tagesabschluss-Review nach 3. Rückfall in Folge — 03.08./04.08./05.08., am 05.08. sogar zweimal am selben Tag):** Ein reiner Prüfhinweis reicht nicht mehr, da die Prüfung wiederholt gedanklich übersprungen wurde, obwohl die Regel bekannt war — dasselbe Rückfall-Muster wie bei anderen strukturell abgesicherten Pflichtzeilen (Tweet-Check, Format-Zeile). Deshalb ab jetzt eine verpflichtende Ausgabezeile, exakt wie die bereits bestehenden Pflichtzeilen aus Punkt 9/[[feedback_vollcheck_format]] behandelt: **Vor JEDER Trigger-Meldung (Entry, TP-Erreichen, SL-Nachzug, Struktur-Bruch) explizit die Zeile "Kerze geschlossen: JA (Ende HH:MM)" oder "Kerze geschlossen: NEIN (läuft bis HH:MM)" ausgeben** — nicht nur intern prüfen und weglassen. Fehlt diese Zeile bei einer Trigger-Meldung, gilt die Meldung als nicht regelkonform, unabhängig davon ob der Trigger im Nachhinein zufällig richtig lag.
+
+**Why:** Fable-Review 05.08.2026: "Eine Regel, die drei Tage in Folge bricht und nur durch User-Eingriff gerettet wird, ist keine stabile Regel mehr, sondern ein Prozess-Loch." Ein interner Check ohne sichtbaren Beleg ist nicht überprüfbar und wird unter Zeitdruck übersprungen — eine Pflichtzeile im Output macht die Prüfung erzwingbar, analog zum bereits bewährten Muster bei Punkt 9.
 
 **7d. Kerzenfarbe/Schlusstyp bei jedem Preis-Trigger explizit benennen, nicht nur das Level (ergänzt 13.07.2026, Konkretisierung von [[feedback_chartanalyse]] Punkt 9c — kein eigenständiges neues Prinzip)**
 
