@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-05T16:15:41.260Z
+  modified: 2026-08-06T15:55:16.765Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -473,6 +473,16 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 **Why:** Löst das bei Trade #28 dokumentierte Problem (zu später Trigger durch den 15-Min-Kerzenschluss-Lag, plus keine Wiederholung für die Restposition), ohne die bewährten Rauschfilter der Regel (Kerzenschluss-Pflicht, RSI-Magnitudenschwelle) aufzugeben — beide Zahlen werden nur proportional halbiert, kein neues Prinzip.
 
 **Review-Pflicht (analog Punkt 12 Basisregel):** Nach den nächsten **3-5 Anwendungsfällen** explizit prüfen, ob 2 Kerzen/RSI≥5 zu oft normale kurze Konsolidierungen fälschlich abschneidet (mehr Fehlsignale als die alte 3/8-10-Fassung) oder tatsächlich zuverlässig mehr Gewinn sichert. Bei Bedarf nachjustieren oder auf die alte Schwelle zurückfallen.
+
+**12.4 Pflicht-Ausgabezeile "Stall-Check" bei jedem Check-in mit offener Position (ergänzt 06.08.2026, Fable-Tagesabschluss-Review nach Trade #33)**
+
+**Vorfall:** Bei Trade #33 (06.08.2026, Long) war der Punkt-12.3-Trigger (2 Kerzenschlüsse ohne neues Extrem + RSI ≥5 Punkte vom lokalen Extrem) spätestens gegen 17:20-17:25 Uhr erfüllt, wurde aber erst um 17:34 Uhr auf Levis explizite Nachfrage ("Was war die Regel wenn wir nur seitwärts laufen?") überhaupt angesprochen — ein rein interner Check ohne sichtbaren Beleg im Output wurde unter der laufenden Quick-Tick-Kadenz schlicht übersprungen. In den ~10-15 Minuten dazwischen lief der Kurs vom Bewegungs-Hoch zurück Richtung Entry, genau das Fenster, in dem ein Teilgewinn/SL-Nachzug noch etwas gesichert hätte. Der Exit selbst kam nicht zu spät (Levi exitete selbständig bei QQQ-EMA50-Bruch), aber die Transparenz während der Position fehlte — dasselbe Rückfall-Muster wie bei den bereits bestehenden Pflichtzeilen (Tweet-Check, Kerze-geschlossen, Format), die genau aus diesem Grund eingeführt wurden.
+
+**Regel:** Bei JEDEM Check-in (Quick-Tick UND Voll-Check) während einer offenen Position eine explizite Pflicht-Ausgabezeile ausgeben: **"Stall-Check: [X] Kerzen ohne neues Extrem, RSI [Y] Punkte vom Extrem entfernt → [nicht] getriggert"**. Referenz-Extrem (Bewegungs-Hoch/-Tief seit Entry bzw. seit letztem Teilverkauf, siehe Rekursions-Logik in 12.3) und aktueller RSI-Stand müssen bei jedem Tick mitgeführt werden, nicht nur beim Voll-Check.
+
+**Why:** Ein interner Check ohne sichtbaren Beleg ist nicht überprüfbar und wird unter Zeitdruck/bei langer Quick-Tick-Kette übersprungen — eine Pflichtzeile im Output macht die Prüfung erzwingbar, exakt analog zum bewährten Muster bei Punkt 7d0 (Kerze geschlossen) und Punkt 9/[[feedback_vollcheck_format]] (Tweet-Check/Format). Fehlt diese Zeile bei einem Check mit offener Position, gilt der Check als nicht regelkonform durchgeführt.
+
+**How to apply:** Sobald ein Trade offen ist, ab dem ersten Check-in danach die Stall-Check-Zeile in JEDES Signal-Format (auch das kompakte Quick-Tick-Format aus Punkt 2) aufnehmen — nicht nur im Voll-Check. Referenz-Extrem beim Entry auf den Entry-Kurs selbst setzen (noch kein Bewegungs-Extremum vorhanden), danach mit jedem neuen Hoch/Tief aktualisieren.
 
 ## 13. Chasing-Situation vor Entry — halbierte Position statt Vollentry, kein separates Konsolidierungs-Add (ergänzt 22.07.2026, nach Trade #24, Fable-Review)
 

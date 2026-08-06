@@ -1,98 +1,104 @@
 # Memory Index
 
-- [Tagesabschluss 05.08.2026: Trade #31 (Loss) + #32 (Win) + Fable-Review](trades/trading_2026-08-05.md) — Tagesbilanz +53,19€. Trade #31 Long SL-Loss -39,80€ (bewusst 50% Größe vor 16 Uhr, aber 7d0-Verstoß beim Entry-Trigger). Trade #32 Short Win +92,99€ (volle 5.000€-Phase-3-Größe nach 16 Uhr, Punkt-12-Stall-Teilexit +28,05€, Vollexit bei TP1 statt TP2-Lauf auf User-Wunsch, +64,94€). **Fable-Review deckte 3. 7d0-Rückfall in Folge auf (03./04./05.08.)** → zwei neue Pflichtregeln umgesetzt: "Kerze geschlossen: JA/NEIN"-Zeile vor jeder Trigger-Meldung ([[feedback_live_trading]] Punkt 7d0) und Chop-Offenlegungspflicht jetzt auch bei Exit-Abweichungen ([[project_risikomanagement]]). RR Phase 3 gestiegen 0,75:1→0,94:1 (n=7), Richtung 1,5:1-Ziel aber noch früh/dünne Stichprobe — Erwartungswert bleibt win-rate- statt RR-getragen
-- [DAX-Erweiterung: eigener Vormittags-Trading-Block (10-15 Uhr)](project_dax_erweiterung.md) — 05.08., Strategiewechsel: DAX wird eigenständiger paralleler Block (eigenes "start update dich #1") statt reine Papier-Beobachtung. Fable-Review deckte auf: bisherige Trennung war nur Disziplin, `trade_db.cjs`/`cooldown_check.cjs` erzwingen sie nicht strukturell. **DAX-Live-Trading startet erst NACH Abschluss aller NAS100-Phasen** — bis dahin läuft nur Infrastruktur-Aufbau parallel. Weitere Entscheidungen: eigene Phase 1 von vorne, DAX-Position vor Nasdaq-Update schließen (kein Overlap), Korrelationsregel bleibt, gemeinsames Trades/Tag-Limit. To-do-Liste steht, siehe [[feedback_dax_trennung]] für die verschärfte Trennungsregel
-- [Trade #30 + Fable-Tagesabschluss-Review](trades/trading_2026-08-04.md) — 04.08., Win +33,75€ (+1,69%), R2-Bruch mit Doppelkerzen-Bestätigung nach Palantir/S&P-Rekord-Katalysator, TP1 automatisch + Rest manuell an Widerstandszone (Punkt 8e) geschlossen. Gestaffeltes Unterband-Fenster (#26-30) komplett — Fable-Review bestätigte Trade regelkonform, fand 3. Fehler (Chop-Offenlegungspflicht vom 03.08. nicht im Vollentry angewendet, Rückfall-Muster wie bei Trade #29) und **empfiehlt GO auf volle Phase-3-Größe (5.000€/2%) ab Trade #31** (kein #21-Typ-Regelbruch im Fenster, 80% WR/+169,79€, aber n=5 dünn + realisiertes RR nur 0,75:1) — Fable-Empfehlung, wartet auf Levis Go, siehe [[project_risikomanagement]]
-- [draw_list getChartApi-Bug (Fix vorgenommen, Live-Test durch Levi noch ausstehend)](feedback_draw_list_getchartapi_bug.md) — 04.08. gefunden, 04.08. Root-Cause behoben (Fable): `src/core/drawing.js` löste `getChartApi`/`evaluate` in 4 von 5 Funktionen nicht über den lokalen `_resolve(_deps)`-Helper auf (nur `drawShape` tat das korrekt) — daher `ReferenceError` bei jedem `draw_list`-Aufruf. Fix bereits gegen den echten laufenden CDP-Port live verifiziert (separater Node-Prozess, nicht der aktive MCP-Server), Round-Trip draw_shape→draw_list→draw_remove_one erfolgreich. **Wichtig:** der laufende MCP-Server-Prozess selbst hat noch den alten Code geladen — braucht Neustart, damit der Fix in der nächsten aktiven Session wirkt
-- [Mac-Umzug (Zukunft)](project_mac_umzug.md) — geplant ca. September 2026, Windows-Setup fällt weg, Mac Mini + mobiles MacBook-Pro/iPad-Setup simultan. Nichts tun bis User aktiv "Mac Mini ist da" meldet — dann Neuinstallation aller APIs/MCP + Live-Test des Memory-Sync-Problems
-- [Trade #29: Long Stop-Hunt-Reversal + ISM-Beat](trades/trading_2026-08-03.md) — 03.08., Win +105,21€ (+2,65%), TP1+TP2 beide erreicht, Phase 3 jetzt 3W/1L (75%). Fable-Review bestätigte Trade regelkonform, deckte 7. Fehler auf (fehlende Chop-Offenlegung am Entry, siehe [[project_risikomanagement]]) und bestätigte: 3 von 6 Tagesfehlern waren Rückfälle → struktureller Fix (Pre-Send-Checkliste auch für Quick-Ticks) in [[feedback_loop_ablauf_uebersicht]] umgesetzt
-- [X-Account @AITraderLog](project_x_account_idee.md) — angelegt 04.08., Titelbild final (nacktes Claude-Code-Terminal), Reveal erfolgt schrittweise über Tweets statt vorab volles Profil
-- [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 03.08., 149$/Monat für Live-Kalenderdaten statt WebFetch-Scrape erwogen, noch nicht entschieden — bei wiederholten Fetch-Fehlern erneut vorschlagen
-- [Phase 4 final definiert + Übergang ins normale Trading](project_vision.md) — 31.07., User-Entscheidung: Phase 4 (Trade 36-40, 5 Trades) = UnusualWhales (konditional) + 10.000€/Trade. Danach Ende des Phasensystems, Übergang zu 50.000€ Realkapital — Vorbedingung dafür: Wochen-/Monatsabschlüsse als neue Tracking-Ebene (siehe [[project_risikomanagement]])
-- [Trade #28 & Fable-Review: Positions-Verteidigung vs. Dreh-Schwelle](trades/trading_2026-07-31.md) — 31.07., Short NAS100 Win nur +13,80€ statt möglichem Mehrfachen. User-Kritik bestätigt: Punkt 11 (2-3/4, für Dreh) wurde fälschlich als einzige Schwelle für reinen Positions-Schutz benutzt. **Finale Fassung nach mehreren verworfenen Zwischenschritten:** [[feedback_live_trading]] Punkt 12.3 (Stall-Regel geschärft: 2 Kerzenschlüsse + RSI≥5 Pkt statt 3/8-10, inkl. Rekursions-Logik für Restpositionen) PLUS Punkt 7c 5. Erweiterung (paralleler, schnellerer 1-Min-Tick-Trigger für aktive Gegenbewegung, 5/3 Checks) — beide dokumentiert als komplementär, nicht redundant. Scope-Klarstellung: nie mit Punkt 11 (Dreh-Schwelle) vermischen. TP1-Rekalibrierung geprüft und als Hindsight Bias verworfen. Rückwirkende Prüfung gegen Trade-Historie: Trade #19 (15.07.) plausibler Kandidat für früheren Trigger, Trade #21/#26/#27 nicht einschlägig (andere Fehlerursache)
-- [4H-Timeframe & Indikator-Ranking Review](project_review_4h_und_indikator_ranking_2026-07-31.md) — 31.07., Fable-Review: beide abgelehnt (Regeldisziplin > mehr Zeitebenen/Indikatoren). depth_get live getestet: kein DOM-Panel verfügbar (keine Broker-Anbindung), Order Flow dauerhaft nicht nutzbar
-- [Tagesabschluss 30.07.2026](trades/trading_2026-07-30.md) — Kein Trade, aber Regel-Pflege-Tag: Gamma-Melt-up (+3,6%) nach PCE/GDP/MSFT-Schock, dann Korrektur+Chop. Fable-Review schärfte Punkt 13.1 (Chasing-Pflicht) + 7c-Erweiterung (Kipp-Anzeichen) nach, Chop-Pflichtzeile + Pane-Batching-Regel ergänzt
-- [Demo-Loop für Dritte](feedback_demo_trades.md) — 29.07.2026, erste Freunde-Demo: voller Regelsatz + aktive Blackouts gelten auch im Demo, aber keine Eintragung in Trade-DB/trade_log
-- [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung 20 Uhr, PK 20:30 Uhr. Fed-Level-Event, volle Entry-Sperrfrist gilt (siehe [[feedback_session_update]])
-- [Fable-Tagesabschluss-Review 28.07.2026](trades/trading_2026-07-28.md) — Trade #26/#27 geprüft: kein Regelbruch, aber Script-Test-Lücke (size.cjs) + Punkt-12-Stall-Regel nicht vollständig angewendet (nur SL-Nachzug statt Teilgewinn), siehe [[feedback_live_trading]] Punkt 12.2
-- [Punkt-12-Präzisierung: SL-Nachzug ≠ Teilgewinn](feedback_live_trading.md) — 28.07. nach Trade #27: bei Stall-Trigger BEIDE Optionen (Teilgewinn + SL-Nachzug) anbieten, nicht nur SL-Variante — siehe Punkt 12.2
-- [size.cjs Short-SL-Bug (GEFIXT)](feedback_size_script_short_bug.md) — Vorzeichenfehler lieferte zu hohen SL-Preis bei Short-Positionen, 28.07. vor Live-Nutzung erkannt+gefixt, SL-Preis immer < Entry prüfen. Nachtrag 28.07.: kein TP-Analogon im Script, neue Pflicht für Script-Testläufe vor Live-Nutzung
-- [Session 28.07.2026](trades/trading_2026-07-28.md) — Chip-Crash-Tag: Trade #26 Short Loss -55,63€ (SL-Bug in size.cjs vor Nutzung gefixt), Trade #27 Long Win +72,66€ (TP1+Free-Roll, TP2-Fib-Revision, SL nach 3. Stall ausgelöst). Tagesbilanz +17,03€, 27 Trades gesamt +155,89€
-- [Voll-Check-Format](feedback_vollcheck_format.md) — Fließtext mit ✓/✗ pro geprüftem Punkt, keine Tabelle (27.07., User-Korrektur zurück zum bewährten Design)
-- [Prozessfehler 27.07. für Fable (GELÖST)](feedback_prozessfehler_27_07_fuer_fable.md) — Root-Cause: stille Prüfungen ohne sichtbaren Beleg über 100+ Loop-Ticks. Fix im Tagesabschluss umgesetzt: Pflicht-Ausgabezeilen `Tweet-Check`/`Format` in jedem Voll-Check, siehe [[feedback_live_trading]] Punkt 9
-- [Modellwahl Trading](feedback_modellwahl_trading.md) — Sonnet 5 für aktives Trading (Loop+Voll-Check), Fable 5 für Analyse/Reviews/Tagesabschluss. Fable-Deprecation-Status im Blick behalten
-- [Trade-DB (SQLite)](feedback_memory_pflege.md) — `scripts/trade_db.cjs`+`trade_stats.cjs`+`add_trade.cjs` im Code-Projekt (27.07., Fable-Build, verifiziert). Nach jedem Trade `add_trade.cjs` zusätzlich ausführen
-- [Tagesabschluss 27.07.2026](trades/trading_2026-07-27.md) — Morgen: Iran-Deeskalation/V-Erholung. Nachmittag: China-DUV-Chip-Schock, Ausverkauf bis 27.787,55, Range 27.828-28.050 hielt bis 20-Uhr-Deadline, kein Trade (#26 offen)
-- [SL/TP-Regel-Reform 27.07.2026](feedback_chartanalyse.md) — Punkt 8b: TP1 hart RR≥1:1 (Auswahlfilter), TP2 offen ohne RR-Pflicht. Punkt 8c: Schock-ATR-Tier (2,5-3×) → automatisch 50%-Floor, siehe [[project_risikomanagement]] Stacking-Regel
-- [Stall-Exit Update 27.07.2026](feedback_live_trading.md) — Punkt 12.1a: 9d1-Vorrangklausel verliert ab 4. Kerze ohne neues Extrem (+RSI-Abkühlung) ihr unbegrenztes Veto
-- [UnusualWhales verschoben](project_vision.md) — Integration NICHT jetzt (27.07., Fable-Review): erst Phase 3 komplett + Gesamt-Review alle Phasen, dann ggf. mit eigener Testphase. Falls doch: GEX>Dark Pool>Options Flow>Put/Call priorisieren
-- [Phase-2-Abschluss-Review 24.07.2026](project_phase2_abschluss_review_2026-07-24.md) — Fable-GO für Phase 3 mit Bedingungen (gestaffelter Einstieg #26-30, RR-Hard-Gates). Win-Rate-Ziel knapp erreicht, Rendite-Ziel verfehlt
-- [Session 23.07.2026](trades/trading_2026-07-23.md) — Trade #25 Short Win +43,14€ (Houthi-Risk-Off). 25 Trades: +138,86€, 65,2% Win-Rate
-- [Zeitzone Deutschland](feedback_zeitzone.md) — Alle Uhrzeiten in DE-Ortszeit. **Korrigiert 27.07.:** bare `date` liefert bereits DE-Zeit direkt, KEIN manueller Offset mehr (alter Offset verursachte realen 2h-Fehler)
-- [Session 22.07.2026](trades/trading_2026-07-22.md) — Trade #24 Loss -20,03€ (Chasing-Entry, Verlust trotz sonst korrekter Regelanwendung)
-- [Loop-Ablauf-Übersicht](feedback_loop_ablauf_uebersicht.md) — Referenz: 1-Min- vs. 5-Min-Kerze, Setup-Suche vs. offene Position (Stand nach Fable-Audit 21.07./23.07., Anti-Drift-Pflichtzeilen 27.07.)
-- [Session 21.07.2026](trades/trading_2026-07-21.md) — Trade #23 Win +24,31€. Stall-Regel (Punkt 12) überarbeitet. Voll-Check-Standard ehrlich auf Realistisches reduziert
-- [Session 20.07.2026](trades/trading_2026-07-20.md) — Trade #22 Win +3,43€, Fehlausbruch/Vollreversal NAS100
-- [Session 18.07.2026](trades/trading_2026-07-18.md) — Kein Handelstag. Backtest 16-18-Uhr-Fenster, Freitags-Pauschalregel gestrichen
-- [Session 17.07.2026](trades/trading_2026-07-17.md) — Kein Trade: Iran-Risk-Off bewusst ausgelassen
-- [Performance-Ziele](project_performance_ziele.md) — Ziel 70% Win-Rate / 1-1,5% Ø-Rendite. Stand 23.07.: Win-Rate erreicht, Rendite-Ziel verfehlt
-- [Fable-Tiefendiagnose 15.07. (ABGESCHLOSSEN)](project_fable_tiefendiagnose_2026-07-15.md) — Alle 8 Fixes umgesetzt und live verifiziert, keine offenen Punkte
-- [Session 16.07.2026](trades/trading_2026-07-16.md) — Trade #21 Loss -15,52€, SL verletzte Basis-8c-Rauschregel (Fable-korrigiert)
-- [NQ1!-Feed-Lag (GELÖST)](feedback_nq1_feed_lag.md) — 10-Min-Delay-Bug, 15.07. durch Wechsel auf QQQ gelöst
-- [MTF-Voll-Check wiederholt vergessen](feedback_mtf_voll_check_wiederholt_vergessen.md) — 1H-Bias fiel wiederholt weg, jetzt fester Zwei-Schritt-Block
-- [Session 15.07.2026](trades/trading_2026-07-15.md) — Trade #19 Loss, Trade #20 Win +51,46€ (beide TPs erreicht)
-- [Positions-Farbcode](feedback_positions_farbcode.md) — SL 🔴, TP1/TP2 🟢 im Positions-Tick, plus Zertifikatspreis
-- [Session 14.07.2026](trades/trading_2026-07-14.md) — Trade #18 Win +10,26€, 5-stufiges SL-Trailing
-- [Trade 13.07.2026](trades/trading_2026-07-13.md) — Trade #17 Win, aber RR-Regelbruch (0,32:1 statt 1:1), Fable-aufgedeckt
-- [Robustheit: Monte Carlo (offen)](project_robustheit_monte_carlo.md) — Erst ab ~50 Trades sinnvoll, bei jedem Review-Check gegenprüfen
-- [Trade 10.07.2026](trades/trading_2026-07-10.md) — Kein Trade. 1-Min-Loop-Bug final gelöst (CronCreate), DAX-Beobachtung gestartet
-- [DAX-Trennungsregel](feedback_dax_trennung.md) — DAX-Beobachtungen strikt getrennt vom NAS100-Haupttrading, eigener Ordner
-- [DAX-Beobachtung Übersicht](dax_beobachtung/uebersicht.md) — Einstiegspunkt/Status, aktiv seit 10.07. (XETR:DAX, 5-Min)
-- [DAX-Beobachtung 10.07.2026](dax_beobachtung/notiz_2026-07-10.md) — Erste Paper-Session, Frührally + Pullback
-- [Trade 09.07.2026](trades/trading_2026-07-09.md) — Trade #16 Phase-2-Start Win +15,29€ (bewusstes 50%-Chop-Sizing)
-- [BE-Definition für Trade-Statistik](feedback_be_definition.md) — Mechanismus-basierte Breakeven-Regel, löst alte Inkonsistenz auf
-- [Broker-Wert hat Priorität](feedback_broker_wert_prioritaet.md) — Abgelesener Scalable-Kontostand gilt immer als Wahrheit, nie Fill-Rückrechnung
-- [Broker-Blockade-Playbook](feedback_broker_blockade_playbook.md) — Eskalations-Playbook wenn SL-Stornierung fehlschlägt
-- [Scalable Capital SL/TP exklusiv](feedback_broker_sl_tp_exklusiv.md) — SL/TP nicht gleichzeitig aktiv, TP-Erreichen braucht manuellen 2-Schritt
-- [Wiederholte Zonentests](feedback_wiederholte_zonentests.md) — Fallende Hochs bei Zonentest sofort als Erschöpfung flaggen + These hinterfragen
-- [Trade 08.07.2026](trades/trading_2026-07-08.md) — Trade #14 Loss (Broker-Ausfall+Hedge) + Trade #15 Win, Tagesbilanz -17,41€
-- [TradingView Launch (MSIX)](project_tradingview_launch.md) — MSIX-Pfad muss in health.js stehen für tv_launch
-- [SpaceX (SPCX)](project_spacex_ipo.md) — Normale Aktie seit IPO, NDX-Aufnahme 07.07., keine Sonderstrategie
-- [Nasdaq Trading System (ARCHIV)](trading_session_nasdaq.md) — Überholt seit 16.07., aktuelle Levels in trades/-Dateien
-- [Tagesabschluss Routine](feedback_tagesabschluss.md) — "Tag Zusammenfassung speichern" → Datei+Git-Backup. **27.07.:** zusätzlich `add_trade.cjs` pro neuem Trade vor dem Backup
+- [Tagesabschluss 06.08.2026: Trade #33 (Long, Loss)](trades/trading_2026-08-06.md) — V-Shape-Reversal-Tag, -30,69€. Fable-Review: Stall-Exit (12.3) erst auf Nachfrage erkannt → neue Pflichtzeile "Stall-Check" in [[feedback_live_trading]] Punkt 12.4. 50%-Sizing bei erhöhtem ATR bestätigt. RR Phase 3 0,94→1,07:1 (n=8)
+- [Tagesabschluss 05.08.2026: Trade #31 (Loss) + #32 (Win)](trades/trading_2026-08-05.md) — +53,19€. 3. 7d0-Rückfall in Folge aufgedeckt → neue Pflichtzeilen in [[feedback_live_trading]]/[[project_risikomanagement]]. RR Phase 3 0,75→0,94:1 (n=7)
+- [DAX-Erweiterung: eigener Vormittags-Trading-Block (10-15 Uhr)](project_dax_erweiterung.md) — 05.08. Strategiewechsel, To-do-Liste (14 Punkte) läuft, Stand 06.08.: Punkt 1-7 erledigt (Chartsymbol `IG:DAX`, DB, Log, Risikomanagement-Doc, EZB/FRED-Datenquelle)
+- [Trade #30 + Fable-Review](trades/trading_2026-08-04.md) — 04.08., Win +33,75€. Unterband-Fenster #26-30 komplett, Fable-GO für volle Phase-3-Größe (5.000€) ab #31
+- [draw_list getChartApi-Bug (Fix vorgenommen, Live-Test ausstehend)](feedback_draw_list_getchartapi_bug.md) — 04.08., Root-Cause in `src/core/drawing.js` behoben, MCP-Server-Neustart nötig für Wirkung
+- [Mac-Umzug (Zukunft)](project_mac_umzug.md) — ca. September 2026, nichts tun bis Levi "Mac Mini ist da" meldet
+- [Trade #29: Long Stop-Hunt-Reversal + ISM-Beat](trades/trading_2026-08-03.md) — 03.08., Win +105,21€, TP1+TP2. Chop-Offenlegungspflicht am Entry ergänzt ([[project_risikomanagement]])
+- [X-Account @AITraderLog](project_x_account_idee.md) — angelegt 04.08., schrittweiser Reveal statt vollem Profil vorab
+- [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 03.08., 149$/Monat erwogen, noch nicht entschieden
+- [Phase 4 final definiert + Übergang ins normale Trading](project_vision.md) — 31.07., Phase 4 (Trade 36-40) = UnusualWhales (konditional) + 10.000€/Trade, danach 50.000€ Realkapital. 06.08.: `IG:NASDAQ` als QQQ-Ersatz für Phase-4-Review vermerkt, nicht jetzt umgesetzt
+- [Trade #28 & Fable-Review: Positions-Verteidigung vs. Dreh-Schwelle](trades/trading_2026-07-31.md) — 31.07., Win nur +13,80€ statt Mehrfachem. [[feedback_live_trading]] Punkt 12.3 + 7c geschärft
+- [4H-Timeframe & Indikator-Ranking Review](project_review_4h_und_indikator_ranking_2026-07-31.md) — 31.07., beide abgelehnt, depth_get dauerhaft nicht nutzbar (kein Broker-DOM)
+- [Tagesabschluss 30.07.2026](trades/trading_2026-07-30.md) — Kein Trade, Regel-Pflege-Tag nach PCE/GDP/MSFT-Schock+Chop
+- [Demo-Loop für Dritte](feedback_demo_trades.md) — 29.07., voller Regelsatz gilt auch im Demo, aber keine DB/Log-Eintragung
+- [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung 20 Uhr, volle Entry-Sperrfrist
+- [Fable-Tagesabschluss-Review 28.07.2026](trades/trading_2026-07-28.md) — #26/#27 kein Regelbruch, aber Script-Test-Lücke + Punkt-12 unvollständig angewendet
+- [Punkt-12-Präzisierung: SL-Nachzug ≠ Teilgewinn](feedback_live_trading.md) — bei Stall-Trigger beide Optionen anbieten (Punkt 12.2)
+- [size.cjs Short-SL-Bug (GEFIXT)](feedback_size_script_short_bug.md) — Vorzeichenfehler bei Short, 28.07. gefixt, SL-Preis immer < Entry prüfen
+- [Session 28.07.2026](trades/trading_2026-07-28.md) — Chip-Crash-Tag, #26 Loss -55,63€, #27 Win +72,66€, Tagesbilanz +17,03€
+- [Voll-Check-Format](feedback_vollcheck_format.md) — Fließtext mit ✓/✗ pro Punkt, keine Tabelle
+- [Prozessfehler 27.07. für Fable (GELÖST)](feedback_prozessfehler_27_07_fuer_fable.md) — Pflicht-Ausgabezeilen `Tweet-Check`/`Format` in jedem Voll-Check
+- [Modellwahl Trading](feedback_modellwahl_trading.md) — Sonnet 5 für Live-Trading, Fable 5 für Analyse/Reviews
+- [Trade-DB (SQLite)](feedback_memory_pflege.md) — `trade_db.cjs`+`trade_stats.cjs`+`add_trade.cjs`, nach jedem Trade ausführen
+- [Tagesabschluss 27.07.2026](trades/trading_2026-07-27.md) — China-DUV-Chip-Schock, Range hielt, kein Trade
+- [SL/TP-Regel-Reform 27.07.2026](feedback_chartanalyse.md) — Punkt 8b: TP1 hart RR≥1:1, TP2 offen. Punkt 8c: Schock-ATR-Tier → 50%-Floor
+- [Stall-Exit Update 27.07.2026](feedback_live_trading.md) — Punkt 12.1a: 9d1-Vorrangklausel verliert ab 4. Kerze ihr Veto
+- [UnusualWhales verschoben](project_vision.md) — erst Phase 3 komplett + Gesamt-Review, dann ggf. eigene Testphase
+- [Phase-2-Abschluss-Review 24.07.2026](project_phase2_abschluss_review_2026-07-24.md) — Fable-GO für Phase 3 mit Bedingungen
+- [Session 23.07.2026](trades/trading_2026-07-23.md) — #25 Win +43,14€. 25 Trades: +138,86€, 65,2% WR
+- [Zeitzone Deutschland](feedback_zeitzone.md) — Alle Uhrzeiten DE-Ortszeit, bare `date` liefert das direkt (kein Offset)
+- [Session 22.07.2026](trades/trading_2026-07-22.md) — #24 Loss -20,03€, Chasing-Entry
+- [Loop-Ablauf-Übersicht](feedback_loop_ablauf_uebersicht.md) — Referenz 1-Min/5-Min-Kerze, Setup-Suche vs. offene Position
+- [Session 21.07.2026](trades/trading_2026-07-21.md) — #23 Win +24,31€, Stall-Regel überarbeitet
+- [Session 20.07.2026](trades/trading_2026-07-20.md) — #22 Win +3,43€, Fehlausbruch/Vollreversal
+- [Session 18.07.2026](trades/trading_2026-07-18.md) — Kein Handelstag, Freitags-Pauschalregel gestrichen
+- [Session 17.07.2026](trades/trading_2026-07-17.md) — Kein Trade, Iran-Risk-Off bewusst ausgelassen
+- [Performance-Ziele](project_performance_ziele.md) — Ziel 70% WR / 1-1,5% Ø-Rendite. Stand 23.07.: WR erreicht, Rendite verfehlt
+- [Fable-Tiefendiagnose 15.07. (ABGESCHLOSSEN)](project_fable_tiefendiagnose_2026-07-15.md) — Alle 8 Fixes verifiziert
+- [Session 16.07.2026](trades/trading_2026-07-16.md) — #21 Loss -15,52€, SL verletzte 8c-Rauschregel
+- [NQ1!-Feed-Lag (GELÖST)](feedback_nq1_feed_lag.md) — 10-Min-Delay, gelöst durch Wechsel auf QQQ
+- [MTF-Voll-Check wiederholt vergessen](feedback_mtf_voll_check_wiederholt_vergessen.md) — 1H-Bias fiel weg, jetzt fester Zwei-Schritt-Block
+- [Session 15.07.2026](trades/trading_2026-07-15.md) — #19 Loss, #20 Win +51,46€ (beide TPs)
+- [Positions-Farbcode](feedback_positions_farbcode.md) — SL 🔴, TP1/TP2 🟢 im Positions-Tick
+- [Session 14.07.2026](trades/trading_2026-07-14.md) — #18 Win +10,26€, 5-stufiges SL-Trailing
+- [Trade 13.07.2026](trades/trading_2026-07-13.md) — #17 Win, aber RR-Regelbruch (0,32:1 statt 1:1)
+- [Robustheit: Monte Carlo (offen)](project_robustheit_monte_carlo.md) — Erst ab ~50 Trades sinnvoll
+- [Trade 10.07.2026](trades/trading_2026-07-10.md) — Kein Trade, 1-Min-Loop-Bug final gelöst (CronCreate)
+- [DAX-Trennungsregel](feedback_dax_trennung.md) — DAX strikt getrennt vom NAS100-Haupttrading, eigener Ordner
+- [ECB Data Portal API (Referenz)](reference_ecb_data_portal_api.md) — kostenlose EZB-Primärquelle, kein Key, genutzt in `eu_snapshot_dax.py`
+- [DAX-Session-Update-Ablauf](feedback_session_update_dax.md) — 06.08., Trigger "start update dich #1", 6 Schritte, Cheat-Sheet als unverifizierter Entwurf markiert
+- [DAX-Risikomanagement](project_risikomanagement_dax.md) — 06.08. eigenständig, Budget offen bis Phase-4-Abschluss, IG:DAX, VDAX-NEW+VIX
+- [DAX-Trade-Log (leer)](dax_trades/trade_log_dax.md) — 06.08. angelegt, physisch getrennt von trades/trade_log.md
+- [DAX-Beobachtung Übersicht](dax_beobachtung/uebersicht.md) — aktiv seit 10.07. (XETR:DAX, 5-Min)
+- [DAX-Beobachtung 10.07.2026](dax_beobachtung/notiz_2026-07-10.md) — Erste Paper-Session
+- [Trade 09.07.2026](trades/trading_2026-07-09.md) — #16 Phase-2-Start Win +15,29€ (bewusstes 50%-Chop-Sizing)
+- [BE-Definition für Trade-Statistik](feedback_be_definition.md) — Mechanismus-basierte Breakeven-Regel
+- [Broker-Wert hat Priorität](feedback_broker_wert_prioritaet.md) — Scalable-Kontostand gilt immer als Wahrheit
+- [Broker-Blockade-Playbook](feedback_broker_blockade_playbook.md) — Eskalation wenn SL-Stornierung fehlschlägt
+- [Scalable Capital SL/TP exklusiv](feedback_broker_sl_tp_exklusiv.md) — SL/TP nicht gleichzeitig aktiv
+- [Wiederholte Zonentests](feedback_wiederholte_zonentests.md) — Fallende Hochs sofort als Erschöpfung flaggen
+- [Trade 08.07.2026](trades/trading_2026-07-08.md) — #14 Loss (Broker-Ausfall+Hedge) + #15 Win, -17,41€
+- [TradingView Launch (MSIX)](project_tradingview_launch.md) — MSIX-Pfad muss in health.js stehen
+- [SpaceX (SPCX)](project_spacex_ipo.md) — Normale Aktie seit IPO, keine Sonderstrategie
+- [Nasdaq Trading System (ARCHIV)](trading_session_nasdaq.md) — Überholt seit 16.07.
+- [Tagesabschluss Routine](feedback_tagesabschluss.md) — "Tag Zusammenfassung speichern" → Datei+Git-Backup+add_trade.cjs
 - [News System](project_news_system.md) — X MCP aktiv seit 30.06., löst RSS ab
-- [Risikomanagement](project_risikomanagement.md) — 15.000€ Kapital, Phase 3 seit 24.07. (gestaffelt #26-30). Stacking-Regel: 4 Halbierungs-Trigger, Floor 50%
-- [Trade 22.06.2026](trades/trading_2026-06-22.md) — Kein Trade abgeschlossen (Fehlklick, Setup invalidiert)
+- [Risikomanagement](project_risikomanagement.md) — 15.000€ Kapital, Phase 3 seit 24.07., Stacking-Regel Floor 50%
+- [Trade 22.06.2026](trades/trading_2026-06-22.md) — Kein Trade (Fehlklick, Setup invalidiert)
 - [Trade 23.06.2026](trades/trading_2026-06-23.md) — 3 Trades +28,12€ (2 Win, 1 BE)
-- [Session 25.06.2026](trades/trading_2026-06-25.md) — Kein Trade. GDP/PCE-Überraschung → Asien-Sell-off
-- [Order-Bestätigung](feedback_order_bestaetigung.md) — Order-Ausführung immer aktiv bestätigen lassen, nie annehmen
-- [Memory Pflege Regel](feedback_memory_pflege.md) — Sofort nach jedem Trade/Update speichern. Zitierpflicht: Zahlenbehauptungen brauchen frischen Tool-Call
-- [Chartanalyse Checkliste](feedback_chartanalyse.md) — Volle TA (Trend/S-R/Fib/Candlesticks/Volumen/RSI/MACD/MTF/RRR/Muster) am Voll-Check-Rhythmus. Punkt 8b/8c am 27.07. reformiert (RR-Entkopplung, SL-Breite-Floor)
-- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte: Memory→Tweets→FRED→Kalender→Intermarket→NAS100+QQQ-Chart→Bias. 30.07.: WebFetch-Kalenderzeiten gegen eigene 14:30-CET-Standardliste prüfen. 03.08.: tradingeconomics-Fetch fehleranfällig (fake Actuals, fehlender Freitag-NFP) → Tweet-Wochenkalender aus Schritt 2 als Cross-Check nutzen
+- [Session 25.06.2026](trades/trading_2026-06-25.md) — Kein Trade, GDP/PCE-Überraschung
+- [Order-Bestätigung](feedback_order_bestaetigung.md) — Ausführung immer aktiv bestätigen lassen
+- [Memory Pflege Regel](feedback_memory_pflege.md) — Sofort nach Trade/Update speichern, Zitierpflicht für Zahlen
+- [Chartanalyse Checkliste](feedback_chartanalyse.md) — Volle TA am Voll-Check-Rhythmus, 8b/8c reformiert
+- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte: Memory→Tweets→FRED→Kalender→Intermarket→Chart→Bias
 - [Session 30.06.2026](trades/trading_2026-06-30.md) — 3 Trades +9,72€
-- [Trade 12.06.2026](trades/trading_2026-06-12.md) — Erster Trade +20,32€, perfekt ausgeführt
-- [Trade Log Tabelle](trades/trade_log.md) — Narrative Übersicht aller Trades (Zahlen jetzt auch in der SQLite-DB, siehe oben)
-- [CLI Start Anleitung](reference_cli_start.md) — "cd tradingview-mcp && claude" für echte 78-Tool-Verbindung
-- [Iran-Konflikt Zeitverlauf](project_iran_konflikt.md) — Zeitverlauf der Eskalation seit Versailles-Deal
-- [Trading Zeitfenster](feedback_trading_zeitfenster.md) — Beste Entry-Zone 16-18 Uhr DE-Zeit. 15:30-16:00 seit 23.07. aktive Suche mit Pflicht-Halbierung
-- [Instrumenten-Fokus](feedback_instrumenten_fokus.md) — Nasdaq Hauptinstrument, DAX/Gold nur Ergänzung, kein Doppelrisiko
-- [Vision & Fahrplan](project_vision.md) — Ziel: Bloomberg/GS-Niveau über alle Phasen. UnusualWhales-Plan siehe oben. **27.07.:** IBKR-Zweck nur Fill-Rückabgleich, KEINE automatische Order-Ausführung gewünscht
-- [Live-Trading-Protokoll](feedback_live_trading.md) — 1-Min-Loop, Entscheidungsbaum+Positions-Kasten, Voll-Check-Rhythmus. Punkt 12.1a-Update siehe oben. 27.07.: Punkt 9 Anti-Drift-Fix. 30.07.: Punkt 13.1 (Chasing-Pflicht, feste 2-Check-Schwelle statt "hält", Hindsight-Warnung) + Punkt 7c-Erweiterung (Kipp-Anzeichen nach Extrembewegung), beide mit Review-Pflicht nach Fable-Nachschärfung — siehe [[trades/trading_2026-07-30]]
+- [Trade 12.06.2026](trades/trading_2026-06-12.md) — Erster Trade +20,32€
+- [Trade Log Tabelle](trades/trade_log.md) — Narrative Übersicht, Zahlen auch in SQLite-DB
+- [CLI Start Anleitung](reference_cli_start.md) — "cd tradingview-mcp && claude" für echte Tool-Verbindung
+- [Iran-Konflikt Zeitverlauf](project_iran_konflikt.md) — Eskalation seit Versailles-Deal
+- [Trading Zeitfenster](feedback_trading_zeitfenster.md) — Beste Entry-Zone 16-18 Uhr, 15:30-16:00 mit Pflicht-Halbierung
+- [Instrumenten-Fokus](feedback_instrumenten_fokus.md) — Nasdaq Hauptinstrument, DAX/Gold nur Ergänzung
+- [Vision & Fahrplan](project_vision.md) — Bloomberg/GS-Niveau als Ziel. IBKR nur Fill-Rückabgleich, keine Auto-Order
+- [Live-Trading-Protokoll](feedback_live_trading.md) — 1-Min-Loop, Entscheidungsbaum, Voll-Check-Rhythmus
 - [Datenquelle NAS100](feedback_datenquelle_nas100.md) — quote_get kann stale sein, immer Chart-Bars nutzen
 - [Trade 01.07.2026](trades/trading_2026-07-01.md) — 2 Verluste in Folge -32,97€, Cooldown aktiv
+- [Don't change a running system](feedback_dont_change_running_system.md) — Verbesserungsfunde am Live-Setup vermerken, nicht sofort umsetzen
 - [Regeldisziplin](feedback_regeldisziplin.md) — Verlust trotz Regeleinhaltung = akzeptabel, durch Regelbruch = selbstgemacht
-- [Verifizieren statt nachgeben](feedback_verify_dont_cave.md) — Bei Widerspruch zu Marktdaten immer live gegenchecken statt User-Aussage übernehmen
+- [Verifizieren statt nachgeben](feedback_verify_dont_cave.md) — Bei Widerspruch immer live gegenchecken
 - [User-Identität](user_identity.md) — Levi tradet allein mit Claude → "du" statt "ihr"
-- [Trade 02.07.2026](trades/trading_2026-07-02.md) — Trades #10-12, alle Verluste, Phase 1 erstmals negativ
+- [Trade 02.07.2026](trades/trading_2026-07-02.md) — #10-12, alle Verluste, Phase 1 erstmals negativ
 - [Regime-Wechsel vs. Prozessfehler](feedback_regime_wechsel.md) — Bei Verlustserie jeden Trade einzeln klassifizieren
-- [Backtest-Ablauf](feedback_backtest_ablauf.md) — Trigger "Backtest machen". **27.07.:** zweistufig — DB-Delta-Check (Standard) vs. echter TradingView-Replay (nur Reformen/Phasenübergänge/ungeklärte Verluste), Stichprobe statt Vollreplay
+- [Backtest-Ablauf](feedback_backtest_ablauf.md) — zweistufig: DB-Delta-Check vs. echter Replay
 - [Chart-Layout-Präferenz](feedback_chart_layout.md) — NAS100 Single-Pane volle Höhe, VIX per quote_get
-- [Backtest-Ergebnis 03.07.2026](feedback_backtest_ergebnis_2026-07-03.md) — 5 Regeln geprüft, hypothetisch ≈+60€ statt -4,22€
-- [Realisiertes RR](feedback_realisiertes_rr.md) — Kernkennzahl 28.07. ≈1,16:1 blended (27 Trades, leicht gesunken von 1,27:1 nach Trade #26-Verlust), Phase 3 isoliert ≈0,81:1 (n=2, noch nicht belastbar)
-- [Session 06.07.2026](trades/trading_2026-07-06.md) — Kein Trade, erschöpfter Ausbruch diszipliniert nicht gejagt
-- [Indikator-/Pane-Check](feedback_indikator_check.md) — isFailed-EMA-Bug root-gecaust und strukturell gefixt (16.07.)
-- [Trade 07.07.2026](trades/trading_2026-07-07.md) — Trade #13 Win +46,25€, TP1+TP2 erreicht, löst Verlustserie #8-12 auf
-- [Pane-Sync-Bug (GELÖST)](feedback_pane_sync_bug.md) — pane_focus-Fix bestätigt; Fokus kann nach Screenshot zurückspringen
+- [Backtest-Ergebnis 03.07.2026](feedback_backtest_ergebnis_2026-07-03.md) — hypothetisch ≈+60€ statt -4,22€
+- [Realisiertes RR](feedback_realisiertes_rr.md) — Kernkennzahl ≈1,16:1 blended (27 Trades)
+- [Session 06.07.2026](trades/trading_2026-07-06.md) — Kein Trade, erschöpfter Ausbruch nicht gejagt
+- [Indikator-/Pane-Check](feedback_indikator_check.md) — isFailed-EMA-Bug strukturell gefixt
+- [Trade 07.07.2026](trades/trading_2026-07-07.md) — #13 Win +46,25€, löst Verlustserie #8-12 auf
+- [Pane-Sync-Bug (GELÖST)](feedback_pane_sync_bug.md) — pane_focus-Fix bestätigt, kann nach Screenshot zurückspringen
 - [Dual-Gate-Bestätigung](feedback_dual_gate_confirmation.md) — Bei Multi-Instrument-Setups gleichen Bestätigungsgrad prüfen
-- [Positions-Status-Format](feedback_positions_status_pflicht.md) — SL+TP1+TP2 in jedem Positions-Update zeigen, nicht nur bei Entry
-- [Bewährter Live-Trading-Workflow](feedback_live_trading_workflow_bewaehrt.md) — 7 vom User bestätigte Prozesselemente als Vorlage
+- [Positions-Status-Format](feedback_positions_status_pflicht.md) — SL+TP1+TP2 in jedem Positions-Update
+- [Bewährter Live-Trading-Workflow](feedback_live_trading_workflow_bewaehrt.md) — 7 bestätigte Prozesselemente als Vorlage
