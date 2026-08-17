@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-07-23T10:19:56.627Z
+  modified: 2026-08-12T09:58:57.734Z
 ---
 
 Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
@@ -38,6 +38,23 @@ Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 3. Ab 16:00: volle Positionsgröße bei bestätigtem Setup, wie bisher
 
 **Review-Pflicht (analog 7a1/Punkt 12):** Nach den nächsten 5 Entries im 15:30-16:00-Fenster explizit auswerten, ob diese öfter/stärker ausgestoppt wurden als 16:00+-Entries. Bestätigt sich die Fakeout-Sorge nicht, Halbierungs-Pflicht für dieses Fenster wieder streichen und rein regelbasiert ohne Uhrzeit-Faktor behandeln — Basis: n=0 bei Einführung, bewusst noch nicht abgesichert.
+
+**Terminierung (07.08.2026, Levi-Entscheidung nach Fable-Regelwerk-Audit, siehe [[project_regelwerk_audit_2026-08-07]]):** Status seit Einführung (23.07.) nicht aktualisiert/gegen die Trade-DB geprüft. Levi terminiert diese Review explizit auf **nach Abschluss von Phase 3** (siehe [[project_risikomanagement]]), analog zur Stall-Exit-Review in [[feedback_live_trading]] Punkt 12.
+
+### Review-Ergebnis 12.08.2026 (Fable, Punkt 4 des Phase-1-3-Audits, siehe [[project_regelwerk_audit_2026-08-07]] — überfällige Review jetzt tatsächlich durchgeführt statt weiter aufgeschoben)
+
+**Datenbasis:** `scripts/trades.db` (35 Trades) per direkter SQLite-Abfrage + alle Tages-Dateien seit Regel-Einführung (23.07.2026) auf Entry-Zeitstempel geprüft (Trade_log liefert keine Uhrzeiten, deshalb Tages-Dateien als Primärquelle genutzt). Ergebnis: tatsächlich im 15:30-16:00-Fenster eröffnete UND halbierte Trades: **n=3** (#28, #30, #31) — deutlich unter den in der ursprünglichen Review-Pflicht vorausgesetzten 5. Mehrere Entries lagen knapp außerhalb des Fensters und zählen nicht mit: #24 (22.07., Entry exakt 16:00:00 — der Fall, der die Regel überhaupt erst auslöste, selbst aber am Rand liegt, nicht im Fenster), #29 (03.08., Entry 16:05:36), #32 (05.08., 16:34:58), #33 (06.08., 16:15:08), #34 (07.08., 16:15:58), #35 (07.08., 17:04:58) sowie #25/#26/#27, alle nach 16:00.
+
+**Die 3 gefundenen Fälle:**
+- **#28** (31.07.) Entry 15:50:08, halbiert (229 Stk statt ~458 bei Vollgröße), **WIN +13,80€**
+- **#30** (04.08.) Entry 15:50:05, halbiert (77 Stk / 1.998,92€ statt ~4.000€), **WIN +33,75€**
+- **#31** (05.08.) Entry vor SL-Zeit 16:01:41, halbiert (401 Stk / 2.501,65€ statt ~5.000€), **LOSS -39,80€**
+
+**Befund:** 2 von 3 Fenster-Trades waren Gewinne — dort hat die Halbierung nur Gewinn gekostet (grobe lineare Skalierung: +27,60€ statt +13,80€ bzw. +67,50€ statt +33,75€ bei Vollgröße). Der eine Verlust (#31) ist exakt der Fall, den die Regel absichern soll: bei Vollgröße wäre der Verlust ungefähr doppelt so hoch ausgefallen (≈-79,60€ statt -39,80€). Rechnet man alle drei Trades bei angenommener linearer Vollgrößen-Skalierung zusammen, ergäbe sich bei Vollgröße ein Netto von **+15,50€** (27,60 + 67,50 - 79,60) gegenüber dem tatsächlichen halbierten Netto von **+7,75€** — bei dieser kleinen Stichprobe wäre Vollgröße also sogar besser gefahren, weil zwei Gewinne den einen Verlust überwiegen. Diese Rechnung ist nur eine grobe Näherung (ignoriert Slippage/Fill-Nichtlinearität bei größerer Stückzahl) und bei n=3 statistisches Rauschen, kein belastbares Muster.
+
+**Fakeout-Grundsorge der Regel:** Win-Rate im Fenster (2/3 ≈ 66,7%) liegt NICHT unter der Gesamt-Win-Rate aller 35 DB-Trades (21 Win / 33 ohne BE ≈ 63,6%) — kein Hinweis, dass Fenster-Entries öfter ausgestoppt werden als der Rest. Auch das ist bei n=3 nicht belastbar.
+
+**Verdikt: Sample zu klein für eine belastbare Entscheidung — weder Beibehaltung noch Streichung ist durch die Daten gedeckt.** n=3 verfehlt die selbst gesetzte Schwelle (5) klar; die eigentlich fällige Review kann inhaltlich nicht abschließend beantwortet werden, nur ehrlich dokumentiert. Die vorhandene Evidenz zeigt in dieser kleinen Stichprobe eine leichte Tendenz GEGEN den Netto-Nutzen der Regel (mehr Gewinn beschnitten als Verlust vermieden), aber das kippt bei einem einzigen weiteren Fall in die andere Richtung — kein Grund für eine Änderung. **Entscheidung:** Regel bleibt unverändert in Kraft (kein Eingriff in ein laufendes System ohne robuste Evidenz, siehe [[feedback_dont_change_running_system]]). Diese Review gilt NICHT als abgeschlossen, sondern wird vertagt, bis 2 weitere echte Fenster-Entries vorliegen (dann n=5, ursprüngliche Schwelle erreicht) — erst dann erneut prüfen.
 
 ### Wichtig
 - US-Börsenöffnung = 15:30 Uhr deutscher Sommerzeit (vorher fälschlich 17:00 angenommen — korrigiert am 22.06.2026)

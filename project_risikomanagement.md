@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-05T16:15:54.620Z
+  modified: 2026-08-12T09:51:14.791Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -71,6 +71,12 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 1. **UnusualWhales erfolgreich angebunden** (konditional — siehe [[project_vision]] Priorisierung GEX/Max Pain zuerst; falls die Integration technisch/inhaltlich scheitert, wird Phase 4 ohne UW mit reinem 10k€-Kapitaltest fortgesetzt, kein Blocker für den Kapital-Fortschritt)
 2. **10.000€-Positionsgröße** als eigener Bewährungsschritt, bevor der große Sprung auf 50.000€ Realkapital kommt
 
+**Addendum 12.08.2026 (Fable-Vollprüfung Phase 1-3, Punkt 3 der Handlungsempfehlungen, von Levi genehmigt — Details siehe [[project_phase4_gates_2026-08-12]]):** Die obige Tabelle und der Absatz "Phase 4 neu definiert" (31.07.2026) bleiben als historischer Stand stehen, gelten aber ab sofort als überholt durch folgende Neustaffelung:
+- **Phase 3 verlängert auf #26-40** (statt #26-35) — die zusätzlichen 5 Trades (#36-40) laufen bei Schock-Tier-Fällen (Gate 8c/8d, siehe [[feedback_chartanalyse]]) zu reduzierter Größe (~2.000-2.500€), sonst zu voller Phase-3-Größe (4.000-5.000€).
+- **Phase 4 = #41-50, bleibt bei Phase-3-Positionsgröße (4.000-5.000€)** — NICHT bei den in der Tabelle oben genannten ~10.000€/Trade.
+- Der ursprünglich für Phase 4 vorgesehene **10.000€-Positionstest + konditionale UnusualWhales-Integration wird auf einen eigenen, späteren Schritt verschoben** — erst nach einem bestandenen #50-Review, nicht mehr innerhalb von #36-50.
+- Das #50-Review entscheidet über den 10k€/50k-Übergang anhand von sechs vorab festgelegten, numerischen Gates (Regelbrüche, RR, EV, Win-Rate, DB-Sync, Monte-Carlo-Ergebnis) — alle sechs müssen erfüllt sein, keine Einzelkriterien-Freigabe. Volle Kriterien, Begründungen und vier explizit offenzuhaltende blinde Flecken in [[project_phase4_gates_2026-08-12]], nicht hier dupliziert.
+
 **Danach: Übergang ins normale Trading (kein Phasensystem mehr), 50.000€ Kapital.** Sobald Phase 4 erfolgreich abgeschlossen ist, endet die Phasen-Logik komplett — kein "Phase 5", sondern der eigentliche Übergang zum regulären Trading mit voller Motivation und vollem Kapital. **Harte Vorbedingung für diesen Übergang:** Vor dem Wechsel auf 50.000€ muss die Tracking-Infrastruktur erweitert werden — bisher gibt es nur Tagesabschlüsse ([[feedback_tagesabschluss]]), für die 50k-Stufe braucht es zusätzlich **Wochenabschlüsse und Monatsabschlüsse**, damit die Performance auf dieser Kapitalstufe ehrlich und greifbar trackbar ist (Win-Rate/Expectancy/Drawdown nicht nur pro Tag, sondern aggregiert über Woche/Monat, analog zum bestehenden Phasen-Review-Muster). Diese Wochen-/Monats-Abschluss-Struktur muss VOR dem 50k-Start stehen, nicht erst währenddessen nachgebaut werden.
 
 **Why:** User-Zitat 31.07.2026: "Weil dann müssen wir alles ehrlich tracken, damit wir eine greifbare Performance hinbekommen." Bei 50.000€ Kapital sind die Beträge pro Trade groß genug, dass ungenaues/lückenhaftes Tracking echte Konsequenzen hätte — die bisherige Tagesabschluss-Granularität reicht für diese Stufe nicht mehr aus.
@@ -135,7 +141,7 @@ Beispiel: Entry Nasdaq 29.400, SL 29.200 (200 Pkt = 0,68%), Hebel 5x → SL-Abst
 ### Workflow Trade-Ausführung (festgelegt 22.06.2026, Schritte 0 + 2 ergänzt 04.07.2026 nach Fable-5-Review)
 0. **Vor jedem neuen Entry-Entscheid:** `node scripts/cooldown_check.cjs` ausführen. Bei Exit-Code 2 / roter Status ist kein neuer Trade erlaubt, unabhängig vom Setup — nicht mehr nur aus dem Gedächtnis prüfen (siehe Trade #12, 02.07.2026, wo der Cooldown-Bruch übersehen wurde).
 1. Claude findet Setup im Chart (Support/Resistance, Entry-Level, SL-Level)
-2. Claude berechnet die Positionsgröße über `node scripts/size.cjs --entry <NAS100> --sl <NAS100> --dir long|short --hebel <x> --zert <Stückpreis> --phase <1|2|3>` statt Kopfrechnen — liefert Stückzahl, SL-Preis fürs Produkt und einen Formel-Gegencheck der €/Punkt-Ratio (siehe [[feedback_zertifikat_pnl]])
+2. Claude berechnet die Positionsgröße über `node scripts/size.cjs --entry <NAS100> --sl <NAS100> --dir long|short --hebel <x> --zert <Stückpreis> --phase <1|2|3> --kapital 15000` statt Kopfrechnen — liefert Stückzahl, SL-Preis fürs Produkt und einen Formel-Gegencheck der €/Punkt-Ratio (siehe [[feedback_zertifikat_pnl]]). **`--kapital` ist seit 07.08.2026 Pflichtparameter (kein stiller 15000-Default mehr, siehe [[project_dax_erweiterung]] Fable-Trennungsaudit)** — für NAS100 immer explizit `--kapital 15000` mitgeben, für DAX-Trades den dann gültigen DAX-Betrag (siehe [[project_risikomanagement_dax]]).
 3. User sucht passendes Produkt auf Scalable Capital (Faktor-Zertifikat Nasdaq, passender Hebel) und meldet aktuellen Stückpreis an Claude
 4. Claude berechnet finale Stückzahl = berechnete Positionsgröße ÷ Stückpreis, plus SL/TP in € fürs konkrete Produkt
 5. User führt Order aus

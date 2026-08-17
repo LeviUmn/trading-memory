@@ -5,8 +5,11 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-04T15:22:26.682Z
+  modified: 2026-08-12T09:40:28.680Z
 ---
+
+> **⚠️ EINGEFROREN seit 04.08.2026 (Trade #30) — NICHT mehr live gepflegt.**
+> Seit 27.07.2026 ist `scripts/trades.db` (SQLite) die maßgebliche Quelle für Trade-Daten (siehe [[feedback_memory_pflege]]). Diese Markdown-Tabelle ist ein **historischer Schnappschuss bis Trade #30** und wird nicht mehr fortgeschrieben — Trades #31 und danach stehen NICHT hier, sondern nur in der DB. Für aktuelle Statistik/Auswertung: `node scripts/trade_stats.cjs`. Für Einzeltrade-Details ab #31: die jeweilige `trading_YYYY-MM-DD.md`-Datei. Bewusste Entscheidung, hier keine Nachträge für #31-35 einzupflegen — verhindert eine dritte, teilweise widersprüchliche Datenquelle (siehe Regelbruch-Tracking-Korrektur, Fable-Audit 12.08.2026).
 
 Kompakte Übersicht aller Trades (Phase-Zählung, Win-Rate-Basis). Details siehe jeweilige trading_YYYY-MM-DD.md Datei.
 

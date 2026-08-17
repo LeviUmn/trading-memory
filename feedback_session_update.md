@@ -1,16 +1,16 @@
 ---
 name: feedback-session-update
-description: "Trigger 'start update dich' → IMMER vollständiger 6-Schritt-Ablauf: Memory → Tweets → FRED → Live-Kalender → TV Intermarket → NAS100+QQQ Chart → Bias. Keinen Schritt überspringen."
+description: "Trigger 'start update dich' (NAS100-Hauptauslöser, unverändert; DAX-Pendant heißt seit 07.08.2026 'start update dich dax') → IMMER vollständiger 6-Schritt-Ablauf: Memory → Tweets → FRED → Live-Kalender → TV Intermarket → NAS100+QQQ Chart → Bias. Keinen Schritt überspringen."
 metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-03T14:03:26.708Z
+  modified: 2026-08-07T11:10:25.896Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
 
-**Trigger:** NUR wenn User explizit **"start update dich"** schreibt.
+**Trigger:** NUR wenn User explizit **"start update dich"** schreibt — bleibt der unveränderte NAS100-Hauptauslöser für den 6-Schritt-Ablauf unten. **Umbenennung 07.08.2026:** Die kurzzeitig eingeführte "#2"-Zusatzform (siehe [[project_dax_erweiterung]] To-do 12) ist wieder entfallen — Levi wollte stattdessen eine eindeutigere Benennung. Das DAX-Pendant heißt jetzt **"start update dich dax"** (siehe [[feedback_session_update_dax]]), nicht mehr "#1"/"#2".
 
 Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) → NICHT automatisch starten.
 

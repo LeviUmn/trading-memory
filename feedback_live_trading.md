@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-06T15:55:16.765Z
+  modified: 2026-08-12T09:59:29.313Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -126,6 +126,14 @@ Diese Inhaltsregeln sind vom Wecker-Mechanismus komplett unabhängig — `CronCr
 4. Nur bei echtem Kipp-Punkt (Punkt 4a) überhaupt Text schreiben — bei "alles unverändert" reicht ein sehr kurzer Status, kein neuer Analyse-Absatz
 
 **Why:** User hat am 03.07.2026 explizit befürchtet, dass eine 2-minütige Denkpause während der Muster-Erkennung die Kerze bereits "verschwinden" lässt, bevor reagiert wird — die eigentliche Gefahr ist also nicht ein zu langes Intervall, sondern eine zu langsame Auswertung pro Check-in.
+
+## 2c. Positionsgrößen-Bestätigung bei Entry — Stückzahl gegen Positionsgröße rückrechnen (ergänzt 07.08.2026, Fable-Review nach Trade #35)
+
+Bei Trade #35 (07.08.2026) nannte die Entry-Meldung 276 Stk., tatsächlich waren es 376 Stk. — über ~10 Nachrichten/Ticks (17:04-18:04 Uhr) wurden SL/TP/P&L-Anzeigen im Positions-Kasten mit der falschen Stückzahl berechnet, bis der User es beim ersten Teilverkauf korrigierte. Ökonomisch war das folgenlos (SL/TP sind preis-, nicht stückzahlbasiert, das reale Risiko war die ganze Zeit korrekt), aber prozessual riskant: unentdeckt hätte die falsche Zahl in eine Stacking- oder Limit-Entscheidung einfließen können, und kein bestehender Mechanismus hätte das automatisch aufgedeckt.
+
+**Fix:** Bei der ersten Positions-Kasten-Ausgabe nach jeder manuellen Entry-Meldung die genannte Stückzahl × Zert.-Preis gegen die genannte Positionsgröße (€) rückrechnen. Bei Abweichung >1€ aktiv nachfragen, statt die Zahl unkommentiert zu übernehmen — nicht stillschweigend mit der zuerst genannten Zahl weiterrechnen.
+
+**Bewusst NICHT übernommen (Sonnet 5 + Fable 5, nach gemeinsamer Prüfung):** Der Vorschlag, den SL-Nachzug auf Breakeven bereits bei Erkennung eines Momentum-Fade-Signals statt erst nach einem Teilverkauf durchzuführen, wurde verworfen. Begründung: Ein vorgezogener BE-SL hätte bei einem Whipsaw zwischen Fade-Erkennung und Ausführung die GESAMTE Position ohne realisierten Gewinn auslösen können — die tatsächlich gewählte Reihenfolge (erst Teilverkauf realisieren, dann Rest absichern) garantiert dagegen immer mindestens den Teilgewinn, unabhängig vom weiteren Kursverlauf. Es gibt kein Szenario, in dem BE-zuerst einen echten Vorteil bringt, aber eines (Whipsaw vor Ausführung), in dem es strikt schlechter ist — Fable hat den eigenen ursprünglichen Vorschlag nach dieser Gegenprüfung selbst zurückgenommen. Die bisherige Reihenfolge (Teilverkauf → SL-Nachzug) bleibt also unverändert Standard.
 
 ## 3. Tool-Sequenz bei jedem Check-in — Umfang phasenabhängig (aktualisiert 03.07.2026, `quote_get` entfernt 16.07.2026)
 Kernwerte immer parallel, kein Nachdenken:
@@ -436,6 +444,8 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 
 **Review-Pflicht (Bedingung für den Fortbestand dieser Regel, analog 7a1):** Nach den nächsten **5 Anwendungsfällen** explizit prüfen, ob die Regel tatsächlich einen Unterschied gemacht hat (Teilgewinn gesichert, der sonst verloren gegangen wäre, ohne dabei echte Fortsetzungen abzuschneiden). Zeigt sich kein klarer Nutzen oder überwiegen die abgeschnittenen Fortsetzungen, Regel wieder streichen statt als ungenutzte Karteileiche stehen zu lassen — Basis: n=1 bei dieser Überarbeitung, weiterhin nicht statistisch abgesichert.
 
+**Terminierung (07.08.2026, Levi-Entscheidung nach Fable-Regelwerk-Audit, siehe [[project_regelwerk_audit_2026-08-07]]):** Die Fallzahl-Schwelle ist längst erreicht (mind. 5 relevante Trades seit 21.07.: #23/#25/#27/#28/#33), die Review wurde aber bewusst noch nicht durchgeführt. Levi terminiert sie explizit auf **nach Abschluss von Phase 3** (siehe [[project_risikomanagement]]), nicht sofort — gilt für diese Review-Pflicht UND für 12.3 (Review-Pflicht unten, Punkt "Nach den nächsten 3-5 Anwendungsfällen").
+
 **Bewährt bei Trade #23 (erster, noch nicht nach neuer Fassung geprüfter Fall):** Nach dem Ausbruch über 29.076/29.144 (neues Hoch) gab es keine bekannten Widerstände mehr, TP1/TP2 lagen weit und ohne echtes Level. Die (damals noch als Vollexit gefasste) Stall-Regel griff nach der 3. Kerze ohne neues Hoch (kombiniert mit einsetzender Eskalations-News, also nicht rein durch die Stall-Logik selbst bestätigt) und ermöglichte einen Exit bei +0,81%.
 
 **How to apply:** Bei jedem Check-in während einer offenen Position (zusätzlich zu Punkt 11) den Abstand zum letzten bestätigten Hoch/Tief mitzählen. Nach der 3. Kerze ohne neuen Extremwert, kombiniert mit erkennbarer RSI-Abkühlung, aktiv einen Teilgewinn vorschlagen — unabhängig davon, ob TP1/TP2 erreicht sind oder ein hartes Reversal-Kriterium (Punkt 11) bereits vorliegt. **Ergänzung 27.07.2026 (siehe 1a):** Blockiert die 9d1-Vorrangklausel den Vorschlag bei der 3. Kerze, das Mitzählen trotzdem fortsetzen — ab der 4. Kerze ohne neuen Extremwert (weiterhin mit RSI-Abkühlung) greift der Teilgewinn-Vorschlag auch dann, wenn 9d1 noch ein technisch intaktes Fortsetzungsmuster meldet.
@@ -483,6 +493,23 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 **Why:** Ein interner Check ohne sichtbaren Beleg ist nicht überprüfbar und wird unter Zeitdruck/bei langer Quick-Tick-Kette übersprungen — eine Pflichtzeile im Output macht die Prüfung erzwingbar, exakt analog zum bewährten Muster bei Punkt 7d0 (Kerze geschlossen) und Punkt 9/[[feedback_vollcheck_format]] (Tweet-Check/Format). Fehlt diese Zeile bei einem Check mit offener Position, gilt der Check als nicht regelkonform durchgeführt.
 
 **How to apply:** Sobald ein Trade offen ist, ab dem ersten Check-in danach die Stall-Check-Zeile in JEDES Signal-Format (auch das kompakte Quick-Tick-Format aus Punkt 2) aufnehmen — nicht nur im Voll-Check. Referenz-Extrem beim Entry auf den Entry-Kurs selbst setzen (noch kein Bewegungs-Extremum vorhanden), danach mit jedem neuen Hoch/Tief aktualisieren.
+
+## 12.5 Review-Abschluss 12.08.2026 (Fable, Punkt 4 des Phase-1-3-Audits, siehe [[project_regelwerk_audit_2026-08-07]] — überfällige Review jetzt tatsächlich durchgeführt statt weiter aufgeschoben)
+
+**Datenbasis:** Alle Tages-Dateien 21.07.-07.08.2026 auf Punkt-12/12.1a/12.2/12.3/12.4-relevante Fälle durchsucht (nicht nur die bereits im Audit genannten Trades #23/#33/#35). Gefundene Fälle: **n=7** (#23, #25, #27, #28, #32, #33, #35) — die eigene Schwelle (≥5 seit 21.07.) ist damit klar erreicht, die Review war überfällig.
+
+**Fall für Fall:**
+1. **#23 (21.07., Ursprungsfall):** Regel zum Zeitpunkt des Trades noch informell/nicht final (Vollexit statt Teilverkauf der Restposition — verstößt gegen die noch am selben Tag reformierte "nur Teilgewinn, nie Vollexit"-Fassung; zusätzlich mit Eskalations-News vermischt, "nicht rein durch die Stall-Logik selbst bestätigt" laut eigener damaliger Einordnung). Kein sauberer Test der finalen Regelform, sondern deren Auslöser.
+2. **#25 (23.07.):** Trigger-Kriterien mehrfach knapp erfüllt, aber jedes Mal von der 9d1-Vorrangklausel überstimmt — kein Teilverkauf vor dem finalen SL. Deckte eine echte Design-Lücke auf (Vorrangklausel ohne zeitliche Grenze) und führte direkt zur 1a-Ergänzung (27.07., zeitlich begrenztes Override-Ventil). Ergebnis WIN, aber ohne dass Punkt 12 selbst je griff.
+3. **#27 (28.07.):** Trigger klar erfüllt (3+ Kerzen ohne neues Hoch), aber nur ein manueller SL-Nachzug wurde ausgelöst, kein Teilgewinn-Vorschlag — unvollständige Anwendung. Führte zu 12.2 (beide Optionen aktiv gemeinsam anbieten). Finanziell glimpflich (Free-Roll-Prinzip via TP1), aber Prozess lückenhaft.
+4. **#28 (31.07.):** Trigger korrekt nach der damaligen 3-Kerzen-Logik ausgelöst ("planmäßig"), aber mit ~19 Minuten Verzug zum eigentlichen Bewegungs-Extremum — spürbar suboptimaler Exit (+13,80€ statt eines am Extremum erreichbaren deutlich höheren Betrags). Führte zu 12.3 (2 Kerzen/RSI≥5 + Rekursions-Logik für Restpositionen).
+5. **#32 (05.08.):** Erster vollständig sauberer Erfolgsfall unter der verschärften Fassung — Trigger (2 Kerzen + RSI-Abkühlung) rechtzeitig erkannt, Teilexit UND SL-Nachzug gemeinsam angeboten (12.2 und 12.3 beide korrekt angewendet). WIN +92,99€, kein Regelbruch.
+6. **#33 (06.08.):** Trigger-Kriterien (12.3) bereits gegen 17:20-17:25 Uhr erfüllt, aber erst 17:34 Uhr auf explizite User-Nachfrage überhaupt angesprochen — ein interner Check ohne Output-Beleg wurde unter der laufenden Quick-Tick-Kadenz stillschweigend übersprungen. Führte zu 12.4 (Pflicht-Ausgabezeile "Stall-Check"). LOSS -30,69€ (durch 50%-ATR-Sizing gemildert, sonst ungefähr doppelt so hoch).
+7. **#35 (07.08., einziger Fall NACH Einführung von 12.4):** Der tatsächliche Teilverkauf (18:02-18:03 Uhr) wird in der Tagesdatei explizit als **"Punkt-7c-Extension"** (4 aufeinanderfolgende Checks fallender MACD-H/RSI, tick-basierter Erschöpfungs-Trigger) geführt — **nicht** als Punkt-12/12.3-Auslösung (kerzenschluss-basiert). In der Tagesdatei gibt es keinen Beleg, dass in diesem Trade überhaupt ein echter Punkt-12-Trigger auftrat, und keinen Beleg, dass die Pflicht-Ausgabezeile "Stall-Check: ..." aus 12.4 bei den Check-ins tatsächlich ausgegeben wurde.
+
+**Kernbefund:** Von 7 Fällen ist genau **einer (#32)** eine vollständig regelkonforme Anwendung der finalen (12.2+12.3-)Fassung. Drei Fälle (#25, #27, #28) deckten je eine eigene Lücke auf und führten zu einer gezielten Nachschärfung — so ist iteratives Regel-Tuning gedacht, zeigt aber auch, dass die Regel bis 31.07. durchgehend nachjustiert werden musste, nie über mehrere Fälle hinweg unverändert stabil lief. Der schwerste Fall (#33) deckte eine reine Transparenz-Lücke auf (Trigger erfüllt, aber nicht sichtbar gemacht) und führte zu 12.4 — **aber #35, der einzige Fall seit 12.4, testet diesen Fix nicht**, weil dort ein anderer, unabhängiger Mechanismus (Punkt 7c) den Teilverkauf auslöste, nicht Punkt 12 selbst.
+
+**Verdikt: NICHT als vollständig validiert geschlossen — ein konkreter Rest-Gap bleibt offen.** Die 12.2+12.3-Fassung von Punkt 12 hat mit #32 einen sauberen Erfolgsbeleg und darf als grundsätzlich funktionsfähig gelten. Die 12.4-Pflichtzeile ist dagegen bislang **durch keinen einzigen Fall bestätigt** — #33 zeigte das Problem, das sie lösen soll, aber es existiert noch kein dokumentierter Fall, in dem 12.4 selbst (nach ihrer Einführung am 06.08.) bei einem echten, kerzenschluss-basierten Punkt-12-Trigger nachweislich gegriffen und die späte Erkennung verhindert hat. **Empfehlung:** Regel bleibt unverändert in Kraft, kein Hinweis auf grundsätzliche Fehlkalibrierung. Diese Review wird nicht als endgültig abgeschlossen geführt, sondern vertagt auf den nächsten Fall mit einem echten kerzenschluss-basierten Punkt-12-Trigger — dort explizit gegenchecken, ob die "Stall-Check: ..."-Zeile tatsächlich bei jedem Check-in im Output erscheint, bevor 12.4 als bestätigt gilt.
 
 ## 13. Chasing-Situation vor Entry — halbierte Position statt Vollentry, kein separates Konsolidierungs-Add (ergänzt 22.07.2026, nach Trade #24, Fable-Review)
 

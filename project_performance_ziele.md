@@ -4,7 +4,7 @@ description: "Levis Performance-Ziele (70% Win-Rate, 1-1,5% Ø-Rendite/Trade), f
 metadata:
   type: project
   originSessionId: session-2026-07-16
-  modified: 2026-07-24T08:42:19.094Z
+  modified: 2026-08-12T10:25:13.842Z
 ---
 
 Levi hat am 16.07.2026 (nach Trade #20, +51,46€/+2,58%) zwei persönliche Performance-Ziele genannt, begründet mit der Disziplin durch Regeln/Memory/MCP-Verbindung:
@@ -38,3 +38,22 @@ Levi hat am 16.07.2026 (nach Trade #20, +51,46€/+2,58%) zwei persönliche Perf
 **Warum kein "Ziel erreicht"-Fazit trotz 70% Win-Rate Phase 2:** Ein einzelner starker Trade (#25, +1,96%) hebt Win-Rate UND Rendite gleichzeitig an — genau das Muster, vor dem diese Datei seit 16.07. warnt (siehe Trade #20 damals). Die Rendite-Kennzahl bleibt trotz der Verbesserung weit unter dem 1-1,5%-Ziel. Fable bestätigte das im Phase-2-Abschluss-Review (24.07.2026): ohne Trade #25 wären es nur 66,7% Win-Rate und ≈0,46% Rendite gewesen — die 70% sind eine gute Stichprobe, kein stabiles neues Niveau.
 
 **Phase-2-Abschluss-Review abgeschlossen (24.07.2026, siehe [[project_phase2_abschluss_review_2026-07-24]]):** Fable gab GO für Phase 3 mit Bedingungen (gestaffelter Einstieg, siehe [[project_risikomanagement]]). Zentraler neuer Befund dort: Phase-2-eigenes RR (≈1,75:1) ist deutlich besser als die blendete Lifetime-Zahl (1,27:1) zeigt — echte RR-Verbesserung innerhalb der Phase, die im bisherigen Reporting nicht sichtbar war.
+
+---
+
+## Addendum 12.08.2026 — Kapital-Realitätscheck: der eigentliche Maßstab ist €-EV/Trade, nicht Win-Rate
+
+Aus der heutigen Fable-Vollprüfung ([[project_fable_vollpruefung_phase1-3_2026-08-12]], Abschnitt 3), Ergänzung zu den bisherigen Updates auf dieser Seite, ohne sie zu ersetzen:
+
+**Die zwei hier bisher getrackten Kennzahlen (Win-Rate, Ø-Rendite/Trade in %) geben ein unvollständiges Bild.** Die Win-Rate-Zielmarke (70%) wurde am 23.07. formal getroffen (Update oben: 70%, n=10, Phase 2), während die Rendite-Zielmarke (1-1,5%/Trade) laut demselben Update "klar verfehlt" blieb. Das wurde damals korrekt als "kein Ziel-erreicht-Fazit" gewertet — aber selbst die Rendite-in-%-Kennzahl beantwortet nicht die eigentlich relevante Frage: **Reicht der Edge, um bei Zielkapital (50.000€) das gewünschte monatliche Einkommen zu erzeugen?** Das ist eine reine €-EV-pro-Trade-Rechnung bei Zielgröße, keine %/Trade- oder Win-Rate-Frage.
+
+**Tatsächliche monatliche Run-Rate (35 Trades, ~1,84 Monate):** 239,41€ Gesamtergebnis ≈ **130€/Monat real** — bei einem gültigen Ziel von 2.100-3.900€/Monat (Zielmitte ~3.000€). Das reale Ergebnis liegt bei **≈4,3% des Zielmittelwerts.**
+
+**Drei Hochrechnungs-Szenarien auf 50.000€ Kapital, je nach zugrunde gelegtem Edge aus der 35-Trade-Historie:**
+- **Aktuellster Edge (Phase 3, EV 0,213%/Trade):** ≈852€/Monat bei voller 50k-Größe — 41% der unteren Zielgrenze. **Ziel nicht erreichbar.**
+- **Lifetime-blended (EV 0,4%/Trade, alle 35 Trades):** ≈1.600€/Monat — 76% der unteren Grenze, weiterhin klar verfehlt.
+- **Bester bisheriger Edge (Phase 2, EV 0,611%/Trade):** ≈2.444€/Monat — läge im unteren Zielband.
+
+**Fazit, unverblümt:** Nur auf Phase-2-Niveau-Edge ist das Einkommensziel überhaupt erreichbar. Das jüngste Signal (Phase 3) bewegt sich in die Gegenrichtung. n=35 bleibt unter der selbstgesetzten Monte-Carlo-Schwelle (~50), diese Zahlen sind also eine Frühwarnung, kein Endurteil — aber sie dürfen nicht durch eine isoliert betrachtete Win-Rate-Kennzahl überdeckt werden, die für sich genommen bereits "erreicht" gemeldet werden könnte, während der eigentliche Engpass (€-EV/Trade bei Zielkapital) unverändert offen bleibt.
+
+**Verknüpfung zum Fahrplan:** Diese Rechnung ist die Grundlage der sechs numerischen Gates in [[project_phase4_gates_2026-08-12]] (u.a. EV≥0,5%/Trade, RR≥1,3:1) sowie des entsprechenden Addendums in [[project_vision]] — der 10k/50k-Kapitalsprung ist jetzt an Edge-Qualität auf Phase-2-Niveau gekoppelt, nicht nur an Trade-Anzahl oder Win-Rate.

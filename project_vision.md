@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: trading-session-2026-06-26
-  modified: 2026-07-31T15:59:52.584Z
+  modified: 2026-08-12T10:24:50.054Z
 ---
 
 ## Das Ziel (formuliert 26.06.2026)
@@ -69,3 +69,16 @@ Wir wollen am Ende aller Phasen der bestmögliche Trader sein — professionell 
 - **Harte Vorbedingung für den 50k-Übergang:** Wochen- und Monatsabschlüsse müssen als Tracking-Ebene ergänzt werden (zusätzlich zu den bestehenden Tagesabschlüssen, siehe [[feedback_tagesabschluss]]), BEVOR auf 50.000€ gewechselt wird — nicht erst währenddessen nachgebaut. Volle Begründung + Detail-Regel in [[project_risikomanagement]], Abschnitt "Skalierungs-Fahrplan".
 - **IBKR / Futures (MNQ):** Vorbereitung auf Schweiz-Umzug — parallel testen bevor Umzug ansteht. IBKR bietet keine deutschen Hebelzertifikate, Alternative wäre Micro Nasdaq Futures.
 - **Scope-Klarstellung (27.07.2026, Levi-Entscheidung):** Falls IBKR (oder eine andere API-Anbindung) kommt, ist der Zweck ausschließlich **automatischer Fill-Rückabgleich** (echter Fill-Preis/Stückzahl/Timing direkt aus dem Konto lesen, löst das in der heutigen Fable-Bewertung genannte "Kein Fill-Abgleich"-Problem, siehe [[feedback_broker_wert_prioritaet]]) — NICHT automatische Order-Ausführung. Levi will die Order weiterhin bewusst selbst auslösen, das Vertrauen in eine autonome Order-Platzierung durch das System ist explizit (noch) nicht gewünscht. Nur die Rückübertragung der tatsächlichen Trade-Daten (statt manueller Chat-Meldung) soll automatisiert werden.
+- **Vermerkt für den Gesamt-Review nach Phase 4 (06.08.2026):** `IG:NASDAQ` ("US Tech 100 Cash") live getestet — trackt `FOREXCOM:NAS100` fast identisch (~3 Punkte/0,01% Abweichung, kein Delay), hat aber im Gegensatz dazu **echtes, variierendes Volumen** (390-3.058/15-Min-Bar, kein Konstant-0-Wert). Könnte den QQQ-Volumen-Umweg ablösen und einen Tool-Call pro Voll-Check-Tick sparen. Fund entstand als Nebenprodukt des analogen DAX-Checks (`IG:DAX`, siehe [[project_dax_erweiterung]]). **Bewusst nicht jetzt umgesetzt** — Levi-Entscheidung 06.08.2026: "don't change a running system", solange NAS100 läuft. `FOREXCOM:NAS100` ist über Monate kalibriert (ATR-Schwellen, Level-Berührungen etc.); ein Anbieterwechsel könnte trotz fast identischem Schlusskurs abweichendes Spread-/Tick-Verhalten haben. Erst beim Gesamt-Review nach Phase 4 (mit Fable) erneut aufgreifen und ggf. erst nach paralleler Papier-Beobachtung (Punkt-für-Punkt-Vergleich ATR/Level-Touches beider Symbole) auf `IG:NASDAQ` umstellen.
+
+---
+
+## Addendum 12.08.2026 — Kapital-Realitätscheck (Fable-Vollprüfung Phase 1-3)
+
+Im Rahmen der heutigen Vollprüfung ([[project_fable_vollpruefung_phase1-3_2026-08-12]], Abschnitt 3 "Kapital-/Ziel-Realitätscheck") wurde der Fahrplan gegen die tatsächliche Trade-History (35 Trades) gegengerechnet — mit einem klaren Ergebnis, das hier festgehalten werden muss, nicht nur im Audit-File:
+
+**Befund:** Am aktuellsten belegten Edge (Phase 3, EV 0,213%/Trade) ist das Einkommensziel (2.100-3.900€/Monat) **auch bei voller 50.000€-Kapitalgröße nicht erreichbar** — die Hochrechnung liegt bei ≈852€/Monat, nur 41% der unteren Zielgrenze. Der lifetime-blendete Edge (EV 0,4%/Trade, alle 35 Trades) käme auf ≈1.600€/Monat (76% der unteren Grenze) — ebenfalls klar verfehlt. Nur am **bisher besten Edge** (Phase 2, EV 0,611%/Trade) läge die Hochrechnung mit ≈2.444€/Monat im unteren Zielband. Das jüngste Signal (Phase 3) bewegt sich damit in die falsche Richtung, nicht in die richtige.
+
+**Konsequenz für den Fahrplan:** Der harte Vorbedingungs-Block oben ("Danach: Übergang ins normale Trading") und die Phase-4-Bedingungen sind jetzt zusätzlich an [[project_phase4_gates_2026-08-12]] gekoppelt — sechs numerische Gates (u.a. EV≥0,5%/Trade, RR≥1,3:1), die bewusst auf Phase-2-Niveau zielen, nicht auf den optimistischeren Lifetime-Schnitt. Der 10.000€/50.000€-Kapitalsprung ist damit nicht mehr nur an Trade-Anzahl (n=50, Monte-Carlo-Schwelle) gebunden, sondern zusätzlich an **Edge-Qualität**: Ohne Rückkehr auf mindestens Phase-2-Niveau bleibt das Endziel rechnerisch unerreichbar, unabhängig von der Stichprobengröße.
+
+**Das ist keine Absage an die Vision** — das Ziel (professionelles Niveau, Lebenshaltungskosten über Trading) bleibt unverändert. Was sich ändert: die Messlatte für den Kapitalsprung ist jetzt explizit "hat sich der Edge auf Phase-2-Niveau erholt/stabilisiert", nicht nur "sind genug Trades gesammelt". n=35 liegt weiterhin unter der selbstgesetzten Monte-Carlo-Schwelle (~50) — die obige Hochrechnung ist eine Frühwarnung, kein finales Urteil, aber sie darf nicht stillschweigend unter der Annahme "mehr Trades werden es schon lösen" weiterlaufen.

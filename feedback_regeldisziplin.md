@@ -5,6 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 7c946990-591f-4e7e-acad-80f3259782b4
+  modified: 2026-08-12T10:56:26.336Z
 ---
 
 Es gibt zwei fundamental unterschiedliche Arten von Verlust-Trades, die klar getrennt bewertet werden müssen:
@@ -34,3 +35,19 @@ Die Regelbruch/Marktrisiko-Unterscheidung wurde bisher nur bei Verlust-Trades ko
 **Why:** Fable-5-Review (09.07.2026) stellte fest, dass Regelverstöße bislang nur über die Verlust-Statistik sichtbar wurden — dadurch bleibt unklar, wie oft Regeln tatsächlich gebrochen werden, wenn der Ausgang zufällig positiv ist. Ohne diese Sichtbarkeit erodieren Regeln schleichend ("hat doch letztes Mal geklappt").
 
 **How to apply:** Bei JEDER Trade-Nachbesprechung (Gewinn oder Verlust) explizit prüfen und im Trade-Log/der Tagesdatei vermerken, ob alle zum Zeitpunkt geltenden Regeln eingehalten wurden — unabhängig vom Ergebnis. Regelverstöße bei Gewinn-Trades genauso benennen wie bei Verlust-Trades, auch wenn kein unmittelbarer Handlungsbedarf am Ergebnis besteht (das Geld bleibt gewonnen) — der Handlungsbedarf betrifft die Disziplin für künftige Trades.
+
+### Erkennungs-Zwang + Sofort-Review (ergänzt 12.08.2026, Phase-1-3-Regelwerk-Audit)
+
+Das Prinzip aus dem Abschnitt oben (Regelbruch-Klassifizierung gilt auch bei Gewinn-Trades, 09.07.2026) blieb über einen Monat unmechanisiert — es lebte nur als Vorsatz, ohne erzwungenen Check. Ergebnis: Von den 6 beim Audit vom 12.08.2026 nachträglich korrigierten Regelverstößen (u.a. Trades #9, #12, #31, #34) war keiner ein Gewinn-Trade, alle 6 waren Verluste — die Prüfung fand also faktisch weiterhin nur bei Verlusten statt, genau das Muster, das der 09.07.-Eintrag verhindern sollte. Zwei Mechanismen schließen die Lücke:
+
+**a) Erkennungs-Zwang:** Im Tagesabschluss bekommt JEDER Trade, unabhängig von Win/Loss/BE, eine Pflichtzeile — parallel zur bereits bestehenden "DB-Sync: JA/NEIN"-Zeile (siehe [[feedback_tagesabschluss]]):
+`Regelkonformität geprüft: JA — Verstoß: JA/NEIN`
+Diese Zeile ist selbst nicht optional — ihr Fehlen im Tagesabschluss ist damit direkt sichtbar (nicht erst nachträglich beim nächsten Audit), und sie kann bei Gewinn-Trades nicht mehr stillschweigend übersprungen werden.
+
+**b) Sofort-Review:** Sobald `Verstoß: JA` ausgelöst wird — bei Win ODER Loss —, ist eine noch am selben Tag durchgeführte Fable-Review Pflicht. Formalisiert, was bei Verlust-Fällen bereits informell passierte (#31 am 05.08., #34 am 07.08.), aber bei Gewinn-Fällen bisher nie ausgelöst wurde.
+
+**Why:** Ohne einen Zwangs-Punkt im Prozess selbst bleibt die Erkennung von der Tagesform/Aufmerksamkeit abhängig — die Zahlen (6/6 Korrekturen nur bei Verlusten) zeigen, dass genau das bisher passiert ist.
+
+**Ausdrücklich nicht Teil dieser Änderung (von Levi abgelehnt, 12.08.2026):** keine automatische Positionsgrößen-Reduktion (50%-Floor) nach einem Verstoß, keine neue Cooldown-Regel-3 (Verstoß-Häufigkeits-Zähler) in `cooldown_check.cjs`. Diese Ergänzung ist rein auf Erkennung + Review beschränkt, keine automatische Konsequenz.
+
+**How to apply:** Siehe [[feedback_tagesabschluss]], Abschnitt "Regelkonformitäts-Pflichtzeile" für den genauen Ablauf im Tagesabschluss.
