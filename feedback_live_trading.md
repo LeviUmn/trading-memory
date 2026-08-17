@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-12T09:59:29.313Z
+  modified: 2026-08-17T16:28:21.937Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -224,6 +224,36 @@ Ein reines Preis-Level ("Bruch über 29.541") lässt offen, ob eine grün schlie
 **Why:** User-Feedback 13.07.2026: "wie die Kerze schließen musste, ob es rot oberhalb einer Grenze oder eine grüne sein musste, das hast du mir nicht gesagt" — der Entscheidungsbaum nannte nur das Preis-Level, nicht die geforderte Kerzenfarbe/den Schlusstyp, wodurch die Bedingung mehrdeutig blieb.
 
 **How to apply:** Bei JEDEM Trigger im Entscheidungsbaum (Punkt 7) explizit dazuschreiben, ob eine grüne Bestätigungskerze verlangt ist oder ein reiner Schlusskurs-Bruch (auch bei roter Kerze) ausreicht, z.B. "🟢 Wenn Kerze GRÜN über 29.541 schließt" vs. "🟢 Wenn Kerze (Farbe egal) über 29.541 schließt". Gilt für alle Preis-Trigger, nicht nur den finalen Entry-Trigger.
+
+**7f. RR-Gate (Live, vorläufig) — laufende RR-Anzeige in der heißen Phase, nicht erst beim fertigen Entry-Signal (ergänzt 17.08.2026, Fable-Review nach Trade #36)**
+
+Ergänzt das bestehende Wenn-Dann-Format aus Punkt 7 (Kurs / 🟢🔴 / Sonst warten, siehe oben) um eine zusätzliche Pflichtzeile, die den RR-Check aus Punkt 2 (bisher erst an das fertige Entry-Signal gekoppelt) schon während der laufenden Beobachtung in der heißen Phase sichtbar macht:
+
+```
+RR-Gate (Live, vorläufig): SL-Floor [X Pkt, ATR-Formel 8c] → TP1 [nächstgelegenes Pivot-Level aus 7a1a] → RR ca. [Y]:1 — Gate ✓/✗
+```
+
+**Beispiele (Trade #36, 17.08.2026):**
+
+✗-Fall (vor Entry, Kurs 30.153, SL-Floor 30.105 = 48 Pkt, TP1-Kandidat R1 30.183,15 = 30 Pkt):
+```
+Kurs: 30.153 | Setup: Long-Anlauf an R1
+🟢 Wenn Kurs R1 (30.183,15) mit bestätigtem Schlusskurs überwindet: LONG auslösen
+→ Sonst: warten
+RR-Gate (Live, vorläufig): SL-Floor 30.105 (48 Pkt, ATR 8c) → TP1 R1 30.183,15 (30 Pkt) → RR ≈0,63:1 — Gate ✗ NICHT erfüllt
+```
+
+✓-Fall (nach bestätigtem R1-Durchbruch, TP1 auf Tageshoch 30.246,10 aktualisiert):
+```
+Kurs: 30.192 | Setup: Long, R1 überwunden
+🟢 Wenn Kurs sich über R1 hält / nächster Schlusskurs bestätigt: LONG auslösen
+→ Sonst: warten
+RR-Gate (Live, vorläufig): SL-Floor 30.105 (48 Pkt, ATR 8c) → TP1 Tageshoch 30.246,10 (93 Pkt) → RR ≈1,94:1 — Gate ✓ erfüllt
+```
+
+**Why:** Bei Trade #36 (17.08.2026) erfolgte der Entry manuell, bevor die RR-Prüfung überhaupt sichtbar/verfügbar war — der RR-Check war bisher ausschließlich an das fertige Entry-Signal aus Punkt 2 gekoppelt (dort: "wird VOR jedem Entry-Signal durchgerechnet, aber nicht als Zwischenschritt ausgesprochen"), nicht an die laufende Beobachtung während der heißen Phase in Punkt 7. Diese Lücke ermöglichte einen manuellen Vorgriff, ohne dass die RR-Zahl je gezeigt wurde. Diese Ergänzung macht das Gate schon während der Beobachtung durchgehend sichtbar, bevor ein solcher Vorgriff passieren kann.
+
+**How to apply:** Die Zeile erscheint ab Eintritt in die heiße Phase (sobald Punkt 7 überhaupt aktiv wird, siehe "How to apply" weiter oben) bei jedem Update und aktualisiert sich automatisch, sobald sich das TP-Bild ändert (z.B. nach einem Levelbruch wie oben). Sie ersetzt NICHT den finalen RR-Check bei echtem Entry (der bleibt unverändert an die tatsächlich gewählte SL/TP-Struktur nach [[feedback_chartanalyse]] Punkt 8b/8c gekoppelt) — sie ist ein Frühindikator/Transparenz-Mechanismus. Kein relevanter Tempo-Mehraufwand, da Punkt 7 ohnehin ausschließlich in der heißen Phase läuft, nicht im minütlichen Quick-Tick (Punkt 3).
 
 ### 7a. Indikatoren proaktiv "freigeben", Kurs bleibt Users Job (ergänzt 01.07.2026, erweitert 02.07.2026)
 User kann Indikatoren (RSI, MACD etc.) selbst nicht gut einschätzen, den NAS100-Kurs aber problemlos selbst ablesen. Klare Arbeitsteilung: Claude überwacht und meldet proaktiv, sobald die GESAMTE nicht-preisliche Seite einer Bedingung erfüllt ist — der User muss dann nur noch auf das Erreichen des Kurs-Levels warten, nicht selbst irgendetwas anderes interpretieren.
