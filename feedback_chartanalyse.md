@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-12T09:30:32.762Z
+  modified: 2026-08-17T15:50:34.995Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -169,6 +169,16 @@ Einmal pro Handelstag, beim Session-Start (nicht im 1-Min-Loop, kein Tempo-Konfl
 4. Gültig bis zum nächsten Session-Start, dann neu berechnen
 
 **Nachziehen bei Annäherung (ergänzt 23.07.2026, User-Anforderung):** Nur die 1-2 kursnächsten Level werden initial gezeichnet, R1/R2/S2 bleiben zunächst nur berechnet, nicht gezeichnet (siehe Punkt 3). Sobald sich der Kurs im laufenden Voll-Check-Rhythmus (Punkt 9) einem noch nicht gezeichneten Level (R1, R2 oder S2) auf eine Distanz nähert, die der aktuellen Rausch-Kerzen-Größe (≈1-2× ATR(14), siehe 8c) entspricht, dieses Level SELBSTSTÄNDIG per `draw_shape` nachziehen — ohne dass der User danach fragen muss. Grund: Der User kennt die berechneten Zahlenwerte nicht auswendig und kann selbst nicht erkennen, wann eine Annäherung bevorsteht — das ist explizit Aufgabe des Loops, nicht des Users (gleiches Prinzip wie Punkt 7a in [[feedback_live_trading]]: proaktiv melden statt auf Nachfrage warten). Nicht mehr benötigte Level (Kurs hat sie klar hinter sich gelassen, keine SL-Relevanz mehr) können unauffällig stehen bleiben oder bei Gelegenheit per `draw_remove_one` entfernt werden — kein Pflichtschritt, nur Aufräumen bei Bedarf.
+
+**7a1b. Spike über Pivot-R-Level ohne bestätigten Schlusskurs — Beobachtungsnotiz (ergänzt 17.08.2026, Fable-Review nach Trade #36, n=1)**
+
+**Beobachtung (ausdrücklich noch KEIN eigenständiges Exit- oder Entry-Verbotssignal, kein Blocker):** Spikt der Kurs intrabar über ein berechnetes Pivot-R-Level (siehe 7a1a) hinaus, OHNE dass ein 5-Min-Kerzenschluss über diesem Level bestätigt, und folgt danach ein Seitwärtslauf von mehr als 15 Minuten direkt an/unter der Linie ohne neues Bewegungs-Hoch, wird das als **reduzierte Fortsetzungs-Konfidenz** markiert — nicht mehr automatisch als reine Bestätigung der Trendfortsetzung gewertet.
+
+**Why:** Bei Trade #36 (17.08.2026) durchbrach der Kurs R1 (30.183,15) kurzzeitig mit einem Hoch von 30.192,55, ohne dass sich ein Schlusskurs darüber bestätigte. Es folgte eine 20-25-minütige enge Konsolidierung direkt an/unter R1 mit 6-7 gescheiterten Rückeroberungsversuchen, bevor der Kurs sichtbar abdrehte und kontinuierlich fiel — ein klassisches False-Break-/Absorptionsmuster an einem Pivot-Widerstand, das die bestehende Logik (7a1a behandelt Pivot-Level primär als statische Ziel-/Widerstandsmarken, 9d1 prüft nicht spezifisch auf diese Konstellation) bisher nicht von einem echten Ausbruch unterschied. n=1 — dies ist eine Beobachtungsnotiz, keine belastbare Regel.
+
+**How to apply:** Tritt dieses Muster (Spike über Pivot-R-Level ohne bestätigten 5-Min-Schlusskurs + anschließend >15 Min Seitwärtslauf ohne neues Hoch direkt an der Linie) auf: kein Nachladen der Position auf Basis dieses Spikes, erhöhte Wachsamkeit für den Stall-Exit-Trigger (Punkt 12.3 in [[feedback_live_trading]]), aber weiterhin normale Bestätigungs-/Exit-Logik ansonsten unverändert anwenden — die Beobachtung schärft die Interpretation, ersetzt aber kein bestehendes Kriterium.
+
+**Review-Pflicht (Bedingung für den Fortbestand dieser Notiz):** Nach den nächsten 2-3 vergleichbaren Fällen (Spike über ein Pivot-R/S-Level ohne bestätigten Schlusskurs, gefolgt von längerem Seitwärtslauf direkt an der Linie) explizit prüfen, ob sich das Muster wiederholt bestätigt. Bestätigt es sich, kann daraus eine feste Regel werden (z.B. mit konkreten Handlungskonsequenzen für Entry/Exit); bestätigt es sich nicht, diese Notiz wieder streichen statt sie als ungenutzte Karteileiche stehen zu lassen (gleiches Prinzip wie bei 7a1, siehe Review-Pflicht dort).
 
 ### 8. Multi-Timeframe — feste Reihenfolge (eingeführt 26.06.2026, auf zwei Instrumente erweitert 16.07.2026)
 Top-Down immer in dieser Reihenfolge, nie überspringen. **Seit 16.07.2026 läuft dieser Check auf BEIDEN Panes** (NAS100 + QQQ), nicht mehr nur NAS100 — löst die Asymmetrie auf, dass der finale Entry-Trigger (Dual-Gate, [[feedback_live_trading]] Punkt 7b) längst zwei Instrumente prüft, der übergeordnete MTF-Bias bisher aber nur eines. Nur in der ruhigen Phase durchführen (siehe [[feedback_live_trading]] Punkt 3a); in der heißen Phase entfällt der QQQ-Teil ersatzlos, Zeitdruck hat Vorrang.
