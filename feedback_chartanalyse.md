@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-17T15:50:34.995Z
+  modified: 2026-08-18T17:37:16.113Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -269,6 +269,28 @@ Kein Trade wird genommen, wenn SL zu nah am aktuellen Kurs liegt (würde durch n
 **Kein Automatismus — trade-abhängig, mit echten 5-Min-Bars verifiziert (ergänzt 03.07.2026, siehe [[feedback_backtest_ergebnis_2026-07-03]] Teil 3).** Der Multiplikator ist kein Freifahrtschein, der jeden Verlust verhindert: Bei Trade #8 hätte ein 2,5-3x weiterer SL den Whipsaw überlebt (Kurs erholte sich 45 Min. später bis zum Tageshoch) — bei Trade #12 hätte er NICHT geholfen, weil der Kurs danach ungebremst weiterfiel und der Verlust nur größer geworden wäre. **How to apply:** 8c reduziert Rauschen-Stopps, ersetzt aber nicht die aktive Beobachtung — 9d1/4a (Muster+Kerze live erkennen und aussteigen) bleibt die zuverlässigere Regel, weil sie unabhängig davon funktioniert, ob sich der Markt danach erholt oder weiter fällt.
 
 **Verstoß gegen die BASIS-Regel (nicht nur den Chop-Multiplikator) bei Trade #21 (16.07.2026, Fable-verifiziert):** Größte Rausch-Kerze der 45 Min vor Entry: 72,7 Pkt (14:55-Kerze). Mindest-SL nach Schritt 2 (1,5-2×, schon OHNE Chop-/Schock-Aufschlag): 109-145 Pkt. Tatsächlicher SL: nur 55 Pkt — unterschritt damit bereits die einfache Basis-Regel, nicht erst den Chop-/Schock-Multiplikator. **Direkte Folge:** Mit einem regelkonformen SL (109+ Pkt) hätte TP1 (75 Pkt entfernt) nur RR ≈0,69:1 erreicht — klar unter der Pflicht-Schwelle ≥1:1 aus Punkt 8b. Der zum Entry-Zeitpunkt geloggte "RR-Check bestanden" (1,4:1) war also ein Artefakt des zu engen, nicht-regelkonformen SL — keine echte Bestätigung. **How to apply (verschärft):** Schritt 1-2 dieser Regel (Rausch-Kerze ermitteln, SL ≥1,5-2× davon) ist ein Pflicht-Gate VOR dem RR-Check aus 8b, nicht danach — wird die SL-Mindestdistanz verletzt, ist die anschließende RR-Rechnung automatisch ungültig, selbst wenn sie rechnerisch "besteht". Bei sehr nahen TP-Zielen (wie hier 75/115 Pkt gegenüber 109+ Pkt Mindest-SL) bedeutet das oft: Trade auslassen, weil kein regelkonformer SL+TP-Kombination die RR-Minima gleichzeitig erfüllt — nicht den SL nachträglich verbreitern und hoffen, dass die TPs noch passen.
+
+### 8b1. TP-Realismus-Filter — Hard-Gate vor der TP1-Auswahl, nicht nur Warnzeile danach (ergänzt 18.08.2026, Fable-Review nach Trade #38)
+
+**Kernprinzip (bestätigt die bestehende Kausalkette aus 8b, ergänzt sie um einen fehlenden Filterschritt):** SL und TP kommen bewusst aus zwei unterschiedlichen Quellen — SL beantwortet "wo beweist der Markt, dass die These falsch ist" (Struktur/Rauschpuffer, siehe 7a/8c), TP beantwortet "wohin bewegt sich der Markt plausibel, wenn die These stimmt" (echtes technisches Level: Fib-Extension, EMA-Konfluenz, Pivot, Struktur-Hoch). Diese Trennung ist **kein** Konstruktionsfehler und wird NICHT aufgehoben — ein TP, das stattdessen mechanisch aus der SL-Distanz abgeleitet würde (z.B. immer "SL × Faktor"), wäre der eigentliche Zufallstreffer, weil er keinen Bezug zu echter Struktur/Liquidität hätte. Der tatsächliche Fehler lag bislang darin, dass ein TP-Kandidat, der zwar auf einem echten Level lag, aber weit außerhalb der real beobachtbaren Marktbewegung des Tages, trotzdem als gültiges TP1 akzeptiert wurde, solange die RR-Zahl rechnerisch ≥1:1 ergab.
+
+**Neuer, verbindlicher Ablauf (ersetzt Schritt 2 aus dem 8b-Ablauf, Rest von 8b bleibt unverändert):**
+1. Setup/Trigger bestätigt (wie bisher).
+2. SL aus Struktur/Rauschkerzen bestimmen (7a/8c inkl. Schock-Tier) → definiert die Risikoeinheit R.
+3. TP-Kandidatenliste aus echten technischen Levels bilden (Fib-Extension, EMA-Konfluenz, Pivot, Struktur-Hoch/-Tief), aufsteigend nach Distanz sortiert.
+4. **Realismus-Filter (neu, VOR der TP1-Auswahl):** Kandidaten verwerfen, die weiter als **2× ATR(14)** ODER weiter als **2× die Breite der unmittelbar vorausgehenden Konsolidierungsbox** (soweit erkennbar) entfernt liegen — diese gelten als statistisch kaum erreichbar für die Marktbewegung des Moments, unabhängig davon, wie das RR rechnerisch aussieht.
+5. TP1 = der nächste verbleibende (realistische) Kandidat aus Schritt 4, der zusätzlich RR≥1:1 zu R erfüllt (Schritt aus 8b unverändert). RR ergibt sich aus der echten Distanz — schwankendes RR (mal 1,3:1, mal 3:1, je nach Lage des nächsten echten Levels) ist gesund und erwartbar, kein Mangel, der ausgeglichen werden müsste.
+6. Erfüllt kein Kandidat innerhalb des Realismus-Fensters (Schritt 4) gleichzeitig RR≥1:1 → **kein Trade.** Explizit als "kein valides RR trotz bestätigtem Setup" loggen — nicht das ferne, unrealistische Level trotzdem als TP1 nehmen, nur weil die RR-Zahl formal passt.
+
+**Pflicht-Ausgabezeile vor jeder Entry-Bestätigung (gleiche Behandlung wie die bestehenden Pflichtzeilen aus 8c/07.08. und 12.08.):**
+`TP-Realismus: TP1 X Pkt = Y,Y× ATR / Z,Z× letzte Box-Breite — ✓/✗`
+Fehlt diese Zeile, gilt die Entry-Prüfung als nicht vollständig.
+
+**Why:** Bei Trade #38 (18.08.2026) lag TP1 (15min-EMA50, 100 Punkte entfernt) bei ca. 2,7-3,1× ATR(14) und über dem 2-fachen der vorausgehenden 45-Punkte-Konsolidierungsbox, die 40-50 Minuten gehalten hatte — objektiv außerhalb dessen, was die unmittelbare Marktbewegung plausibel hergab. Das RR-Gate (2,56:1) bestätigte den Trade trotzdem, weil TP und SL bis dahin nur als unabhängiger Quotient geprüft wurden, nie gegen die tatsächliche Bewegungsgröße des Tages. Der Kurs kam nach Entry nie näher an TP1 heran als die Ausgangsbasis, sondern fiel direkt zurück in die alte Box und wurde dort ausgestoppt — ein Totalausfall der erwarteten Bewegung, kein normaler Rücksetzer. Zusatzbefund aus derselben Analyse: TP1 und TP2 lagen bei #38 nur 22 Punkte auseinander, was die Zweistufen-Teilgewinn-Logik aus 8b praktisch entwertete — auch das ist ein Symptom fehlender Realismus-Prüfung bei der TP-Auswahl.
+
+**Bewusst NICHT übernommen:** Ein fester, kalibrierter Zahlenwert für die 2×-Schwelle über den aktuellen Vorschlag hinaus — die Datenbasis (n=13 in Phase 3) ist noch zu klein, um den exakten Schwellenwert empirisch zu validieren. Nach den nächsten 10-15 Trades mit dieser Pflichtzeile im Log prüfen, ob TP/ATR- bzw. TP/Box-Verhältnis tatsächlich mit Trefferquote/MFE korreliert, und die Schwelle bei Bedarf nachjustieren.
+
+**Review-Pflicht:** Wie bei anderen frisch eingeführten Heuristiken (siehe 7a1) nach den nächsten 10-15 Anwendungsfällen prüfen, ob der Filter tatsächlich schlechte Trades wie #38 verhindert hätte, ohne dabei valide Trades unnötig auszusortieren. Zeigt sich kein klarer Nutzen oder eine zu hohe Fehlausschluss-Rate, Schwelle anpassen statt Regel unverändert als Karteileiche stehen zu lassen.
 
 ### 8d. Markt-Regime-Gate — VOR der Setup-Suche prüfen (ergänzt 02.07.2026)
 Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup entsteht), einen groben Regime-Check durchführen:
