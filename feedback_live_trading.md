@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-17T16:28:21.937Z
+  modified: 2026-08-19T17:53:04.359Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -286,6 +286,25 @@ Seit 03.07.2026 läuft ein 2-Pane-Layout (`2v`): Pane 0 = NAS100 (Preis/Entry, E
 **How to apply:** Im Entscheidungsbaum-Kasten (Punkt 7) den finalen Trigger-Moment erst als "grünes Licht" bestätigen, wenn explizit auch der letzte QQQ-Check (Volume + VWAP) zum Zeitpunkt des Kurs-Erreichens noch positiv war — nicht auf Basis eines älteren Checks aus der ruhigen Phase entscheiden.
 
 **Kompakt-Statuszeile angepasst:** VWAP steht NICHT mehr in der Pro-Tick-Zeile aus Punkt 2 (die bleibt NAS100-only: Kurs/RSI/MACD/EMA50). VWAP erscheint nur noch zusammen mit Volume als eigene Zeile bei den QQQ-Checks (ruhige Phase laufend, heiße Phase einmalig).
+
+## 7b1. Entry-Freigabe erst nach abgeschlossenem RR-/TP-Realismus-PASS — Dual-Gate allein reicht nicht (ergänzt 19.08.2026, Fable-Review nach Trade #39)
+
+**Kernprinzip:** Dual-Gate-Erfüllung (Punkt 7b: NAS100+QQQ EMA50, Kerzenschluss/Muster/Candlestick) ist notwendig, aber nicht hinreichend für einen Entry. Unabhängig davon, ob die Order durch Claude bestätigt oder von Levi eigenständig ausgelöst wird, muss die abgeschlossene RR-Gate- und TP-Realismus-Prüfung ([[feedback_chartanalyse]] Punkt 8b/8b1, inkl. Schock-Tier-Kopplung 8c falls Regime-Gate 8d zutrifft) als explizites PASS vorliegen, BEVOR die Order ausgeführt wird — zeitlich vorher, nicht erst rechnerisch im Nachhinein bestätigt.
+
+**Ablauf / was "PASS" konkret bedeutet:**
+1. Dual-Gate bestätigt sich (Punkt 7b: NAS100+QQQ EMA50 ✓, Kerzenschluss/Muster/Candlestick ✓) → das ist der Auslöser, um in den RR-/TP-Realismus-Check einzusteigen, NICHT der Auslöser für die Order selbst.
+2. SL/TP nach [[feedback_chartanalyse]] Punkt 8b (Struktur→SL→RR-Check TP1≥1:1) und 8b1 (TP-Realismus-Filter ≤2×ATR/≤2× letzte Konsolidierungsbox) vollständig durchrechnen — inkl. Schock-Tier-Kopplung (Punkt 8c), falls Regime-Gate 8d gerade Schock-Tag zeigt.
+3. Erst wenn die Pflicht-Ausgabezeile(n) aus 8b1 (`TP-Realismus: ... ✓`) und ggf. 8c (`RR-Check TP1 bei Schock-Tier-SL: ... ✓`) explizit mit ✓ vorliegen, gilt die Order als freigegeben.
+4. Diese Reihenfolge gilt UNABHÄNGIG vom Ausführungsweg — auch wenn Levi selbst, ohne auf Claudes Bestätigung zu warten, im Broker auslöst, ist ein Entry vor Abschluss von Schritt 3 ein Regelverstoß nach [[feedback_regeldisziplin]], unabhängig vom späteren Ergebnis.
+
+**Pflicht-Ausgabezeile (vor jeder Entry-Bestätigung, ergänzt die bestehenden Zeilen aus 8b1/8c, ersetzt sie nicht):**
+`Entry-Freigabe: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ — PASS` (bei fehlendem Baustein stattdessen: `Entry-Freigabe: ... — NICHT PASS, Grund: <fehlender Baustein>`)
+
+Fehlt diese Zeile vor einer Trigger-/Entry-Meldung, gilt die Prüfung als nicht abgeschlossen — exakt dieselbe Behandlung wie die bereits bestehenden Pflichtzeilen (Tweet-Check, Kerze-geschlossen/Punkt 7d0, Format, SL/ATR-Ratio/Punkt 8c).
+
+**Why:** n=2 mit konsistent negativem Prozesssignal. Trade #36 (17.08.2026, [[trades/trading_2026-08-17]]) — Entry vor abgeschlossener RR-Prüfung, RR nur ~0,6:1, LOSS -27,88€. Trade #39 (19.08.2026, [[trades/trading_2026-08-19]]) — identisches Muster: Levi ging short, sobald das Dual-Gate erfüllt war, ohne die separate RR-/TP-Realismus-Prüfung abzuwarten, RR nur ~0,42-0,47:1, aber WIN +45,74€. Nach [[feedback_regeldisziplin]] (Abschnitt "Regelbruch-Klassifizierung gilt auch bei Gewinn-Trades") ist der Gewinn bei #39 kein Freispruch, sondern Zufall — derselbe Prozessfehler wie bei #36, nur der Marktausgang unterschied sich. Levi hat das Muster bei #39 selbst bestätigt ("Diesmal war Dual Gate erfolgreich, nur RR hat nicht ganz gepasst bei der Berechnung, aber dennoch war RR final sauber") — die Reihenfolge war vertauscht: RR wurde nachträglich statt vorab geprüft.
+
+**Bewusst NICHT Teil dieser Regel:** Kein automatisches Order-Blockieren oder technischer Broker-Eingriff — das System kann nicht direkt in den Broker eingreifen (Levi handelt eigenständig über Scalable Capital, siehe [[feedback_broker_wert_prioritaet]]). Diese Regel bleibt eine Disziplin-/Prozessregel mit Pflicht-Ausgabezeile, kein technischer Blocker — analog zu anderen Pflichtzeilen-ohne-Automatismus-Regeln in diesem Regelwerk (z.B. Punkt 7d0/Kerze-geschlossen, 8c/SL-ATR-Ratio, 8d/Schock-Tag).
 
 ## 7e. QQQ-Session-Gate — wann das Dual-Gate verfügbar ist (ergänzt 15.07.2026, Fable-Review)
 

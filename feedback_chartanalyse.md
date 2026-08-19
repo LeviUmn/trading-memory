@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-18T17:37:16.113Z
+  modified: 2026-08-19T17:53:12.267Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -291,6 +291,8 @@ Fehlt diese Zeile, gilt die Entry-Prüfung als nicht vollständig.
 **Bewusst NICHT übernommen:** Ein fester, kalibrierter Zahlenwert für die 2×-Schwelle über den aktuellen Vorschlag hinaus — die Datenbasis (n=13 in Phase 3) ist noch zu klein, um den exakten Schwellenwert empirisch zu validieren. Nach den nächsten 10-15 Trades mit dieser Pflichtzeile im Log prüfen, ob TP/ATR- bzw. TP/Box-Verhältnis tatsächlich mit Trefferquote/MFE korreliert, und die Schwelle bei Bedarf nachjustieren.
 
 **Review-Pflicht:** Wie bei anderen frisch eingeführten Heuristiken (siehe 7a1) nach den nächsten 10-15 Anwendungsfällen prüfen, ob der Filter tatsächlich schlechte Trades wie #38 verhindert hätte, ohne dabei valide Trades unnötig auszusortieren. Zeigt sich kein klarer Nutzen oder eine zu hohe Fehlausschluss-Rate, Schwelle anpassen statt Regel unverändert als Karteileiche stehen zu lassen.
+
+**Zeitliche Kopplung an den Entry (ergänzt 19.08.2026, siehe [[feedback_live_trading]] Punkt 7b1):** Diese Prüfung (wie auch der RR-Check aus 8b) muss als abgeschlossenes PASS VOR jeder Order-Ausführung vorliegen, nicht nur rechnerisch irgendwann davor oder danach nachgewiesen sein — auch wenn Levi die Order eigenständig ohne Claudes Bestätigung auslöst. Volle Regel, Ablauf und Pflicht-Ausgabezeile dazu in [[feedback_live_trading]] Punkt 7b1.
 
 ### 8d. Markt-Regime-Gate — VOR der Setup-Suche prüfen (ergänzt 02.07.2026)
 Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup entsteht), einen groben Regime-Check durchführen:
