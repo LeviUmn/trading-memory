@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-20T16:34:35.210Z
+  modified: 2026-08-20T16:41:49.736Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -320,6 +320,10 @@ Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup
 **Rangfolge Auslassen vs. Halbieren bei bestätigtem Regime-Chop (ergänzt 20.08.2026, Fable-Review, Levi-Entscheidung):** Punkt 7 stellt "Position halbieren oder Trade auslassen" bislang gleichrangig nebeneinander. Sobald aber das Regime SELBST als Lehrbuch-Chop bestätigt ist (diese Session-Ebene, nicht nur ein einzelnes wackelndes Setup nach Punkt 7), gilt ab jetzt eine Rangfolge: **"Trade auslassen" ist die Standard-Reaktion.** "Halbieren" bleibt ausschließlich für den Fall reserviert, dass das Tages-Regime insgesamt noch NICHT als Chop bestätigt ist, aber ein einzelnes Setup unsicher wirkt.
 
 **Ausnahme — volle Gate-Kette bleibt handelbar:** Diese Standard-Reaktion gilt NICHT, wenn ein konkretes Setup trotz bestätigtem Regime-Chop Dual-Gate (7b) + RR-Gate (8b) + TP-Realismus (8b1) alle drei ohne jeden Kompromiss als PASS erfüllt. Ein Setup, das diese volle Kette sauber besteht, zeigt in der Praxis meist auch keine aktive Chop-Symptomatik aus Punkt 7 (RSI/MACD-Flip + flacher VIX) mehr — das ist aber keine automatische Garantie, da Dual-Gate (7b) EMA50-Ausrichtung + Kerzenschluss/Muster prüft, nicht RSI/MACD direkt. Zeigt sich trotz PASS an allen drei Gates gleichzeitig ein aktives RSI/MACD-Flip nach Punkt 7, zählt das als Kompromiss — die Ausnahme greift dann NICHT, Auslassen bleibt Standard. Regime-Chop (Session-Ebene) und ein einzelnes, vollständig bestätigtes Setup schließen sich sonst nicht zwangsläufig aus; ein pauschales Auslassen würde in diesem Fall echte, regelkonforme Trades blockieren statt vor Rauschen zu schützen.
+
+**Pflicht-Ausgabezeile bei bestätigtem Regime-Chop, sobald die Ausnahme geprüft wird (ergänzt 20.08.2026, gleiche Behandlung wie die bestehenden Pflichtzeilen aus 7b1/8b1/8c):**
+`Regime-Chop-Ausnahme: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ + kein RSI/MACD-Flip ✓ — ✓/✗ (nur bei bestätigtem Regime-Chop relevant)`
+Liegt bei bestätigtem Regime-Chop (Session-Ebene) für ein konkretes Setup KEINE vollständige Zeile mit allen vier ✓ vor, gilt automatisch "Auslassen" — kein Trade ohne diese Zeile, unabhängig davon, wie überzeugend das Setup sonst wirkt.
 
 **Why:** Levi beobachtete nach einer schwachen Woche (siehe [[trades/trading_2026-08-20]]), dass die FOMO-Falle nicht in der Positionsgröße liegt, sondern im Einstieg selbst, solange der Markt strukturell keine sauberen Signale liefert — eine halbierte Position in einem strukturell chop-artigen Regime verliert seltener groß, aber öfter, der Erwartungswert bleibt schlecht. Fables Gegenargument (bestätigt an Trade #40/#41 vom selben Tag, beide regelkonform trotz diagnostiziertem Chop-Tag) verhinderte eine zu pauschale Fassung: Die Ausnahme für die volle Gate-Kette stellt sicher, dass echte Ausbrüche wie #40/#41 weiterhin zulässig bleiben. Fable stufte dies als risikoreduzierende Priorisierung bestehender Reaktionen ein (kein neues Analyse-Signal), deshalb reicht lockere Beobachtung über die nächsten Anwendungsfälle, kein hartes n=10-Validierungsgate wie bei neu eingeführten Indikatoren/Schwellenwerten.
 
