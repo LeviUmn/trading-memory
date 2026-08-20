@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-19T17:53:12.267Z
+  modified: 2026-08-20T16:15:18.473Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -293,6 +293,10 @@ Fehlt diese Zeile, gilt die Entry-Prüfung als nicht vollständig.
 **Review-Pflicht:** Wie bei anderen frisch eingeführten Heuristiken (siehe 7a1) nach den nächsten 10-15 Anwendungsfällen prüfen, ob der Filter tatsächlich schlechte Trades wie #38 verhindert hätte, ohne dabei valide Trades unnötig auszusortieren. Zeigt sich kein klarer Nutzen oder eine zu hohe Fehlausschluss-Rate, Schwelle anpassen statt Regel unverändert als Karteileiche stehen zu lassen.
 
 **Zeitliche Kopplung an den Entry (ergänzt 19.08.2026, siehe [[feedback_live_trading]] Punkt 7b1):** Diese Prüfung (wie auch der RR-Check aus 8b) muss als abgeschlossenes PASS VOR jeder Order-Ausführung vorliegen, nicht nur rechnerisch irgendwann davor oder danach nachgewiesen sein — auch wenn Levi die Order eigenständig ohne Claudes Bestätigung auslöst. Volle Regel, Ablauf und Pflicht-Ausgabezeile dazu in [[feedback_live_trading]] Punkt 7b1.
+
+**Log-Präzisierung — exakte Zahlen statt nur ✓/✗ (ergänzt 20.08.2026, Fable-Review nach Trade #40/#41):** Bei Trade #40 (20.08.2026) wurde die Pflichtzeile korrekt mit ✓ ausgegeben, aber der exakte ATR(14)-Wert zum Entry-Zeitpunkt nicht separat dokumentiert — beim Tagesabschluss musste er aus einer Tagesspanne (44-104) grob geschätzt werden, eine zu breite Range für eine spätere Kalibrierung. Ab sofort gehört zur Pflichtzeile aus Schritt 4 zusätzlich der **exakte ATR(14)-Wert und die exakte Box-Breite als Zahl** (nicht nur das daraus abgeleitete Verhältnis), sowie nach Trade-Abschluss zusätzlich **wie nah TP1 tatsächlich erreicht wurde (MFE in Punkten)** in die Trade-DB-Notiz (`add_trade.cjs --notes`). Format der Pflichtzeile unverändert (`TP-Realismus: TP1 X Pkt = Y,Y× ATR(=Z Pkt) / W,W× Box(=V Pkt) — ✓/✗`), nur die Rohwerte werden jetzt zusätzlich mitgeführt statt nur des Verhältnisses.
+
+**Why:** Fable-Review (20.08.2026) bestätigte anhand von Trade #40/#41: Bei n=2 ist keine inhaltliche Aussage zur 2×-Schwelle möglich (Review-Pflicht liegt weiterhin bei 10-15 Fällen, unverändert), aber schon jetzt zeigte sich, dass Trade #40 wegen der fehlenden Rohwert-Dokumentation nicht als sauberer Kalibrierungsdatenpunkt taugt, nur als Prozess-Nachweis (Pflichtzeile korrekt ausgegeben). Ohne diese Ergänzung würde die eigentliche Review nach 10-15 Fällen auf denselben Schätzungs-Fallstrick treffen wie hier. Zusatzbeobachtung aus dem Review (noch keine Regel, nur Hypothese bei n=2): Trade #41 lag mit TP1/ATR ≈1,4-1,5× klar konservativ innerhalb der Schwelle und verfehlte TP1 trotzdem nur um ~7 Punkte (MFE), während Trade #40 als Grenzfall (~1,8-2,0×) den SL traf, ohne sich TP1 überhaupt anzunähern — spricht eher dafür, dass nicht die TP-Distanz der limitierende Faktor war, sondern das separat diagnostizierte Chop-Regime (siehe [[trades/trading_2026-08-20]]), das gerichtete Bewegungen unabhängig von der Zieldistanz abwürgt. Die MFE-Protokollierung ab jetzt soll genau diese Unterscheidung (Distanz-Problem vs. Regime-Problem) bei der Review nach 10-15 Fällen möglich machen.
 
 ### 8d. Markt-Regime-Gate — VOR der Setup-Suche prüfen (ergänzt 02.07.2026)
 Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup entsteht), einen groben Regime-Check durchführen:
