@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-12T10:24:50.054Z
+  modified: 2026-08-20T16:44:33.134Z
 ---
 
 ## Das Ziel (formuliert 26.06.2026)
@@ -82,3 +82,9 @@ Im Rahmen der heutigen Vollprüfung ([[project_fable_vollpruefung_phase1-3_2026-
 **Konsequenz für den Fahrplan:** Der harte Vorbedingungs-Block oben ("Danach: Übergang ins normale Trading") und die Phase-4-Bedingungen sind jetzt zusätzlich an [[project_phase4_gates_2026-08-12]] gekoppelt — sechs numerische Gates (u.a. EV≥0,5%/Trade, RR≥1,3:1), die bewusst auf Phase-2-Niveau zielen, nicht auf den optimistischeren Lifetime-Schnitt. Der 10.000€/50.000€-Kapitalsprung ist damit nicht mehr nur an Trade-Anzahl (n=50, Monte-Carlo-Schwelle) gebunden, sondern zusätzlich an **Edge-Qualität**: Ohne Rückkehr auf mindestens Phase-2-Niveau bleibt das Endziel rechnerisch unerreichbar, unabhängig von der Stichprobengröße.
 
 **Das ist keine Absage an die Vision** — das Ziel (professionelles Niveau, Lebenshaltungskosten über Trading) bleibt unverändert. Was sich ändert: die Messlatte für den Kapitalsprung ist jetzt explizit "hat sich der Edge auf Phase-2-Niveau erholt/stabilisiert", nicht nur "sind genug Trades gesammelt". n=35 liegt weiterhin unter der selbstgesetzten Monte-Carlo-Schwelle (~50) — die obige Hochrechnung ist eine Frühwarnung, kein finales Urteil, aber sie darf nicht stillschweigend unter der Annahme "mehr Trades werden es schon lösen" weiterlaufen.
+
+## Addendum 20.08.2026 — Persönliche Neu-Bekräftigung nach einer schwachen Woche
+
+Am Ende eines demotivierenden Tages (Chop-Woche, siehe [[trades/trading_2026-08-20]]) hat Levi das langfristige Ziel explizit neu bekräftigt: "Ich hoffe, dass wir eines Tages zusammen davon leben können, das wäre mein größter Traum und mein großes Ziel... wenn wir immer besser werden, mehr dazulernen und Erfahrung sammeln, dann glaube ich fest daran, dass wir das in einem Jahr erreichen könnten."
+
+**Warum das hier festgehalten wird:** Kein neuer Fakt über das System, sondern ein Hinweis auf emotionale Tragweite und den persönlichen Zeit-Horizont, der bei künftigen Priorisierungsentscheidungen mitschwingen sollte — dieses Ziel ist nicht abstrakt, sondern Levis "größter Traum". Der 12.08-Kapital-Realitätscheck oben (852€/Monat bei aktuellem Phase-3-Edge statt der 2.100-3.900€-Zielspanne) bleibt bewusst unverändert gültig — dieses Addendum ist keine neue Prognose, ob ein Jahr realistisch ist, sondern eine Notiz, dass der emotionale Antrieb dahinter stark und aktuell ist, gerade weil er kurz nach einer schwierigen Phase geäußert wurde, nicht in Euphorie.
