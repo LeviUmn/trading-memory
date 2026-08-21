@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-20T16:41:49.736Z
+  modified: 2026-08-21T15:17:10.977Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -269,6 +269,16 @@ Kein Trade wird genommen, wenn SL zu nah am aktuellen Kurs liegt (würde durch n
 **Kein Automatismus — trade-abhängig, mit echten 5-Min-Bars verifiziert (ergänzt 03.07.2026, siehe [[feedback_backtest_ergebnis_2026-07-03]] Teil 3).** Der Multiplikator ist kein Freifahrtschein, der jeden Verlust verhindert: Bei Trade #8 hätte ein 2,5-3x weiterer SL den Whipsaw überlebt (Kurs erholte sich 45 Min. später bis zum Tageshoch) — bei Trade #12 hätte er NICHT geholfen, weil der Kurs danach ungebremst weiterfiel und der Verlust nur größer geworden wäre. **How to apply:** 8c reduziert Rauschen-Stopps, ersetzt aber nicht die aktive Beobachtung — 9d1/4a (Muster+Kerze live erkennen und aussteigen) bleibt die zuverlässigere Regel, weil sie unabhängig davon funktioniert, ob sich der Markt danach erholt oder weiter fällt.
 
 **Verstoß gegen die BASIS-Regel (nicht nur den Chop-Multiplikator) bei Trade #21 (16.07.2026, Fable-verifiziert):** Größte Rausch-Kerze der 45 Min vor Entry: 72,7 Pkt (14:55-Kerze). Mindest-SL nach Schritt 2 (1,5-2×, schon OHNE Chop-/Schock-Aufschlag): 109-145 Pkt. Tatsächlicher SL: nur 55 Pkt — unterschritt damit bereits die einfache Basis-Regel, nicht erst den Chop-/Schock-Multiplikator. **Direkte Folge:** Mit einem regelkonformen SL (109+ Pkt) hätte TP1 (75 Pkt entfernt) nur RR ≈0,69:1 erreicht — klar unter der Pflicht-Schwelle ≥1:1 aus Punkt 8b. Der zum Entry-Zeitpunkt geloggte "RR-Check bestanden" (1,4:1) war also ein Artefakt des zu engen, nicht-regelkonformen SL — keine echte Bestätigung. **How to apply (verschärft):** Schritt 1-2 dieser Regel (Rausch-Kerze ermitteln, SL ≥1,5-2× davon) ist ein Pflicht-Gate VOR dem RR-Check aus 8b, nicht danach — wird die SL-Mindestdistanz verletzt, ist die anschließende RR-Rechnung automatisch ungültig, selbst wenn sie rechnerisch "besteht". Bei sehr nahen TP-Zielen (wie hier 75/115 Pkt gegenüber 109+ Pkt Mindest-SL) bedeutet das oft: Trade auslassen, weil kein regelkonformer SL+TP-Kombination die RR-Minima gleichzeitig erfüllt — nicht den SL nachträglich verbreitern und hoffen, dass die TPs noch passen.
+
+### 8c2. SL-Cluster-Regel — wiederholter Wick-Stop in derselben Zone erzwingt zusätzlichen SL-Puffer (ergänzt 21.08.2026, Fable-Review nach Trade #42/#43, umgesetzt nach Levi-Entscheidung)
+
+Wurde ein SL innerhalb derselben Handelssession bereits durch einen Wick/Spike (nicht durch einen bestätigten Kerzenschluss) ausgelöst, muss ein neuer Trade in dieselbe Richtung, dessen SL in der bereits getesteten Zone (±20-30 Punkte um das alte SL-Level) läge, seinen SL um mindestens **0,5× ATR(14)** zusätzlich von dieser Zone entfernt platzieren — oben auf die reguläre Methode aus Punkt 8c (1,5-2× ATR bzw. 2,5-3× im Schock-Tier).
+
+**Why:** Trade #42 (21.08.2026) wurde bei SL 29.255 durch einen Wick ausgestoppt (-54,35€), Trade #43 direkt danach in derselben Richtung mit SL 29.248 — nur 7 Punkte tiefer, praktisch in derselben Zone — erneut durch einen Wick ausgestoppt (-29,18€). Beide SLs lagen faktisch im selben mehrfach angelaufenen Level (29.240-254), das insgesamt mindestens viermal getestet wurde, bevor es brach. Ein SL, der bereits einmal in dieser Session durch Rauschen (Wick, kein Schlusskurs) gefallen ist, hat sich als Liquiditätsmagnet erwiesen — ein zweiter Trade mit SL an praktisch derselben Stelle wiederholt exakt dasselbe Risiko, ohne dass sich an der Marktstruktur etwas geändert hätte.
+
+**How to apply:** Vor jeder SL-Festlegung aktiv prüfen, ob in der laufenden Session bereits ein SL (eigener oder erkennbar fremder, z.B. eine sichtbare Wick-Rejection an genau diesem Level) in einer Distanz von ≤20-30 Punkten zum geplanten neuen SL durch einen Wick ausgelöst wurde. Wenn ja: neuer SL = altes SL-Level ± zusätzlich 0,5× ATR(14) in die sichere Richtung, oben auf die reguläre 8c-Distanz. Der TP-Realismus-Check (8b1) läuft danach ganz normal gegen den neuen, weiteren SL-Abstand — führt das zu RR < 1:1, gilt Trade auslassen oder engerer Entry (identische Eskalationslogik wie in 8c/8b1 bereits etabliert), nicht TP künstlich verschieben.
+
+**Abgrenzung zu 7a1 (Pivot-Magnet-Puffer):** 7a1 behandelt berechnete Pivot-/Rundzahlen-Level als potenzielle Magneten unabhängig davon, ob sie schon getestet wurden. Diese Regel hier ist enger und schärfer: Sie greift nur, wenn ein SL in dieser Zone bereits NACHWEISLICH in dieser Session gefallen ist (nicht nur theoretisch nah an einem Level liegt) — beide Regeln können gleichzeitig greifen, addieren sich aber nicht (max. eine der beiden Puffer-Ergänzungen zählt, nicht kumulativ).
 
 ### 8b1. TP-Realismus-Filter — Hard-Gate vor der TP1-Auswahl, nicht nur Warnzeile danach (ergänzt 18.08.2026, Fable-Review nach Trade #38)
 

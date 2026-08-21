@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: session-2026-07-21
-  modified: 2026-08-03T14:49:35.708Z
+  modified: 2026-08-21T13:19:31.783Z
 ---
 
 Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine zusammenhängende Referenz gespeichert, damit sich künftige Sessions konsistent daran halten — bündelt Regeln, die sonst über mehrere Dateien verteilt sind.
@@ -37,7 +37,9 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 3. **QQQ-Dual-Gate:** Zeitstempel-Vergleich NAS100/QQQ-Bar → falls Session-Gate offen (Punkt 7e): `pane_focus(1)`, dort 15min+60min → EMA50/VWAP/Volumen lesen → **QQQ-Timeframe zurück auf 15min setzen** (ergänzt 31.07.2026, User-Korrektur — QQQ-Pane bleibt sonst auf 60min stehen, wenn direkt zu Pane 0 zurückgewechselt wird) → dann erst zurück auf Pane 0
 4. **Chartmuster (reduziert, NICHT mehr die volle [[feedback_chartanalyse]] 9d-Liste):** Screenshot + Prüfung auf die 3-4 zum Kontext wahrscheinlichsten Muster (z.B. Double-Top bei Zonentest, Flag/Pennant bei Konsolidierung, Keil bei Trendabschwächung)
 5. **Fibonacci:** nur wenn ein erkennbarer Impuls/Trend vorliegt, sonst ausgelassen
-6. **Tweet-Fetch-Fälligkeit aus `x_last_fetch.json` berechnen, nicht mental Minute%10 mitzählen** (ergänzt 27.07.2026, Anti-Drift-Fix nach zweimaligem Ausfall — siehe [[feedback_live_trading]] Punkt 9): Zeitstempel lesen, Differenz zur echten Systemzeit bilden. ≥10 Min → Fetch der 3 Accounts (DeItaone/KobeissiLetter/zerohedge) durchführen, Timestamp aktualisieren. Ergebnis IMMER als Pflicht-Zeile im Output (auch "noch nicht fällig" oder "nichts Neues") — nie stillschweigend weglassen, siehe Schritt 9
+6. **Tweet-Fetch-Fälligkeit ab 21.08.2026 an der Voll-Check-Zählung festgemacht, nicht mehr an Zeitstempel-Differenz** (User-Korrektur, live während Trading-Session — löst den darunter dokumentierten Grenzfall-Bug strukturell statt nur punktuell): Fetch läuft an JEDEM 2. Voll-Check (= alle 10 Min, da Voll-Checks im 5-Min-Takt laufen), gezählt ab dem letzten tatsächlich durchgeführten Fetch — kein Zeitstempel-Vergleich, kein Rundungs-/Grenzfall-Risiko mehr. Bei Voll-Check Nr. 1 nach einem Fetch: "noch nicht fällig (nächster Fetch beim übernächsten Voll-Check)". Bei Voll-Check Nr. 2: Fetch durchführen, `x_last_fetch.json` weiterhin als Log/Audit-Trail aktualisieren (Zeitstempel bleibt für Nachvollziehbarkeit, ist aber nicht mehr die Fälligkeits-Grundlage). Ergebnis weiterhin IMMER als Pflicht-Zeile im Output, siehe Schritt 9.
+
+**Historie (vorheriger Ansatz, ergänzt 27.07.2026, abgelöst 21.08.2026):** Zuvor lief die Fälligkeit über `x_last_fetch.json`-Zeitstempel-Differenz zur Systemzeit (≥10 Min → fällig). Grenzfall-Vorfall 21.08.2026: bei einer Differenz von GENAU 10 Min wurde fälschlich "noch nicht fällig" ausgegeben (≥10 schließt 10 ein, wurde aber als "fast erreicht" gelesen). Statt die Zeit-Schwelle nur zu korrigieren, hat der User die Fälligkeit direkt auf Voll-Check-Zählung umgestellt — robuster, weil sie an echten, bereits diskreten Loop-Ereignissen hängt statt an einer kontinuierlichen Zeitdifferenz.
 7. **Offenlegungspflicht:** im Output kurz nennen, was geprüft wurde und was ausgelassen wurde (z.B. "Fibonacci nicht berechnet, kein Impuls")
 8. 8d-Regime-Gate (Schock/Chop) neu bewerten
 9. **Ausgabe: Vorlage aus [[feedback_vollcheck_format]] Zeile für Zeile kopieren und befüllen** (Entscheidungsbaum mit Dual-Gate-Status, Invalidierungskriterium, was für ein Go-Signal noch fehlt) — zwingend inklusive der beiden Pflicht-Zeilen `Tweet-Check: ...` und `Format: Fließtext ✓` am Ende. Fehlen diese zwei Zeilen, gilt der Voll-Check als NICHT durchgeführt (gleiche Behandlung wie ein fehlender 1H-/QQQ-Schritt, ergänzt 27.07.2026 nach den zwei Prozessfehlern dieses Tages).

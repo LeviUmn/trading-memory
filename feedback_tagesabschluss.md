@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-12T10:56:44.168Z
+  modified: 2026-08-21T15:18:21.751Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -70,6 +70,20 @@ Wird `Verstoß: JA` gesetzt (egal ob der Trade gewonnen oder verloren hat), ist 
 **Why:** Volle Herleitung und Zahlen (6 von 6 nachträglich korrigierten Regelverstößen waren ausschließlich Verlust-Trades, kein einziger Gewinn-Trade) siehe [[feedback_regeldisziplin]], Abschnitt "Erkennungs-Zwang + Sofort-Review". Ohne diese Pflichtzeile wird die Regelkonformitätsprüfung bei Gewinn-Trades erfahrungsgemäß stillschweigend übersprungen.
 
 **Ausdrücklich nicht Teil dieser Änderung:** keine automatische Positionsgrößen-Reduktion nach einem Verstoß, keine neue Cooldown-Regel-3 — Levi hat beides am 12.08.2026 explizit abgelehnt, diese Ergänzung ist rein Erkennung + Review, keine automatische Konsequenz.
+
+## SL-Hit-Klassifizierung: Wick/Spike vs. bestätigter Reversal (ergänzt 21.08.2026, Fable-Review nach Trade #42/#43, umgesetzt nach Levi-Entscheidung)
+
+Bei JEDEM SL-Hit gehört ab sofort eine zusätzliche Pflichtzeile zum Tagesabschluss/Sofort-Review, parallel zu "Regelkonformität geprüft" oben:
+
+`SL-Hit-Typ: Wick/Spike (kein Kerzenschluss) ODER bestätigter Kerzenschluss — Punkt-11-Kriterien zum SL-Zeitpunkt: X/4 erfüllt`
+
+War der SL primär durch einen Wick/Spike ausgelöst (kein 5-Min-Kerzenschluss jenseits des SL-Levels) UND waren die Punkt-11-Reversal-Kriterien ([[feedback_live_trading]]) zum Auslöse-Zeitpunkt NICHT vollständig (2-3/4) erfüllt, gilt das explizit als "SL-Hit ≠ bestätigtes Reversal" — der Trade-Ausgang (Verlust) bleibt unverändert bestehen, aber die Review-Sprache darf daraus NICHT automatisch ableiten, dass die zugrunde liegende Markteinschätzung/These falsch war. Beides wird getrennt bewertet: das Ergebnis (Geld verloren, zählt) und die Frage, ob die These inhaltlich widerlegt wurde (nur bei erfüllten Punkt-11-Kriterien der Fall).
+
+**Why:** Trade #42/#43 (21.08.2026) wurden beide durch Wicks in der Zone 29.240-254 ausgestoppt, während zum Zeitpunkt des jeweiligen SL-Hits nur 1-2 von 4 Punkt-11-Kriterien erfüllt waren — ein Fable-Live-Check (21.08., ~35-40 Min NACH beiden SL-Hits) zeigte NAS100 5min und QQQ 15min beide noch unterhalb ihrer jeweiligen EMA50, also weiterhin nicht bestätigt. Der Fable-Review vom 21.08.2026 stellte fest, dass "SL wurde getroffen" in der Live-Kommunikation faktisch mit "der Markt hat die Short-These widerlegt" gleichgesetzt wurde, obwohl das nach den eigenen Kriterien zum Zeitpunkt nicht belegt war. Diese Vermischung erschwert eine ehrliche Nachbesprechung: ein Verlust durch eine unglückliche SL-Platzierung in einer mehrfach getesteten Zone (siehe [[feedback_chartanalyse]] Punkt 8c2) ist ein anderes Problem als ein Verlust durch eine tatsächlich falsche Markteinschätzung, und beide brauchen unterschiedliche Lehren.
+
+**How to apply:** Bei jedem SL-Hit im Tagesabschluss/Sofort-Review zuerst prüfen, ob der letzte relevante 5-Min-Kerzenschluss VOR dem SL-Hit bereits jenseits des SL-Levels lag (dann: bestätigter Schluss, kein reiner Wick) oder ob der SL nur durch das Hoch/Tief innerhalb einer Kerze berührt wurde, ohne dass der Schlusskurs selbst das Level bestätigte (dann: Wick/Spike). Danach den Punkt-11-Stand zum exakten SL-Zeitpunkt dokumentieren (nicht rückwirkend zum späteren, ggf. schon weiter entwickelten Stand). Fehlt diese Zeile bei einem SL-Hit-Trade, gilt der Tagesabschluss als unvollständig — gleiche Behandlung wie die bestehende "Regelkonformität geprüft"-Zeile.
+
+**Abgrenzung zu [[feedback_live_trading]] Punkt 11 (Volumen-Kriterium):** Das dort am 21.08.2026 ergänzte fünfte, dämpfende Volumen-Kriterium wirkt VOR/WÄHREND der Position (soll einen verfrühten Dreh-Vorschlag verhindern). Diese Regel hier wirkt NACH dem SL-Hit, in der Nachbesprechung — beide entstanden aus demselben Fable-Review, adressieren aber unterschiedliche Zeitpunkte im Prozess.
 
 ## Git-Backup nach jedem Tagesabschluss (ergänzt 23.07.2026)
 

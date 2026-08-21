@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-19T17:53:04.359Z
+  modified: 2026-08-21T15:18:00.808Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -297,6 +297,10 @@ Seit 03.07.2026 läuft ein 2-Pane-Layout (`2v`): Pane 0 = NAS100 (Preis/Entry, E
 3. Erst wenn die Pflicht-Ausgabezeile(n) aus 8b1 (`TP-Realismus: ... ✓`) und ggf. 8c (`RR-Check TP1 bei Schock-Tier-SL: ... ✓`) explizit mit ✓ vorliegen, gilt die Order als freigegeben.
 4. Diese Reihenfolge gilt UNABHÄNGIG vom Ausführungsweg — auch wenn Levi selbst, ohne auf Claudes Bestätigung zu warten, im Broker auslöst, ist ein Entry vor Abschluss von Schritt 3 ein Regelverstoß nach [[feedback_regeldisziplin]], unabhängig vom späteren Ergebnis.
 
+**Laufende Ampel-Zeile während der Prüfung (ergänzt 21.08.2026, Fable-Review nach Trade #42, Levi-Entscheidung):** Zwischen dem Dual-Gate-Trigger (Schritt 1) und dem fertigen PASS/FAIL (Schritt 3) vergehen im Live-Loop reale Sekunden bis Minuten, in denen bisher NICHTS ausgegeben wurde — sichtbar war nur "Dual-Gate ✓" und danach, mit Verzögerung, das fertige Ergebnis. Genau dieses stumme Zwischenfenster war der Tatort beider bisherigen 7b1-Regelbrüche (#36, #39): Dual-Gate war schon sichtbar erfüllt, die RR-/TP-Realismus-Prüfung lief noch, wirkte nach außen aber wie "fertig, nur noch Order absetzen". Ab sofort läuft ab dem Moment, in dem Schritt 2 beginnt, bis Schritt 3 abgeschlossen ist, eine explizite Zwischenzeile im Output: `RR-Check läuft — NOCH NICHT einsteigen`. Diese Zeile ersetzt nicht die finale Pflichtzeile aus Schritt 3, sie schließt nur die bisher stumme Lücke davor.
+
+**Why:** Levi hat sich bewusst GEGEN eine zusätzliche aktive Bestätigungsschleife entschieden (würde Tempo kosten, er trägt das Risiko, den Hinweis zu übersehen, selbst) und FÜR eine reine, parallel mitlaufende Statuszeile — kein neuer Wartezustand, kein Abbruch der Geschwindigkeit, nur sichtbare Kennzeichnung eines ohnehin schon bestehenden Zwischenzustands.
+
 **Pflicht-Ausgabezeile (vor jeder Entry-Bestätigung, ergänzt die bestehenden Zeilen aus 8b1/8c, ersetzt sie nicht):**
 `Entry-Freigabe: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ — PASS` (bei fehlendem Baustein stattdessen: `Entry-Freigabe: ... — NICHT PASS, Grund: <fehlender Baustein>`)
 
@@ -468,6 +472,17 @@ Erst wenn mindestens 2-3 dieser Kriterien gleichzeitig erfüllt sind, gilt das a
 **How to apply:** Bei jedem Check-in während einer offenen Position die 4 Kriterien oben gegen den aktuellen Stand prüfen. Sobald 2-3 gleichzeitig kippen, das explizit und sofort als Handlungsaufforderung melden (nicht nur als normalen Status), inklusive Vorschlag für Exit-Preis und ggf. neuer Gegenrichtungs-Setup — User entscheidet dann über die tatsächliche Order.
 
 **Belegpflicht für jeden Punkt-11-Exit (ergänzt 22.07.2026, Fable-Review nach Trade #24):** Bei Trade #24 wurde ein 50%-Exit mit "Reversal-Kriterien erfüllt" begründet, obwohl keines der vier Kriterien oben mit einem konkreten Wert (MACD-H-Zahl, EMA50-Bezug, QQQ-Stand, 15min/1H-Richtung) belegt war — nur "zwei Fehlversuche an einer Zone" (das ist ein 9d1-Chartmuster-Signal, kein Punkt-11-Kriterium). Ab jetzt gilt: Ein Punkt-11-Exit/Dreh-Vorschlag ist nur zulässig, wenn im Output explizit steht, WELCHE der vier Kriterien mit welchem konkreten Wert erfüllt sind (z.B. "MACD-H 5min: -2,1, seit 2 Checks negativ ✓ | EMA50: Kurs 29.006 unter 29.041, Folgekerze bestätigt ✓ | QQQ: über eigener EMA50, Kriterium NICHT erfüllt ✗ | 15min: MACD-H flach, keine Beschleunigung ✗ → 2/4, Exit gerechtfertigt"). Ein Exit ohne diese Auflistung gilt als nicht belegt und ist stattdessen über 9d1/4a (reines Muster-Exit, dort reicht ein einzelnes Signal) oder Punkt 12 (Stall) zu begründen, nicht über Punkt 11.
+
+**Fünftes, dämpfendes Kriterium: Volumen-Kontext (ergänzt 21.08.2026, Fable-Review nach Trade #42/#43, Levi-Entscheidung)**
+
+Ergänzt die bestehenden 4 Kriterien um ein fünftes, das anders als die anderen NICHT zum Erfüllen des 2-3-von-4-Schwellenwerts zählt, sondern als nachgelagerter Dämpfer wirkt: Läuft die geprüfte Gegenbewegung mit einem QQQ-Volumen (rollierend über die letzten 15-20 Min), das deutlich unter dem Durchschnitt der vorausgehenden Hauptbewegung liegt (Faustregel: **<50%**), gilt selbst ein technisch erfülltes 2/4-Kriterium (siehe oben) als NICHT ausreichend für einen aktiven Dreh-Vorschlag — die Bewegung bleibt Beobachtung, kein Handlungssignal. Bestätigt das Volumen dagegen (vergleichbar oder höher als die Hauptbewegung), ändert das die 2-3-von-4-Schwelle selbst nicht, bestätigt aber zusätzlich die Konfidenz der bereits erfüllten Kriterien.
+
+**Why:** Levi bemängelte am 21.08.2026, dass QQQ-Volumen bei jedem Check zwar als Zahl mitgeteilt, aber nie als eigenständiges Warnsignal interpretiert wurde. Fable-Analyse (21.08., Trade #42/#43) bestätigte den Kern strukturell: Punkt 7b definiert Volumen explizit als "unterstützende Bestätigung, kein harter Blocker" — das galt bisher nur für den Entry, es gab keine Übertragung dieser Logik auf Punkt 11 (Reversal-Check während offener Position). Ein Live-Check am 21.08. zeigte während der Bounce-Phase nach Trade #42/#43 (ca. 16:44-17:00 Uhr) ein QQQ-15min-Volumen von 99-154K gegenüber 195-204K in der unmittelbar vorausgehenden Abwärtsbewegung — ein moderater, aber realer Rückgang. Ein harter Blocker wäre angesichts des nur moderaten Rückgangs vermutlich zu aggressiv (würde legitime Fälle mitblockieren) — ein dämpfendes Kriterium passt die tatsächliche Signalstärke besser.
+
+**Pflicht-Ausgabezeile (bei jedem Voll-Check mit offener Position, gleiche Behandlung wie die bestehenden Pflichtzeilen):**
+`Volumen-Check: QQQ X K (Bounce/Gegenbewegung) vs. Y K (vorherige Hauptbewegung) → bestätigt/schwach getragen`
+
+**Abgrenzung:** Dieses Kriterium zählt NICHT zu den ursprünglichen "2-3 von 4" — es kann die Schwelle nur nach unten dämpfen (2/4 + schwaches Volumen → kein Dreh), nie nach oben ersetzen (schwaches Volumen macht aus 1/4 nicht automatisch 2/4). Gilt nur, wenn das QQQ-Session-Gate (Punkt 7e) offen ist — außerhalb der US-Session entfällt dieses Kriterium ersatzlos, wie die bestehenden QQQ-Teile des Reversal-Checks. Siehe auch [[feedback_tagesabschluss]], Abschnitt "SL-Hit-Klassifizierung" — dort wird die verwandte Frage "SL-Hit vs. bestätigtes Reversal" für den Tagesabschluss geregelt.
 
 ## 12. Stall-Exit-Regel — proaktiver Teilgewinn ohne vollen Reversal abzuwarten (ergänzt 21.07.2026, Trade #23; überarbeitet nach Fable-Review 21.07.2026)
 
