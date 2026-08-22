@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-21T15:17:10.977Z
+  modified: 2026-08-22T09:22:33.082Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -207,6 +207,30 @@ Wenn das identifizierte Bestätigungslevel für ein Setup weit vom aktuellen Kur
 **Why:** Am 02.07.2026 wurde ein Long-Bestätigungslevel bei 29.530 vorgeschlagen, während der Kurs bei ~29.430 stand (100 Punkte entfernt). User hat zurecht hinterfragt, ob das nicht zu weit weg ist, um darauf zu warten. Lösung: näheres Level (29.500, bereits zweimal angetestet) als taktischen Trigger definiert, das ferne Level (29.530/EMA50) blieb für die volle Bestätigung bestehen — User bestätigte diesen Ansatz als sinnvoll.
 
 **How to apply:** Bei jedem Setup mit einem fernen Bestätigungslevel aktiv prüfen, ob ein näheres, technisch begründbares Level als Zwischenschritt sinnvoll ist, statt den User pauschal auf das eine ferne Level zu vertrösten.
+
+### 8a2. Zwei-Kerzen-Bestätigung für den EMA50-Reclaim-Trigger (Stufe-1, ergänzt 22.08.2026, Fable-Kernstrategie-Review)
+
+Der Stufe-1-Trigger aus 8a1 basiert bei einem EMA50-Reclaim bisher auf einem einzelnen 5-Min-Kerzenschluss jenseits EMA50 plus einer unpräzise definierten "Folgekerze" (z.B. Trade #38: "5min-EMA50-Schlusskurs-Bruch + Folgekerze") — unklar blieb dabei, ob die Folgekerze selbst ebenfalls jenseits EMA50 schließen musste oder nur "keine Gegenbewegung" zeigen durfte. Ab jetzt gilt präzise: Der Stufe-1-EMA50-Reclaim-Trigger braucht **2 aufeinanderfolgende 5-Min-Kerzenschlüsse auf derselben Seite von EMA50** (beide Schlusskurse bestätigen den Bruch, nicht nur der erste), bevor die Stufe-1-Position ausgelöst wird.
+
+**Why:** Trade #38 (18.08.2026) — Entry nach Bruch-Kerzenschluss + Folgekerze, RR-Gate 2,56:1 ✓, Stufe-1-Größe korrekt angewendet. Kurs fiel direkt danach in einen Fehlausbruch/Retest zurück, testete die SL-Zone zweimal intrabar, SL wurde ausgelöst (-17,75€). Ob die damalige "Folgekerze" selbst über EMA50 schloss, ist aus der Tagesnotiz nicht eindeutig rekonstruierbar — genau diese Unschärfe soll die Neufassung beseitigen. Ausgelöst durch Levis Frage nach der Kernstrategie (22.08.2026, nach dem verworfenen Reversal-Tactical-Trigger-Thema desselben Tages).
+
+**Trade-off (explizit, mit Levi besprochen):** Verzögert den Stufe-1-Trigger um mindestens eine weitere 5-Min-Kerze, verschiebt Entry-/SL-/TP-Level und senkt tendenziell das RR (Entry weiter vom ursprünglichen SL-Level entfernt, TP oft nicht proportional weiter). Gilt **nur** für den Stufe-1/taktischen EMA-Reclaim-Trigger (8a1), NICHT für den primären NAS100-Dual-Gate-Kerzenschluss (Punkt 7b in [[feedback_live_trading]]) — dort bleibt vorerst 1 bestätigter Kerzenschluss Standard. Eine Ausweitung auf 2 Kerzen für das gesamte Dual-Gate ist eine offene, hier bewusst nicht getroffene Entscheidung.
+
+**How to apply:** Bei jedem Stufe-1-Setup nach 8a1 mit EMA50-Reclaim als Trigger-Bedingung erst nach dem 2. aufeinanderfolgenden 5-Min-Kerzenschluss auf der neuen Seite von EMA50 auslösen, nicht nach dem 1. Im Output explizit kennzeichnen (z.B. "EMA50-Reclaim: Kerze 1/2 bestätigt, warte auf 2. Schluss").
+
+**Review-Pflicht:** Analog zu anderen frisch eingeführten Schwellen (7a1, Punkt 12) nach den nächsten 5 Anwendungsfällen prüfen, ob die zusätzliche Verzögerung den Whipsaw-Schutz wert war oder zu oft echte, schnelle Fortsetzungen abschneidet.
+
+### 8a3. Volumen-Soft-Gate während der Reclaim-Bestätigung (8a2, ergänzt 22.08.2026, Fable-Kernstrategie-Review)
+
+Ergänzt 8a2 um eine Volumen-Prüfung während desselben Bestätigungsfensters (jetzt 2 Kerzen), bewusst NICHT als durchgehendes, permanentes Gate über die gesamte Beobachtungsphase.
+
+**Regel:** QQQ-Volumen über die beiden Reclaim-Bestätigungskerzen (relativ zum eigenen Durchschnitt der unmittelbar vorausgehenden Bewegung) wird mitgeführt. Liegt es deutlich darunter (Faustregel <50%, dieselbe Schwelle wie beim bereits bestehenden Volumen-Dämpfer in [[feedback_live_trading]] Punkt 11), gilt das als Vertrauens-Dämpfer: der Trigger löst trotzdem aus (kein hartes Veto), aber explizit mit dem Vermerk "schwach getragen" statt "bestätigt" — bei ohnehin grenzwertigen RR-/TP-Realismus-Werten (8b/8b1) sollte ein schwach getragener Reclaim eher zum Auslassen führen als ein volumenbestätigter.
+
+**Pflicht-Ausgabezeile beim Stufe-1-Trigger:** `Reclaim-Volumen-Check: QQQ X K (Reclaim-Fenster, 2 Kerzen) vs. Y K (Ø vorausgehende Bewegung) → bestätigt/schwach getragen`
+
+**Warum nur im Reclaim-Fenster, nicht durchgehend (Levis Nachfrage 22.08.2026 beantwortet):** Ein permanentes, tick-für-tick-Volumen-Gate wurde bewusst geprüft und verworfen, aus zwei Gründen: (1) Volumen ist ein Ereignis-Signal, kein Zustands-Signal — die TA-Aussage "Ausbruch braucht Volumen" bezieht sich auf den Moment des Levelbruchs selbst, nicht auf jede beliebige Minute davor/danach. Volumen schwankt außerhalb dieses Moments aus vielen harmlosen Gründen (Tageszeit, Nachrichten-Pause), ohne dass das etwas über die Validität der Bewegung aussagt — ein Dauer-Gate würde ein sauberes Signal mit Rauschen verdünnen, nicht schärfen. (2) Ein durchgehendes Gate würde gegen die bestehende Phasen-Architektur aus [[feedback_live_trading]] Punkt 7b verstoßen ("heiße Phase: KEIN Pane-Wechsel zu QQQ mehr pro Loop-Durchlauf") — dieser Tempo-Schutz existiert genau deshalb, weil wiederholte QQQ-Checks reale Sekunden kosten und den eigentlichen Preis-Trigger verzögern können. Die Bindung an das 2-Kerzen-Reclaim-Fenster (statt an jeden 1-Min-Tick) ist der bewusste Mittelweg: breiter als eine einzelne Momentaufnahme (deckt jetzt beide Bestätigungskerzen aus 8a2 ab), aber zeitlich begrenzt statt unbegrenzt fortlaufend. Der bereits bestehende Volumen-Dämpfer in Punkt 11 ([[feedback_live_trading]]) bleibt davon unberührt — der ist für eine andere Frage (Position verteidigen/drehen) gedacht und läuft dort bewusst im Voll-Check-Rhythmus, nicht kontinuierlich.
+
+**Review-Pflicht:** Läuft mit derselben 5-Anwendungsfälle-Prüfung wie 8a2 (beide Regeln entstehen zusammen, aus demselben Anlass, gemeinsam zu bewerten).
 
 ### 8b. TP-Festlegung — Teilverkauf-Standard (verbindlich, überarbeitet 04.07.2026 nach Fable-5-Review, siehe [[feedback_realisiertes_rr]])
 TP wird IMMER technisch bestimmt, nie als Wunsch-%:

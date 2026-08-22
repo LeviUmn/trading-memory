@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 7c946990-591f-4e7e-acad-80f3259782b4
-  modified: 2026-08-12T10:56:26.336Z
+  modified: 2026-08-22T08:40:12.899Z
 ---
 
 Es gibt zwei fundamental unterschiedliche Arten von Verlust-Trades, die klar getrennt bewertet werden müssen:
@@ -51,3 +51,11 @@ Diese Zeile ist selbst nicht optional — ihr Fehlen im Tagesabschluss ist damit
 **Ausdrücklich nicht Teil dieser Änderung (von Levi abgelehnt, 12.08.2026):** keine automatische Positionsgrößen-Reduktion (50%-Floor) nach einem Verstoß, keine neue Cooldown-Regel-3 (Verstoß-Häufigkeits-Zähler) in `cooldown_check.cjs`. Diese Ergänzung ist rein auf Erkennung + Review beschränkt, keine automatische Konsequenz.
 
 **How to apply:** Siehe [[feedback_tagesabschluss]], Abschnitt "Regelkonformitäts-Pflichtzeile" für den genauen Ablauf im Tagesabschluss.
+
+### Levis persönlicher Fokus auf Durchsetzung/Konsistenz (ergänzt 22.08.2026, nach Fable-Win/Loss-Vergleich)
+
+Fables Vergleichsanalyse aller 43 Trades (22.08.2026) fand, dass die größte Verlust-Kategorie (50,5% aller Verlust-Euro, Kategorie B) NICHT fehlendes Wissen war, sondern bereits existierende, bekannte Regeln, die im Moment nicht angewendet wurden — explizit als "kein Wissensproblem, ein Durchsetzungsproblem" benannt. Levis Reaktion darauf: "Da bin ich auch am Lernen und es wird besser bei mir mit der Durchsetzung und Konsistenz. Das habe ich mir selber persönlich fest an die Stirn geschrieben."
+
+**Why:** Das ist ein expliziter persönlicher Fokuspunkt, kein einmaliger Kommentar — relevant dafür, wie künftige Reviews/Tagesabschlüsse eingeordnet werden.
+
+**How to apply:** Bei künftigen Regelkonformitäts-Auswertungen (siehe Abschnitt oben) gezielt darauf achten, ob sich die Kategorie-B-Quote (Regelbruch trotz bereits bekannter Regel) über die Zeit tatsächlich senkt — nicht nur pauschal glauben, dass es "besser wird", sondern anhand der DB/Tagesabschlüsse verifizieren (siehe [[feedback_verify_dont_cave]] und [[feedback_coaching_ehrlichkeit]]). Echte Verbesserung ehrlich anerkennen, wenn die Zahlen sie stützen — aber nicht vorschnell bestätigen, nur weil der Wunsch geäußert wurde.

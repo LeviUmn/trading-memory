@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 028ce287-5d0c-400c-bf08-bdc1d4c4670c
-  modified: 2026-07-28T15:01:21.158Z
+  modified: 2026-08-22T09:22:57.305Z
 ---
 
 Kein dauerhaftes 2-Pane-Layout mit VIX mehr verwenden. NAS100 bekommt grundsätzlich die volle Chart-Höhe (Layout "single"), VIX-Kurs wird bei Bedarf per `quote_get` abgefragt statt permanent gechartet zu sein.
@@ -17,6 +17,24 @@ Kein dauerhaftes 2-Pane-Layout mit VIX mehr verwenden. NAS100 bekommt grundsätz
 **Ausnahme seit 03.07.2026, Pane-1-Symbol geändert 15.07.2026:** 2-Pane-Layout (`2v`) ist bewusst in Nutzung — Pane 0 = NAS100 (volles 5er-Indikatoren-Set), Pane 1 = `BATS:QQQ` (Invesco QQQ Trust, Cboe-One-Echtzeitfeed) mit **EMA50 (Länge 50) + Volume + VWAP** (bewusst 3 statt 2 Indikatoren, siehe [[feedback_live_trading]] Punkt 7b für die Rollentrennung EMA=Pflicht-Gate/VWAP+Volumen=unterstützend — ursprünglich am 15.07.2026 versehentlich auf nur Volume+VWAP reduziert, EMA50 nach Rückgriff auf die Trade-#13-Historie noch am selben Tag wiederhergestellt). Zweck: echte Volumen-Bestätigung für Breakout/Divergenz-Checks aus der TA-Checkliste ([[feedback_chartanalyse]]), die auf dem NAS100-CFD-Feed nicht verfügbar ist. **Vorher lief hier `CME_MINI_DL:NQ1!` — ersetzt am 15.07.2026, weil der Delayed-Feed strukturell 10 Min hinterherlief ([[feedback_nq1_feed_lag]]); QQQ läuft dagegen in Echtzeit synchron zu NAS100 (Zeitstempel-verifiziert am 15.07.2026). Einschränkungen: QQQ handelt nur zur US-Session (siehe [[feedback_live_trading]] Punkt 7e) und der Cboe-One-Feed zeigt nur einen Teil (~10-20%) des konsolidierten Volumens — für die relative Spike-Bewertung ausreichend, absolute Zahlen nicht als Marktgröße interpretieren.** `tab_new` funktioniert in der Desktop-App nicht zuverlässig (meldet Erfolg, aber `tab_count` bleibt bei 1) — Pane-Split ist der funktionierende Workaround.
 
 **VWAP auf QQQ:** Anders als auf FOREXCOM:NAS100 funktioniert VWAP auf QQQ einwandfrei (echtes Volumen vorhanden). Der QQQ-VWAP ist am US-Handelsbeginn (9:30 ET / 15:30 MESZ) verankert — das ist die institutionell relevantere Referenz als der frühere Globex-verankerte NQ1!-VWAP. In den ersten ~15-30 Min nach US-Open ist der VWAP noch jung/dünn — mit Vorsicht verwenden. QQQ-Preise (~$-Bereich) und VWAP-Level gelten nur als Richtungs-Referenz (Kurs über/unter VWAP), nie als 1:1-Level für den NAS100-Chart — wie schon bei NQ1!.
+
+## VWAP-Standardabweichungsbänder auf QQQ (ergänzt + live umgesetzt 22.08.2026, Fable-Kernstrategie-Review)
+
+Ergänzt den bestehenden VWAP-Indikator auf QQQ (Pane 1, Entity-ID zum Umsetzungszeitpunkt `d1GyOo`) um Bänder — kein zusätzlicher Indikator-Slot, Bänder sind eine Sub-Option des bereits vorhandenen VWAP, kostenlos in Bezug auf das 5-Indikatoren-Limit.
+
+**Warum:** Ein Preis, der die VWAP-Mittellinie nur knapp streift, sah bisher optisch identisch aus wie ein Preis, der eine echte, mit Volumen unterlegte Spannweite durchbricht — genau diese Unterscheidung soll das Whipsaw-an-der-EMA/VWAP-Problem entschärfen (Fable-Kernstrategie-Review 22.08.2026, ausgelöst durch Levis Frage nach Trades #19/#38, siehe [[feedback_chartanalyse]] 8a2/8a3).
+
+**Konfiguration (live gesetzt via `indicator_set_inputs`, verifiziert per Screenshot am selben Tag):**
+- Band 1: aktiviert, Multiplikator 1 Standardabweichung (`in_5: true`, `in_6: 1`)
+- Band 2: aktiviert, Multiplikator 2 Standardabweichungen (`in_7: true`, `in_8: 2`)
+- Band 3: bewusst deaktiviert (`in_9: false`), um die Pane nicht zu überladen
+- Verifiziert am Screenshot (nicht nur "success" vertraut): VWAP-Zeile zeigte 5 Werte (VWAP + Band1 Ober/Unter + Band2 Ober/Unter) — z.B. 713,11 Mitte / 714,42–711,81 (±1,31) / 715,72–710,50 (±2,61). Band-2-Abstand exakt doppelt so groß wie Band-1-Abstand zur Mittellinie — bestätigt die korrekte 1×/2×-Relation.
+
+**Lesart:** Preis innerhalb Band 1 = normale Rausch-Zone um VWAP, kein starkes Signal. Kurs schließt jenseits Band 2 = deutlich stärkeres Bestätigungssignal als ein reiner Mittellinien-Touch. Stand 22.08.2026: informeller Kontext-Check, noch KEIN eigenständiges Pflichtkriterium mit eigener Ausgabezeile — das wäre ein separater, hier bewusst nicht getroffener nächster Schritt.
+
+**How to apply:** Die Konfiguration ist am Chart persistiert (siehe Split-Screen-Persistenz-Abschnitt unten) — kein Wiederholungsschritt beim nächsten Live-Trading-Start nötig, nur bei sichtbarem Fehlen per Screenshot gegenchecken und ggf. mit obiger Konfiguration neu setzen.
+
+**Plan-Upgrade-Frage (Diskussionsnotiz, 22.08.2026, kein Beschluss):** Levi brachte die Möglichkeit eines TradingView-Plan-Upgrades ins Spiel (mehr als 5 Indikator-Slots auf NAS100, kein Tausch mehr nötig für einen neuen Indikator). Fable-Einschätzung: Ein zusätzlicher freier Slot würde ADX (Trendstärke) strategisch moderat wertvoll machen — er würde die bereits bestehende, aber informelle Chop-Erkennung (siehe [[feedback_chartanalyse]] Punkt 7, RSI/MACD-Flip + flacher VIX) in eine objektive, live mitlaufende Zahl übersetzen, ähnlich wie ATR die frühere manuelle "größte Rausch-Kerze"-Schätzung ersetzt hat — kein Durchbruch, aber eine echte, moderate Verbesserung gegen das wiederholt dokumentierte Muster "Chop erkannt, aber ignoriert". Kein Ersatz für die VWAP-Bänder/8a2/8a3 oben, adressiert eine andere Teilfrage (wie oft überhaupt handeln, nicht wie sauber der einzelne Trigger ist). Vorbehalt: mehr Slots lösen NICHT das separat dokumentierte Pflichtzeilen-Wachstumsproblem ([[feedback_live_trading]] Punkt 14, Trade #42 "Hinweis zu spät gelesen") — ein weiterer Indikator ist auch eine weitere Zahl, die unter Zeitdruck gelesen werden muss. Kostenfrage (Plan-Preis) ist reine Levi-Entscheidung, von Fable nicht bewertet. Keine Umsetzung, reine Diskussionsnotiz für eine spätere Entscheidung.
 
 ## Indikatoren-Set (Stand 23.07.2026, ATR ersetzt Pivot Points)
 

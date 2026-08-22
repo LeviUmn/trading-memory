@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-21T15:18:00.808Z
+  modified: 2026-08-22T08:44:41.985Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -603,3 +603,19 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 **Hindsight-Warnung (Fable-Review 30.07.2026):** Die Lehre aus dem 30.07.-Vorfall ("wir hätten reingehen sollen") ist eine **Prozess-Lehre** (die Option aktiv anbieten statt implizit wegzulassen) — **keine Ergebnis-Lehre**. Eine identische Ausgangslage (Chasing-Kriterien erfüllt, Dual-Gate sauber) hätte genauso gut schon nach dem 1. Voll-Check kippen können — dann wäre "wir hätten reingehen sollen" nie ausgesprochen worden. Diese Regel bewertet die Qualität der Entscheidung zum Zeitpunkt der Entscheidung (wurde die Option genannt?), nicht das tatsächliche Ergebnis der jeweiligen Bewegung.
 
 **Review-Pflicht (ergänzt 30.07.2026):** Diese Regel (13.1) läuft mit Stichprobe n=1 (nur der 30.07.-Vorfall, dabei kein tatsächlicher Trade ausgeführt). Nach den nächsten 2-3 echten Anwendungsfällen (tatsächlich vorgeschlagene halbierte Chasing-Position) explizit prüfen, ob die 2-Check-Schwelle in der Praxis taugt (zu früh/zu spät) oder ob sie wieder gestrichen/angepasst werden muss — analog zur bestehenden Review-Pflicht-Praxis bei anderen frisch eingeführten Regeln (siehe Punkt 7a1, Punkt 12).
+
+## 14. Regeländerungs-Tempo während einer laufenden Verlustserie drosseln — Rückfrage vor Sofort-Scharfschaltung (ergänzt 22.08.2026, Fable-Review Woche #36-#43)
+
+Neue oder geänderte Prozessregeln, die aus einer Trade-Nachbesprechung entstehen, werden nicht automatisch sofort scharf geschaltet, wenn zum Zeitpunkt der Nachbesprechung eine laufende Verlustserie aktiv ist. Stattdessen wird aktiv gefragt: **"Diese Regel jetzt sofort scharf schalten, oder erst zum nächsten Sessionstart?"**
+
+**Definition "laufende Verlustserie" (konkret, im Moment prüfbar — nicht vage wie das ursprüngliche "hält" in 13.1):** mindestens EINES der beiden Kriterien trifft zum Zeitpunkt der Regel-Erstellung zu —
+1. Der Trade, der die Regel-Idee ausgelöst hat, ist bereits der 2. Verlust-Trade am selben Kalendertag (unabhängig davon, ob der Tages-Cooldown aus [[project_risikomanagement]] dadurch schon technisch greift), ODER
+2. Der auslösende Trade ist bereits der 2. oder mehr Verlust-Trade in Folge (ohne dazwischenliegenden Win) innerhalb der laufenden Handelswoche, per `trades.db` nachprüfbar.
+
+Trifft keines der beiden zu (z.B. Regel-Idee nach einem einzelnen Verlust-Trade nach einer Gewinn-Serie, oder aus einem Gewinn-Trade heraus), gilt diese Bremse nicht — normales sofortiges Umsetzen wie bisher bleibt der Standard.
+
+**Ausnahme (Notfall-Fix, keine Rückfrage nötig):** Ein Fehler, der Trades aktiv verfälscht (falsche Berechnung, kaputtes Skript, Sizing-Bug) — analog zur bestehenden Notfall-Fix-Ausnahme in [[feedback_dont_change_running_system]] — wird weiterhin sofort behoben, unabhängig von einer laufenden Verlustserie. Diese Regel betrifft ausschließlich neue/geänderte **Prozess- und Checklisten-Regeln** (zusätzliche Pflichtzeilen, neue Gate-Schritte, neue Formulierungen), nicht Bugfixes.
+
+**Why:** Fable-Vollanalyse der Woche #36-#43 (22.08.2026, siehe [[trades/trading_2026-08-21]]) fand zwei belastbare Belege: (1) Die am 17.08. nach Trade #36 eingeführten Regeln 7f/7a1b (Reaktion auf "Entry vor abgeschlossenem RR-Check") haben denselben Fehlertyp bei Trade #39 zwei Tage später NICHT verhindert — die Notiz zu #39 nennt es explizit "2. Fall desselben Musters nach #36". (2) Die Pflicht-Output-Checkliste pro Entry wuchs allein innerhalb dieser einen Woche von Dual-Gate/RR-Gate auf 9+ Pflichtzeilen (Entry-Freigabe-PASS, Ampel-Zeile, Stall-Check, Regelkonformitäts-Zeile, DB-Sync, SL/ATR-Zeile, SL-Hit-Klassifizierung u.a.) — Trade #42 (21.08., Sizing-Regelbruch, Schock-Tier nicht halbiert) wurde explizit mit "Hinweis zu spät gelesen" begründet, ein plausibler Beleg dafür, dass eine wachsende Checkliste unter Live-Zeitdruck selbst zur Fehlerquelle werden kann. Diese Regel ist bewusst NICHT dasselbe Prinzip wie [[feedback_dont_change_running_system]] (dort geht es um gefundene Optimierungen an Kern-Setup/Symbolen/Indikatoren, die grundsätzlich auf einen Review-Checkpoint verschoben werden) — hier geht es spezifisch um das Timing der Aktivierung neuer Prozessregeln, die aus einem laufenden Verlust-Tag selbst entstehen, nicht um eine generelle Aufschiebung.
+
+**How to apply:** Sobald im Rahmen einer Trade-Nachbesprechung/eines Sofort-Reviews (siehe [[feedback_regeldisziplin]], "Sofort-Review") eine neue oder geänderte Prozessregel formuliert wird, zuerst gegen die beiden Kriterien oben prüfen. Trifft eines zu, die Rückfrage aktiv stellen, bevor die Regel als "umgesetzt"/scharf geführt wird — nicht die Regel schon als aktiv behandeln und die Frage nur beiläufig erwähnen. Levis Antwort entscheidet: "Sofort" → wie bisher normal dokumentieren und ab sofort gültig; "Nächster Sessionstart" → Regel-Text trotzdem sofort schreiben und speichern (Wissen geht nicht verloren), aber mit einem expliziten Vermerk "Scharf ab Sessionstart TT.MM., nicht rückwirkend für den laufenden Tag" versehen, und in der laufenden Session NICHT als Pflichtzeile einfordern.
