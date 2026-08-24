@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-24T11:23:28.740Z
+  modified: 2026-08-24T11:42:40.701Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -315,6 +315,28 @@ Fehlt diese Zeile vor einer Trigger-/Entry-Meldung, gilt die Prüfung als nicht 
 
 **Bewusst NICHT Teil dieser Regel:** Kein automatisches Order-Blockieren oder technischer Broker-Eingriff — das System kann nicht direkt in den Broker eingreifen (Levi handelt eigenständig über Scalable Capital, siehe [[feedback_broker_wert_prioritaet]]). Diese Regel bleibt eine Disziplin-/Prozessregel mit Pflicht-Ausgabezeile, kein technischer Blocker — analog zu anderen Pflichtzeilen-ohne-Automatismus-Regeln in diesem Regelwerk (z.B. Punkt 7d0/Kerze-geschlossen, 8c/SL-ATR-Ratio, 8d/Schock-Tag).
 
+## 7b1a. Q-Score-Suffix an der Entry-Freigabe (ergänzt 24.08.2026 Nacht, Phase 1 der Studie "bessere Trades", Levi-Freigabe, siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 3+6)
+
+**Was:** Zusätzlich zur bestehenden `Entry-Freigabe:`-Pflichtzeile aus Punkt 7b1 berechnet `scripts/gate_check.cjs` jetzt vier Q-Faktoren (Q1-Q4) und hängt das Ergebnis als **Suffix** an dieselbe Zeile an — KEINE neue eigenständige Pflichtzeile:
+`Entry-Freigabe: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ — PASS | Q-Score: 4/4 GRÜN`
+`Entry-Freigabe: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ — PASS | Q-Score: 3/4 GELB (halbe Position)`
+
+**Die vier Faktoren (Details/Formeln in `scripts/gate_check.cjs` Kopfkommentar):**
+- **Q2 (Reifegrad):** vollautomatisch, `impuls_reifegrad_atr ≤1,5` — Schwelle vorläufig/unkalibriert, wird erst nach dem 15-Trade-Fenster kalibriert.
+- **Q4 (Runway):** vollautomatisch, `runway_ratio = Distanz(Entry→erstes Gegenlevel) / Distanz(Entry→TP1) ≥1,0` — als CLI-Parameter `--runway-ratio` übergeben (Kandidatenauswahl "welches Gegenlevel" bleibt manuell, analog zur TP-Kandidatenliste in 8b1 Schritt 3); fehlt der Parameter, gilt Q4 als nicht prüfbar (UNKNOWN-Logik wie bei den übrigen Gates).
+- **Q1 (Ablehnung/Timing):** Boolean-Parameter `--q1-reject`, vorbefüllt aus den bereits vorliegenden 8a2-(Reclaim-Fenster) und 8c2-(Zonen-Historie)-Werten — **nicht neu im Kopf bewertet.**
+- **Q3 (Kohärenz):** Boolean-Parameter `--q3-coherence`, vorbefüllt aus dem MTF-Dual-Gate-Ergebnis (5min/15min/1H NAS100 + QQQ). **Tie-Breaker:** Lag das QQQ-Volumen im Trigger-Fenster unter Durchschnitt (`--qqq-volume-below-avg yes`), zählt Q3 NICHT als erfüllt, selbst wenn alle vier Ebenen übereinstimmen.
+
+**Ampel-Logik:** 4/4 → GRÜN, volle Größe. 3/4 MIT Q1 oder Q4 erfüllt → GELB, halbe Position. 3/4 OHNE Q1 und OHNE Q4 → ROT, Auslassen empfohlen. ≤2/4 → ROT, Auslassen empfohlen. Ein nicht übergebener Faktor zählt für die Ampel-Zahl wie "nicht erfüllt", wird im Detail-Output aber separat als unklar markiert.
+
+**Stacking:** 8b1a (Schock-Tier = No-Trade, siehe [[feedback_chartanalyse]]) hat Vorrang vor dem Q-Score — ist 8b1a bereits ein Komplett-Ausschluss, wird der Q-Score gar nicht erst berechnet/angezeigt (härterer Ausschluss schlägt Sizing-Signal). Trifft die Q-Score-GELB-Ampel gleichzeitig mit einem anderen Halbierungsgrund zusammen (z.B. 8b1 Zone 2, TP-Realismus), wird trotzdem nur EINMAL halbiert, nicht kumulativ — `gate_check.cjs` gibt dafür einen expliziten "Kombinierter Sizing-Hinweis" aus.
+
+**Scharfschaltungsstufe (WICHTIG, siehe Punkt 14):** Für die ersten 8 Trades des laufenden 15-Trade-Fensters wirkt der Q-Score AUSSCHLIESSLICH als Anzeige/Sizing-Signal (GELB → halbe Position) und Empfehlung (ROT → "Auslassen empfohlen"), **kein hartes Veto** — Levi/Sonnet behalten bei ROT trotzdem die Entscheidung, den Trade zu nehmen. Nach Trade 15 entscheidet die vorab festgelegte Auswertung (Studie Abschnitt 4.4/Sequenzplan Phase 2) über hartes Gate / unverändert lassen / streichen.
+
+**Verzahnung mit der Retest-Zeitbox:** Siehe [[feedback_chartanalyse]] Punkt 8b Schritt 4 — Q1 deckt sich inhaltlich mit dem dortigen Retest-Kriterium (Level per Kerzenschluss zurückerobert). Kein separates drittes Test-Fenster: Q-Score und Retest-Zeitbox laufen beide im bereits aktiven 8b1-/Sizing-Fenster (seit 24.08.2026) und werden gemeinsam nach Trade 15 ausgewertet.
+
+**DB-Rückschreibung:** Bei `--trade-id` schreibt `gate_check.cjs` `q_score`/`q_flags` (und, falls angegeben, `runway_ratio`) in die entsprechenden Spalten von `scripts/trades.db` (siehe `updateGateResult()` in `trade_db.cjs`).
+
 ## 7e. QQQ-Session-Gate — wann das Dual-Gate verfügbar ist (ergänzt 15.07.2026, Fable-Review)
 
 QQQ (Pane 1) liefert nur während der US-Handelszeiten Daten, NAS100 (CFD) läuft dagegen fast 24/5. Drei Zonen (MESZ; bei US-Winterzeit je +1h prüfen):
@@ -608,6 +630,8 @@ Ergänzt Punkt 11 um eine weichere, häufiger greifende Regel für Fälle, in de
 **Hindsight-Warnung (Fable-Review 30.07.2026):** Die Lehre aus dem 30.07.-Vorfall ("wir hätten reingehen sollen") ist eine **Prozess-Lehre** (die Option aktiv anbieten statt implizit wegzulassen) — **keine Ergebnis-Lehre**. Eine identische Ausgangslage (Chasing-Kriterien erfüllt, Dual-Gate sauber) hätte genauso gut schon nach dem 1. Voll-Check kippen können — dann wäre "wir hätten reingehen sollen" nie ausgesprochen worden. Diese Regel bewertet die Qualität der Entscheidung zum Zeitpunkt der Entscheidung (wurde die Option genannt?), nicht das tatsächliche Ergebnis der jeweiligen Bewegung.
 
 **Review-Pflicht (ergänzt 30.07.2026):** Diese Regel (13.1) läuft mit Stichprobe n=1 (nur der 30.07.-Vorfall, dabei kein tatsächlicher Trade ausgeführt). Nach den nächsten 2-3 echten Anwendungsfällen (tatsächlich vorgeschlagene halbierte Chasing-Position) explizit prüfen, ob die 2-Check-Schwelle in der Praxis taugt (zu früh/zu spät) oder ob sie wieder gestrichen/angepasst werden muss — analog zur bestehenden Review-Pflicht-Praxis bei anderen frisch eingeführten Regeln (siehe Punkt 7a1, Punkt 12).
+
+**Verzahnung mit der Retest-Zeitbox (ergänzt 24.08.2026 Nacht, Phase 1 der Studie "bessere Trades", siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 2.1):** [[feedback_chartanalyse]] Punkt 8b Schritt 4 enthält jetzt eine Retest-Zeitbox (max. 2 Voll-Checks auf Retest der gebrochenen Struktur warten), die exakt dieselbe 2-Voll-Check-Einheit dieser Regel wiederverwendet — kein neues Zeitkonzept. Kommt innerhalb der Zeitbox kein Retest, aber die Chasing-Kriterien sind über dieselben 2 Checks sauber erfüllt, greift genau diese Regel (13.1) als der dort bereits vorgesehene Auffangmechanismus — kein Widerspruch, sondern eine komplementäre Antwort auf denselben Risikofall (unbegrenztes Warten ohne Verfallsmechanismus). Die oben stehende Review-Pflicht dieser Regel (n=1, wartet auf 2-3 echte Fälle) und die Review-Pflicht der Retest-Zeitbox werden **gemeinsam am Ende des laufenden 15-Trade-Test-Fensters** bewertet, nicht getrennt und nicht sequenziell — sonst entsteht eine künstliche Verzögerung, weil ein Review auf den anderen wartet.
 
 ## 14. Regeländerungs-Tempo während einer laufenden Verlustserie drosseln — Rückfrage vor Sofort-Scharfschaltung (ergänzt 22.08.2026, Fable-Review Woche #36-#43)
 

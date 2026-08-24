@@ -1,11 +1,11 @@
 ---
 name: project-studie-bessere-trades-2026-08-24
-description: "Gemeinsame Fable+Opus-Studie 24.08.2026 (Abend): Wie mehr genommene Trades TP statt SL erreichen, ohne Frequenz zu senken. Kernbefund verifiziert (TP1-Breakeven 29,8% exakt bestätigt), Retest-Entry-vs-13.1-Chasing-Konflikt via Zeitbox gelöst, Q-Score kritisch geprüft (Pflichtzeilen-Last), DB-Erweiterung + skipped_setups auf Machbarkeit geprüft, check_violation_sync.cjs als zwei getrennte Probleme entlarvt (SL/ATR-Teil erledigt, DB-Text-Sync-Teil offen). Phase 0 (Abschnitt 6) am 24.08. Abend UMGESETZT (siehe Nachtrag Abschnitt 7): tp1_hit-Fix #31/#32, sieben neue DB-Spalten, exit_type rückwirkend für 42/43 Trades, skipped_setups-Tabelle+Skript, Tagesabschluss-Pflichtpunkt 4, gate_check.cjs-Verankerung bei 8c/7b1. Phase 1 (Retest-Zeitbox, Q-Score) weiterhin offen"
+description: "Gemeinsame Fable+Opus-Studie 24.08.2026 (Abend): Wie mehr genommene Trades TP statt SL erreichen, ohne Frequenz zu senken. Kernbefund verifiziert (TP1-Breakeven 29,8% exakt bestätigt), Retest-Entry-vs-13.1-Chasing-Konflikt via Zeitbox gelöst, Q-Score kritisch geprüft (Pflichtzeilen-Last), DB-Erweiterung + skipped_setups auf Machbarkeit geprüft, check_violation_sync.cjs als zwei getrennte Probleme entlarvt (SL/ATR-Teil erledigt, DB-Text-Sync-Teil offen). Phase 0 (Abschnitt 6) am 24.08. Abend UMGESETZT (Nachtrag Abschnitt 7): tp1_hit-Fix #31/#32, sieben neue DB-Spalten, exit_type rückwirkend für 42/43 Trades, skipped_setups-Tabelle+Skript, Tagesabschluss-Pflichtpunkt 4, gate_check.cjs-Verankerung bei 8c/7b1. Phase 1 (Retest-Zeitbox + Q-Score) am 24.08. Nacht UMGESETZT (Nachtrag Abschnitt 8): Retest-Zeitbox in 8b Schritt 4 + Verzahnung mit 13.1, Q-Score (Q1-Q4) in gate_check.cjs als Entry-Freigabe-Suffix, Anzeige-Modus für Trade 1-8, Auswertung nach Trade 15 offen"
 metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T11:24:34.561Z
+  modified: 2026-08-24T11:43:29.105Z
 ---
 
 Siehe [[project_opus_vollpruefung_2026-08-24]] für die volle Historie des 24.08. (C-1 bis C-4, gate_check.cjs, die 11-Punkte-Umsetzung vom Abend). Diese Studie ist Opus' Entwurf vom späten 24.08., von Fable an der DB verifiziert und an mehreren Stellen weiterentwickelt/korrigiert — als EIN Dokument, [Fable-Ergänzung]/[Fable-Korrektur] markiert die Stellen mit eigenem Beitrag.
@@ -156,3 +156,32 @@ Levi hat Phase 0 (Abschnitt 6, reine Datenarbeit, keine Regelwerk-Änderung) fre
 **7. `gate_check.cjs`-Pflichtverweis erweitert:** `feedback_chartanalyse.md` Punkt 8c und `feedback_live_trading.md` Punkt 7b1 verweisen jetzt explizit auf `gate_check.cjs` als das Werkzeug, mit dem die jeweilige Pflichtzeile geprüft wird (vorher nur bei 8b1 verankert) — schließt die in Abschnitt 4 oben beschriebene Lücke prozessual, `check_violation_sync.cjs`-SL/ATR-Teil gilt damit auch dokumentarisch als erledigt.
 
 Alles committet (kein Push). Phase 1 (Retest-Zeitbox, Q-Score in `gate_check.cjs`) bleibt separat, noch nicht freigegeben.
+
+## 8. Nachtrag 24.08.2026 (Nacht) — Phase 1 umgesetzt
+
+Levi hat Phase 1 freigegeben (Retest-Zeitbox + Q-Score in `gate_check.cjs`), explizit OHNE ein drittes eigenes Test-Fenster — beides läuft im bereits aktiven gemeinsamen 15-Trade-Fenster (8b1-Drei-Zonen + 2.000-2.500€-Sizing, seit 24.08.2026).
+
+**1. Retest-Zeitbox:** In `feedback_chartanalyse.md` Punkt 8b Schritt 4 als eigener Absatz präzisiert — die 5-Schritte-Logik aus Abschnitt 2.1 (nicht sofort entern → max. 2 Voll-Checks auf Retest warten → Retest kommt: engerer Entry / kein Retest + saubere Chasing-Kriterien: 13.1 greift / weder noch: Auslassen), wortgleich mit dem Studie-Entwurf. In `feedback_live_trading.md` Punkt 13.1 einen Querverweis-Absatz ergänzt, der die gemeinsame 2-Voll-Check-Einheit und die gemeinsame Auswertung beider offener Reviews (13.1-n=1 UND Retest-Zeitbox) am Ende des 15-Trade-Fensters festhält — beide Dokumente verweisen jetzt explizit aufeinander, nicht getrennt lesbar.
+
+**2. Q-Score in `gate_check.cjs`:** Neue Funktion `evaluateQScore()` + Helper `toBool()`. Vier Faktoren:
+- Q2 (Reifegrad ≤1,5× ATR) und Q4 (Runway ≥1,0) vollautomatisch aus `--impuls-reifegrad-atr`/`--runway-ratio` berechnet (`num()`-Parsing, gleiche UNKNOWN-Philosophie wie die Basis-Gates — fehlender Parameter zählt für die Ampel-Zahl wie "nicht erfüllt", wird aber separat als UNKLAR ausgewiesen statt als stiller Fehlschlag).
+- Q1 (Ablehnung/Timing) und Q3 (Kohärenz, inkl. QQQ-Volumen-Tiebreak via `--qqq-volume-below-avg`) als vorbefüllte Boolean-Parameter (`--q1-reject`, `--q3-coherence`) — das Skript übernimmt nur die Ampel-Logik, keine Einzelurteile, exakt wie in Abschnitt 3 empfohlen.
+- Ampel (4/4 GRÜN / 3/4 mit Q1 oder Q4 GELB / sonst ROT) exakt nach Vorgabe umgesetzt.
+- **Stacking mit 8b1a:** Q-Score wird nur berechnet, wenn `--tier` NICHT `schock` ist (`tier !== 'schock'` steuert den Aufruf von `evaluateQScore()`) — bei Schock-Tier druckt das Skript stattdessen `Q-Score: nicht berechnet (Schock-Tier hat Vorrang, 8b1a)`, kein Q-Score-Objekt im Ergebnis.
+- **Stacking mit 8b1 Zone 2:** Neuer `combinedSizingNote`-Wert in `evaluateTrade()` — sammelt alle aktiven Halbierungsgründe (TP-Realismus Zone 2, Q-Score GELB) in einer Liste und gibt bei ≥2 Gründen explizit `"halbe Position (EINMALIG, nicht kumulativ — Gründe: ...)"` aus, statt nur implizit auf Nicht-Multiplikation zu vertrauen — per Testlauf verifiziert (siehe unten).
+- Ausgabe als Suffix-Zeile `Entry-Freigabe-Suffix: | Q-Score: X/4 AMPEL (...)`, KEINE neue Pflichtzeile, plus Detail-Block pro Faktor.
+- DB-Rückschreibung: `updateGateResult()` in `trade_db.cjs` um optionale Spalten `q_score`, `q_flags`, `runway_ratio`, `trend_effizienz` erweitert — bewusst nur geschrieben, wenn im Aufruf explizit übergeben (`undefined`-Check), damit ein Schock-Tier-Trade (Q-Score nicht berechnet) einen evtl. schon vorhandenen DB-Wert nicht stillschweigend auf NULL zurücksetzt.
+- Trend-Effizienz (Abschnitt 3, Punkt "NICHT jetzt hart verankern"): optionaler `--trend-effizienz`-Rohwert wird mitgeführt/ausgegeben (`Trend-Effizienz (roh, kein Gate): X`) und optional in die DB-Spalte geschrieben — kein Gate, keine Schwelle, wie vorgegeben.
+
+**Scharfschaltungsstufe (Punkt 14 beachtet):** In `feedback_live_trading.md` neuer Abschnitt "## 7b1a. Q-Score-Suffix an der Entry-Freigabe" dokumentiert die Stufung explizit — für die ersten 8 Trades des Fensters reiner Anzeige-/Sizing-Modus, kein hartes Veto, Levi/Sonnet behalten bei ROT die Entscheidung. Nach Trade 15 entscheidet die Auswertung aus Abschnitt 4.4 (hier oben) über hartes Gate/unverändert/streichen.
+
+**Verifikation (zwei Beispielaufrufe + Stacking-Test, alle live gegen `scripts/gate_check.cjs` gelaufen):**
+- 4/4 GRÜN: `--impuls-reifegrad-atr 1.1 --runway-ratio 1.3 --q1-reject yes --q3-coherence yes --qqq-volume-below-avg no` → `Q-SCORE: 4/4 GRÜN (volle Position)`, Gesamtstatus PASS.
+- 3/4 GELB: gleiche Eingabe mit `--impuls-reifegrad-atr 1.9` (Q2 NEIN) → `Q-SCORE: 3/4 GELB (halbe Position)`.
+- 2/4 und 1/4 ROT: mit zusätzlich `--runway-ratio 0.8` (Q4 NEIN) bzw. zusätzlich `--q1-reject no` (Q1 NEIN) → beide `ROT (Auslassen empfohlen)`.
+- Schock-Tier: `--tier schock` mit denselben Q-Parametern → `Q-Score: nicht berechnet (Schock-Tier hat Vorrang, 8b1a)`, kein Q-Faktor-Block.
+- Stacking-Test: TP1 in Zone 2 (2,75× ATR) UND Q-Score 3/4 GELB gleichzeitig → `Kombinierter Sizing-Hinweis: halbe Position (EINMALIG, nicht kumulativ — Gründe: TP-Realismus Zone 2 (8b1) + Q-Score 3/4 GELB)` — bestätigt, dass die Absicherung gegen doppeltes Halbieren tatsächlich greift.
+- Alle Q-Faktoren weggelassen → alle vier UNKLAR, Ampel 0/4 ROT, Gesamtstatus/Exit-Code unverändert PASS/0 (Q-Score beeinflusst wie vorgegeben `status`/`overallPass`/`exitCode` NICHT).
+- `--trade-id` gegen eine nicht existierende Trade-Nummer getestet → korrekte "keine Zeile gefunden"-Meldung, kein Absturz, kein Schreibversuch in die echte `trades.db`.
+
+Alles committet (Skripte + Memory-Dateien getrennt in ihren jeweiligen Repos, kein Push). Ab dem nächsten Live-Trade läuft der Q-Score im Anzeige-/Sizing-Modus mit — Trade 1-8 des laufenden Fensters zählen dafür.
