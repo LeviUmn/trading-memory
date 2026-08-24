@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: session-2026-08-12
-  modified: 2026-08-24T10:46:16.842Z
+  modified: 2026-08-24T12:55:36.700Z
 ---
 
 ## Auftrag und Kontext
@@ -26,7 +26,9 @@ Ersetzt/ergänzt den bisherigen Skalierungs-Fahrplan in [[project_risikomanageme
 
 Ersetzt die bisherige Phase-4-Definition in [[project_risikomanagement]] ("Phase 4 neu definiert", ergänzt 31.07.2026: #36-40 bei ~10.000€/Trade).
 
-- Phase 4 (#41-50) läuft bei derselben Positionsgröße wie Phase 3 (4.000-5.000€), nicht bei 10.000€.
+**ÜBERHOLT seit 24.08.2026 (Levi-Entscheidung, siehe [[project_opus_vollpruefung_2026-08-24]] D-3) — dieser Abschnitt beschrieb ein "Phase 4 (#41-50)" als bereits eigenständig laufendes Fenster. Das existiert nicht.** Levi hat klargestellt: Phase 3 wurde bewusst still bis #50 verlängert (nicht nur bis #40), um erst bei n=50 die Monte-Carlo-Analyse durchzuführen. "Phase 4" ist der Zielzustand NACH #50, kein eigenes Trade-Fenster #41-50 mit eigenen, schon jetzt laufenden Gates. Die untenstehenden Sätze bleiben als historischer Stand (galt bis 24.08.2026) erhalten, die Positionsgrößen-Aussage (keine 10.000€ vor #50) ist inhaltlich weiterhin korrekt — nur die Rahmung "eigenes Fenster #41-50" ist falsch.
+
+- ~~Phase 4 (#41-50) läuft bei derselben Positionsgröße wie Phase 3 (4.000-5.000€), nicht bei 10.000€.~~ Richtig: **Phase 3 (verlängert)** läuft bis #50 bei Phase-3-Positionsgröße (4.000-5.000€, im 15-Trade-Testfenster temporär 2.000-2.500€, siehe [[project_risikomanagement]]) — keine 10.000€ vor einem bestandenen #50-Review.
 - Der ursprünglich für Phase 4 vorgesehene 10.000€-Positionstest (plus konditionale UnusualWhales-Integration) wird zu einem **eigenen, späteren Bewährungsschritt** — erst NACH einem bestandenen #50-Review, nicht in denselben 10 Trades vermischt.
 
 **Begründung:** Monte Carlo (siehe [[project_robustheit_monte_carlo]], Schwelle n≈50) braucht nur die Ergebnis-Verteilung, unabhängig von der Positionsgröße. Der aktuellste demonstrierte Edge (Phase 3, EV 0,213%/Trade) trägt das Einkommensziel nicht einmal bei voller 50k-Skalierung (≈852€/Monat statt Ziel 2.100-3.900€, siehe Vollprüfung Kernbefund 5). Auf einen unbewiesenen, frisch (nur prozessual) reparierten Fehlertyp direkt das Doppelte an Positionsgröße zu setzen wäre im Zweifelsfall doppelt so großer Verlust bei derselben unbestätigten Fehlerrate — nicht bessere Daten.
@@ -60,7 +62,7 @@ Diese vier Punkte sind bewusst offene Einschränkungen des #50-Review-Rahmens se
 
 **Why (gesamt):** Diese Datei setzt die Gate-Kriterien VOR den 15 Trades fest, nicht danach — genau um die Post-hoc-Rationalisierung zu verhindern, die die Vollprüfung bei den "0 Regelbrüche"-Behauptungen in Phase 1-3 aufgedeckt hat.
 
-**How to apply:** Bei jedem Tagesabschluss ab Trade #36 prüfen, ob ein Schock-Tier-Fall vorlag (→ Positionsgröße gemäß Abschnitt 1). Ab Trade #41 automatisch auf Phase-3-Größe bleiben, nicht auf 10.000€ hochstufen. Beim #40-Review Abschnitt 1 (Gate-Bestätigung) prüfen. Beim #50-Review alle sechs Gates aus Abschnitt 3 einzeln durchgehen UND alle vier blinden Flecken aus Abschnitt 4 explizit beantworten, bevor über 10.000€/50k-Realkapital entschieden wird.
+**How to apply:** Bei jedem Tagesabschluss ab Trade #36 prüfen, ob ein Schock-Tier-Fall vorlag (→ Positionsgröße gemäß Abschnitt 1). Ab Trade #41 automatisch auf Phase-3-Größe bleiben, nicht auf 10.000€ hochstufen — das ist weiterhin (verlängerte) Phase 3, kein separates Phase-4-Fenster (siehe Klarstellung in Abschnitt 2). Beim #40-Review Abschnitt 1 (Gate-Bestätigung) prüfen. **Die sechs Gates aus Abschnitt 3 werden EINMALIG beim #50-Review ausgewertet, nicht laufend/inkrementell ab #41** — ein Zwischenstand vor #50 (z.B. bei n=8 der Trades seit #36) ist kein valides Gate-Ergebnis, sondern höchstens ein unverbindlicher Frühindikator (klargestellt 24.08.2026, siehe [[project_opus_vollpruefung_2026-08-24]] D-4). Beim #50-Review alle sechs Gates aus Abschnitt 3 einzeln durchgehen UND alle vier blinden Flecken aus Abschnitt 4 explizit beantworten, bevor über 10.000€/50k-Realkapital entschieden wird.
 
 ## 5. Nachtrag 12.08.2026 — Minimal-Grouping implementiert, Voll-Infrastruktur weiter aufgeschoben
 

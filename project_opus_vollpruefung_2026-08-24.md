@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T12:51:14.611Z
+  modified: 2026-08-24T12:56:44.484Z
 ---
 
 24.08.2026: Levi hat erstmals Opus 5 (statt/zusätzlich zu Fable) für einen unabhängigen Vollcheck von Tradingstrategie + komplettem Regelwerk hinzugezogen ([[feedback_modellwahl_trading]] bisher: Sonnet=Live, Fable=Analyse — Opus jetzt als Cross-Check-Option ergänzt, aber noch nicht als fester Prozessbestandteil beschlossen).
@@ -325,3 +325,21 @@ Zusätzlich ein vierter, nicht angeforderter aber sinnvoller Stacking-Test gefah
 Commit im NAS100-Repo (`tradingview-mcp`): `scripts/gate_check.cjs` (D-1-Umsetzung + neues 8b2-Gate). Memory-Änderungen (dieses Dokument + `feedback_chartanalyse.md`, `MEMORY.md`) im separaten Memory-Repo. Beide kein Push, wie angewiesen.
 
 **Status:** D-1 entschieden und umgesetzt, 8b2 neu eingeführt und mit drei (plus einem zusätzlichen Stacking-)Testfall live verifiziert. D-3/D-4/D-5 weiterhin offen.
+
+## Nachtrag 24.08.2026 (spät) — D-3 ENTSCHIEDEN (abweichend von Fables Empfehlung), D-4 dadurch GEGENSTANDSLOS
+
+**D-3 (aus N-10, #41-43-Phasenzuordnung): ENTSCHIEDEN — Phase 3 bleibt bis #50 verlängert, KEINE DB-Änderung.** Levi hat sich gegen Fables oben dokumentierte Empfehlung entschieden (#41-43 auf `phase=4` umzuklassifizieren) und stattdessen klargestellt, dass diese Empfehlung auf einer falschen Prämisse beruhte. Levi-Zitat: *"Wir haben Phase 4 noch nicht erreicht. Wir haben stillschweigend Phase 3 verlängert bis 50 Trades, damit wir dann das Monte-Carlo-Analyse machen können. Phase 4 ist bisher nicht am Start, wir sind verlängert in Phase 3. Das bleibt auch weiterhin so, bis 50 Trades voll sind + wir jetzt schauen, wie sich die Regeländerungen und Anpassungen auswirken, bevor wir weiter skalieren."* Phase 3 läuft damit bewusst verlängert bis Trade #50 (nicht nur bis #40, wie in [[project_phase4_gates_2026-08-12]] vom 12.08. gestaffelt) — #41, #42, #43 sind und bleiben korrekt `phase=3` (per Direktabfrage am 24.08.2026 nochmals bestätigt). Die DB hatte in diesem Punkt schon recht, N-10/Fables D-3-Empfehlung war die falsche Korrektur. Nachgezogen in [[project_risikomanagement]] (Addendum 12.08. durchgestrichen + Levi-Zitat + gültige Fassung ergänzt), [[project_phase4_gates_2026-08-12]] (Abschnitt 2 + How-to-apply klargestellt) und [[project_vision]] (Fahrplan-Tabelle + Phase-4-Absatz als überholt markiert).
+
+**D-4 (aus N-11, #40-Review/Phase-4-Gates-Zwischenstand): GEGENSTANDSLOS durch die D-3-Entscheidung.** Die n=8-Zwischenrechnung der sechs Gates über #36-43 (oben, Tabelle) beruhte auf der jetzt widerlegten Annahme, es gäbe bereits ein separates, laufendes Phase-4-Fenster ab #41 mit eigener Gate-Prüfung. Das gibt es nicht — es gibt nur die eine, verlängerte Phase 3 bis #50. Die sechs Gates werden EINMALIG, gesammelt, beim #50-Review über die komplette (verlängerte) Phase-3-Historie ausgewertet, nicht laufend ab #41 geprüft. Die n=8-Zahlen oben sind damit nicht "noch zu früh" (wie ursprünglich eingeordnet), sondern beziehen sich auf eine Fensterabgrenzung, die es so nicht gibt — als Diagnosewert (wie läuft's seit #36) bleiben die Rohzahlen informativ, aber sie sind kein Zwischenstand eines Phase-4-Gate-Prozesses. Das #40-Review (N-11) selbst bleibt unabhängig davon weiterhin ein offener Governance-Punkt (nachzuholen), unberührt von dieser Korrektur.
+
+**Nicht angefasst (wie angewiesen):** D-5 (Früh-Exit-Stack vs. Testfenster-Enderkriterium) bleibt offen, separater nächster Schritt. Keine Änderung an der `phase`-Spalte in `trades.db` — per Direktabfrage verifiziert: #41/#42/#43 zeigen weiterhin `phase=3`.
+
+### Geprüft: Skript-Logik auf ein hartcodiertes "#41-50-Fenster"
+
+`scripts/gate_check.cjs`, `scripts/trade_stats.cjs` und `scripts/size.cjs` durchsucht — keines der Skripte enthält eine Trade-Nummern-basierte Fenstergrenze (`#41`, `#41-50` o.ä.). `trade_stats.cjs` gruppiert ausschließlich über die `phase`-Spalte in `trades.db` (`WHERE phase = :phase` bzw. automatische Aufschlüsselung nach den in der DB tatsächlich vorkommenden `phase`-Werten). `size.cjs` hat `PHASE_DEFAULTS` nur für die Phasen 1-3 definiert, kein Phase-4-Eintrag existiert. `gate_check.cjs` hat keinerlei Trade-Nummer- oder Phasen-Filterlogik. **Konsequenz: Diese Korrektur ist eine reine Dokumentationsfrage — kein Skript musste angepasst werden**, weil keines je eine eigenständige #41-50-Fenster-Logik implementiert hatte, die dem jetzt korrigierten Verständnis widersprochen hätte.
+
+### Git-Commit
+
+Commit im NAS100-Repo (`tradingview-mcp`): keine Skript-Änderungen (siehe oben), kein Commit dort nötig. Memory-Änderungen (dieses Dokument + `project_risikomanagement.md`, `project_phase4_gates_2026-08-12.md`, `project_vision.md`, `MEMORY.md`) im separaten Memory-Repo committet, kein Push.
+
+**Status:** D-3 entschieden (Phase 3 verlängert bis #50, keine DB-Änderung), D-4 als gegenstandslos dokumentiert. D-5 weiterhin offen.

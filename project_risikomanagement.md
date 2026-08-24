@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T10:45:45.918Z
+  modified: 2026-08-24T12:55:12.098Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -81,9 +81,9 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 
 **Addendum 12.08.2026 (Fable-Vollprüfung Phase 1-3, Punkt 3 der Handlungsempfehlungen, von Levi genehmigt — Details siehe [[project_phase4_gates_2026-08-12]]):** Die obige Tabelle und der Absatz "Phase 4 neu definiert" (31.07.2026) bleiben als historischer Stand stehen, gelten aber ab sofort als überholt durch folgende Neustaffelung:
 - **Phase 3 verlängert auf #26-40** (statt #26-35) — die zusätzlichen 5 Trades (#36-40) laufen bei Schock-Tier-Fällen (Gate 8c/8d, siehe [[feedback_chartanalyse]]) zu reduzierter Größe (~2.000-2.500€), sonst zu voller Phase-3-Größe (4.000-5.000€).
-- **Phase 4 = #41-50, bleibt bei Phase-3-Positionsgröße (4.000-5.000€)** — NICHT bei den in der Tabelle oben genannten ~10.000€/Trade.
+- ~~**Phase 4 = #41-50, bleibt bei Phase-3-Positionsgröße (4.000-5.000€)** — NICHT bei den in der Tabelle oben genannten ~10.000€/Trade.~~ **ÜBERHOLT seit 24.08.2026 (Levi-Entscheidung, siehe [[project_opus_vollpruefung_2026-08-24]] D-3):** Es gibt aktuell KEIN separates Phase-4-Fenster #41-50. Levi-Zitat: *"Wir haben Phase 4 noch nicht erreicht. Wir haben stillschweigend Phase 3 verlängert bis 50 Trades, damit wir dann das Monte-Carlo-Analyse machen können. Phase 4 ist bisher nicht am Start, wir sind verlängert in Phase 3."* **Gültige Fassung:** Phase 3 läuft bewusst verlängert bis #50 (nicht nur bis #40) — Trades #41, #42, #43 sind und bleiben korrekt mit `phase=3` in `trades.db` getaggt (per Direktabfrage am 24.08.2026 bestätigt: alle drei zeigen `phase=3`), KEINE DB-Änderung. Phase 4 beginnt erst NACH einem bestandenen #50-Gate-Review — kein separates, bereits laufendes Zwischenfenster mit eigenen Gates ab #41.
 - Der ursprünglich für Phase 4 vorgesehene **10.000€-Positionstest + konditionale UnusualWhales-Integration wird auf einen eigenen, späteren Schritt verschoben** — erst nach einem bestandenen #50-Review, nicht mehr innerhalb von #36-50.
-- Das #50-Review entscheidet über den 10k€/50k-Übergang anhand von sechs vorab festgelegten, numerischen Gates (Regelbrüche, RR, EV, Win-Rate, DB-Sync, Monte-Carlo-Ergebnis) — alle sechs müssen erfüllt sein, keine Einzelkriterien-Freigabe. Volle Kriterien, Begründungen und vier explizit offenzuhaltende blinde Flecken in [[project_phase4_gates_2026-08-12]], nicht hier dupliziert.
+- Das #50-Review entscheidet über den 10k€/50k-Übergang anhand von sechs vorab festgelegten, numerischen Gates (Regelbrüche, RR, EV, Win-Rate, DB-Sync, Monte-Carlo-Ergebnis) — alle sechs müssen erfüllt sein, keine Einzelkriterien-Freigabe. Volle Kriterien, Begründungen und vier explizit offenzuhaltende blinde Flecken in [[project_phase4_gates_2026-08-12]], nicht hier dupliziert. **Die "sechs Gates" werden EINMALIG bei Trade #50 über die gesamte verlängerte Phase 3 ausgewertet, nicht laufend ab #41 geprüft** (siehe Korrektur oben und in [[project_phase4_gates_2026-08-12]]).
 
 **Danach: Übergang ins normale Trading (kein Phasensystem mehr), 50.000€ Kapital.** Sobald Phase 4 erfolgreich abgeschlossen ist, endet die Phasen-Logik komplett — kein "Phase 5", sondern der eigentliche Übergang zum regulären Trading mit voller Motivation und vollem Kapital. **Harte Vorbedingung für diesen Übergang:** Vor dem Wechsel auf 50.000€ muss die Tracking-Infrastruktur erweitert werden — bisher gibt es nur Tagesabschlüsse ([[feedback_tagesabschluss]]), für die 50k-Stufe braucht es zusätzlich **Wochenabschlüsse und Monatsabschlüsse**, damit die Performance auf dieser Kapitalstufe ehrlich und greifbar trackbar ist (Win-Rate/Expectancy/Drawdown nicht nur pro Tag, sondern aggregiert über Woche/Monat, analog zum bestehenden Phasen-Review-Muster). Diese Wochen-/Monats-Abschluss-Struktur muss VOR dem 50k-Start stehen, nicht erst währenddessen nachgebaut werden.
 
