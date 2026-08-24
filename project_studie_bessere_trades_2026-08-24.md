@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T12:59:07.508Z
+  modified: 2026-08-24T13:38:28.304Z
 ---
 
 Siehe [[project_opus_vollpruefung_2026-08-24]] für die volle Historie des 24.08. (C-1 bis C-4, gate_check.cjs, die 11-Punkte-Umsetzung vom Abend). Diese Studie ist Opus' Entwurf vom späten 24.08., von Fable an der DB verifiziert und an mehreren Stellen weiterentwickelt/korrigiert — als EIN Dokument, [Fable-Ergänzung]/[Fable-Korrektur] markiert die Stellen mit eigenem Beitrag.
@@ -188,3 +188,27 @@ Levi hat Phase 1 freigegeben (Retest-Zeitbox + Q-Score in `gate_check.cjs`), exp
 - `--trade-id` gegen eine nicht existierende Trade-Nummer getestet → korrekte "keine Zeile gefunden"-Meldung, kein Absturz, kein Schreibversuch in die echte `trades.db`.
 
 Alles committet (Skripte + Memory-Dateien getrennt in ihren jeweiligen Repos, kein Push). Ab dem nächsten Live-Trade läuft der Q-Score im Anzeige-/Sizing-Modus mit — Trade 1-8 des laufenden Fensters zählen dafür.
+
+## 9. Nachtrag 24.08.2026 (Abend) — Vier neue Indikatoren ins Regelwerk verankert (Opus-Spezifikation, Fable umgesetzt)
+
+Sonnet hat am Abend des 24.08.2026 direkt am Chart vier neue Indikatoren live gesetzt (Plan-Upgrade auf 10 Slots/Chart, siehe [[feedback_chart_layout]]): ADX/DMI (NAS100), Anchored VWAP + Relative Volume at Time (QQQ), plus die VWAP-σ-Bänder-Persistenz gefixt. Opus hat dazu eine Verankerungs-Spezifikation erarbeitet ("Indikator-Erweiterung bei 10 Slots"), Fable hat sie hier umgesetzt — bewusst in dieser Studie statt in [[project_opus_vollpruefung_2026-08-24]], weil alle sechs Punkte direkt an Q1 und den Rendite-Hebel dieser Studie andocken, nicht an die dortige Prozess-Fehler-Historie.
+
+**1. VWAP-σ-Bänder (c3) — [[feedback_chartanalyse]] 8e:** Ein QQQ-Kerzenschluss jenseits Band 2 (2× Standardabweichung) gilt jetzt als zusätzliche, volumenbasierte Ausprägung von "bekannte Widerstandszone getestet" — macht das seit 22.08. live gesetzte, bisher nur informelle Band-2-Signal für den Teilgewinn-Trigger erstmals wirksam. Ein Satz, kein neuer Mechanismus.
+
+**2. ATR(14) Tages-Timeframe (a1) — [[feedback_session_update]] Schritt 6 + [[feedback_chartanalyse]] 8d Kriterium 1:** Neue Pflichtzeile beim Session-Start `ATR(14) D: X Pkt | heutige Range bisher: Y Pkt | Verhältnis Z×`, objektiviert das bisherige Augenmaß-Kriterium 1 des Regime-Gates. Einmal am Tagesanfang gesetzt, kein neuer Live-Loop-Schritt.
+
+**3. ADX (NAS100), GEMESSEN KEIN GATE (b2):** Neue optionale Spalte `adx_at_entry` in `scripts/trades.db` (`trade_db.cjs`, gleiches idempotentes Migrationsmuster wie die Phase-0-Spalten, per `PRAGMA table_info`-Check live gegen die bestehende 43-Zeilen-DB verifiziert). Neuer optionaler `--adx`-Parameter in `scripts/gate_check.cjs` — reiner Rohwert, exakt wie `--trend-effizienz` behandelt (kein Einfluss auf `status`/`overallPass`/`exitCode`, per Testlauf mit FAIL- UND PASS-Ergebnis bestätigt: der ADX-Wert erscheint identisch unabhängig vom Gate-Ausgang). Zusätzlich ADX(1H/Daily) als Rohwert-Zeile im Session-Start-Briefing verankert ([[feedback_session_update]] Schritt 6) — Kontext für [[feedback_chartanalyse]] 8d, keine Schwelle, keine Pflichtzeile im Loop. **Keine Gate-Entscheidung jetzt** — die steht wie geplant erst bei der Trade-15-Auswertung an, zusammen mit dem Q-Score.
+
+**4. Anchored VWAP als Q1-Ableitungsquelle (b1) — [[feedback_live_trading]] Punkt 7b1a:** Vierter, unabhängiger Beleg für `--q1-reject` neben 8a2/8c2 — Anker auf das Extrem des gescheiterten Gegenversuchs, Kurs bleibt auf der Gegenseite → volumenbasiert bestätigte Ablehnung. Kritische Einschränkung wörtlich mitverankert: Anker maximal 1× pro Session + maximal 1× pro tatsächlich eröffneter Position, NIEMALS pro geprüftem Setup-Kandidaten (sonst Punkt-14-Verstoß) — ein Q1-Beleg über Anchored VWAP setzt voraus, dass ohnehin schon ein Anker aktiv ist, kein zusätzlicher nur dafür gesetzter Anker.
+
+**5. Anchored VWAP als Positionsschutz-Modifikator (c1) — [[feedback_live_trading]] Punkt 11:** Der Entry-AVWAP wirkt als Konfidenz-Modifikator auf die bereits vier bestehenden Reversal-Kriterien, NICHT als sechstes zählendes Kriterium — falsche Seite verstärkt bereits erfüllte Kriterien (Verteilung statt Pullback), richtige Seite schwächt sie ab. Ändert die 2-3-von-4-Schwelle nicht, keine neue Pflichtzeile.
+
+**6. RVOL füllt vier bestehende Regelstellen (c2), keine neue Regel:** [[feedback_live_trading]] Punkt 11 (5. Kriterium, Pflichtzeile jetzt `QQQ RVOL X,Xx ... vs. Y,Yx ...`), [[feedback_chartanalyse]] 8a3 (Reclaim-Volumen-Check-Zeile ebenso auf RVOL umgestellt), [[feedback_live_trading]] Punkt 7b (Volumen als unterstützende Bestätigung) und Q3-Tiebreaker (`--qqq-volume-below-avg` in `gate_check.cjs`/Punkt 7b1a) lesen den Volumen-Vergleich jetzt vom seit heute Abend live gesetzten Indikator **Relative Volume at Time** statt von einem flach geschätzten Kopf-Vergleich. Die 50%-Schwelle bleibt als Zahl unverändert. Kernbegründung (an allen vier Stellen verankert): Levis Handelsfenster (16-18 Uhr MESZ) liegt strukturell nach dem US-Open-Volumen-Peak (15:30 MESZ) — ein flacher Durchschnitt vergleicht spätes Volumen fälschlich gegen diesen Peak und unterschätzt systematisch, wie stark eine späte Bewegung getragen ist; RVOL ist zeitnormalisiert und behebt das strukturell.
+
+**Explizit nicht umgesetzt (Opus geprüft und abgelehnt, unverändert gültig):** Fallender ADX als Erschöpfungs-/Positionsschutz-Signal, +DI/−DI als Richtungssignal, Volume Profile/VPOC. Keine neue Pflichtzeile im Live-Loop durch irgendeinen der sechs Punkte.
+
+**Bestätigungslauf:** `node scripts/trade_stats.cjs` (Gesamtergebnis 81,09€/43 Trades, Phase-3-Kernzahlen -57,77€/18 Trades/TP1-Quote 27,8% — alle unverändert) und `node scripts/gate_check.cjs --adx X` (Live-, Batch- und `--trade-id`-Pfad getestet, ADX erscheint als Rohwert unabhängig vom Gate-Ausgang, kein Einfluss auf `status`) liefen fehlerfrei gegen die echte, unveränderte `trades.db`. Ein Test-Writeback auf Trade #1 wurde direkt danach anhand des committeten `trades.sql`-Dumps wieder auf den exakten Ursprungszustand zurückgesetzt und per erneutem Dump-Diff (leer) verifiziert.
+
+**Offener Punkt, nicht selbst prüfbar:** Die Datenqualität von Anchored VWAP/RVOL auf dem Cboe-One-Teilvolumen-Feed (nur ~10-20% des konsolidierten Volumens, siehe [[feedback_chart_layout]]) muss noch live per Screenshot verifiziert werden, sobald US-Handelszeit ist — reine Regelwerk-Verankerung kann das nicht prüfen.
+
+Alles committet (kein Push).

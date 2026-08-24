@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-07T11:10:25.896Z
+  modified: 2026-08-24T13:36:19.496Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -127,7 +127,9 @@ Wenn 2+ Faktoren bärisch → übergeordneter Gegenwind, Short-Bias verstärkt s
 - `chart_get_state` → aktuelles Symbol, Timeframe, Indikatorliste (Pane 0 = NAS100)
 - `data_get_study_values` → RSI, MACD, EMA50, Bollinger Bands, ATR (aktuelle NAS100-Werte — **kein VWAP auf NAS100**, der CFD-Feed hat kein Volumen, siehe [[feedback_chart_layout]]; Pivot Points seit 23.07.2026 kein Chart-Indikator mehr, siehe [[feedback_chartanalyse]] Punkt 7a1a für die Berechnung)
 - `data_get_ohlcv` mit `summary: true` + zusätzlich `count: 300` → vollständigen Verlauf seit letzter Session rekonstruieren
-- **QQQ-Pane (Pane 1):** `pane_focus(1)` → EMA50/VWAP/Volume von QQQ lesen → zurück `pane_focus(0)`. Vorher Session-Gate/Zeitstempel-Check nach [[feedback_live_trading]] Punkt 7e — bei Pre-Market/geschlossenem Markt den QQQ-Stand explizit als "dünn" bzw. "Stand von gestern" kennzeichnen, nicht als aktuell ausgeben. Volumen-Spikes relativ zum eigenen QQQ-Durchschnitt bewerten (NAS100-CFD hat keine)
+- **QQQ-Pane (Pane 1):** `pane_focus(1)` → EMA50/VWAP/Volume von QQQ lesen → zurück `pane_focus(0)`. Vorher Session-Gate/Zeitstempel-Check nach [[feedback_live_trading]] Punkt 7e — bei Pre-Market/geschlossenem Markt den QQQ-Stand explizit als "dünn" bzw. "Stand von gestern" kennzeichnen, nicht als aktuell ausgeben. Volumen-Spikes relativ zum eigenen QQQ-Durchschnitt (bzw. RVOL, siehe [[feedback_live_trading]] Punkt 11 "RVOL statt Kopf-Vergleich") bewerten (NAS100-CFD hat keine)
+- **ATR(14) Tages-Timeframe (ergänzt 24.08.2026, Indikator-Verankerung nach dem TradingView-Plan-Upgrade):** Einmal pro Handelstag kurz `chart_set_timeframe(D)` auf NAS100 wechseln, ATR(14) auf Tagesbasis lesen, danach zurück auf 5min. Gegen die bisherige Tagesrange (Hoch-Tief seit Handelsbeginn, aus `data_get_ohlcv`) gegenrechnen → Pflichtzeile `ATR(14) D: X Pkt | heutige Range bisher: Y Pkt | Verhältnis Z×` ausgeben. Objektiviert [[feedback_chartanalyse]] Punkt 8d Kriterium 1 (bisher Augenmaß "ungewöhnlich groß, >2× Durchschnitt") — gilt für den ganzen Handelstag, kein Wiederholungsschritt im 1-Min-Loop.
+- **ADX(1H/Daily), NAS100 (ergänzt 24.08.2026, "Directional Movement" neu im NAS100-Indikatoren-Set, siehe [[feedback_chart_layout]]):** Rohwert auf 1H und Tages-Timeframe notieren — NUR die ADX-Linie, +DI/−DI NICHT auswerten (Verwechslungsrisiko mit dem bestehenden Dual-Gate). Reine Kontext-/Regime-Information für [[feedback_chartanalyse]] Punkt 8d (Vorlauf-Einschätzung Trend vs. Chop-Regime) — KEINE Schwelle, KEIN Gate, KEINE Pflichtzeile im 1-Min-Loop. Entscheidung über eine mögliche Gate-Funktion erst nach der Trade-15-Auswertung (siehe [[project_studie_bessere_trades_2026-08-24]]).
 - Welche Key-Levels wurden getestet / gebrochen seit letzter Session?
 - `capture_screenshot` für visuellen Überblick
 

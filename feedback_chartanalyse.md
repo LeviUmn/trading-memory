@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T12:50:37.789Z
+  modified: 2026-08-24T13:35:10.532Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -226,7 +226,9 @@ Ergänzt 8a2 um eine Volumen-Prüfung während desselben Bestätigungsfensters (
 
 **Regel:** QQQ-Volumen über die beiden Reclaim-Bestätigungskerzen (relativ zum eigenen Durchschnitt der unmittelbar vorausgehenden Bewegung) wird mitgeführt. Liegt es deutlich darunter (Faustregel <50%, dieselbe Schwelle wie beim bereits bestehenden Volumen-Dämpfer in [[feedback_live_trading]] Punkt 11), gilt das als Vertrauens-Dämpfer: der Trigger löst trotzdem aus (kein hartes Veto), aber explizit mit dem Vermerk "schwach getragen" statt "bestätigt" — bei ohnehin grenzwertigen RR-/TP-Realismus-Werten (8b/8b1) sollte ein schwach getragener Reclaim eher zum Auslassen führen als ein volumenbestätigter.
 
-**Pflicht-Ausgabezeile beim Stufe-1-Trigger:** `Reclaim-Volumen-Check: QQQ X K (Reclaim-Fenster, 2 Kerzen) vs. Y K (Ø vorausgehende Bewegung) → bestätigt/schwach getragen`
+**RVOL statt Kopf-Vergleich (ergänzt 24.08.2026, Indikator-Verankerung nach dem TradingView-Plan-Upgrade):** Der Vergleich "QQQ-Volumen vs. eigener Durchschnitt" wird ab jetzt am live gesetzten Indikator **Relative Volume at Time** (RVOL, QQQ-Pane) abgelesen statt weiterhin geschätzt — volle Begründung (Zeitnormalisierung gegen den US-Open-Peak) in [[feedback_live_trading]] Punkt 11, Abschnitt "RVOL statt Kopf-Vergleich". Die 50%-Schwelle bleibt unverändert, nur sauberer gemessen.
+
+**Pflicht-Ausgabezeile beim Stufe-1-Trigger:** `Reclaim-Volumen-Check: QQQ RVOL X,Xx (Reclaim-Fenster, 2 Kerzen) vs. Y,Yx (Ø vorausgehende Bewegung) → bestätigt/schwach getragen`
 
 **Warum nur im Reclaim-Fenster, nicht durchgehend (Levis Nachfrage 22.08.2026 beantwortet):** Ein permanentes, tick-für-tick-Volumen-Gate wurde bewusst geprüft und verworfen, aus zwei Gründen: (1) Volumen ist ein Ereignis-Signal, kein Zustands-Signal — die TA-Aussage "Ausbruch braucht Volumen" bezieht sich auf den Moment des Levelbruchs selbst, nicht auf jede beliebige Minute davor/danach. Volumen schwankt außerhalb dieses Moments aus vielen harmlosen Gründen (Tageszeit, Nachrichten-Pause), ohne dass das etwas über die Validität der Bewegung aussagt — ein Dauer-Gate würde ein sauberes Signal mit Rauschen verdünnen, nicht schärfen. (2) Ein durchgehendes Gate würde gegen die bestehende Phasen-Architektur aus [[feedback_live_trading]] Punkt 7b verstoßen ("heiße Phase: KEIN Pane-Wechsel zu QQQ mehr pro Loop-Durchlauf") — dieser Tempo-Schutz existiert genau deshalb, weil wiederholte QQQ-Checks reale Sekunden kosten und den eigentlichen Preis-Trigger verzögern können. Die Bindung an das 2-Kerzen-Reclaim-Fenster (statt an jeden 1-Min-Tick) ist der bewusste Mittelweg: breiter als eine einzelne Momentaufnahme (deckt jetzt beide Bestätigungskerzen aus 8a2 ab), aber zeitlich begrenzt statt unbegrenzt fortlaufend. Der bereits bestehende Volumen-Dämpfer in Punkt 11 ([[feedback_live_trading]]) bleibt davon unberührt — der ist für eine andere Frage (Position verteidigen/drehen) gedacht und läuft dort bewusst im Voll-Check-Rhythmus, nicht kontinuierlich.
 
@@ -411,6 +413,8 @@ Bevor überhaupt aktiv nach Setups gesucht wird (nicht erst wenn schon ein Setup
 2. **Häufung von Makro-Überraschungen:** Gab es heute oder in den letzten 1-2 Tagen mehrere große Datenüberraschungen (Konsens-Abweichungen), nicht nur eine?
 3. **VIX-Bewegung:** Hat VIX heute bereits eine deutliche Bewegung gezeigt (>5% Intraday-Range), auch wenn er aktuell wieder ruhig aussieht?
 
+**Kriterium 1 objektiviert (ergänzt 24.08.2026, Indikator-Verankerung nach dem TradingView-Plan-Upgrade):** Die Vergleichsgröße für Kriterium 1 war bisher reines Augenmaß. Sie kommt jetzt aus der beim Session-Start einmalig gelesenen Pflichtzeile `ATR(14) D: X Pkt | heutige Range bisher: Y Pkt | Verhältnis Z×` (siehe [[feedback_session_update]] Schritt 6) — Verhältnis Z× ersetzt die bisherige Schätzung, die Schwelle selbst (>2×) bleibt unverändert. Gilt für den ganzen Handelstag, kein Wiederholungsschritt im 1-Min-Loop.
+
 **Ergebnis:** Wenn 2 von 3 Kriterien zutreffen → "Schock-Regime" aktiv. Konsequenz: entweder Positionsgröße spürbar reduzieren (Richtung unteres Phasen-Limit) UND SL-Multiplikator erhöhen (siehe 8c Schock-Tag-Multiplikator), ODER an besonders extremen Tagen (alle 3 Kriterien erfüllt) das Trading für den Rest des Tages ganz pausieren, auch ohne dass die Cooldown-Regel (2 Verluste) technisch schon ausgelöst wurde.
 
 **Why:** Am 02.07.2026 zeigte sich, dass selbst technisch saubere Setups (Trade #12: Double-Bottom, zweistufiger Trigger, MACD-Crossover) in einem durch mehrere Makro-Schocks geprägten Marktregime scheiterten. Die Lehre: das Regime selbst VOR der Setup-Suche einschätzen, nicht nur reaktiv auf Chop innerhalb eines einzelnen Setups reagieren.
@@ -446,6 +450,8 @@ Liegt bei bestätigtem Regime-Chop (Session-Ebene) für ein konkretes Setup KEIN
 
 ### 8e. Widerstandstest + überkauft = zusätzliches Teilgewinn-Signal (ergänzt 14.07.2026, Trade #18)
 Unabhängig vom regulären TP1/TP2-Teilverkauf-Standard (Punkt 8b): Wenn der Kurs während einer offenen Position eine bekannte Widerstandszone testet (BB-Oberband, altes Session-Hoch, berechnetes Pivot-Level siehe 7a1a) **UND gleichzeitig der 1H-RSI nahe überkauft ist (>65-70)**, aktiv einen Teilgewinn (25-50% der Restposition) vorschlagen — auch wenn kein TP-Level erreicht ist und kein hartes Reversal-/Exit-Kriterium (Double-Top, EMA50-Bruch, Divergenz) formal ausgelöst hat.
+
+**Ergänzung 24.08.2026 (Indikator-Verankerung nach dem TradingView-Plan-Upgrade, siehe [[feedback_chart_layout]]):** Ein QQQ-Kerzenschluss jenseits Band 2 (2× Standardabweichung) der bereits seit 22.08.2026 live gesetzten VWAP-σ-Bänder gilt ab jetzt als zusätzliche, sogar stärkere Ausprägung von "bekannte Widerstandszone getestet" — volumenbasiert statt nur preisbasiert, macht das bisher rein informelle Band-2-Signal für diese Regel erstmals wirksam. Kein neuer Mechanismus, kein neues Kriterium: Ein Band-2-Schluss zählt einfach als eine weitere gültige Ausprägung der bereits bestehenden Widerstandszonen-Liste (BB-Oberband, Session-Hoch, Pivot), gleichrangig neben den drei bisherigen.
 
 **Why:** Bei Trade #18 (14.07.2026) testete der Kurs bei 29.692 exakt die Widerstandszone, während der 1H-RSI bei 69,6 nahe überkauft stand — beides war zum Zeitpunkt bereits bekannt/beobachtet, wurde aber nur als Kontext vermerkt, nicht in eine Handlungsregel übersetzt. Der Kurs fiel danach über ~20 Minuten kontinuierlich zurück bis zum nachgezogenen SL, wodurch ein Großteil des Peak-Gewinns (~2%) wieder abgegeben wurde, bevor der reguläre SL griff. Keine der bestehenden Exit-Regeln (9d1/4a Umkehrmuster, Punkt 11 Reversal-Kriterien) hatte am Peak selbst schon ausgelöst — diese Lücke schließt die neue Regel.
 
