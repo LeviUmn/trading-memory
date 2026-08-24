@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T12:55:12.098Z
+  modified: 2026-08-24T12:58:57.949Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -75,7 +75,7 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 
 - **Beginn:** 24.08.2026, ab dem nächsten Trade nach dieser Umsetzung.
 - **Grund:** Phase-3-EV ist nach dem C-1-Fix (korrigierter `result_pct`-Bug #42/#43) negativ (−0,059%/Trade, siehe [[project_opus_vollpruefung_2026-08-24]]) — Risiko wird reduziert, während Exit-/TP-Regelwerk (8b1-Umbau, siehe [[feedback_chartanalyse]] Punkt 8b1/10) im selben Fenster nachgebessert und validiert wird.
-- **Ende-Kriterium (BEIDE müssen erfüllt sein):** EV > 0% über die nächsten 15 Trades UND TP2-Quote > 20% in diesem Fenster (Referenz: TP2-Quote lag über 43 Trades bisher nur bei 7%, siehe [[project_opus_vollpruefung_2026-08-24]]).
+- ~~**Ende-Kriterium (BEIDE müssen erfüllt sein):** EV > 0% über die nächsten 15 Trades UND TP2-Quote > 20% in diesem Fenster (Referenz: TP2-Quote lag über 43 Trades bisher nur bei 7%, siehe [[project_opus_vollpruefung_2026-08-24]]).~~ **KORRIGIERT 24.08.2026 (Levi-Entscheidung D-5, Option B, siehe [[project_opus_vollpruefung_2026-08-24]]):** Ende-Kriterium ist jetzt **EV > 0% über die nächsten 15 Trades UND TP1-Quote im Zielkorridor 45-50%** (Breakeven-Schwelle 29,8%, siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 0). Grund: Die TP2-Quote hängt zusätzlich vom unveränderten Früh-Exit-Stack (8e, Punkt 12 Stall-Exit) ab, der Positionen vor TP2 abschneiden kann, unabhängig davon, ob die heutigen Entry-seitigen Verbesserungen (Retest-Zeitbox, Q-Score) wirken — das alte Kriterium hätte das Fenster potenziell an einem Faktor scheitern lassen, der gar nicht Gegenstand dieses Tests ist. Die TP2-Quote wird weiterhin gemessen und berichtet, ist aber für DIESES Fenster kein Pass/Fail-Kriterium mehr. Der Früh-Exit-Stack-Rückbau (Opus' Option A) wird explizit als eigener, separater nächster Schritt NACH der Trade-15-Auswertung behandelt, mit eigenem Test — nicht mitten im laufenden Fenster zusätzlich verändert.
 - **Danach:** Zurück auf reguläre Phase-3-Größe (4.000-5.000€) — `scripts/size.cjs` PHASE_DEFAULTS[3] auf `ORIGINAL_PHASE_3` zurücksetzen, diesen Absatz als abgeschlossen markieren (nicht löschen).
 - **Verhältnis zum #50-Review/Phase-4-Gates:** Unabhängig von diesem 15-Trade-Fenster — die sechs #50-Gates aus [[project_phase4_gates_2026-08-12]] laufen weiter über den vollen #36-50-Bereich, dieses Fenster ist eine zusätzliche, engere Sizing-Beschränkung innerhalb dieses Bereichs, kein Ersatz dafür.
 

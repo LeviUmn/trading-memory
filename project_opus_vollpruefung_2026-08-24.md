@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T12:56:44.484Z
+  modified: 2026-08-24T12:59:29.870Z
 ---
 
 24.08.2026: Levi hat erstmals Opus 5 (statt/zusätzlich zu Fable) für einen unabhängigen Vollcheck von Tradingstrategie + komplettem Regelwerk hinzugezogen ([[feedback_modellwahl_trading]] bisher: Sonnet=Live, Fable=Analyse — Opus jetzt als Cross-Check-Option ergänzt, aber noch nicht als fester Prozessbestandteil beschlossen).
@@ -334,6 +334,22 @@ Commit im NAS100-Repo (`tradingview-mcp`): `scripts/gate_check.cjs` (D-1-Umsetzu
 
 **Nicht angefasst (wie angewiesen):** D-5 (Früh-Exit-Stack vs. Testfenster-Enderkriterium) bleibt offen, separater nächster Schritt. Keine Änderung an der `phase`-Spalte in `trades.db` — per Direktabfrage verifiziert: #41/#42/#43 zeigen weiterhin `phase=3`.
 
+## Nachtrag 24.08.2026 (spät) — D-5 ENTSCHIEDEN — Option B, damit D-1 bis D-5 vollständig abgeschlossen
+
+**D-5 (aus N-12, Früh-Exit-Stack vs. Testfenster-Enderkriterium): ENTSCHIEDEN — Option B.** Levi hat sich für Fables Empfehlung entschieden: Das laufende Fenster verändert nicht gleichzeitig Entry-Seite (Retest-Zeitbox, Q-Score) UND Exit-Seite (Früh-Exit-Stack 8e/Punkt 12) — sonst wäre am Ende nicht mehr unterscheidbar, welcher Fix gewirkt hätte, und Punkt 14 (Regeländerungs-Tempo-Bremse) würde mitten im laufenden Fenster erneut verletzt.
+
+**Korrigiertes Ende-Kriterium für DIESES Fenster:** EV > 0% über die 15 Trades UND TP1-Quote im Zielkorridor 45-50% (Breakeven-Schwelle 29,8%, siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 0). TP2-Quote (>20%) wird weiterhin gemessen und berichtet, ist aber für DIESES Fenster **kein** Pass/Fail-Kriterium mehr — Grund: hängt zusätzlich vom unveränderten Früh-Exit-Stack ab, der Positionen unabhängig von der Entry-Qualität vor TP2 abschneiden kann.
+
+**Nachgelagerter, separater nächster Schritt:** Nach der Trade-15-Auswertung wird der Früh-Exit-Stack-Rückbau (Option A: 8e/Punkt 12 für ein eigenes Fenster lockern) als eigenständige Entscheidung mit eigenem Test behandelt — nicht als zusätzliche Änderung im aktuellen Fenster.
+
+**Nachgezogen in:** [[project_risikomanagement]] (Absatz "15-Trade-Test-Fenster", altes Ende-Kriterium durchgestrichen + neue Fassung ergänzt), [[project_studie_bessere_trades_2026-08-24]] (Sequenzplan Phase 2, Punkt 12 durchgestrichen + neuer Punkt 13 für den separaten Früh-Exit-Stack-Schritt), `MEMORY.md`.
+
+**Status:** D-5 entschieden und dokumentiert (keine Code-Änderung nötig — reine Kriteriums-/Dokumentationsfrage, `gate_check.cjs`/`trade_stats.cjs` prüfen das Fenster-Enderkriterium ohnehin nicht automatisiert). **Damit sind alle fünf Entscheidungen aus dem finalen Vollcheck (D-1 bis D-5) getroffen und umgesetzt.**
+
+### Git-Commit
+
+Memory-Änderungen (dieses Dokument + `project_risikomanagement.md`, `project_studie_bessere_trades_2026-08-24.md`, `MEMORY.md`) im separaten Memory-Repo committet, kein Push. Keine Skript-Änderung im NAS100-Repo nötig.
+
 ### Geprüft: Skript-Logik auf ein hartcodiertes "#41-50-Fenster"
 
 `scripts/gate_check.cjs`, `scripts/trade_stats.cjs` und `scripts/size.cjs` durchsucht — keines der Skripte enthält eine Trade-Nummern-basierte Fenstergrenze (`#41`, `#41-50` o.ä.). `trade_stats.cjs` gruppiert ausschließlich über die `phase`-Spalte in `trades.db` (`WHERE phase = :phase` bzw. automatische Aufschlüsselung nach den in der DB tatsächlich vorkommenden `phase`-Werten). `size.cjs` hat `PHASE_DEFAULTS` nur für die Phasen 1-3 definiert, kein Phase-4-Eintrag existiert. `gate_check.cjs` hat keinerlei Trade-Nummer- oder Phasen-Filterlogik. **Konsequenz: Diese Korrektur ist eine reine Dokumentationsfrage — kein Skript musste angepasst werden**, weil keines je eine eigenständige #41-50-Fenster-Logik implementiert hatte, die dem jetzt korrigierten Verständnis widersprochen hätte.
@@ -342,4 +358,4 @@ Commit im NAS100-Repo (`tradingview-mcp`): `scripts/gate_check.cjs` (D-1-Umsetzu
 
 Commit im NAS100-Repo (`tradingview-mcp`): keine Skript-Änderungen (siehe oben), kein Commit dort nötig. Memory-Änderungen (dieses Dokument + `project_risikomanagement.md`, `project_phase4_gates_2026-08-12.md`, `project_vision.md`, `MEMORY.md`) im separaten Memory-Repo committet, kein Push.
 
-**Status:** D-3 entschieden (Phase 3 verlängert bis #50, keine DB-Änderung), D-4 als gegenstandslos dokumentiert. D-5 weiterhin offen.
+**Status:** D-3 entschieden (Phase 3 verlängert bis #50, keine DB-Änderung), D-4 als gegenstandslos dokumentiert. D-5 siehe Nachtrag unten (entschieden — Option B).

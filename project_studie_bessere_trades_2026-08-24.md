@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T12:30:15.598Z
+  modified: 2026-08-24T12:59:07.508Z
 ---
 
 Siehe [[project_opus_vollpruefung_2026-08-24]] für die volle Historie des 24.08. (C-1 bis C-4, gate_check.cjs, die 11-Punkte-Umsetzung vom Abend). Diese Studie ist Opus' Entwurf vom späten 24.08., von Fable an der DB verifiziert und an mehreren Stellen weiterentwickelt/korrigiert — als EIN Dokument, [Fable-Ergänzung]/[Fable-Korrektur] markiert die Stellen mit eigenem Beitrag.
@@ -135,7 +135,8 @@ Die von Opus benannten Schwächen (n=18, retrospektive A/B-Klassifikation mit 4 
 9. Q-Score (Trades 1-8 nur berechnet/protokolliert, kein Veto, wie von Opus vorgesehen) läuft ab jetzt als zusätzliche gemessene Dimension **im bereits laufenden 8b1-/Sizing-Fenster** (beide seit 24.08.2026 aktiv) — kein separater Zähler, ein gemeinsames Ende. Retest-Zeitbox und Q-Score starten gemeinsam, weil beide auf denselben kommenden Trades gemessen werden.
 10. Nach Trade 8 (gemeinsame Zählung): Sichtprüfung, keine Entscheidung.
 11. Nach Trade 15 (gemeinsame Zählung): Auswertung A-E gemäß Opus' vorab festgelegten Entscheidungsregeln (Q-Score hartes Gate / gestrichen / verlängern; Faktoren einzeln raus bei Differenz <8pp; Reifegrad-Quartile; Runway gegen MFE; Fehlausschluss-Abbruchbedingung über `skipped_setups`), UND gleichzeitig 13.1s eigene Review-Pflicht (n≥2-3 echte Zeitbox-Fälle) — beide gemeinsam, nicht sequenziell. Zusätzlich: TP1-Quote gegen den verifizierten Zielkorridor 45-50% und die 29,8%-Breakeven-Schwelle aus Abschnitt 0.
-12. Am Ende des Fensters explizit auch prüfen, ob die TP2-Quote (Ziel >20%) sich verbessert hat — wenn nicht, verweist das gemäß Abschnitt 5 auf den separaten, hier nicht gelösten Früh-Exit-Stack-Rückbau als nächsten Schritt, nicht auf eine weitere Q-Score-Iteration.
+12. ~~Am Ende des Fensters explizit auch prüfen, ob die TP2-Quote (Ziel >20%) sich verbessert hat — wenn nicht, verweist das gemäß Abschnitt 5 auf den separaten, hier nicht gelösten Früh-Exit-Stack-Rückbau als nächsten Schritt, nicht auf eine weitere Q-Score-Iteration.~~ **KORRIGIERT 24.08.2026 (Levi-Entscheidung D-5, Option B, siehe [[project_opus_vollpruefung_2026-08-24]]):** TP2-Quote (>20%) ist für DIESES Fenster kein Pass/Fail-Kriterium mehr, sondern nur noch eine berichtete Beobachtungsgröße — Grund: hängt zusätzlich vom unveränderten Früh-Exit-Stack (8e/Punkt 12) ab, der unabhängig von den heutigen Entry-Verbesserungen greift. Pass/Fail für dieses Fenster läuft jetzt über EV>0% UND TP1-Quote im Zielkorridor 45-50% (siehe Abschnitt 0/Punkt 11).
+13. **NEU (D-5):** Nach Trade-15-Auswertung, als eigener nächster Schritt: Entscheidung über Früh-Exit-Stack-Rückbau (Opus' Option A, 8e/Punkt 12 lockern), mit eigenem Test — nicht Teil des aktuellen Fensters.
 
 Mindest-Zellenbesetzung n≥5 je Zelle bleibt gültig (Opus), sonst Fenster auf 25-30 Trades verlängern statt mit dünnen Zellen zu entscheiden.
 
