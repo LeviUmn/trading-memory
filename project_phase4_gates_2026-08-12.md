@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: session-2026-08-12
-  modified: 2026-08-12T11:15:40.059Z
+  modified: 2026-08-24T10:46:16.842Z
 ---
 
 ## Auftrag und Kontext
@@ -40,7 +40,7 @@ Ersetzt die bisherige Phase-4-Definition in [[project_risikomanagement]] ("Phase
 | EV/Trade (blended #36-50) | ≥ 0,5% | Nahe am einzigen bisher demonstrierten Niveau (Phase 2: 0,611%), das laut Vollprüfung das Einkommensziel überhaupt erreichbar macht |
 | Win-Rate | ≥ 55% | Zwischen dem bisherigen Hochstufen-Minimum (45-50%) und Phase 2 (70%) |
 | DB-Sync / Regelbruch-Tracking | 100%, `trades.db` einzige Quelle | Fortsetzung des am 12.08.2026 erledigten Punkt-2-Fixes (siehe [[project_fable_vollpruefung_phase1-3_2026-08-12]]) |
-| Monte-Carlo-Ergebnis (n=50) | Reales Endergebnis nicht in den unteren 20% der simulierten Verteilung | Aus [[project_robustheit_monte_carlo]], jetzt als konkretes Ergebnis-Kriterium statt nur "MC durchgeführt" |
+| Monte-Carlo-Ergebnis (n=50) | Realer maximaler Drawdown nicht in den oberen (schlechtesten) 20% der simulierten Drawdown-Verteilung | Aus [[project_robustheit_monte_carlo]], jetzt als konkretes Ergebnis-Kriterium statt nur "MC durchgeführt". **C-4-Fix (24.08.2026):** ursprünglich €-Endergebnis, siehe Änderungsvermerk unten |
 
 **Explizite Kopplung — alle sechs Kriterien sind UND-verknüpft, nicht optional:** Nur wenn ALLE sechs Kriterien erfüllt sind, ist der Übergang zu 10.000€/Trade bzw. 50k-Realkapital freigegeben.
 
@@ -70,7 +70,7 @@ Die VOLLE Infrastruktur (narrative Wochen-/Monatsabschluss-Dokumente, Drawdown-T
 
 ## 6. Nachtrag 12.08.2026 — Monte-Carlo-Methodik vollständig spezifiziert
 
-Die vier zuvor offenen Ambiguitäten der Monte-Carlo-Methode (Gate-Metrik, 20%-Schwelle, Permutationstest-vs-Bootstrap-Benennung, Datenbasis `trades.db`/`result_eur`) sind jetzt in [[project_robustheit_monte_carlo]] vollständig aufgelöst (Nachtrag 12.08.2026 dort) — reine Text-Klarstellung, kein Skript gebaut, Build-Trigger für Abschnitt 5 oben unverändert.
+Die vier zuvor offenen Ambiguitäten der Monte-Carlo-Methode (Gate-Metrik, 20%-Schwelle, Permutationstest-vs-Bootstrap-Benennung, Datenbasis `trades.db`) sind jetzt in [[project_robustheit_monte_carlo]] vollständig aufgelöst (Nachtrag 12.08.2026 dort) — reine Text-Klarstellung, kein Skript gebaut, Build-Trigger für Abschnitt 5 oben unverändert. **Korrektur 24.08.2026:** Die Datenbasis-Spalte wurde dort zusätzlich von `result_eur` auf `result_pct` umgestellt (siehe Nachtrag 8 unten UND [[project_robustheit_monte_carlo]] Punkt 4) — die ursprüngliche `result_eur`-Festlegung war selbst fehlerhaft (mischt Positionsgrößen-Skalierungshistorie mit Sequenzrobustheit).
 
 ## 7. Nachtrag 12.08.2026 — Risiko-Limit-Prüfung
 
@@ -86,3 +86,17 @@ Fable-Gegencheck des bestehenden 2%-Kapitaleinsatz-Limits ([[project_risikomanag
 - **Für #41-50 (aktuelles Fenster, Phase-3-Größe 4.000-5.000€): keine Änderung** — das Risiko-Limit bindet hier ohnehin nicht, eine Anpassung wäre Kosmetik.
 - **Für den nächsten echten Skalierungsschritt (10.000€-Positionstest bzw. 50k-Realkapital, frühestens nach bestandenem #50-Review): interim 1,5% statt 2%** als Risiko-Limit — abgeleitet vom bisher schlechtesten realen Fall (#34, hochgerechnet auf Schock-Tier-Maximum plus Sicherheitspuffer).
 - **Volle 2% erst freigeben, wenn BEIDE Bedingungen erfüllt sind:** (a) die sechs #50-Gates (Abschnitt 3) bestanden, UND (b) das Risiko-Limit hat in der Praxis mindestens einmal real gebunden (nicht nur die Positionsformel im Kopf/auf dem Papier durchgerechnet) — damit belegt ist, dass die MIN-Logik unter echtem Marktdruck tut, was sie auf dem Papier tut.
+
+## 8. Nachtrag 24.08.2026 — C-4-Fix: Gate 6 auf Drawdown-Metrik umgestellt
+
+Teil der Opus-Vollcheck-Gegenprüfung vom 24.08.2026 ([[project_opus_vollpruefung_2026-08-24]]). Bug verifiziert: Bei fixer Positionsgröße (Phase 3/4 laufen beide bei konstanter €-Größe pro Trade, siehe Abschnitt 2 oben) ist die Summe aller `result_eur`-Werte **kommutativ** — ein Permutationstest ohne Zurücklegen (siehe [[project_robustheit_monte_carlo]]) verändert nur die Reihenfolge der Trades, nie ihre Summe. Das reale €-Endergebnis liegt deshalb in JEDER Permutation exakt am selben Perzentil (dem einzig existierenden), niemals in den unteren 20% — Gate 6 konnte mit der alten Metrik unter den gegebenen Bedingungen (feste Positionsgröße) rein rechnerisch nie fehlschlagen, unabhängig davon, wie schlecht/gut die echte Strategie ist.
+
+**Fix:** Gate-Metrik von "€-Endergebnis" auf "**maximaler Drawdown**" umgestellt (Tabelle in Abschnitt 3 oben aktualisiert). Der maximale Drawdown EINER Permutation hängt sehr wohl von der Reihenfolge ab (eine Sequenz mit den Verlust-Trades gebündelt am Anfang erzeugt einen tieferen Drawdown als dieselben Trades verteilt) — die Metrik ist unter Permutation tatsächlich variabel und kann das reale Ergebnis damit auch tatsächlich als Ausreißer (obere/schlechteste 20%) einstufen. Schwelle bleibt bei 20%, nur an das andere Ende gespiegelt (nicht "unterste 20% des Endergebnisses", sondern "oberste/schlechteste 20% des Drawdowns").
+
+**Warum nicht Bootstrap (Opus' ursprünglich erste Alternativ-Option):** Ein Wechsel auf Bootstrap-mit-Zurücklegen hätte den Kommutativitäts-Bug nicht behoben (die Summe bliebe bei fixer Positionsgröße weiterhin invariant über jede Ziehungs-Reihenfolge) UND hätte zusätzlich die bereits in [[project_robustheit_monte_carlo]] Nachtrag Punkt 3 explizit begründete Methodenwahl (Permutationstest, kein Bootstrap — Sequenzrobustheit ist die Frage, nicht Stichproben-Unsicherheit) rückgängig gemacht, ohne den eigentlichen Fehler zu adressieren. Der Metrik-Wechsel (Drawdown statt Endergebnis) behebt den Bug direkt an der Wurzel, ohne die bereits begründete Testmethode anzutasten.
+
+**How to apply:** Sobald `gate_check.cjs`/eine künftige Monte-Carlo-Implementierung gebaut wird (Build-Trigger unverändert, siehe Abschnitt 5), pro Permutation den maximalen Drawdown (nicht die Endsumme) berechnen und das reale Ergebnis dagegen einordnen.
+
+## 9. Nachtrag 24.08.2026 — Datenbasis zusätzlich auf `result_pct` umgestellt
+
+Ergänzt den C-4-Fix in Abschnitt 8 (Gate-Metrik = Drawdown statt Endergebnis) um eine zweite Korrektur an derselben Stelle: Die Datenbasis-Spalte für den zukünftigen Drawdown wechselt von `result_eur` auf `result_pct` (Positions-%). Grund: Positionsgrößen-Spanne über n=43 ist 399€-5.020,85€ (Faktor 12,6) — ein €-Drawdown würde die Skalierungshistorie (Phase 1 vs. Phase 3 vs. 15-Trade-Test-Fenster, siehe [[project_risikomanagement]]) mitmessen statt reiner Sequenzrobustheit. Volle Begründung in [[project_robustheit_monte_carlo]] Punkt 4. Das reale €-Endergebnis bleibt diagnostisch sichtbar, hat aber keine Gate-Funktion mehr.

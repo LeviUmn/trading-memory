@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-12T09:51:14.791Z
+  modified: 2026-08-24T10:45:45.918Z
 ---
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
@@ -70,6 +70,14 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 **Phase 4 neu definiert (ergänzt 31.07.2026, User-Entscheidung; Trade-Anzahl korrigiert 31.07.2026 nach User-Korrektur — Phase 4 hat wie die anderen Phasen eine feste Trade-Range, 5 Trades):** Ersetzt die alte "Vollsystem ab Trade 36"-Zeile. Phase 4 startet erst NACH Phase-3-Abschluss (#35) UND einem großen, mehrfach hinterfragten Gesamt-Review über alle bisherigen Phasen (siehe [[project_vision]] für den bereits dokumentierten Review-Fahrplan vor UnusualWhales). Zwei Bedingungen für Phase 4:
 1. **UnusualWhales erfolgreich angebunden** (konditional — siehe [[project_vision]] Priorisierung GEX/Max Pain zuerst; falls die Integration technisch/inhaltlich scheitert, wird Phase 4 ohne UW mit reinem 10k€-Kapitaltest fortgesetzt, kein Blocker für den Kapital-Fortschritt)
 2. **10.000€-Positionsgröße** als eigener Bewährungsschritt, bevor der große Sprung auf 50.000€ Realkapital kommt
+
+**15-Trade-Test-Fenster: Positionsgröße temporär auf 2.000-2.500€ reduziert (ergänzt 24.08.2026, Opus-Vollcheck-Umsetzung Punkt 8, siehe [[project_opus_vollpruefung_2026-08-24]]):** Ersetzt/überlagert die Phase-3-Positionsgröße (4.000-5.000€, siehe Tabelle unten) für die kommenden Trades. `scripts/size.cjs` PHASE_DEFAULTS[3] wurde entsprechend auf `posMin: 2000, posMax: 2500` gesetzt (Original-Werte 4.000-5.000€ bleiben im Skript als `ORIGINAL_PHASE_3` dokumentiert, für den Rückbau ohne Git-Archäologie).
+
+- **Beginn:** 24.08.2026, ab dem nächsten Trade nach dieser Umsetzung.
+- **Grund:** Phase-3-EV ist nach dem C-1-Fix (korrigierter `result_pct`-Bug #42/#43) negativ (−0,059%/Trade, siehe [[project_opus_vollpruefung_2026-08-24]]) — Risiko wird reduziert, während Exit-/TP-Regelwerk (8b1-Umbau, siehe [[feedback_chartanalyse]] Punkt 8b1/10) im selben Fenster nachgebessert und validiert wird.
+- **Ende-Kriterium (BEIDE müssen erfüllt sein):** EV > 0% über die nächsten 15 Trades UND TP2-Quote > 20% in diesem Fenster (Referenz: TP2-Quote lag über 43 Trades bisher nur bei 7%, siehe [[project_opus_vollpruefung_2026-08-24]]).
+- **Danach:** Zurück auf reguläre Phase-3-Größe (4.000-5.000€) — `scripts/size.cjs` PHASE_DEFAULTS[3] auf `ORIGINAL_PHASE_3` zurücksetzen, diesen Absatz als abgeschlossen markieren (nicht löschen).
+- **Verhältnis zum #50-Review/Phase-4-Gates:** Unabhängig von diesem 15-Trade-Fenster — die sechs #50-Gates aus [[project_phase4_gates_2026-08-12]] laufen weiter über den vollen #36-50-Bereich, dieses Fenster ist eine zusätzliche, engere Sizing-Beschränkung innerhalb dieses Bereichs, kein Ersatz dafür.
 
 **Addendum 12.08.2026 (Fable-Vollprüfung Phase 1-3, Punkt 3 der Handlungsempfehlungen, von Levi genehmigt — Details siehe [[project_phase4_gates_2026-08-12]]):** Die obige Tabelle und der Absatz "Phase 4 neu definiert" (31.07.2026) bleiben als historischer Stand stehen, gelten aber ab sofort als überholt durch folgende Neustaffelung:
 - **Phase 3 verlängert auf #26-40** (statt #26-35) — die zusätzlichen 5 Trades (#36-40) laufen bei Schock-Tier-Fällen (Gate 8c/8d, siehe [[feedback_chartanalyse]]) zu reduzierter Größe (~2.000-2.500€), sonst zu voller Phase-3-Größe (4.000-5.000€).

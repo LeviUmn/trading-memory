@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-21T15:18:21.751Z
+  modified: 2026-08-24T11:23:12.207Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -84,6 +84,24 @@ War der SL primär durch einen Wick/Spike ausgelöst (kein 5-Min-Kerzenschluss j
 **How to apply:** Bei jedem SL-Hit im Tagesabschluss/Sofort-Review zuerst prüfen, ob der letzte relevante 5-Min-Kerzenschluss VOR dem SL-Hit bereits jenseits des SL-Levels lag (dann: bestätigter Schluss, kein reiner Wick) oder ob der SL nur durch das Hoch/Tief innerhalb einer Kerze berührt wurde, ohne dass der Schlusskurs selbst das Level bestätigte (dann: Wick/Spike). Danach den Punkt-11-Stand zum exakten SL-Zeitpunkt dokumentieren (nicht rückwirkend zum späteren, ggf. schon weiter entwickelten Stand). Fehlt diese Zeile bei einem SL-Hit-Trade, gilt der Tagesabschluss als unvollständig — gleiche Behandlung wie die bestehende "Regelkonformität geprüft"-Zeile.
 
 **Abgrenzung zu [[feedback_live_trading]] Punkt 11 (Volumen-Kriterium):** Das dort am 21.08.2026 ergänzte fünfte, dämpfende Volumen-Kriterium wirkt VOR/WÄHREND der Position (soll einen verfrühten Dreh-Vorschlag verhindern). Diese Regel hier wirkt NACH dem SL-Hit, in der Nachbesprechung — beide entstanden aus demselben Fable-Review, adressieren aber unterschiedliche Zeitpunkte im Prozess.
+
+## Auflösen offener skipped_setups-Einträge (ergänzt 24.08.2026 Abend, Phase 0 der Studie "bessere Trades")
+
+Vierter Pflichtpunkt beim Tagesabschluss, parallel zu "DB-Sync", "Regelkonformität geprüft" und "SL-Hit-Typ" oben: Für JEDES am Handelstag mit `scripts/add_skipped_setup.cjs` erfasste ausgelassene Setup (Tabelle `skipped_setups`, siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 6) muss `hypothetisches_ergebnis` noch am selben Tagesabschluss nachgetragen werden — nicht offen bleiben.
+
+**How to apply:** Pro offenem Eintrag mit `hypothetisches_ergebnis IS NULL` und `datum` = heute: `data_get_ohlcv` für den Rest der Session nach dem geplanten `uhrzeit`-Zeitpunkt prüfen — wäre der geplante Preis (`geplanter_entry`/`geplanter_sl`/`geplantes_tp1`) tatsächlich TP1, TP2, SL oder keins von beidem (`WEDER_NOCH`) getroffen worden? Danach direkt per DB-Write eintragen:
+
+```
+node -e "const {getDb,updateSkippedResult}=require('./scripts/trade_db.cjs'); const db=getDb(); updateSkippedResult(db, <id>, '<TP1|TP2|SL|WEDER_NOCH>'); db.close();"
+```
+
+Kein separates Update-Skript nötig für diesen einmaligen Nachtrag — `updateSkippedResult()` aus `trade_db.cjs` reicht. Offene Einträge vorher mit `node -e "const {getDb,allSkippedSetups}=require('./scripts/trade_db.cjs'); console.log(allSkippedSetups(getDb()).filter(s=>!s.hypothetisches_ergebnis))"` auflisten.
+
+**Pflicht-Abschlusszeile:** `Skipped-Setups aufgelöst: JA (X von X) / NEIN (kein Fall heute)`.
+
+**Why:** Genau diese Zahl (was hätten ausgelassene Setups gebracht) beantwortet Levis eigentliche Frage künftig per Query statt per Gedächtnis — bleibt sie unbefüllt, entsteht dieselbe stille Datenlücke, die bei `tp1_hit` für #31/#32 bereits einmal passiert ist (siehe [[project_studie_bessere_trades_2026-08-24]]).
+
+**Abgrenzung:** Kein Voll-Check-Schritt, keine neue Pflichtzeile im 1-Minuten-Loop — ausschließlich ein Tagesabschluss-Schritt, analog zu den drei bestehenden Pflichtpunkten oben.
 
 ## Git-Backup nach jedem Tagesabschluss (ergänzt 23.07.2026)
 

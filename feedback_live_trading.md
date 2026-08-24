@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-22T08:44:41.985Z
+  modified: 2026-08-24T11:23:28.740Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -87,9 +87,10 @@ Am Ende JEDES Voll-Checks zusätzlich zwingend:
     NIE aus dem Gedächtnis neu formulieren/als Tabelle umbauen. Letzte Zeile immer
     "Format: Fließtext ✓".
 (2) x_last_fetch.json lesen, Minuten seit letztem Tweet-Fetch aus dem Zeitstempel berechnen
-    (NICHT mental mitzählen) → bei ≥10 Min Pflicht-Fetch + Pflicht-Ausgabezeile
-    "Tweet-Check: ..." (siehe Punkt 9) — IMMER ausgeben, auch bei "nichts Neues" oder
-    "noch nicht fällig", nie stillschweigend weglassen.
+    (NICHT mental mitzählen) → bei ≥60 Min (Schwelle geändert 24.08.2026, siehe Punkt 9)
+    ODER anlassbezogen bei einem bekannten Kalender-Release innerhalb ±15 Min Pflicht-Fetch +
+    Pflicht-Ausgabezeile "Tweet-Check: ..." (siehe Punkt 9) — IMMER ausgeben, auch bei
+    "nichts Neues" oder "noch nicht fällig", nie stillschweigend weglassen.
 Fehlt eine der beiden Zeilen im Output, gilt der Voll-Check als NICHT durchgeführt —
 exakt dieselbe Behandlung wie beim fehlenden 1H-/QQQ-Schritt oben.
 ```
@@ -104,18 +105,20 @@ Diese Formulierung wurde am 15.07.2026 live erarbeitet (Cron-Job-Korrektur 16:26
 **Bezug zu Punkt 2a:** Das bringt die Praxis zurück zu dem, was Punkt 2a von Anfang an vorsah (`CronCreate` mit `*/1 * * * *`), aber zwischenzeitlich durch `ScheduleWakeup` ersetzt wurde. Ab jetzt gilt `CronCreate` als das verbindliche Standard-Werkzeug für den Loop, `ScheduleWakeup` nur noch als Fallback, falls `CronCreate` in einer Session nicht verfügbar ist (dann gilt die 2-Minuten-Realität aus dem ScheduleWakeup-Test als Notlösung, nicht als neues Ziel).
 
 **Wichtig — nur der Wecker-Mechanismus ändert sich, der Inhalt jedes Ticks bleibt exakt wie bisher dokumentiert:** Der isolierte Cadence-Test lief bewusst mit reduziertem Inhalt (nur Zahlen/Screenshot), um ausschließlich den Timing-Mechanismus zu prüfen. Das war NUR für den Test. Im echten Live-Trading gelten unverändert:
-- Tweet-Fetch der 3 X-Accounts bei jedem 2. Voll-Check, alle 10 Minuten (siehe weiter unten, angepasst 10.07.2026)
+- Tweet-Fetch der 3 X-Accounts alle 60 Minuten + anlassbezogen bei bekanntem Kalender-Release (±15 Min), siehe weiter unten (Schwelle geändert 24.08.2026, ursprünglich 10 Minuten/angepasst 10.07.2026, Mechanismus unverändert)
 - Volle Setup-Scan-Checkliste beim Voll-Check, solange keine Position offen ist (Punkt 9, [[feedback_chartanalyse]])
 - Positions-Kasten mit SL/TP1/TP2 bei jedem Status-Update, sobald eine Position offen ist (Punkt 8, [[feedback_positions_status_pflicht]])
 - Entscheidungsbaum-Format in der heißen Phase (Punkt 7)
 
 Diese Inhaltsregeln sind vom Wecker-Mechanismus komplett unabhängig — `CronCreate` bestimmt nur WANN reagiert wird, nicht WAS in der Reaktion steht. Keine dieser Regeln wird durch den Mechanismus-Wechsel verkürzt oder ersetzt.
 
-**X-Tweets als Bestandteil jedes 2. Voll-Checks, alle 10 Minuten (ergänzt 10.07.2026, angepasst 10.07.2026 nach Live-Test):** Bisher wurden die 3 X-Accounts (DeItaone/KobeissiLetter/zerohedge) nur beim Session-Update (Schritt 2, siehe [[feedback_session_update]]) und ad-hoc auf Nachfrage abgerufen — dazwischen konnte über Stunden eine marktbewegende Breaking-News (Fed-Kommentar, Geopolitik) unbemerkt bleiben. Ursprünglich bei JEDEM Voll-Check vorgesehen (alle 5 Min), nach dem Live-Loop-Test aber auf **jeden 2. Voll-Check** (alle 10 Min) reduziert: `get_users_posts` für alle 3 Accounts seit dem `x_last_fetch.json`-Timestamp abrufen und den Timestamp danach aktualisieren, aber nur bei jedem zweiten Voll-Check-Durchlauf, nicht bei jedem.
+**X-Tweets als Bestandteil des Voll-Checks, alle 60 Minuten + anlassbezogen (ergänzt 10.07.2026, angepasst 10.07.2026 nach Live-Test, Schwelle geändert 24.08.2026):** Bisher wurden die 3 X-Accounts (DeItaone/KobeissiLetter/zerohedge) nur beim Session-Update (Schritt 2, siehe [[feedback_session_update]]) und ad-hoc auf Nachfrage abgerufen — dazwischen konnte über Stunden eine marktbewegende Breaking-News (Fed-Kommentar, Geopolitik) unbemerkt bleiben. Ursprünglich bei JEDEM Voll-Check vorgesehen (alle 5 Min), nach dem Live-Loop-Test auf jeden 2. Voll-Check (alle 10 Min) reduziert, **ab 24.08.2026 (Opus-Vollcheck-Umsetzung Punkt 11, siehe [[project_opus_vollpruefung_2026-08-24]]) weiter auf alle 60 Minuten** (jeden 12. Voll-Check) **+ anlassbezogen bei einem bekannten Kalender-Release (±15 Min um den Release-Zeitpunkt, unabhängig vom 60-Min-Takt)** reduziert: `get_users_posts` für alle 3 Accounts seit dem `x_last_fetch.json`-Timestamp abrufen und den Timestamp danach aktualisieren.
 
-**Why:** User-Vorschlag 10.07.2026: "damit falls was Neues gekommen ist, was die Märkte dreht, wir sofort wissen" — der Voll-Check ist ohnehin der Punkt, an dem laut Punkt 9 bewusst etwas mehr Zeit investiert wird. Korrektur nach dem Live-Test (gleicher Tag): User-Feedback "alle 5 Minuten macht keinen Sinn, kostet zu viel Speed" — 10 Minuten reichen, um bei Breaking News zeitnah informiert zu sein, ohne den Voll-Check unnötig zu verlangsamen.
+**Why (10 Min → 60 Min, 24.08.2026):** Die am 27.07.2026 gebaute Anti-Drift-Infrastruktur (`x_last_fetch.json`-Fälligkeitsprüfung, Pflicht-Ausgabezeile "Tweet-Check", siehe [[feedback_prozessfehler_27_07_fuer_fable]]) bleibt als MECHANISMUS vollständig bestehen — nur der Schwellenwert ändert sich. Nur die Frequenz wird reduziert, weil sich in der Praxis gezeigt hat, dass 10 Minuten für den tatsächlichen Nutzen (Breaking News zeitnah erfassen) unnötig eng war, während der anlassbezogene Zusatz-Trigger (bekannter Kalender-Release ±15 Min) genau die Fälle abdeckt, in denen echte Zeitkritikalität besteht — ein Makro-Release kündigt sich an, eine beliebige Zufalls-Breaking-News nicht, dort bleibt der 60-Min-Grundtakt die Absicherung. Fable stimmte diesem Auftrag mit der Auflage zu, dass die Infrastruktur selbst (nicht nur der Zahlenwert) unverändert bleibt.
 
-**How to apply (korrigiert 13.07.2026 — ersetzt die alte "intern mitzählen"-Anweisung, die zum verpassten 16:00-Tweet-Fetch führte):** NICHT mehr per eigener Zählung abwechseln — stattdessen die per Punkt 9a per `Bash date` ermittelte echte Minute nehmen: Minute % 10 == 0 → Tweet-Fetch einbauen, sonst entfällt dieser Schritt (nur Screenshot + finale Kerze + MTF + Musterprüfung). Das macht den Tweet-Rhythmus von derselben verlässlichen Zeitquelle abhängig wie den Voll-Check-Rhythmus selbst, statt einer separaten, fehleranfälligen Zählung.
+**Why (ursprünglich, 10.07.2026):** User-Vorschlag 10.07.2026: "damit falls was Neues gekommen ist, was die Märkte dreht, wir sofort wissen" — der Voll-Check ist ohnehin der Punkt, an dem laut Punkt 9 bewusst etwas mehr Zeit investiert wird. Korrektur nach dem Live-Test (gleicher Tag): User-Feedback "alle 5 Minuten macht keinen Sinn, kostet zu viel Speed" — 10 Minuten reichen, um bei Breaking News zeitnah informiert zu sein, ohne den Voll-Check unnötig zu verlangsamen.
+
+**How to apply (korrigiert 13.07.2026 — ersetzt die alte "intern mitzählen"-Anweisung, die zum verpassten 16:00-Tweet-Fetch führte; Schwelle geändert 24.08.2026):** NICHT per eigener Zählung abwechseln — stattdessen die per Punkt 9a per `Bash date` ermittelte echte Minute nehmen: Minute % 60 == 0 → Tweet-Fetch einbauen. ZUSÄTZLICH unabhängig vom 60-Min-Takt: Liegt die aktuelle Uhrzeit innerhalb ±15 Min eines bekannten Kalender-Release (aus dem Session-Start-Kalender-Check, siehe [[feedback_session_update]]) → ebenfalls Tweet-Fetch einbauen, auch wenn der 60-Min-Takt gerade nicht fällig ist. Sonst entfällt dieser Schritt (nur Screenshot + finale Kerze + MTF + Musterprüfung). Das macht den Tweet-Rhythmus weiterhin von derselben verlässlichen Zeitquelle abhängig wie den Voll-Check-Rhythmus selbst, statt einer separaten, fehleranfälligen Zählung.
 
 **How to apply:** Tweet-Fetch läuft parallel zu den anderen Voll-Check-Tools (Screenshot/MTF-Wechsel/Pattern-Check), nicht sequenziell danach. Nur bei echten marktbewegenden Inhalten eine Meldung im kompakten Format (siehe Punkt 4a: nur bei echten News, kein Fließtext) — bei "nichts Neues/nichts Relevantes" reicht ein sehr kurzer Vermerk oder gar keine explizite Erwähnung, keine Tweet-Liste ausgeben.
 
@@ -300,6 +303,8 @@ Seit 03.07.2026 läuft ein 2-Pane-Layout (`2v`): Pane 0 = NAS100 (Preis/Entry, E
 **Laufende Ampel-Zeile während der Prüfung (ergänzt 21.08.2026, Fable-Review nach Trade #42, Levi-Entscheidung):** Zwischen dem Dual-Gate-Trigger (Schritt 1) und dem fertigen PASS/FAIL (Schritt 3) vergehen im Live-Loop reale Sekunden bis Minuten, in denen bisher NICHTS ausgegeben wurde — sichtbar war nur "Dual-Gate ✓" und danach, mit Verzögerung, das fertige Ergebnis. Genau dieses stumme Zwischenfenster war der Tatort beider bisherigen 7b1-Regelbrüche (#36, #39): Dual-Gate war schon sichtbar erfüllt, die RR-/TP-Realismus-Prüfung lief noch, wirkte nach außen aber wie "fertig, nur noch Order absetzen". Ab sofort läuft ab dem Moment, in dem Schritt 2 beginnt, bis Schritt 3 abgeschlossen ist, eine explizite Zwischenzeile im Output: `RR-Check läuft — NOCH NICHT einsteigen`. Diese Zeile ersetzt nicht die finale Pflichtzeile aus Schritt 3, sie schließt nur die bisher stumme Lücke davor.
 
 **Why:** Levi hat sich bewusst GEGEN eine zusätzliche aktive Bestätigungsschleife entschieden (würde Tempo kosten, er trägt das Risiko, den Hinweis zu übersehen, selbst) und FÜR eine reine, parallel mitlaufende Statuszeile — kein neuer Wartezustand, kein Abbruch der Geschwindigkeit, nur sichtbare Kennzeichnung eines ohnehin schon bestehenden Zwischenzustands.
+
+**Klarstellung — womit die Entry-Freigabe geprüft wird (ergänzt 24.08.2026 Abend, Studie "bessere Trades", siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 4):** Schritt 2 (RR-/TP-Realismus-Prüfung) stützt sich auf `scripts/gate_check.cjs` — das Skript rechnet RR-Gate, TP-Realismus (8b1), SL-Mindestdistanz/Schock-Tier (8c) und SL-Cluster (8c2) deterministisch durch, bevor die Pflichtzeile unten mit ✓ ausgegeben wird. Bislang war das nirgends explizit an dieser Stelle verankert, obwohl 7b1 die Zusammenfassungs-/Freigabezeile für genau diese Prüfungen ist — die Klarstellung schließt diese Lücke, keine neue Prüfung.
 
 **Pflicht-Ausgabezeile (vor jeder Entry-Bestätigung, ergänzt die bestehenden Zeilen aus 8b1/8c, ersetzt sie nicht):**
 `Entry-Freigabe: Dual-Gate ✓ + RR-Gate ✓ + TP-Realismus ✓ — PASS` (bei fehlendem Baustein stattdessen: `Entry-Freigabe: ... — NICHT PASS, Grund: <fehlender Baustein>`)
