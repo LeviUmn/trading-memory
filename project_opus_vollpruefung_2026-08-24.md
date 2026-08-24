@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T12:37:02.586Z
+  modified: 2026-08-24T12:51:14.611Z
 ---
 
 24.08.2026: Levi hat erstmals Opus 5 (statt/zusätzlich zu Fable) für einen unabhängigen Vollcheck von Tradingstrategie + komplettem Regelwerk hinzugezogen ([[feedback_modellwahl_trading]] bisher: Sonnet=Live, Fable=Analyse — Opus jetzt als Cross-Check-Option ergänzt, aber noch nicht als fester Prozessbestandteil beschlossen).
@@ -289,3 +289,39 @@ Problem: Das 15-Trade-Fenster-Enderkriterium verlangt TP2-Quote >20% (Baseline 7
 `0181161` (Hauptfixes N-3 bis N-22 außer D-1/D-2-Scaffolding) und `be67d9e` (D-1/D-2-Vorbereitung) — beide im NAS100-Repo (`tradingview-mcp`), kein Push. Memory-Änderungen (dieses Dokument + `feedback_chartanalyse.md`, `feedback_live_trading.md`, `feedback_tagesabschluss.md`, `project_studie_bessere_trades_2026-08-24.md`, `MEMORY.md`) folgen im separaten Memory-Repo-Commit, ebenfalls kein Push.
 
 **Status:** Alle 22 N-Punkte bearbeitet (17 direkt umgesetzt, 5 in D-1/D-2 nur strukturell vorbereitet, da D-1 unentschieden). Alle 5 D-Punkte vorbereitet, KEINE davon entschieden — wartet auf Levi.
+
+## Nachtrag 24.08.2026 (Nacht, spät) — D-1 ENTSCHIEDEN UND UMGESETZT + neues 8b2-TP2-Gate
+
+**D-1 (Zonenabhängige RR-Schwelle für 8b1 Schritt 5): ENTSCHIEDEN.** Levi hat sich gegen alle vier vorbereiteten Optionen (A1/A2/B/C) im engeren Sinne entschieden und stattdessen eine fünfte, einfachere Variante gewählt: RR-Floor für die TP1-Kandidatenauswahl **pauschal zurück auf die ursprüngliche 8b-Baseline RR≥1:1 für BEIDE Zonen** (keine zonenabhängige Differenzierung wie in Fables Option A1, die Zone 1 bei 1:1 und Zone 2 bei 1,5:1 belassen hätte). Die geometrische Drei-Zonen-Distanzstruktur selbst (Zone 1 ≤2×ATR voll, Zone 2 2-3×ATR halbe Position, Zone 3 >3×ATR Ausschluss) bleibt dabei **unverändert und unaufgeweicht** — nur der zusätzliche RR-Aufschlag über die 8b-Baseline hinaus entfällt wieder.
+
+**Umgesetzt in `scripts/gate_check.cjs`:** `TP1_SELECTION_RR_THRESHOLD` von `{1: null, 2: null}` auf `{1: 1.0, 2: 1.0}` gesetzt. Da dieser Wert jetzt identisch mit dem bereits bestehenden 8b-Baseline-RR-Gate (`rrGate`, RR≥1:1) ist, bleibt `tp1SelectionRrPreview` bewusst eine reine, jetzt strukturell redundante Diagnose-/Vorschauzeile statt in ein zusätzliches eigenständiges Gate umgebaut zu werden (ein zweites Gate mit identischem Schwellenwert hätte keinen Erkenntniswert gebracht — N-2 ist damit implizit durch die Wertegleichheit erledigt, nicht durch ein neues Gate). Kopfkommentar der Datei vollständig aktualisiert (Gate-Liste, D-1-Status, Parameterdoku).
+
+**`feedback_chartanalyse.md` 8b1 Schritt 5/6 aktualisiert:** RR-Schwelle im Fließtext von 1,5:1 zurück auf 1:1 geändert, neuer Änderungsvermerk "24.08.2026 (Nacht, spät) — D-1" mit Begründung ergänzt (alter Text bleibt als Historie stehen, nicht überschrieben — gleiche Konvention wie bei allen anderen Korrekturen in diesem Dokument).
+
+### NEU: 8b2 TP2-Realismus-Gate (Levi-Auftrag im selben Zug)
+
+Levi wollte zusätzlich sicherstellen, dass die D-1-Rücknahme (TP1 wieder bei der niedrigen 1:1-Hürde) nicht dazu führt, dass Trades ohne jede Prüfung auf ein lohnendes TP2 durchgehen. Neue Regel **8b2** in `feedback_chartanalyse.md` (zwischen 8b1 und 8b1a eingefügt, direkter thematischer Anschluss an 8b1):
+
+- TP2-Kandidat muss ein **echtes Chart-Level** sein (Pivot/PDH/PDL/VWAP-Band/Box-Kante, aus `data_get_pine_lines`/`_labels`/`_boxes` — dieselbe Quelle wie die bestehende TP1-Prüfung), nicht nur eine ATR-Rechnung.
+- TP2-Kandidat muss **RR≥2:1** von der Entry-Distanz erreichen.
+- **Kein Ausschlussgrund**, wenn TP1 (Zone 1, RR≥1:1) realistisch ist, aber kein solches TP2-Level existiert — löst stattdessen **halbe Position** aus, über dieselbe Stacking-/Kombinationslogik wie 8b1-Zone-2 (kein doppeltes Halbieren bei gleichzeitigem Zusammentreffen).
+
+**Implementiert in `scripts/gate_check.cjs` als neues Gate `tp2RealismGate`** (analog zu `tpRealismGate`, siehe Kopfkommentar der Datei für die vollständige Beschreibung): Live-Parameter `--tp2-level-price` (Batch-JSON-Feld `tp2LevelPrice`). RR wird aus `|tp2LevelPrice − entry| / slDistance` berechnet. `pass` ist bei diesem Gate NIE `false` (nur `true` mit/ohne `sizingFlag`, oder `null` bei fehlendem Parameter — GC-1-konform: fehlende Daten ≠ automatisches FAIL/PASS). `combinedSizingNote`/`halbierungsGruende` in `evaluateTrade()` um den neuen Grund `'TP2-Realismus <2:1 (8b2)'` ergänzt. `writeBackToDb()` schreibt `gate_status` jetzt bevorzugt aus `combinedSizingNote` statt nur aus `sizingFlag` (sonst wäre eine ausschließlich vom neuen Gate ausgelöste Halbierung in `trades.db` nicht sichtbar gewesen).
+
+### Verifikationsläufe (drei Testfälle, wie von Levi verlangt)
+
+Live gegen `node scripts/gate_check.cjs` gefahren (Entry 29500/SL 29440/TP1 29560/long/ATR 40/normal, alle drei Fälle in Zone 1 mit RR(TP1) 1:1):
+
+- **(a) Zone 1 + gültiges TP2-Level RR≥2:1** (`--tp2-level-price 29625`, RR 2,083:1) → `TP2-Realismus (8b2): ... -> voll gültig`, GESAMTSTATUS PASS, **kein** Sizing-Hinweis → volle Position. ✓
+- **(b) Zone 1 + kein gültiges TP2-Level** (`--tp2-level-price 29590`, RR 1,5:1 <2:1) → `TP2-Realismus (8b2): ... -> kein Ausschluss, aber Sizing-Signal "halbe Position"`, GESAMTSTATUS weiterhin PASS, `Kombinierter Sizing-Hinweis: halbe Position (Grund: TP2-Realismus <2:1 (8b2))`. ✓
+- **(c) Zone 1 + TP2-Level-Parameter fehlt** (kein `--tp2-level-price`) → `[N/A] TP2-Realismus (8b2): --tp2-level-price nicht angegeben — nicht pruefbar (UNKLAR...)`, GESAMTSTATUS **UNKNOWN** (nicht FAIL) — die bereits bestandene TP1-Prüfung bleibt unberührt, kein automatisches Durchfallen wegen des fehlenden Parameters. ✓
+
+Zusätzlich ein vierter, nicht angeforderter aber sinnvoller Stacking-Test gefahren: Zone 2 (TP1 2,5×ATR) UND TP2<2:1 gleichzeitig → `Kombinierter Sizing-Hinweis: halbe Position (EINMALIG, nicht kumulativ — Gruende: TP-Realismus Zone 2 (8b1) + TP2-Realismus <2:1 (8b2))` — bestätigt, dass die bestehende Stacking-Logik den neuen Grund korrekt aufnimmt, ohne doppelt zu halbieren. `node --check scripts/gate_check.cjs` sauber.
+
+**Nicht angefasst (wie angewiesen):** D-3 (#41-43 Phasen-Zuordnung), D-4 (#40-Review/Phase-4-Gates) und D-5 (Früh-Exit-Stack vs. Testfenster-Enderkriterium) bleiben offen, unverändert wartend auf Levi — keine der drei Berechnungen/Optionen aus den jeweiligen Abschnitten oben wurde heute umgesetzt.
+
+### Git-Commit
+
+Commit im NAS100-Repo (`tradingview-mcp`): `scripts/gate_check.cjs` (D-1-Umsetzung + neues 8b2-Gate). Memory-Änderungen (dieses Dokument + `feedback_chartanalyse.md`, `MEMORY.md`) im separaten Memory-Repo. Beide kein Push, wie angewiesen.
+
+**Status:** D-1 entschieden und umgesetzt, 8b2 neu eingeführt und mit drei (plus einem zusätzlichen Stacking-)Testfall live verifiziert. D-3/D-4/D-5 weiterhin offen.
