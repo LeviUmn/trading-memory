@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T11:23:12.207Z
+  modified: 2026-08-24T12:30:03.211Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -102,6 +102,16 @@ Kein separates Update-Skript nötig für diesen einmaligen Nachtrag — `updateS
 **Why:** Genau diese Zahl (was hätten ausgelassene Setups gebracht) beantwortet Levis eigentliche Frage künftig per Query statt per Gedächtnis — bleibt sie unbefüllt, entsteht dieselbe stille Datenlücke, die bei `tp1_hit` für #31/#32 bereits einmal passiert ist (siehe [[project_studie_bessere_trades_2026-08-24]]).
 
 **Abgrenzung:** Kein Voll-Check-Schritt, keine neue Pflichtzeile im 1-Minuten-Loop — ausschließlich ein Tagesabschluss-Schritt, analog zu den drei bestehenden Pflichtpunkten oben.
+
+## SQL-Dump nach jeder DB-Änderung aktuell halten (ergänzt 24.08.2026, N-3-Fix, siehe [[project_opus_vollpruefung_2026-08-24]])
+
+Fünfter Pflichtpunkt beim Tagesabschluss, parallel zu "DB-Sync", "Regelkonformität geprüft", "SL-Hit-Typ" und "Skipped-Setups aufgelöst" oben: Nach JEDEM `add_trade.cjs`-Aufruf (neuer Trade) UND nach jedem `gate_check.cjs --trade-id`-Rückschreiben des Tages `node scripts/dump_trades_sql.cjs > scripts/trades.sql` (NAS100) bzw. `node scripts/dump_trades_sql_dax.cjs > scripts/trades_dax.sql` (DAX, falls DAX-Trades betroffen) erneut ausführen und den aktualisierten Dump im selben Git-Backup mitcommitten.
+
+**Why:** `scripts/trades.db`/`trades_dax.db` sind absichtlich in `.gitignore` (Binärdatei, kein sinnvoller Diff) — `trades.sql`/`trades_dax.sql` sind der einzige versionierte, diffbare Stand der Trade-Historie. Bis 24.08.2026 stand das Nachziehen nur im Kopfkommentar von `dump_trades_sql.cjs` selbst, nicht hier — der Dump war dadurch bereits einmal 7 Spalten + die komplette `skipped_setups`-Tabelle veraltet (Stand 24.08. Mittag vs. Abend), ohne dass das an einer Pflichtstelle aufgefallen wäre. Diese Ergänzung schließt genau diese Lücke, analog zum bereits bestehenden Muster der anderen vier Pflichtpunkte oben.
+
+**Pflicht-Abschlusszeile:** `SQL-Dump aktualisiert: JA / NEIN (kein DB-Schreibzugriff heute)`.
+
+**Bestandsaufnahme (N-22, 24.08.2026, reine Zählung, KEINE Kürzung — das wäre eine eigene Entscheidung):** Der Tagesabschluss hat damit aktuell **fünf** explizite Pflicht-Abschlusszeilen (DB-Sync, Regelkonformität geprüft, SL-Hit-Typ [nur bei SL-Hit], Skipped-Setups aufgelöst, SQL-Dump aktualisiert) plus zwei strukturelle Pflichtschritte ohne eigene Ja/Nein-Zeile (`add_trade.cjs`-Eintrag pro neuem Trade, Git-Commit+Push des `memory/`-Ordners). Diese Zahl ist bewusst nur dokumentiert, nicht bewertet — ob das zu viel/zu wenig ist, ist eine eigene, hier nicht getroffene Frage (zu unterscheiden von den *Live-Loop*-Pflichtzeilen in [[feedback_live_trading]]/[[feedback_chartanalyse]], die eine andere, deutlich größere Zählung haben und hier nicht mitgezählt sind).
 
 ## Git-Backup nach jedem Tagesabschluss (ergänzt 23.07.2026)
 

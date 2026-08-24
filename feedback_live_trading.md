@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-24T11:42:40.701Z
+  modified: 2026-08-24T12:27:48.717Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -296,8 +296,8 @@ Seit 03.07.2026 läuft ein 2-Pane-Layout (`2v`): Pane 0 = NAS100 (Preis/Entry, E
 
 **Ablauf / was "PASS" konkret bedeutet:**
 1. Dual-Gate bestätigt sich (Punkt 7b: NAS100+QQQ EMA50 ✓, Kerzenschluss/Muster/Candlestick ✓) → das ist der Auslöser, um in den RR-/TP-Realismus-Check einzusteigen, NICHT der Auslöser für die Order selbst.
-2. SL/TP nach [[feedback_chartanalyse]] Punkt 8b (Struktur→SL→RR-Check TP1≥1:1) und 8b1 (TP-Realismus-Filter ≤2×ATR/≤2× letzte Konsolidierungsbox) vollständig durchrechnen — inkl. Schock-Tier-Kopplung (Punkt 8c), falls Regime-Gate 8d gerade Schock-Tag zeigt.
-3. Erst wenn die Pflicht-Ausgabezeile(n) aus 8b1 (`TP-Realismus: ... ✓`) und ggf. 8c (`RR-Check TP1 bei Schock-Tier-SL: ... ✓`) explizit mit ✓ vorliegen, gilt die Order als freigegeben.
+2. SL/TP nach [[feedback_chartanalyse]] Punkt 8b (Struktur→SL→RR-Check TP1≥1:1) und 8b1 (TP-Realismus-Filter, Drei-Zonen-Logik seit 24.08.2026: Zone 1 ≤2×ATR voll gültig, Zone 2 2×-3×ATR gültig mit Sizing-Flag "halbe Position", Zone 3 >3×ATR Ausschluss — TP1-Kandidatenauswahl zusätzlich RR≥1,5:1) vollständig durchrechnen — inkl. 8b1a (Schock-Tier = No-Trade, ersetzt seit 24.08.2026 die alte separate Schock-Tier-RR-Pflichtzeile aus 8c, siehe dort), falls Regime-Gate 8d gerade Schock-Tag zeigt.
+3. Erst wenn die Pflicht-Ausgabezeile(n) aus 8b1 (`TP-Realismus: TP1 X Pkt = Y,Y× ATR / Z,Z× Box → Zone 1/2/3 ... — ✓/✗`) und ggf. 8b1a (`Schock-Tier aktiv (SL-Floor 2,5-3x ATR) → No-Trade, kein RR-Versuch`) explizit vorliegen — bei Zone 1/2 mit ✓, bei aktivem Schock-Tier automatisch No-Trade —, gilt die Order als freigegeben (Werkzeug: `scripts/gate_check.cjs`, siehe dessen `tpRealismGate`/`schockTierGate`).
 4. Diese Reihenfolge gilt UNABHÄNGIG vom Ausführungsweg — auch wenn Levi selbst, ohne auf Claudes Bestätigung zu warten, im Broker auslöst, ist ein Entry vor Abschluss von Schritt 3 ein Regelverstoß nach [[feedback_regeldisziplin]], unabhängig vom späteren Ergebnis.
 
 **Laufende Ampel-Zeile während der Prüfung (ergänzt 21.08.2026, Fable-Review nach Trade #42, Levi-Entscheidung):** Zwischen dem Dual-Gate-Trigger (Schritt 1) und dem fertigen PASS/FAIL (Schritt 3) vergehen im Live-Loop reale Sekunden bis Minuten, in denen bisher NICHTS ausgegeben wurde — sichtbar war nur "Dual-Gate ✓" und danach, mit Verzögerung, das fertige Ergebnis. Genau dieses stumme Zwischenfenster war der Tatort beider bisherigen 7b1-Regelbrüche (#36, #39): Dual-Gate war schon sichtbar erfüllt, die RR-/TP-Realismus-Prüfung lief noch, wirkte nach außen aber wie "fertig, nur noch Order absetzen". Ab sofort läuft ab dem Moment, in dem Schritt 2 beginnt, bis Schritt 3 abgeschlossen ist, eine explizite Zwischenzeile im Output: `RR-Check läuft — NOCH NICHT einsteigen`. Diese Zeile ersetzt nicht die finale Pflichtzeile aus Schritt 3, sie schließt nur die bisher stumme Lücke davor.
@@ -327,7 +327,7 @@ Fehlt diese Zeile vor einer Trigger-/Entry-Meldung, gilt die Prüfung als nicht 
 - **Q1 (Ablehnung/Timing):** Boolean-Parameter `--q1-reject`, vorbefüllt aus den bereits vorliegenden 8a2-(Reclaim-Fenster) und 8c2-(Zonen-Historie)-Werten — **nicht neu im Kopf bewertet.**
 - **Q3 (Kohärenz):** Boolean-Parameter `--q3-coherence`, vorbefüllt aus dem MTF-Dual-Gate-Ergebnis (5min/15min/1H NAS100 + QQQ). **Tie-Breaker:** Lag das QQQ-Volumen im Trigger-Fenster unter Durchschnitt (`--qqq-volume-below-avg yes`), zählt Q3 NICHT als erfüllt, selbst wenn alle vier Ebenen übereinstimmen.
 
-**Ampel-Logik:** 4/4 → GRÜN, volle Größe. 3/4 MIT Q1 oder Q4 erfüllt → GELB, halbe Position. 3/4 OHNE Q1 und OHNE Q4 → ROT, Auslassen empfohlen. ≤2/4 → ROT, Auslassen empfohlen. Ein nicht übergebener Faktor zählt für die Ampel-Zahl wie "nicht erfüllt", wird im Detail-Output aber separat als unklar markiert.
+**Ampel-Logik (N-17-Fix 24.08.2026, siehe [[project_opus_vollpruefung_2026-08-24]]):** 4/4 → GRÜN, volle Größe. 3/4 → GELB, halbe Position (bei genau vier Faktoren ist "3/4 UND weder Q1 noch Q4 erfüllt" mathematisch unerreichbar — die frühere Zusatzbedingung "MIT Q1 oder Q4 erfüllt" war deshalb immer wahr bei 3/4 und ist als tote Doku entfernt, das Ergebnis war nie falsch). ≤2/4 → ROT, Auslassen empfohlen. **Neuer vierter Zustand UNBEKANNT (N-4-Fix):** Sind mehr Faktoren UNKLAR (fehlende Daten) als tatsächlich ERFÜLLT, ist keine der drei Ampeln aussagekräftig — dann `Q-Score: UNBEKANNT (nicht bewertbar)` statt einer irreführenden "0/4 ROT", die wie eine geprüfte Ablehnung aussieht. Ein nicht übergebener Faktor zählt für die Ampel-Zahl weiterhin wie "nicht erfüllt", wird im Detail-Output aber separat als unklar markiert.
 
 **Stacking:** 8b1a (Schock-Tier = No-Trade, siehe [[feedback_chartanalyse]]) hat Vorrang vor dem Q-Score — ist 8b1a bereits ein Komplett-Ausschluss, wird der Q-Score gar nicht erst berechnet/angezeigt (härterer Ausschluss schlägt Sizing-Signal). Trifft die Q-Score-GELB-Ampel gleichzeitig mit einem anderen Halbierungsgrund zusammen (z.B. 8b1 Zone 2, TP-Realismus), wird trotzdem nur EINMAL halbiert, nicht kumulativ — `gate_check.cjs` gibt dafür einen expliziten "Kombinierter Sizing-Hinweis" aus.
 

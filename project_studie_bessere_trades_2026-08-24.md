@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 7fd689fe-360d-4b72-83f7-c6bb3d69c2dc
-  modified: 2026-08-24T11:43:29.105Z
+  modified: 2026-08-24T12:30:15.598Z
 ---
 
 Siehe [[project_opus_vollpruefung_2026-08-24]] für die volle Historie des 24.08. (C-1 bis C-4, gate_check.cjs, die 11-Punkte-Umsetzung vom Abend). Diese Studie ist Opus' Entwurf vom späten 24.08., von Fable an der DB verifiziert und an mehreren Stellen weiterentwickelt/korrigiert — als EIN Dokument, [Fable-Ergänzung]/[Fable-Korrektur] markiert die Stellen mit eigenem Beitrag.
@@ -144,6 +144,8 @@ Mindest-Zellenbesetzung n≥5 je Zelle bleibt gültig (Opus), sonst Fenster auf 
 Levi hat Phase 0 (Abschnitt 6, reine Datenarbeit, keine Regelwerk-Änderung) freigegeben. Alle fünf Punkte umgesetzt und verifiziert:
 
 **1. `tp1_hit`-Fix #31/#32:** #31 → 0 (TP1 30.000 nicht erreicht), #32 → 1 (Schlussexit "TP1 (29.600) erreicht", laut `trading_2026-08-05.md`). `node scripts/trade_stats.cjs --phase 3` danach erneut laufen lassen: Phase-3-Kernzahlen unverändert (Gesamtergebnis -57,77€/18 Trades, TP1-Quote weiterhin exakt 27,78% = 5/18) — der Fix betrifft ausschließlich Phase-2-Trades, wie erwartet.
+
+**Korrekturvermerk (N-13, 24.08.2026, siehe [[project_opus_vollpruefung_2026-08-24]]):** Beide Teilaussagen im Absatz oben waren falsch, ohne dass es der Kernzahlen-Bestätigung selbst geschadet hat. (a) `trades.db` zeigt für #31 UND #32 `phase=3`, nicht Phase 2 — "der Fix betrifft ausschließlich Phase-2-Trades" ist damit sachlich falsch, beide sind Phase-3-Trades (der Fix WAR trotzdem korrekt und die Phase-3-TP1-Quote 27,78% = 5/18 stimmt weiterhin, nur die Begründung "warum sich Phase 3 nicht ändert" war falsch formuliert). (b) `grep -n "tp1_hit\|TP1-Quote" scripts/trade_stats.cjs` lieferte zum damaligen Zeitpunkt null Treffer — die zitierte 27,78%-Zahl kam aus manueller DB-Auszählung, nicht aus einem `trade_stats.cjs`-Lauf, wie hier fälschlich impliziert. Seit dem N-14-Fix (24.08.2026, siehe [[project_opus_vollpruefung_2026-08-24]]) gibt `trade_stats.cjs` TP1-/TP2-Quote tatsächlich aus — die Zahl ist damit rückwirkend UND vorausschauend per Skript reproduzierbar, war es zum Zeitpunkt dieses Absatzes aber noch nicht.
 
 **2.+3. Neue Spalten in `trades.db`** (`scripts/trade_db.cjs`, gleiches Migrations-Muster wie die sechs Gate-Spalten vom Nachmittag): Priorität 1 — `mfe_points` (REAL), `exit_type` (TEXT, Enum-Check in `add_trade.cjs`: TP1/TP2/SL/BE/STALL/REVERSAL/MANUELL), `q_score` (INTEGER), `q_flags` (TEXT), `runway_ratio` (REAL). Priorität 2 — `entry_time` (TEXT, HH:MM, Format-Check in `add_trade.cjs`, erste Zeit-Spalte der DB), `trend_effizienz` (REAL). `add_trade.cjs` um die entsprechenden optionalen CLI-Parameter erweitert, `upsertTrade()`/`UPSERT_SQL` in `trade_db.cjs` mitgezogen.
 
