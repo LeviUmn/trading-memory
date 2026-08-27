@@ -1,0 +1,41 @@
+---
+name: project-validierungstesttag-naechster-handelstag
+description: "Verbindlich beschlossener dritter fiktiver Testtag (nächster Handelstag nach 27.08.2026) mit 5 binären Pass-Kriterien — validiert die diese Woche gebauten Mechanismen (Paket 1-6c) unter echtem Zeitdruck, BEVOR wieder mit Echtgeld gehandelt wird (#44). Ergebnis entscheidet, ob #44 startet."
+metadata:
+  type: project
+  originSessionId: session-2026-08-27
+  modified: 2026-08-27T09:46:29.506Z
+---
+
+# Kontext
+
+Nach der schlechten Handelswoche (#36-43, 17.-21.08.2026, siehe [[project_risikomanagement]]) und der anschließenden Regelwerk-/Prozess-Reparatur dieser Woche (Pakete 1-6c, siehe [[project_regelwerk_ueberarbeitung_2026-08-26]]) hat Levi gefragt, was Opus und Fable jetzt empfehlen, um zum Renditeziel zu kommen und ob die restlichen 7 Trades bis #50 direkt mit Echtgeld durchgezogen werden sollen. Beide unabhängig eingeholten Einschätzungen (27.08.2026) kamen zum selben Kernschluss: **nicht direkt Echtgeld** — keiner der neu gebauten Mechanismen (Stale-Klasse 7b1c, neuer Tick-Prompt Punkt 2b, Solo-Mandat, GC-5-Konsistenzgate, code-erzwungene Messfeld-Pflicht) wurde je unter echtem Ausführungsdruck getestet, nur isoliert per Skript. Levi hat sich für die von beiden vorgeschlagene Lösung entschieden: **ein dritter fiktiver Testtag mit vorab fixierten, binären Erfolgskriterien** (keine offene Fehlersuche wie bei den ersten beiden Testtagen am 24./25.08.2026, siehe [[project_testtag_analyse_2026-08-24]] und [[testtag/testtag_2026-08-25]]).
+
+**Vorbedingung bereits erledigt (27.08.2026, Commit `e074312`):** Opus fand bei der strategischen Analyse, dass die Paket-6-Befüllungspflicht für die neuen Messfelder bislang nur im Regelwerk-Fließtext stand, nicht im Code erzwungen war — derselbe Fehlertyp wie der ursprüngliche `gate_check.cjs`-nie-aufgerufen-Bug. Fable hat das behoben: `scripts/add_trade.cjs` erzwingt jetzt sieben Pflicht-Messfelder (`atr-at-entry`, `entry-time`, `sl-distance`, `tp1-distance`, `exit-type`, `tp1-hit`, `mfe-points`) mit Hard-Exit bei Fehlen, `--allow-missing "<Grund>"` für begründete historische Nachträge. `scripts/trade_stats.cjs` hat einen neuen Vollständigkeits-Report. Committet und gepusht.
+
+# Der Testtag — Termin: NÄCHSTER HANDELSTAG nach 27.08.2026
+
+**Format:** Fiktiv, wie die beiden vorherigen Testtage — keine echten Order, keine `trades.db`-Einträge, nur simuliert/protokolliert. Levi aktiv im Live-Loop dabei (kein Solo-Loop). Läuft von Sonnet (Live-Loop-Rolle, siehe [[feedback_modellwahl_trading]]), nicht von Fable.
+
+**Grundregel für den Tag:** Keine neuen Regeln/Fixes während des Tages (Punkt 14, Regeländerungs-Tempo-Bremse) — nur beobachten und protokollieren. Ziel ist Ausführungsnachweis, keine weitere Fehlersuche.
+
+## Die 5 binären Pass-Kriterien (alle müssen erfüllt sein — kombiniert aus Fables und Opus' unabhängigen Vorschlägen, 27.08.2026)
+
+1. Bei JEDER Gate-Entscheidung steht der wörtliche `gate_check.cjs`-Konsolen-Output im Protokoll — kein einziges im Kopf gerechnetes RR (0 Ausnahmen).
+2. `zoneRrConsistencyGate` (GC-5) läuft mindestens einmal real durch.
+3. Die Stale-Short/Long-Klasse ([[feedback_live_trading]] 7b1c) wird mindestens einmal ausgewertet und korrekt ausgegeben — auch der Fall "Vorbedingung nicht erfüllt → Zeile entfällt ersatzlos" zählt als korrekt, wenn er tatsächlich eintritt.
+4. Alle sieben neuen Pflicht-Messfelder werden nach jedem fiktiven Trade-Abschluss ohne Nachfrage vollständig erhoben — jetzt code-erzwungen über `add_trade.cjs` (s.o.). Ein sauberer Abbruch bei einem unvollständigen fiktiven `add_trade.cjs`-Testaufruf zählt als Beleg, nicht als Fehlschlag.
+5. Der neue Tick-Prompt (Punkt 2b in [[feedback_live_trading]]) läuft komplett durch, ohne dass ein Pflichtelement übersprungen wird.
+
+## Konsequenz
+
+- **Alle 5 bestanden →** nächste Session startet mit Echtgeld bei Trade #44, im neuen, kleineren Testfenster (2.000-2.500€, Q-Score-Anzeigemodus, Retest-Zeitbox — siehe [[project_studie_bessere_trades_2026-08-24]]). Die 7 verbleibenden Trades bis #50 verschmelzen mit den ersten 7 der 15 Fenster-Trades — EINE Zählung, EIN Sizing, ab jetzt, nicht mehr parallel geführt (Opus- und Fable-Einschätzung waren sich hier einig, dass die bisherige Doppelzählung ein echtes Problem war).
+- **Mindestens 1 Kriterium nicht bestanden →** nur das konkret gescheiterte Element fixen (kein Rundumschlag, kein neues Regelwerk-Paket), danach ein weiterer, ebenso fokussierter Testtag — kein automatisches Echtgeld-Go.
+
+## Weitere Beschlüsse aus derselben Analyse (27.08.2026, gültig unabhängig vom Testtag-Ausgang)
+
+- **#50-Gate gilt bereits jetzt als rechnerisch gescheitert** (Gates 1/3/4 aus [[project_phase4_gates_2026-08-12]] sind mit den Regelbrüchen bei #36/#39/#42 bzw. der erforderlichen Rest-Performance nicht mehr erreichbar) — kein Kapitalsprung auf 10.000€/50k, unabhängig vom Ausgang der nächsten 7 Trades. Das #50-Review findet trotzdem statt, aber als Diagnose, nicht als Bestehensprüfung.
+- **Renditeziel-Revision:** 1-1,5%/Trade als Durchschnittsziel ist mit dem aktuellen Gewinner/Verlierer-Profil (Ø-Gewinn 1,418%, Ø-Verlust -1,266%) nicht erreichbar (würde WR >100% bzw. deutlich höheren Ø-Gewinn/RR erfordern). Neues operatives Zwischenziel für die nächsten 15 Fenster-Trades: **EV ≥ 0,5%/Trade, TP1-Quote im Zielkorridor (37-50%, je nach Modell), RR ≥ 1,3:1**. Das 1-1,5%-Ziel bleibt als Fernziel stehen, ist aber keine Planungsgrundlage für einzelne Fenster mehr — siehe [[project_performance_ziele]] für den vollen Hintergrund, dort noch nicht nachgetragen.
+- **Short-Seite:** Kein Verbot, aber erhöhte Vorsicht — der gesamte historische Short-Verlust (-148€) konzentriert sich auf 5 Trades mit dokumentiertem Regelbruch, saubere Shorts sind EV-neutral (≈+0,12%). Empfehlungen unterschieden sich leicht (Fable: Short-Sizing fix auf untere Kante 2.000€; Opus: Short nur bei Q-Score GRÜN) — noch nicht final entschieden, bei Bedarf vor #44 klären.
+
+**Why (gesamt):** Die zentrale Lehre aus dem gesamten 24.-27.08.2026-Zyklus (Testtag-Fund → Paket 1-6c → dieser Testtag) ist, dass Pflichten, die nur im Regelwerk-Text stehen, unter Zeitdruck nicht zuverlässig ausgeführt werden — sowohl beim ursprünglichen `gate_check.cjs`-Aufruf als auch bei der Paket-6-Messfeld-Befüllung. Dieser Testtag ist der erste Versuch, das nicht per weiterer Textregel, sondern per beobachtetem Ausführungsnachweis zu verifizieren.

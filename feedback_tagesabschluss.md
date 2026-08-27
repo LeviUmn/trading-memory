@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T12:30:03.211Z
+  modified: 2026-08-25T10:44:37.935Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -111,7 +111,24 @@ Fünfter Pflichtpunkt beim Tagesabschluss, parallel zu "DB-Sync", "Regelkonformi
 
 **Pflicht-Abschlusszeile:** `SQL-Dump aktualisiert: JA / NEIN (kein DB-Schreibzugriff heute)`.
 
-**Bestandsaufnahme (N-22, 24.08.2026, reine Zählung, KEINE Kürzung — das wäre eine eigene Entscheidung):** Der Tagesabschluss hat damit aktuell **fünf** explizite Pflicht-Abschlusszeilen (DB-Sync, Regelkonformität geprüft, SL-Hit-Typ [nur bei SL-Hit], Skipped-Setups aufgelöst, SQL-Dump aktualisiert) plus zwei strukturelle Pflichtschritte ohne eigene Ja/Nein-Zeile (`add_trade.cjs`-Eintrag pro neuem Trade, Git-Commit+Push des `memory/`-Ordners). Diese Zahl ist bewusst nur dokumentiert, nicht bewertet — ob das zu viel/zu wenig ist, ist eine eigene, hier nicht getroffene Frage (zu unterscheiden von den *Live-Loop*-Pflichtzeilen in [[feedback_live_trading]]/[[feedback_chartanalyse]], die eine andere, deutlich größere Zählung haben und hier nicht mitgezählt sind).
+**Bestandsaufnahme (N-22, 24.08.2026, reine Zählung, KEINE Kürzung — das wäre eine eigene Entscheidung):** Der Tagesabschluss hat damit aktuell **sechs** explizite Pflicht-Abschlusszeilen (DB-Sync, Regelkonformität geprüft, SL-Hit-Typ [nur bei SL-Hit], Skipped-Setups aufgelöst, SQL-Dump aktualisiert, B1-B3-Schattenmessung geprüft) plus zwei strukturelle Pflichtschritte ohne eigene Ja/Nein-Zeile (`add_trade.cjs`-Eintrag pro neuem Trade, Git-Commit+Push des `memory/`-Ordners). Diese Zahl ist bewusst nur dokumentiert, nicht bewertet — ob das zu viel/zu wenig ist, ist eine eigene, hier nicht getroffene Frage (zu unterscheiden von den *Live-Loop*-Pflichtzeilen in [[feedback_live_trading]]/[[feedback_chartanalyse]], die eine andere, deutlich größere Zählung haben und hier nicht mitgezählt sind).
+
+## Auflösen offener B1-B3-Dual-Gate-Schattenmessung (ergänzt 25.08.2026, nach Opus-Zweitreview + Levi-Entscheidung)
+
+Sechster Pflichtpunkt beim Tagesabschluss, parallel zu "DB-Sync", "Regelkonformität geprüft", "SL-Hit-Typ", "Skipped-Setups aufgelöst" und "SQL-Dump aktualisiert" oben: Für JEDEN am Handelstag abgelehnten/ausgelassenen Dual-Gate-Fall muss geprüft werden, ob das B1-B3-Schattenmessungs-Paket vollständig erfasst ist — nicht offen bleiben, damit die Daten bis zum #50-Review lückenlos vorliegen.
+
+Konkret pro Fall:
+- **B1:** War die Situationsklasse "Basis-Reclaim nach Session-Extrem" (5 Bedingungen, siehe [[feedback_chartanalyse]] 8a4) erfüllt? Falls ja, muss das korrekt im `--grund`-Feld von `add_skipped_setup.cjs` vermerkt sein.
+- **B2:** Sind die beiden erweiterten Dual-Gate-Schattenwerte (`--dg-ema50-5min-diff-pct`, `--dg-vwap-band1-diff-pct`) nachgetragen, sofern die Rohdaten dafür noch verfügbar sind — zusätzlich zu den bereits bestehenden 15min-Werten (`--dg-abstand-pct`, `--dg-abstand-atr`, `--dg-q2-budget-pct`)?
+- **B3:** Bei Fällen mit klar erkennbarem Impuls-Ursprung: ist der B3-Doppelanker-Wert in `gate_check.cjs` ergänzt? Rein informativ, kein Pflichtfeld — ändert nie den Ampel-Status.
+
+**How to apply:** Dieselbe Fall-Liste durchgehen wie beim vierten Pflichtpunkt oben ("Skipped-Setups aufgelöst") — pro Dual-Gate-bedingtem Fall des Tages die drei Punkte B1/B2/B3 prüfen und, soweit die Rohdaten das hergeben, direkt nachtragen.
+
+**Pflicht-Abschlusszeile:** `B1-B3-Schattenmessung geprüft: JA (X Fälle nachgetragen/vervollständigt) / NEIN (kein Dual-Gate-Ablehnungsfall heute)`.
+
+**Why:** Der gesamte Wert von B1-B3 hängt daran, dass die Daten bis zum Review nach Trade #50 vollständig vorliegen — siehe [[project_testtag_analyse_2026-08-24]] Abschnitt 10/10a. Ohne festen Prüfpunkt entsteht sonst dieselbe Art stiller Datenlücke wie beim vierten Pflichtpunkt (dort: unbefüllte `hypothetisches_ergebnis`-Werte), die dann erst beim #50-Review auffällt, wenn sie nicht mehr zu schließen ist.
+
+**Abgrenzung:** Kein Voll-Check-/1-Minuten-Loop-Schritt, ausschließlich Tagesabschluss. Eng verwandt mit, aber inhaltlich getrennt von "Skipped-Setups aufgelöst" oben: dort geht es um das hypothetische Ergebnis (TP1/TP2/SL/WEDER_NOCH) eines ausgelassenen Setups, hier um die Dual-Gate-Messwerte/Klassenzugehörigkeit (B1-B3) desselben Falls — beide Pflichtzeilen können für denselben Eintrag anfallen, sind aber unabhängig voneinander zu prüfen.
 
 ## Git-Backup nach jedem Tagesabschluss (ergänzt 23.07.2026)
 

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T13:36:19.496Z
+  modified: 2026-08-26T16:39:58.739Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich"
@@ -16,7 +16,7 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 
 **Why:** Das ist das wichtigste Update VOR dem Trading. Märkte laufen auch wenn wir nicht traden — Wochenenden, Pausen, Feiertage können geopolitische Events, Gap-Ups/Downs, neue Makrodaten bringen die den Kontext komplett verändern. Technische Analyse ohne fundamentalen Kontext ist wertlos. Jeder der 6 Schritte ist Pflicht.
 
-**How to apply:** Alle 6 Schritte in dieser Reihenfolge, so viel wie möglich parallel ausführen.
+**How to apply:** Alle 6 Schritte in dieser Reihenfolge, so viel wie möglich parallel ausführen — **Ausnahme:** die 3 `get_users_posts`-Calls in Schritt 2 untereinander IMMER sequenziell (Grund siehe dort, Fix 24.08.2026).
 
 ---
 
@@ -25,6 +25,8 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 ### Schritt 1 — Memory lesen
 - MEMORY.md + letzte Trade-Datei aus `memory/trades/`
 - Aktuelle Levels, Bias, Gesamtstatistik, offene Erkenntnisse
+- **Phase-/Sizing-Kontext konkret benennen (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a3):** "Gesamtstatistik" allein reicht nicht — explizit die aktuelle Trade-Nummer (aus `trades.db`/letzter Trade-Datei), die laufende Phase (Phase 3, verlängert bis #50, siehe [[project_risikomanagement]]) und den Abstand zu #50 nennen (z.B. "Trade #44, Phase 3 läuft bis #50, noch 6 Trades im aktuellen Fenster"). **Why:** Ohne diese Zahl fehlt beim Session-Start der Kontext, ob z.B. eine Test-Fenster-Auswertung (Q-Score, 8b1-Drei-Zonen, TP2-Realismus — alle auf 15-Trade- bzw. #50-Fenster laufend) bald ansteht.
+- **Cooldown-Status informativ prüfen (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a2):** Zusätzlich zu den Memory-Inhalten einmalig `node scripts/cooldown_check.cjs` ausführen und den Status (grün/rot) ins Briefing aufnehmen. **Wichtig, Abgrenzung zum Live-Loop:** Das ist NICHT derselbe Check wie der verbindliche Pflicht-Check "vor jedem Entry" aus [[project_risikomanagement]] Workflow Schritt 0 (der läuft weiterhin live im 1-Min-Loop, unmittelbar vor jeder Order) — hier beim Session-Update ist es ein rein informativer Blick auf den Stand VOM VORTAG, damit ein roter Cooldown-Status schon im Morgen-Briefing sichtbar ist und nicht erst beim ersten Entry-Versuch überrascht. Ändert nichts an der Bindungswirkung des Live-Loop-Checks.
 
 ### Schritt 2 — Tweets der 3 Accounts (seit letztem Fetch)
 - `scripts/x_last_fetch.json` lesen → `last_fetch` Timestamp
@@ -34,6 +36,8 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
   - **@zerohedge** (ID: 18856867) — Risk-off Signale
 - Tweets als strukturierten Digest ausgeben (Bullisch / Bearisch / Neutral aufgeteilt)
 - Nach dem Lesen `x_last_fetch.json` mit aktuellem UTC-Timestamp aktualisieren
+
+**KRITISCH — diese 3 Calls IMMER sequenziell, NIEMALS parallel (Fix 24.08.2026, technische Diagnose von Fable):** Die drei `get_users_posts`-Aufrufe im selben Turn/parallel abzusetzen löst beim `xapi`-MCP-Server (xurl) einen Token-Refresh-Race aus → `MCP error -32002: xurl mcp: token refresh after 401 failed`, obwohl der gecachte Access-Token zu dem Zeitpunkt oft noch gar nicht abgelaufen war. Diagnose 24.08.2026 (Fable) fand das Muster in mehreren Sessions (20.08., 21.08., 24.08.) — immer 3 Fehlschläge innerhalb von ~1 Sekunde, exakt wenn die 3 Accounts gleichzeitig gefetcht wurden; ein sofortiger sequenzieller Einzelcall auf denselben (ungeänderten) Cache-Token funktionierte danach anstandslos. Root Cause vermutlich: mehrere gleichzeitige Requests gegen denselben xurl-Prozess lösen konkurrierende Refresh-Versuche aus, X invalidiert bei Refresh-Token-Reuse den ganzen Token-Satz → einzige zuverlässige Abhilfe ist strikt sequenzielles Abfeuern dieser 3 Calls (kurz nacheinander, nicht im selben Turn). Betrifft NUR die 3 `get_users_posts`-Calls untereinander — Schritt 2 als Ganzes darf weiterhin parallel zu Schritt 3/4 laufen (andere Tools/Server, kein gemeinsamer Token-Cache).
 
 ### Schritt 3 — FRED Makrodaten (historisch/strukturell)
 - `python scripts/fred_snapshot.py` ausführen
@@ -47,6 +51,8 @@ Bei allen anderen Einstiegen (Begrüßungen, direkte Fragen, Chart-Anfragen) →
 - Zweck: FRED kennt keine Zukunft — der Live-Kalender zeigt was heute veröffentlicht wird
 - **WICHTIG:** Konsens-Werte IMMER live holen, NIEMALS aus Trainingswissen annehmen (kann falsch/veraltet sein)
 - Schritte 2+3+4 können alle parallel gestartet werden (unabhängig voneinander)
+
+**Klarstellung Parallelität vs. Abhängigkeit (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a6):** "Parallel gestartet" bezieht sich nur auf den STARTZEITPUNKT der drei Tool-Aufrufe (Tweets/FRED/Kalender-Fetch), nicht auf ihre Auswertung. Schritt 4 hat bereits seit der 03.08.2026-Korrektur unten eine inhaltliche Abhängigkeit von Schritt 2 (die dortigen Tweet-Kalenderübersichten dienen als Cross-Check/Ergänzung, siehe dort) — das ist kein Widerspruch zur Parallelität, sondern eine Reihenfolge INNERHALB der Auswertung: Alle drei Fetches gleichzeitig absetzen, aber der Kalender-Cross-Check-Teilschritt aus Schritt 4 erst auswerten, nachdem der Tweet-Digest aus Schritt 2 vorliegt.
 
 **Market-Moving Events (immer prüfen):**
 - PCE / Core PCE — Fed-kritisch (typisch letzter Freitag des Monats, 14:30 CET)
@@ -123,13 +129,22 @@ Wenn 2+ Faktoren bärisch → übergeordneter Gegenwind, Short-Bias verstärkt s
 
 **Korrigiert 04.07.2026 (Fable-5-Review):** Dieser Schritt widersprach bis eben [[feedback_datenquelle_nas100]], die `quote_get` für NAS100 grundsätzlich verbietet (zweimal live falsche Kurse geliefert, 01.07. und 02.07.). Die NAS100-Zeile der Tabelle wurde entsprechend korrigiert — im Intermarket-Scan den NAS100-Kurs aus den Chart-Bars holen, nicht aus `quote_get`.
 
+**VIX → Hebel-Staffelung explizit übersetzen (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a4):** Der in 5a geholte VIX-Wert wurde bisher nur als roher Zahlenwert im Intermarket-Scan mitgeführt, nie aktiv gegen die Hebel-Staffelung aus [[project_risikomanagement]] übersetzt. Ab jetzt gehört ein Einzeiler ins Briefing: `VIX X,X → Hebel-Band Y` (Tabelle: <15 bis 10x, 15-20 → 5-8x, 20-25 → 5x max., >25 → kein Trade/max. 3x). Reine Anzeige/Orientierung für den Sessionstart — ändert nichts an der bestehenden Pflicht, den Hebel am tatsächlichen Entry-Moment erneut gegen den dann aktuellen VIX zu prüfen (VIX kann sich über die Session deutlich bewegen).
+
+**Halbierungsfenster-Reminder (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a5, Anlass [[project_testtag_analyse_2026-08-25]] Abschnitt 12 "Wiederkehrer"):** Am 25.08.2026 verstrich das 15:30-16:00-Positionsgrößen-Halbierungsfenster ([[feedback_trading_zeitfenster]]) beim Session-Start ungeprüft, weil der Loop selbst erst um 16:10 startete. Ab jetzt gehört ins Session-Update-Briefing ein kurzer Hinweis, FALLS der Session-Start absehbar in oder nach diesem Fenster liegt (z.B. "Achtung: 15:30-16:00-Halbierungsfenster läuft bereits/steht unmittelbar bevor — bei einem Entry in diesem Zeitraum automatische Halbierung nach [[feedback_trading_zeitfenster]] beachten"). Kein neuer Mechanismus, nur eine proaktive Erinnerung zum richtigen Zeitpunkt statt erst beim ersten Entry-Versuch.
+
 ### Schritt 6 — NAS100 + QQQ Chart + Indikatoren (korrigiert 16.07.2026: VWAP liegt nicht mehr auf NAS100, Pane 1 ist QQQ statt NQ1!)
 - `chart_get_state` → aktuelles Symbol, Timeframe, Indikatorliste (Pane 0 = NAS100)
-- `data_get_study_values` → RSI, MACD, EMA50, Bollinger Bands, ATR (aktuelle NAS100-Werte — **kein VWAP auf NAS100**, der CFD-Feed hat kein Volumen, siehe [[feedback_chart_layout]]; Pivot Points seit 23.07.2026 kein Chart-Indikator mehr, siehe [[feedback_chartanalyse]] Punkt 7a1a für die Berechnung)
+- **Pivot-Berechnung (7a1a), FESTER erster Teilschritt direkt nach `chart_get_state` (umgesetzt 26.08.2026, löst das seit 24.08.2026 offene To-do unten auf, Fable-Umsetzung nach Opus-Analyse, Punkt c):** `data_get_ohlcv` auf Tages-Timeframe (letzter abgeschlossener Handelstag) → PP/R1/S1/R2/S2 nach der Standardformel aus [[feedback_chartanalyse]] Punkt 7a1a berechnen → die 1-2 kursnächsten Level per `draw_shape` (horizontal_line) einzeichnen. Kein optionaler/nachgefragter Schritt mehr, sondern fester Bestandteil JEDES "start update dich"-Durchlaufs. **Why (Platzierung genau hier):** Der nächste Teilschritt unten ("Welche Key-Levels wurden getestet/gebrochen") lässt sich ohne frisch berechnete Pivots gar nicht sauber beantworten — die Reihenfolge ist zwingend, nicht nur eine Stilfrage.
+- **Indikator-Vollständigkeits-Check (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt a1 — konsolidiert an dieser einen Stelle, siehe Hinweis unten):** Vor dem eigentlichen Werte-Lesen zwei bekannte Neustart-/Re-Initialisierungs-Lücken auf der QQQ-Pane aktiv verifizieren, nicht stillschweigend voraussetzen:
+  1. **RVOL ("Relative Volume at Time") plausibel?** `data_get_study_values` auf QQQ → "Relative Volume" darf nicht 0/leer/fehlend sein. Persistiert nachweislich NICHT über einen `tv_launch`-Neustart (siehe [[feedback_chart_layout]]) — fehlt der Indikator, über die dort dokumentierte UI-Route neu hinzufügen.
+  2. **Anchored-VWAP-Remote-Anker aktiv gesetzt oder bewusst im Fallback?** `data_get_indicator(entity_id: <AVWAP-Remote-ID aus chart_get_state>)` → Feld `in_0` prüfen. `in_0 == 0` bedeutet Fallback (Anker = Session-Start, siehe [[feedback_chart_layout]], Abschnitt "Doppelte VWAP behoben + Anker-Markierung richtiggestellt") — das ist KEIN Fehler, aber es bedeutet: noch kein bewusster "tagesentscheidender" Anker gesetzt. **Nicht** die "Anker-Markierung" aus `data_get_study_values` für diesen Check verwenden — die zeigt praktisch immer 0,00, unabhängig vom Anker-Status (siehe Korrektur in [[feedback_chart_layout]]), und ist als Statuscheck ungeeignet. Ergebnis explizit im Briefing nennen (z.B. "AVWAP-Remote: Fallback aktiv (in_0=0), noch kein Session-Anker gesetzt" oder "AVWAP-Remote: Anker gesetzt auf HH:MM").
+  Fehlt einer der beiden Checks im Briefing, gilt Schritt 6 als nicht vollständig — dieselbe Behandlung wie die übrigen Pflichtbestandteile dieses Ablaufs. **Konsolidierungs-Hinweis:** Dieser Check lebt jetzt AUSSCHLIESSLICH hier (dem tatsächlichen Sessionstart) — [[feedback_live_trading]] verweist nur hierher, statt eine zweite, eigenständige Checkliste zu führen.
+- `data_get_study_values` → RSI, MACD, EMA50, Bollinger Bands, ATR (aktuelle NAS100-Werte — **kein VWAP auf NAS100**, der CFD-Feed hat kein Volumen, siehe [[feedback_chart_layout]]; Pivot Points seit 23.07.2026 kein Chart-Indikator mehr, siehe Pivot-Berechnung oben)
 - `data_get_ohlcv` mit `summary: true` + zusätzlich `count: 300` → vollständigen Verlauf seit letzter Session rekonstruieren
-- **QQQ-Pane (Pane 1):** `pane_focus(1)` → EMA50/VWAP/Volume von QQQ lesen → zurück `pane_focus(0)`. Vorher Session-Gate/Zeitstempel-Check nach [[feedback_live_trading]] Punkt 7e — bei Pre-Market/geschlossenem Markt den QQQ-Stand explizit als "dünn" bzw. "Stand von gestern" kennzeichnen, nicht als aktuell ausgeben. Volumen-Spikes relativ zum eigenen QQQ-Durchschnitt (bzw. RVOL, siehe [[feedback_live_trading]] Punkt 11 "RVOL statt Kopf-Vergleich") bewerten (NAS100-CFD hat keine)
+- **QQQ-Pane (Pane 1):** `pane_focus(1)` → EMA50/Anchored VWAP (Remote)/Volume von QQQ lesen (die eingebaute VWAP-Studie wurde am 26.08.2026 entfernt, siehe [[feedback_chart_layout]] — "Anchored VWAP (Remote)" ist die einzige verbleibende VWAP-Quelle) → zurück `pane_focus(0)`. Vorher Session-Gate/Zeitstempel-Check nach [[feedback_live_trading]] Punkt 7e — bei Pre-Market/geschlossenem Markt den QQQ-Stand explizit als "dünn" bzw. "Stand von gestern" kennzeichnen, nicht als aktuell ausgeben. Volumen-Spikes relativ zum eigenen QQQ-Durchschnitt (bzw. RVOL, siehe [[feedback_live_trading]] Punkt 11 "RVOL statt Kopf-Vergleich") bewerten (NAS100-CFD hat keine)
 - **ATR(14) Tages-Timeframe (ergänzt 24.08.2026, Indikator-Verankerung nach dem TradingView-Plan-Upgrade):** Einmal pro Handelstag kurz `chart_set_timeframe(D)` auf NAS100 wechseln, ATR(14) auf Tagesbasis lesen, danach zurück auf 5min. Gegen die bisherige Tagesrange (Hoch-Tief seit Handelsbeginn, aus `data_get_ohlcv`) gegenrechnen → Pflichtzeile `ATR(14) D: X Pkt | heutige Range bisher: Y Pkt | Verhältnis Z×` ausgeben. Objektiviert [[feedback_chartanalyse]] Punkt 8d Kriterium 1 (bisher Augenmaß "ungewöhnlich groß, >2× Durchschnitt") — gilt für den ganzen Handelstag, kein Wiederholungsschritt im 1-Min-Loop.
-- **ADX(1H/Daily), NAS100 (ergänzt 24.08.2026, "Directional Movement" neu im NAS100-Indikatoren-Set, siehe [[feedback_chart_layout]]):** Rohwert auf 1H und Tages-Timeframe notieren — NUR die ADX-Linie, +DI/−DI NICHT auswerten (Verwechslungsrisiko mit dem bestehenden Dual-Gate). Reine Kontext-/Regime-Information für [[feedback_chartanalyse]] Punkt 8d (Vorlauf-Einschätzung Trend vs. Chop-Regime) — KEINE Schwelle, KEIN Gate, KEINE Pflichtzeile im 1-Min-Loop. Entscheidung über eine mögliche Gate-Funktion erst nach der Trade-15-Auswertung (siehe [[project_studie_bessere_trades_2026-08-24]]).
+- **ADX(1H/Daily), NAS100 (ergänzt 24.08.2026, "Directional Movement" neu im NAS100-Indikatoren-Set, siehe [[feedback_chart_layout]]):** Rohwert auf 1H und Tages-Timeframe notieren — NUR die ADX-Linie, +DI/−DI NICHT auswerten (Verwechslungsrisiko mit dem bestehenden Dual-Gate). Reine Kontext-/Regime-Information für [[feedback_chartanalyse]] Punkt 8d (Vorlauf-Einschätzung Trend vs. Chop-Regime) — KEINE Schwelle, KEIN Gate. **Korrigiert 26.08.2026 (Opus-Endverifikation Paket 2+3, Widerspruch aufgelöst):** Der 1H/Daily-Wert hier bleibt ein einmaliger Session-Start-Blick ohne eigene Wiederholungspflicht im Loop — das gilt weiterhin unverändert. Die frühere Formulierung "KEINE Pflichtzeile im 1-Min-Loop" ist damit aber nicht mehr richtig für ADX insgesamt: Seit 26.08.2026 gibt es eine ADX-Pflichtzeile im 1-Min-/Voll-Check-Loop (`ADX(14, NAS100): X (GEMESSEN, KEIN GATE)`, siehe [[feedback_vollcheck_format]] und [[feedback_live_trading]] Punkt 2b) — die bezieht sich auf den laufenden 5min-ADX-Wert, nicht auf diesen hier separat notierten 1H/Daily-Kontextwert. Beide Lesungen bleiben GEMESSEN-KEIN-GATE, nur die eine (5min) hat jetzt eine Loop-Pflichtzeile, die andere (1H/Daily) bleibt Session-Start-only. Entscheidung über eine mögliche Gate-Funktion erst nach der Trade-15-Auswertung (siehe [[project_studie_bessere_trades_2026-08-24]]).
 - Welche Key-Levels wurden getestet / gebrochen seit letzter Session?
 - `capture_screenshot` für visuellen Überblick
 
@@ -144,9 +159,23 @@ Immer in dieser Reihenfolge ausgeben:
 3. **Wirtschaftskalender heute** (Tabelle: Zeit, Event, Konsens, Vorwert)
 4. **Intermarket-Scan** (Übersicht: wie viele Signale bullisch / bärisch)
 5. **NAS100 + QQQ Chart** (Kurs, Indikatoren, Key-Levels, QQQ-Volumen-Kontext)
-6. **Gesamtbias + Setup-Ideen** (Long/Short mit Bedingung, Entry, SL, TP)
+6. **Gesamtbias + Setup-Ideen** (Long/Short mit Bedingung, Entry, SL, TP) — Bias-Bildung folgt der Rangfolge/Verbindlichkeitsregel im Abschnitt "Bias-Synthese" weiter unten, nicht freihändig
 
 ---
+
+## Bias-Synthese — wie aus 6 Quellen EIN Urteil wird (ergänzt 26.08.2026, Fable-Umsetzung nach Opus-Analyse, Punkt b)
+
+**Ausgangslage:** "Bias" war bisher kein eigener Schritt mit eigener Regel, sondern nur der Ausgabe-Punkt 6 am Ende des Briefings (siehe "Ausgabe-Struktur" oben) — es gab keine Vorschrift, WIE aus Memory/Tweets/FRED/Kalender/Intermarket/Chart ein einziges Bias-Urteil entsteht, und keine Vorrangregel bei Widerspruch zwischen den Quellen. Das Vorbild dafür existiert bereits an anderer Stelle im Regelwerk ([[feedback_chartanalyse]] Punkt 8: "1H-Bias ÜBERSCHREIBT das 5min-Bild"; Punkt 6: "Instrumente widersprechen sich → neutral, kein Trade") — dieselbe Denkweise wird hier auf die Pre-Market-Bias-Bildung übertragen.
+
+**Rangfolge bei Widerspruch (höher schlägt niedriger):**
+1. **Technische Struktur (Schritt 6, NAS100 1H/Daily + QQQ)** ist die primäre Grundlage — genau wie im Live-Loop der 1H-Bias das 5min-Bild überschreibt (siehe oben), überschreibt hier die Chart-Struktur reinen Sentiment-/Kontext-Lärm.
+2. **Aktive Makro-Sperrfristen (Schritt 4, Blackout-Events/Kalender) und akute Schock-Lagen (Schritt 2, Tweets)** können die technische Struktur AUSSER KRAFT setzen, aber nur in Richtung "Vorsicht/kein Entry vor X", nie in Richtung "Entry erzwingen" — analog zum Regime-Gate 8d, das ebenfalls nur bremsen, nie einen Trade erzwingen kann.
+3. **Intermarket-Scan (Schritt 5)** wirkt als Bestätigung/Gegengewicht: Zeigt er 2+ Faktoren klar entgegen der technischen Struktur, gilt derselbe Grundsatz wie [[feedback_chartanalyse]] Punkt 6 ("Instrumente/Indikatoren widersprechen sich → neutral, kein Trade") — der Gesamtbias wird dann NEUTRAL statt einseitig, auch wenn die Chart-Struktur allein klar wäre.
+4. **FRED (Schritt 3) und der strukturelle Tweet-Kontext (Schritt 2, abseits akuter Schocks)** liefern Hintergrund/Einordnung, verändern das Bias-Urteil selbst aber nicht direkt — sie erklären das WARUM, nicht das WAS.
+
+**Verbindlichkeit — explizit geklärt (Kernfrage aus Opus' Analyse, damit keine "Ankereffekt-Falle" entsteht):** Der morgendliche Gesamtbias ist **Kontext/Orientierung, KEIN hartes Gate für den Live-Loop.** Er ersetzt NICHT die eigenständige, live im 1-Min-Loop laufende MTF-/Dual-Gate-Prüfung (siehe [[feedback_live_trading]] Punkt 3a/7b, die ohnehin bei jedem vollständigen Checkliste-Durchlauf den 1H/15min-Bias frisch erhebt) — ein Setup, das der Live-Loop später sauber bestätigt, wird nicht deshalb verworfen, weil der Morgen-Bias in eine andere Richtung zeigte, und umgekehrt wird kein Setup allein deshalb genommen, weil der Morgen-Bias "passt". **Ausnahme, wo der Bias faktisch doch bindend wirkt:** die bereits bestehenden harten Zeit-/Blackout-Regeln aus Schritt 4 (Entry-Sperrfristen um Makro-Releases) und [[project_risikomanagement]] (Overnight-Verbot, Blackout-Tage) — die waren aber schon vor dieser Regel bindend und sind kein neuer Bias-Mechanismus, nur eine bereits bestehende Grenze, die der Bias korrekt wiedergeben muss.
+
+**How to apply:** Beim Formulieren von Ausgabe-Punkt 6 ("Gesamtbias + Setup-Ideen") die Rangfolge 1-4 oben tatsächlich durchgehen und explizit benennen, welche Ebene das Urteil trägt (z.B. "Bias: Long-Kontext (Chart 1H HH-HL trägt, Intermarket neutral, kein Blackout aktiv) — Kontext, kein Gate, Live-Loop prüft eigenständig"). Bei Widerspruch zwischen Chart und Intermarket ausdrücklich "neutral" ausgeben, nicht stillschweigend eine Seite bevorzugen.
 
 ## Regel: Verlauf seit letzter Memory immer rekonstruieren
 

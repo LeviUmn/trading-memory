@@ -1,47 +1,52 @@
 # Memory Index
 
-- [Plan-Upgrade + 4 neue Indikatoren live 24.08.2026 (chart- UND Regelwerk-seitig fertig)](feedback_chart_layout.md) — NAS100 6/10 (+DMI/ADX), QQQ 5/10 (+Anchored VWAP, +Relative Volume at Time). Persistenz getestet: alles außer RVOL übersteht Neustart nach "Speichern"+15s Wartezeit, RVOL muss jede Session neu geprüft/gesetzt werden. **Regelwerk-Verankerung erledigt (Fable, siehe [[project_studie_bessere_trades_2026-08-24]] Abschnitt 9):** VWAP-σ-Band-2 in 8e, ATR(14)-D-Pflichtzeile in [[feedback_session_update]] objektiviert 8d Kriterium 1, ADX GEMESSEN-KEIN-GATE (`adx_at_entry` in trades.db + `--adx` in gate_check.cjs + Session-Start-Rohwert), Anchored VWAP als Q1-Beleg (7b1a, mit Anker-Limit) + als Konfidenz-Modifikator in Punkt 11, RVOL ersetzt Kopf-Vergleich an vier Stellen (Punkt 11/7b/8a3/Q3). Offen, nicht selbst prüfbar: AVWAP/RVOL-Datenqualität auf dem Cboe-One-Teilvolumen-Feed noch live per Screenshot zur US-Handelszeit verifizieren
-- [Studie "bessere Trades" 24.08.2026 + Phase 0/1 umgesetzt](project_studie_bessere_trades_2026-08-24.md) — TP1-Breakeven 29,8% verifiziert. Phase 0: tp1_hit-Fix #31/#32, 7 neue DB-Spalten, skipped_setups+`add_skipped_setup.cjs`, gate_check.cjs bei 8c/7b1 verankert. Phase 1 (Nacht): Retest-Zeitbox in 8b Schritt 4 + Verzahnung mit 13.1 (gemeinsame Review am Fensterende), Q-Score (Q1-Q4) in gate_check.cjs als Entry-Freigabe-Suffix (neu [[feedback_live_trading]] 7b1a), Anzeige-Modus Trade 1-8, hartes Gate erst nach Trade 15 entschieden. Kein drittes Testfenster — läuft im 8b1-/Sizing-Fenster mit
+- [Testtag 27.08.2026 (fiktiv)](testtag/testtag_2026-08-27.md) — 0 Trades, Dual-Gate durchgehend stale trotz R2-Ausbruch+Selbstkorrektur (19:10) und knapper EMA50-Annäherung (19:58). Wartet auf Opus-Review
+- [Validierungstesttag (nächster Handelstag)](project_validierungstesttag_naechster_handelstag.md) — 3. fiktiver Testtag, 5 binäre Pass-Kriterien, entscheidet über Echtgeld-Start #44. #50-Gate bereits rechnerisch gescheitert, Renditeziel auf EV≥0,5%/Trade revidiert
+- [Regelwerk-Überarbeitung 26.08.2026](project_regelwerk_ueberarbeitung_2026-08-26.md) — 6 Pakete nach Opus-Testtag-Analysen (RR-Konsistenz-Gate, Tick-Prompt-Vollständigkeit, Solo-Mandat, AVWAP-Fix, Bias-Synthese, Stale-Klasse/Schattenmessung Paket 6/6a/6b/6c) + add_trade.cjs-Befüllungspflicht-Fix. Alles committet+gepusht
+- [Testtag 25.08.2026 (fiktiv)](testtag/testtag_2026-08-25.md) — #T1 TP1+BE, #T2 gecancelt (Prozessfehler), #T3 solo eröffnet, bei Loop-Stopp offen. Analyse: [[project_testtag_analyse_2026-08-25]]
+- [Testtag-Analyse 24.08.2026 + Opus-Review](project_testtag_analyse_2026-08-24.md) — 1 fiktiver Trade (#T1 Short, Loss). Long-Dual-Gate strukturell blockiert (Abschn. 9/10, umgesetzt). NEU 27.08.: Short-Stale-Gate-Analyse (Abschn. 11) — "Stale-Short/Long"-Klasse als Schattenmessung UMGESETZT (Paket 6/6a/6b, feedback_live_trading.md 7b1c, Anzeige-Modus ohne Rückfrage, Zeile nur bei erfüllter Vorbedingung)
+- [Chart-Layout / Indikatoren](feedback_chart_layout.md) — 2-Pane NAS100+QQQ, NAS100 6/QQQ 4 Indikatoren (VWAP-Dedup 26.08.). RVOL übersteht Neustart nicht. Details: [[project_regelwerk_ueberarbeitung_2026-08-26]]
+- [Studie "bessere Trades" 24.08.2026](project_studie_bessere_trades_2026-08-24.md) — TP1-Breakeven 29,8%. Phase 0 DB-Erweiterung+skipped_setups, Phase 1 Retest-Zeitbox+Q-Score in gate_check.cjs, Anzeige-Modus bis Trade 15
 - [Rollenteilung Sonnet/Fable/Opus neu (24.08.2026)](feedback_modellwahl_trading.md) — Sonnet NUR Live-Loop, Fable Regelwerk+Tagesabschluss+Skripte, Opus punktueller Meilenstein-Check
-- [Opus+Fable-Vollcheck 24.08.2026: N-1 bis N-22 abgearbeitet, D-1 bis D-5 ALLE entschieden](project_opus_vollpruefung_2026-08-24.md) — C-1 bis C-4 + gate_check.cjs umgesetzt, Phase-3 korrigiert (RR 1,03:1, EV −0,059%). Alle 17 direkt umsetzbaren N-Punkte erledigt (Q-Score UNBEKANNT-Zustand statt falsch-ROT, Cluster-Gate an ATR gekoppelt, trades.sql/trades_dax.sql neu gezogen+committet, trade_stats.cjs um TP1-/TP2-Quote+exit_type erweitert, --violation-0-Bug, runway_ratio-Formel vereinheitlicht, retroaktiver Gate-Check #36-43 in DB zurückgeschrieben — 6/8 FAIL, u.a.). **D-1 von Levi entschieden** — RR-Floor für die 8b1-Schritt-5-TP1-Kandidatenwahl pauschal zurück auf 1:1 für BEIDE Zonen, `gate_check.cjs` `TP1_SELECTION_RR_THRESHOLD={1:1.0,2:1.0}`. **Zusätzlich neu: 8b2-TP2-Realismus-Gate** (Chart-Level UND RR≥2:1, sonst halbe Position, kein Ausschluss). **D-3 von Levi ENTSCHIEDEN, abweichend von Fables Empfehlung — Phase 3 bleibt bewusst verlängert bis #50 (nicht nur #40), Phase 4 existiert noch nicht als eigenes laufendes Fenster, sondern ist der Zielzustand NACH bestandenem #50-Gate-Review. #41/#42/#43 bleiben korrekt `phase=3`, KEINE DB-Änderung.** D-4 (Phase-4-Gates-Zwischenstand n=8) dadurch **gegenstandslos** — es gibt kein separates #41-50-Fenster, die sechs Gates werden einmalig bei #50 über die gesamte verlängerte Phase 3 ausgewertet. Nachgezogen in `project_risikomanagement.md`, `project_phase4_gates_2026-08-12.md`, `project_vision.md` (alte Fassungen durchgestrichen, nicht gelöscht). Skript-Check: keines der Skripte (`gate_check.cjs`/`trade_stats.cjs`/`size.cjs`) hatte je eine hartcodierte #41-50-Fensterlogik — reine Dokumentationskorrektur, kein Code geändert. **D-5 von Levi ENTSCHIEDEN — Option B: Ende-Kriterium des laufenden 15-Trade-Sizing-Fensters von "EV>0% UND TP2-Quote>20%" auf "EV>0% UND TP1-Quote im Zielkorridor 45-50%" reduziert** (TP2-Quote wird weiter berichtet, ist aber kein Pass/Fail-Kriterium mehr für dieses Fenster — hängt zusätzlich vom unveränderten Früh-Exit-Stack 8e/Punkt 12 ab). Früh-Exit-Stack-Rückbau (Option A) explizit als eigener, separater nächster Schritt NACH Trade-15-Auswertung vermerkt, mit eigenem Test. Nachgezogen in `project_risikomanagement.md` + `project_studie_bessere_trades_2026-08-24.md` (alte Fassungen durchgestrichen). **Damit sind alle fünf D-Entscheidungen abgeschlossen**
-- [Indikator-Upgrade-Diskussion 22.08.2026 (offen)](project_indikator_upgrade_diskussion_22_08_2026.md) — ADX/Anchored-VWAP zuerst, CVD/Volume-Delta via UW-Orderflow neu aufgeworfen, greift [[project_vision]] auf
+- [Opus+Fable-Vollcheck 24.08.2026: D-1 bis D-5](project_opus_vollpruefung_2026-08-24.md) — N-1..N-22 umgesetzt. D-1 RR-Floor 1:1+8b2-Gate. D-3 Phase 3 bis #50. D-5 Fenster-Kriterium vereinfacht. Details: `project_risikomanagement.md`
+- [Indikator-Upgrade-Diskussion 22.08.2026](project_indikator_upgrade_diskussion_22_08_2026.md) — ADX/AVWAP inzwischen umgesetzt (siehe [[feedback_chart_layout]]); CVD/Volume-Delta via UW-Orderflow weiterhin offen
 - [Kernstrategie-Review 22.08.2026: Whipsaw-an-der-EMA + VWAP-Bänder live gesetzt](feedback_chartanalyse.md) — Reversal-Tactical-Trigger verworfen. Neu: 8a2 (EMA50-Reclaim), 8a3 (Volumen-Soft-Gate). VWAP-Bänder live auf QQQ, siehe [[feedback_chart_layout]]
 - [Regeländerungs-Tempo-Bremse (Punkt 14)](feedback_live_trading.md) — 22.08. Bei Verlustserie vor neuer Regel fragen "sofort scharf oder erst nächster Sessionstart", Notfall-Fixes ausgenommen
-- [Fable-Session-Plan 22.08.2026: Umkehrmuster-Regelwerk + Volumen/Order-Flow](project_fable_session_reversal_volumen_22_08_2026.md) — 21.08. Zwei offene Themen (Reversal ohne Dual-Gate, Order-Flow), nichts umgesetzt
-- [Fable-Vollanalyse Woche 17.-21.08.2026 (#36-#43) + Frage 7](feedback_live_trading.md) — 21.08. Kein falscher Dual-Gate-Entscheid in 8 Trades, Ursachen Timing-/Sizing-Brüche + Regimewechsel. SL-Hits waren Wicks. 4/6 Regeländerungen umgesetzt
+- [Fable-Session-Plan 22.08.2026](project_fable_session_reversal_volumen_22_08_2026.md) — Zwei offene Themen (Reversal ohne Dual-Gate, Order-Flow), nichts umgesetzt
+- [Fable-Vollanalyse Woche 17.-21.08.2026 (#36-#43)](feedback_live_trading.md) — Kein falscher Dual-Gate-Entscheid in 8 Trades, Ursachen Timing/Sizing+Regimewechsel. 4/6 Regeländerungen umgesetzt
 - [SL-Cluster-Regel (Punkt 8c2)](feedback_chartanalyse.md) — 21.08. SL in bereits per Wick getesteter Zone (±20-30 Pkt) braucht zusätzlich min. 0,5× ATR Puffer, Auslöser #42/#43
-- [Tagesabschluss 21.08.2026: #42 (LOSS, Sizing-Verstoß) + #43 (LOSS, regelkonform)](trades/trading_2026-08-21.md) — Opex/PMI-Schock-Tag, -83,53€. Beide Wick-Stopps Zone 29.240-254 — SL-Hit ≠ Reversal. Phase 3 nach #43: -57,77€/18 Trades
-- [CME-FedWatch-API-Idee (kein GO)](project_cme_fedwatch_api_idee.md) — 21.08. Kostenlose Alternative (`pyfedwatch`/WebFetch) statt kostenpflichtiger API
+- [Tagesabschluss 21.08.2026: #42 (LOSS, Sizing-Verstoß) + #43 (LOSS)](trades/trading_2026-08-21.md) — Opex/PMI-Schock-Tag, -83,53€. Beide Wick-Stopps Zone 29.240-254. Phase 3 nach #43: -57,77€/18 Trades
+- [CME-FedWatch-API-Idee (kein GO)](project_cme_fedwatch_api_idee.md) — Kostenlose Alternative (`pyfedwatch`/WebFetch) statt kostenpflichtiger API
 - [Ehrlichkeit wie von einem Trainer](feedback_coaching_ehrlichkeit.md) — 20.08. Levi will ungefilterte Ehrlichkeit + warme Grundhaltung. Verbindet [[feedback_verify_dont_cave]]/[[feedback_regeldisziplin]]
-- [Tagesabschluss 20.08.2026: #40 (LOSS) + #41 (BE) + Regime-Diagnose](trades/trading_2026-08-20.md) — -89,98€/0€, beide regelkonform. Regimewechsel Trend→Chop per Trend-Effizienz-Metrik verifiziert. Phase 3 nach #41: 25,76€/16 Trades
+- [Tagesabschluss 20.08.2026: #40 (LOSS) + #41 (BE)](trades/trading_2026-08-20.md) — -89,98€/0€, beide regelkonform. Regimewechsel Trend→Chop per Trend-Effizienz verifiziert. Phase 3 nach #41: 25,76€/16 Trades
 - [Tagesabschluss 19.08.2026: #39 (WIN, RR-Gate-Verstoß)](trades/trading_2026-08-19.md) — +45,74€, Eigenentry vor RR-Prüfung → neuer Punkt [[feedback_live_trading]] 7b1
 - [Entry-Freigabe-Gate (Punkt 7b1)](feedback_live_trading.md) — 19.08./21.08. Dual-Gate allein reicht nie — RR-/TP-Realismus-PASS als Pflichtzeile VOR jeder Order
 - [TP-Realismus-Filter (Punkt 8b1)](feedback_chartanalyse.md) — 18.08. TP1 zusätzlich zu RR≥1:1 auch ≤2× ATR/Box entfernt (Hard-Gate). Seit 20.08. mit Rohwerten + MFE im Log
-- [Tagesabschluss 18.08.2026: #37 (WIN) + #38 (LOSS)](trades/trading_2026-08-18.md) — Iran/Golf-Eskalation, +15,08€/-17,75€, beide RR-Gates korrekt geprüft. Phase 3 nach #38: 70,00€/13 Trades
+- [Tagesabschluss 18.08.2026: #37 (WIN) + #38 (LOSS)](trades/trading_2026-08-18.md) — Iran/Golf-Eskalation, +15,08€/-17,75€. Phase 3 nach #38: 70,00€/13 Trades
 - [Positionsfokus bei offener Position statt Musterjagd](feedback_positionsfokus_bei_offener_position.md) — 18.08. Reversal-Check zielt auf Risikoschutz der Position, nicht wie neue Setup-Suche
 - [Tagesabschluss 17.08.2026: #36 (LOSS) + Sofort-Review](trades/trading_2026-08-17.md) — -27,88€, Entry-RR-Gate-Verstoß, Auslöser Punkt 7b1
-- [Makrodaten 13.-14.08.2026 (PPI/Claims/Michigan)](project_makrodaten_2026-08-13_bis_14.md) — PPI/Core PPI kühlten, Claims 209K über Konsens, Michigan Sentiment 51,0
-- [Fable-Vollprüfung Phase 1-3 (12.08.2026)](project_fable_vollpruefung_phase1-3_2026-08-12.md) — RR U-förmig (1,18→1,75→0,86), Kapitalziel bei Phase-3-Edge nicht erreichbar
-- [Phase-4-Gates (12.08.2026, Rahmung 24.08. korrigiert)](project_phase4_gates_2026-08-12.md) — 6 Gates fürs #50-Review, einmalig ausgewertet. Ursprüngliche "Phase 3 bis #40, Phase 4 = #41-50 als eigenes Fenster"-Rahmung durch Levis 24.08.-Entscheidung überholt: Phase 3 läuft bewusst verlängert bis #50, Phase 4 startet erst danach (siehe [[project_opus_vollpruefung_2026-08-24]] D-3/D-4)
-- [Tagesabschluss 07.08.2026: #34 (LOSS) + #35 (WIN)](trades/trading_2026-08-07.md) — NFP-Miss-Tag, -91,74€. #34 schnellster Loss (Schock-Tier nicht angewendet)
-- [DAX-Layout-Tools unzuverlässig (Lehre, GELÖST)](feedback_layout_tools_unzuverlaessig.md) — 07.08. `layout_switch` fast NAS100-Layout überschrieben, behoben
-- [Regelwerk-Audit 07.08.2026: Fehler + Paid-Upgrade-Kandidaten](project_regelwerk_audit_2026-08-07.md) — 2 offene DAX-Lücken, TradingEconomics-API als Top-Kaufempfehlung
-- [Nasdaq-Official-Feed-Idee vs. Dual-Gate](project_nasdaq_official_feed_idee.md) — 07.08. Dual-Gate ≠ nur Datenlücke, Schatten-Test statt Sofort-Umstellung
+- [Makrodaten 13.-14.08.2026](project_makrodaten_2026-08-13_bis_14.md) — PPI/Core PPI kühlten, Claims 209K über Konsens, Michigan Sentiment 51,0
+- [Fable-Vollprüfung Phase 1-3 (12.08.)](project_fable_vollpruefung_phase1-3_2026-08-12.md) — RR U-förmig (1,18→1,75→0,86), Kapitalziel bei Phase-3-Edge nicht erreichbar
+- [Phase-4-Gates (12.08., Rahmung 24.08. korrigiert)](project_phase4_gates_2026-08-12.md) — 6 Gates fürs #50-Review. Alte "#41-50 eigenes Fenster"-Rahmung überholt: Phase 3 bis #50, Phase 4 danach ([[project_opus_vollpruefung_2026-08-24]])
+- [Tagesabschluss 07.08.2026: #34 (LOSS) + #35 (WIN)](trades/trading_2026-08-07.md) — NFP-Miss-Tag, -91,74€, #34 schnellster Loss
+- [DAX-Layout-Tools unzuverlässig (GELÖST)](feedback_layout_tools_unzuverlaessig.md) — `layout_switch` fast NAS100-Layout überschrieben, behoben
+- [Regelwerk-Audit 07.08.2026](project_regelwerk_audit_2026-08-07.md) — 2 offene DAX-Lücken, TradingEconomics-API als Top-Kaufempfehlung
+- [Nasdaq-Official-Feed-Idee vs. Dual-Gate](project_nasdaq_official_feed_idee.md) — Dual-Gate ≠ nur Datenlücke, Schatten-Test statt Sofort-Umstellung
 - [Tagesabschluss 06.08.2026: Trade #33 (LOSS)](trades/trading_2026-08-06.md) — V-Shape-Reversal-Tag, -30,69€. Neue Pflichtzeile "Stall-Check" (12.4)
-- [Tagesabschluss 05.08.2026: #31 (Loss) + #32 (Win)](trades/trading_2026-08-05.md) — +53,19€. 3. 7d0-Rückfall in Folge → neue Pflichtzeilen
+- [Tagesabschluss 05.08.2026: #31 (Loss) + #32 (Win)](trades/trading_2026-08-05.md) — +53,19€, 3. 7d0-Rückfall → neue Pflichtzeilen
 - [DAX-Erweiterung: eigener Vormittags-Trading-Block (10-15 Uhr)](project_dax_erweiterung.md) — 05.08. Strategiewechsel. 07.08.: DB/Ordner getrennt
 - [Trade #30 + Fable-Review](trades/trading_2026-08-04.md) — 04.08., Win +33,75€. Fable-GO für volle Phase-3-Größe (5.000€) ab #31
 - [draw_list getChartApi-Bug (Fix vorgenommen)](feedback_draw_list_getchartapi_bug.md) — 04.08., Root-Cause in `src/core/drawing.js` behoben
 - [Mac-Umzug (Zukunft)](project_mac_umzug.md) — ca. September 2026, nichts tun bis Levi "Mac Mini ist da" meldet
 - [Trade #29: Long Stop-Hunt-Reversal + ISM-Beat](trades/trading_2026-08-03.md) — 03.08., Win +105,21€, TP1+TP2
-- [X-Account @AITraderLog](project_x_account_idee.md) — angelegt 04.08., schrittweiser Reveal statt vollem Profil vorab
-- [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 03.08., 149$/Monat erwogen, noch nicht entschieden
+- [X-Account @AITraderLog](project_x_account_idee.md) — schrittweiser Reveal statt vollem Profil vorab
+- [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 149$/Monat erwogen, noch nicht entschieden
 - [Phase 4 final definiert + Übergang ins normale Trading](project_vision.md) — 31.07., Phase 4 (36-40) = UnusualWhales (konditional) + 10.000€/Trade, danach 50.000€
 - [Trade #28 & Fable-Review: Positions-Verteidigung vs. Dreh-Schwelle](trades/trading_2026-07-31.md) — 31.07., Win nur +13,80€. [[feedback_live_trading]] 12.3+7c geschärft
 - [4H-Timeframe & Indikator-Ranking Review](project_review_4h_und_indikator_ranking_2026-07-31.md) — 31.07., beide abgelehnt, depth_get nicht nutzbar
 - [Tagesabschluss 30.07.2026](trades/trading_2026-07-30.md) — Kein Trade, Regel-Pflege-Tag nach PCE/GDP/MSFT-Schock+Chop
 - [Demo-Loop für Dritte](feedback_demo_trades.md) — 29.07., voller Regelsatz gilt auch im Demo, aber keine DB/Log-Eintragung
-- [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung 20 Uhr, volle Entry-Sperrfrist
+- [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Zinsentscheidung, volle Entry-Sperrfrist
 - [Fable-Tagesabschluss-Review 28.07.2026](trades/trading_2026-07-28.md) — #26 Loss -55,63€, #27 Win +72,66€, +17,03€
 - [Punkt-12-Präzisierung: SL-Nachzug ≠ Teilgewinn](feedback_live_trading.md) — bei Stall-Trigger beide Optionen anbieten (Punkt 12.2)
 - [size.cjs Short-SL-Bug (GEFIXT)](feedback_size_script_short_bug.md) — Vorzeichenfehler bei Short, 28.07. gefixt
@@ -87,8 +92,7 @@
 - [Wiederholte Zonentests](feedback_wiederholte_zonentests.md) — Fallende Hochs sofort als Erschöpfung flaggen
 - [Trade 08.07.2026](trades/trading_2026-07-08.md) — #14 Loss (Broker-Ausfall+Hedge) + #15 Win, -17,41€
 - [TradingView Launch (MSIX)](project_tradingview_launch.md) — MSIX-Pfad muss in health.js stehen
-- [SpaceX (SPCX)](project_spacex_ipo.md) — Normale Aktie seit IPO, keine Sonderstrategie
-- [Tagesabschluss Routine](feedback_tagesabschluss.md) — "Tag Zusammenfassung speichern" → Datei+Git-Backup+add_trade.cjs. Seit 24.08. 4 Pflichtpunkte
+- [Tagesabschluss Routine](feedback_tagesabschluss.md) — "Tag Zusammenfassung speichern" → Datei+Git-Backup+add_trade.cjs, seit 25.08. 6 Pflichtpunkte
 - [News System](project_news_system.md) — X MCP aktiv seit 30.06., löst RSS ab
 - [Risikomanagement](project_risikomanagement.md) — 15.000€ Kapital, Phase 3 seit 24.07., Stacking-Floor 50%
 - [Trade 22.06.2026](trades/trading_2026-06-22.md) — Kein Trade (Fehlklick, Setup invalidiert)
@@ -97,7 +101,7 @@
 - [Order-Bestätigung](feedback_order_bestaetigung.md) — Ausführung immer aktiv bestätigen lassen
 - [Memory Pflege Regel](feedback_memory_pflege.md) — Sofort nach Trade/Update speichern, Zitierpflicht für Zahlen
 - [Chartanalyse Checkliste](feedback_chartanalyse.md) — Volle TA am Voll-Check-Rhythmus, 8b/8c reformiert, 8c2 (21.08.) neu
-- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte: Memory→Tweets→FRED→Kalender→Intermarket→Chart→Bias
+- [Session Update Ablauf](feedback_session_update.md) — "start update dich" → 6 Schritte. 26.08.: Bias-Synthese+Pivot-Pflichtschritt ergänzt, siehe [[project_regelwerk_ueberarbeitung_2026-08-26]]
 - [Session 30.06.2026](trades/trading_2026-06-30.md) — 3 Trades +9,72€
 - [Trade 12.06.2026](trades/trading_2026-06-12.md) — Erster Trade +20,32€
 - [Trade Log Tabelle](trades/trade_log.md) — Narrative Übersicht, Zahlen auch in SQLite-DB
@@ -116,7 +120,6 @@
 - [Trade 02.07.2026](trades/trading_2026-07-02.md) — #10-12, alle Verluste, Phase 1 erstmals negativ
 - [Regime-Wechsel vs. Prozessfehler](feedback_regime_wechsel.md) — Verlustserie: jeden Trade einzeln klassifizieren
 - [Backtest-Ablauf](feedback_backtest_ablauf.md) — zweistufig: DB-Delta-Check vs. Replay
-- [Chart-Layout-Präferenz](feedback_chart_layout.md) — NAS100 Single-Pane, VIX per quote_get
 - [Backtest-Ergebnis 03.07.2026](feedback_backtest_ergebnis_2026-07-03.md) — hypothetisch ≈+60€ statt -4,22€
 - [Realisiertes RR](feedback_realisiertes_rr.md) — Kernkennzahl ≈1,16:1 blended (27 Trades)
 - [Session 06.07.2026](trades/trading_2026-07-06.md) — Kein Trade, erschöpfter Ausbruch nicht gejagt

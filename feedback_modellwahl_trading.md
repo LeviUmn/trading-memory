@@ -1,13 +1,21 @@
 ---
 name: feedback-modellwahl-trading
-description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung, Fable 5 Regelwerk/Tagesabschluss/Analyse UND Skripte/Code, Opus 5 nur punktueller Cross-Check bei Meilensteinen"
+description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung, Fable 5 Regelwerk/Tagesabschluss/Analyse UND Skripte/Code, Opus 5 nur punktueller Meilenstein-Check. Seit 27.08.2026: Fable nicht mehr im Tarif enthalten, läuft aber über aufgeladenes Nutzungsguthaben ('Draws from usage credits')"
 metadata:
   type: feedback
   originSessionId: session-2026-07-27
-  modified: 2026-08-24T09:52:01.828Z
+  modified: 2026-08-27T08:53:23.591Z
 ---
 
-## Modellwahl-Regel: Rollenteilung Sonnet/Fable/Opus (aktualisiert 24.08.2026)
+## STAND 27.08.2026: Fable-Verfügbarkeit — Deprecation-Risiko eingetreten, aber per Nutzungsguthaben gelöst
+
+Levi meldete am 27.08.2026 zunächst, dass Fable 5 für seinen Tarif nicht mehr regulär erreichbar ist. Genau das war seit 27.07.2026 als Risiko vermerkt (siehe "Offener Punkt" unten). Levi hat daraufhin Nutzungsguthaben aufgeladen — `/model` zeigt seitdem "Set model to Fable 5 ... · Draws from usage credits", d.h. Fable läuft weiter, zieht aber pro Nutzung von bezahltem Guthaben statt vom regulären Tarifkontingent. Fables Rolle (Regelwerk-Autorschaft, Tagesabschluss, laufende Analyse, Skripte/Code) bleibt damit vorerst unverändert bestehen — die Rollenteilung unten gilt weiter.
+
+**Zu beachten künftig:** Da Fable jetzt Nutzungsguthaben verbraucht (Kosten), bei größeren/laufenden Fable-Aufträgen ggf. kurz gegenchecken, ob Levi das im Blick behalten will (z.B. bei sehr umfangreichen Paketen). Kein Hard-Gate, nur Kostenbewusstsein.
+
+---
+
+## Modellwahl-Regel: Rollenteilung Sonnet/Fable/Opus (aktualisiert 24.08.2026, seit 27.08.2026 überholt s.o.)
 
 **Regel (Stand 24.08.2026, ersetzt die Fassung vom 27.07.2026 unten):**
 - **Sonnet 5:** NUR noch Live-Trading-Ausführung — der 1-Minuten-Loop (Quick-Tick UND 5-Minuten-Voll-Check), Order-Entscheidungen in Echtzeit. Kein Regelwerk, keine Tagesabschlüsse, keine Skripte mehr.

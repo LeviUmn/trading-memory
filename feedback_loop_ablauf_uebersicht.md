@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: session-2026-07-21
-  modified: 2026-08-21T13:19:31.783Z
+  modified: 2026-08-26T16:40:02.845Z
 ---
 
 Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine zusammenhängende Referenz gespeichert, damit sich künftige Sessions konsistent daran halten — bündelt Regeln, die sonst über mehrere Dateien verteilt sind.
@@ -34,7 +34,7 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 ### Jede 5. Minute (5-Min-Kerze) — Voll-Check, Punkt 9 (korrigiert 21.07.2026)
 1. Echte Minute erneut bestätigen
 2. **MTF-Wechsel (uneingeschränkt Pflicht):** `chart_set_timeframe(15)` NAS100 → Werte lesen → `chart_set_timeframe(60)` → Werte + Struktur (HH-HL/LH-LL) letzter 5 Bars → zurück auf 5min
-3. **QQQ-Dual-Gate:** Zeitstempel-Vergleich NAS100/QQQ-Bar → falls Session-Gate offen (Punkt 7e): `pane_focus(1)`, dort 15min+60min → EMA50/VWAP/Volumen lesen → **QQQ-Timeframe zurück auf 15min setzen** (ergänzt 31.07.2026, User-Korrektur — QQQ-Pane bleibt sonst auf 60min stehen, wenn direkt zu Pane 0 zurückgewechselt wird) → dann erst zurück auf Pane 0
+3. **QQQ-Dual-Gate:** Zeitstempel-Vergleich NAS100/QQQ-Bar → falls Session-Gate offen (Punkt 7e): `pane_focus(1)`, dort 15min+60min → EMA50/Anchored VWAP (Remote)/Volumen lesen (eingebaute VWAP-Studie am 26.08.2026 entfernt, siehe [[feedback_chart_layout]]) → **QQQ-Timeframe zurück auf 15min setzen** (ergänzt 31.07.2026, User-Korrektur — QQQ-Pane bleibt sonst auf 60min stehen, wenn direkt zu Pane 0 zurückgewechselt wird) → dann erst zurück auf Pane 0
 4. **Chartmuster (reduziert, NICHT mehr die volle [[feedback_chartanalyse]] 9d-Liste):** Screenshot + Prüfung auf die 3-4 zum Kontext wahrscheinlichsten Muster (z.B. Double-Top bei Zonentest, Flag/Pennant bei Konsolidierung, Keil bei Trendabschwächung)
 5. **Fibonacci:** nur wenn ein erkennbarer Impuls/Trend vorliegt, sonst ausgelassen
 6. **Tweet-Fetch-Fälligkeit ab 21.08.2026 an der Voll-Check-Zählung festgemacht, nicht mehr an Zeitstempel-Differenz** (User-Korrektur, live während Trading-Session — löst den darunter dokumentierten Grenzfall-Bug strukturell statt nur punktuell): Fetch läuft an JEDEM 2. Voll-Check (= alle 10 Min, da Voll-Checks im 5-Min-Takt laufen), gezählt ab dem letzten tatsächlich durchgeführten Fetch — kein Zeitstempel-Vergleich, kein Rundungs-/Grenzfall-Risiko mehr. Bei Voll-Check Nr. 1 nach einem Fetch: "noch nicht fällig (nächster Fetch beim übernächsten Voll-Check)". Bei Voll-Check Nr. 2: Fetch durchführen, `x_last_fetch.json` weiterhin als Log/Audit-Trail aktualisieren (Zeitstempel bleibt für Nachvollziehbarkeit, ist aber nicht mehr die Fälligkeits-Grundlage). Ergebnis weiterhin IMMER als Pflicht-Zeile im Output, siehe Schritt 9.
