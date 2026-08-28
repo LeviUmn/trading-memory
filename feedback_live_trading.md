@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-08-27T09:14:02.003Z
+  modified: 2026-08-28T08:26:56.200Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -86,13 +86,17 @@ Am Ende JEDES Voll-Checks zusätzlich zwingend:
 (1) Output-Vorlage aus [[feedback_vollcheck_format]] Zeile für Zeile kopieren und befüllen,
     NIE aus dem Gedächtnis neu formulieren/als Tabelle umbauen. Letzte Zeile immer
     "Format: Fließtext ✓".
-(2) x_last_fetch.json lesen, Zeitstempel in Ortszeit umrechnen (NIE roh/UTC übernehmen,
-    siehe Punkt 9 "Zeitzonen-Fix", ergänzt 25.08.2026), Minuten-Delta seit letztem
-    Tweet-Fetch berechnen (NICHT mental mitzählen) → bei ≥10 Min (Schwelle 24.08.2026 auf
-    60 Min geändert, 25.08.2026 von Levi zurückrevidiert auf 10 Min, siehe Punkt 9) ODER anlassbezogen bei einem bekannten Kalender-Release
-    innerhalb ±15 Min Pflicht-Fetch + Pflicht-Ausgabezeile "Tweet-Check: ..." (siehe Punkt 9
-    und [[feedback_vollcheck_format]]) — IMMER ausgeben, auch bei "nichts Neues" oder
-    "noch nicht fällig", nie stillschweigend weglassen.
+(2) Tweet-Fetch-Fälligkeit am FESTEN KERZENRASTER prüfen (Levi-Vorgabe 28.08.2026,
+    "Kerzenraster-Fix" — ersetzt die Delta-seit-letztem-Ist-Abruf-Logik, siehe Punkt 9):
+    Ist die echte Minute (per Punkt 9a) % 10 == 0 → Pflicht-Fetch (= jede zweite
+    abgeschlossene 5-Min-Kerze, Slots :00/:10/:20/:30/:40/:50). Zusätzlich
+    x_last_fetch.json lesen (Zeitstempel in Ortszeit, NIE roh/UTC, siehe Punkt 9
+    "Zeitzonen-Fix"): Liegt der letzte Fetch VOR dem Beginn des letzten fälligen
+    Raster-Slots → Slot wurde verpasst → JETZT nachholen und als ÜBERFÄLLIG ausweisen.
+    ODER anlassbezogen bei einem bekannten Kalender-Release innerhalb ±15 Min.
+    Pflicht-Ausgabezeile "Tweet-Check: ..." (siehe Punkt 9 und
+    [[feedback_vollcheck_format]]) — IMMER ausgeben, auch bei "nichts Neues" oder
+    "nicht fällig", nie stillschweigend weglassen.
 Fehlt eine der beiden Zeilen im Output, gilt der Voll-Check als NICHT durchgeführt —
 exakt dieselbe Behandlung wie beim fehlenden 1H-/QQQ-Schritt oben.
 ```
@@ -117,11 +121,20 @@ Fehlt eine dieser vier Zeilen bei einem Check-in mit offener Position, gilt der 
 NICHT durchgeführt — dieselbe Behandlung wie beim MTF-/Tweet-Check-Block oben.
 
 Zusätzlich bei JEDEM Voll-Check (Minute % 5 == 0), unabhängig von einer offenen Position:
-(5) "Regime-Gate (8d): Schock-Tag ✓/✗ (n/3)" ([[feedback_vollcheck_format]]).
-(6) "ADX(14, NAS100): X (GEMESSEN, KEIN GATE)" ([[feedback_vollcheck_format]]).
+(5) "Regime-Gate (8d): Schock-Tag ✓/✗ (n/3) | Regime: Trend/Chop" — der n/3-Zähler ist
+    PFLICHT und darf nie durch eine Trend/Chop-Aussage ERSETZT werden; die steht als Zusatz
+    hinter dem "|" (Format-Fix 28.08.2026, [[feedback_vollcheck_format]]).
+(6) "ADX(14, NAS100): X (GEMESSEN, KEIN GATE)" — X ist ein tatsächlich ABGELESENER
+    Zahlenwert oder explizit "nicht gelesen", nie "~X"/"implizit"/"unverändert"; dieselbe
+    Rohwert-Pflicht gilt für RSI/MACD-H/EMA50 in den MTF-Zeilen (Format-Fix 28.08.2026,
+    [[feedback_vollcheck_format]]).
 
 Vor JEDER tatsächlichen Order/jedem Entry (unabhängig von Tick-Typ), zusätzlich zwingend:
-(7) `node scripts/cooldown_check.cjs` ausführen, Kernzeile der Ausgabe ins Protokoll
+(7) `node scripts/cooldown_check.cjs` ausführen, die tatsächliche Ausgabezeile des Skripts
+    WÖRTLICH ins Protokoll — ein reines Ampel-Symbol ("🟢") genügt NICHT (verschärft
+    28.08.2026, Opus-Vorschlag 3 aus [[project_testtag_analyse_2026-08-27]]: die
+    19:10-Szene des Testtags war nur deshalb unprüfbar, weil statt der Skript-Ausgabe nur
+    "🟢" protokolliert wurde — dieselbe Behandlung wie beim `gate_check.cjs`-Output in (8))
     (Workflow Schritt 0, [[project_risikomanagement]]) — bei rotem Status/Exit-Code 2 kein
     neuer Trade, unabhängig vom Setup.
 (8) Voller 5-Schritte-Ablauf aus Punkt 7b1 (ATR ablesen → SL-Floor rechnen →
@@ -137,13 +150,33 @@ Vor JEDER tatsächlichen Order/jedem Entry (unabhängig von Tick-Typ), zusätzli
     unvollständiger Schritt 5 (Beleg für die Notwendigkeit: `adx_at_entry`/`trend_effizienz`
     standen trotz "optionaler" CLI-Existenz bei 0 von 43 Trades in der DB).
 (9) "Chop-Check: ..." bei jedem Voll-Entry ([[project_risikomanagement]]).
-(10) "Spike-Ausnahme: ..." bei JEDER Dual-Gate-Prüfung (Punkt 7b1), auch wenn daraus kein
-    Entry wird — nicht nur beim finalen Trigger.
+Fehlt eine der Zeilen (7)-(9) vor einer Order, gilt Schritt 5 (RR-/TP-Realismus-PASS,
+Punkt 7b1) als NICHT abgeschlossen — die Order gilt als nicht regelkonform vorbereitet.
+
+Bei jedem TRIGGER-MOMENT, unabhängig davon, ob daraus eine Order wird (Geltungsbereich
+geändert 28.08.2026, Opus-Vorschlag 5/Option i aus [[project_testtag_analyse_2026-08-27]],
+Levi-Freigabe — vorher standen diese Zeilen order-gebunden unter dem Block oben, wodurch
+die Anzeige-Klassen an Null-Trade-Tagen strukturell keine Daten produzieren konnten:
+`skipped_setups` stand nach drei Testtagen bei 0 Zeilen, die Spike-Ausnahme fiel am
+27.08. zu 0/35 aus). Ein TRIGGER-MOMENT ist:
+(a) eine Dual-Gate-Hälfte schließt FRISCH per bestätigtem Kerzenschluss über/unter ihrer
+    EMA50 (NAS100 5min oder QQQ 15min, beide Richtungen), ODER
+(b) ein benanntes Level (Pivot PP/R1/R2/S1/S2, Session-Extrem, eingezeichnete Zone) bricht
+    per bestätigtem Kerzenschluss.
+An jedem Trigger-Moment zwingend:
+(10) "Spike-Ausnahme: ..." (Punkt 7b1) — bei jedem Trigger-Moment mit Dual-Gate-Bezug.
 (11) "Basis-Reclaim-Klasse: ..." NUR wenn Bedingung 1 (Session-Extrem mit Auslöser) erfüllt
     ist ([[feedback_chartanalyse]] 8a4) — sonst entfällt die Zeile ersatzlos, keine
     künstliche Checklisten-Verlängerung an normalen Tagen.
-Fehlt eine dieser Zeilen vor einer Order, gilt Schritt 5 (RR-/TP-Realismus-PASS, Punkt 7b1)
-als NICHT abgeschlossen — die Order gilt als nicht regelkonform vorbereitet.
+(11a) "Stale-Check: ..." (Punkt 7b1c) NUR wenn die Stale-Vorbedingung erfüllt ist — sonst
+    entfällt die Zeile ersatzlos. (Bisher nur vor Orders fällig; an Trigger-Momenten kann
+    die Klasse jetzt auch den Fall messen, für den sie gebaut wurde: altes Gate OHNE Trade.)
+Führt ein Trigger-Moment NICHT zu einem Entry, wird er in ECHTEN Sessions (nicht an
+fiktiven Testtagen — dort genügt die Protokollzeile) zusätzlich per
+`node scripts/add_skipped_setup.cjs` in `skipped_setups` erfasst, damit die Schattenmessung
+Datenpunkte bekommt. Fehlt eine der fälligen Zeilen (10)/(11)/(11a) an einem
+Trigger-Moment, gilt der Check als NICHT vollständig — dieselbe Behandlung wie die übrigen
+Pflichtzeilen.
 
 (27.08.2026, Paket 6, Item 6; Format ergänzt 27.08.2026 Paket 6a um "erkannt seit HH:MM" — das war Teil der Analyse-Vorgabe "keine/erkannt seit HH:MM/Status/spricht für-gegen Richtung" und fehlte in der Erstumsetzung) Zusätzlich ZWINGEND vor jeder Order als eigene Ausgabezeile:
 `9b-Divergenz-Check: MACD-H(5min) [keine Divergenz / Divergenz erkannt seit HH:MM] → [positiv/negativ/divergent] → [kein Widerspruch/WARNUNG: gegen Richtung]`
@@ -156,7 +189,9 @@ ersatzlos, exakt wie bei der Basis-Reclaim-Klasse (11) oben:
 `Stale-Check: [Vorbedingung erfüllt, <n>/5 Stale-Bedingungen erfüllt / STALE-SHORT bzw. STALE-LONG: alle 5 erfüllt]`
 (Bedingungen/Details in Punkt 7b1c — Anzeige-Modus, KEIN Gate, keine Rückfrage.) Fehlt die
 Zeile bei erfüllter Vorbedingung, gilt Schritt 5 als nicht abgeschlossen — dieselbe
-Behandlung wie bei der 9b-Zeile.
+Behandlung wie bei der 9b-Zeile. (Geltungsbereich erweitert 28.08.2026: dieselbe Zeile ist
+zusätzlich an jedem TRIGGER-MOMENT fällig, auch ohne Order — siehe Block (10)/(11)/(11a)
+oben, Opus-Vorschlag 5 aus [[project_testtag_analyse_2026-08-27]].)
 
 Direkt NACH jeder tatsächlichen Order-Ausführung (Entry bestätigt), zusätzlich zwingend
 (ergänzt 26.08.2026, Paket 5, siehe Punkt 11 "Ausführungsschritt: Entry-AVWAP-Anker" für den
@@ -189,7 +224,7 @@ parallele Checkliste dafür führen.
 **Bezug zu Punkt 2a:** Das bringt die Praxis zurück zu dem, was Punkt 2a von Anfang an vorsah (`CronCreate` mit `*/1 * * * *`), aber zwischenzeitlich durch `ScheduleWakeup` ersetzt wurde. Ab jetzt gilt `CronCreate` als das verbindliche Standard-Werkzeug für den Loop, `ScheduleWakeup` nur noch als Fallback, falls `CronCreate` in einer Session nicht verfügbar ist (dann gilt die 2-Minuten-Realität aus dem ScheduleWakeup-Test als Notlösung, nicht als neues Ziel).
 
 **Wichtig — nur der Wecker-Mechanismus ändert sich, der Inhalt jedes Ticks bleibt exakt wie bisher dokumentiert:** Der isolierte Cadence-Test lief bewusst mit reduziertem Inhalt (nur Zahlen/Screenshot), um ausschließlich den Timing-Mechanismus zu prüfen. Das war NUR für den Test. Im echten Live-Trading gelten unverändert:
-- Tweet-Fetch der 3 X-Accounts ~~alle 60 Minuten~~ **alle 10 Minuten** + anlassbezogen bei bekanntem Kalender-Release (±15 Min), siehe weiter unten (Schwelle 24.08.2026 auf 60 Min geändert, 25.08.2026 von Levi zurückrevidiert auf 10 Min — siehe Punkt 9 unten für Historie/Why; ursprünglich 10 Minuten/angepasst 10.07.2026, Mechanismus unverändert)
+- Tweet-Fetch der 3 X-Accounts **an jedem Voll-Check auf Raster-Minute % 10 == 0 (jede zweite abgeschlossene 5-Min-Kerze — Kerzenraster-Fix 28.08.2026, siehe "X-Tweets"-Abschnitt unten)** + anlassbezogen bei bekanntem Kalender-Release (±15 Min). Historie: 10 Min (10.07.) → 60 Min (24.08.) → zurück 10 Min als Ist-Zeit-Delta (25.08.) → festes Kerzenraster statt Ist-Zeit-Delta (28.08.2026, Levi-Vorgabe)
 - Volle Setup-Scan-Checkliste beim Voll-Check, solange keine Position offen ist (Punkt 9, [[feedback_chartanalyse]])
 - Positions-Kasten mit SL/TP1/TP2 bei jedem Status-Update, sobald eine Position offen ist (Punkt 8, [[feedback_positions_status_pflicht]])
 - Entscheidungsbaum-Format in der heißen Phase (Punkt 7)
@@ -204,9 +239,21 @@ Diese Inhaltsregeln sind vom Wecker-Mechanismus komplett unabhängig — `CronCr
 
 **Why (ursprünglich, 10.07.2026):** User-Vorschlag 10.07.2026: "damit falls was Neues gekommen ist, was die Märkte dreht, wir sofort wissen" — der Voll-Check ist ohnehin der Punkt, an dem laut Punkt 9 bewusst etwas mehr Zeit investiert wird. Korrektur nach dem Live-Test (gleicher Tag): User-Feedback "alle 5 Minuten macht keinen Sinn, kostet zu viel Speed" — 10 Minuten reichen, um bei Breaking News zeitnah informiert zu sein, ohne den Voll-Check unnötig zu verlangsamen.
 
-**How to apply (korrigiert 13.07.2026 — ersetzt die alte "intern mitzählen"-Anweisung, die zum verpassten 16:00-Tweet-Fetch führte; Schwelle 24.08.2026 auf 60 Min geändert, 25.08.2026 von Levi zurückrevidiert auf 10 Min; Modulo-Mechanismus ersetzt 25.08.2026, siehe Why unten):** ~~NICHT per eigener Zählung abwechseln — stattdessen die per Punkt 9a per `Bash date` ermittelte echte Minute nehmen: Minute % 60 == 0 → Tweet-Fetch einbauen.~~ **Ersetzt durch die Delta-Prüfung (25.08.2026, alleinige verbindliche Fälligkeitsprüfung):** `x_last_fetch.json` lesen, Zeitstempel in Ortszeit umrechnen, Minuten-Delta seit dem letzten Fetch berechnen → bei ~~≥60 Min Delta~~ **≥10 Min Delta** Tweet-Fetch einbauen (Mechanismus identisch mit Punkt 9 "Struktureller Anti-Drift-Fix" (b), NICHT eine Minute-Modulo-Prüfung). ZUSÄTZLICH unabhängig vom ~~60-Min-Delta~~ **10-Min-Delta**: Liegt die aktuelle Uhrzeit innerhalb ±15 Min eines bekannten Kalender-Release (aus dem Session-Start-Kalender-Check, siehe [[feedback_session_update]]) → ebenfalls Tweet-Fetch einbauen, auch wenn das Delta gerade noch unter ~~60 Min~~ **10 Min** liegt. Sonst entfällt dieser Schritt (nur Screenshot + finale Kerze + MTF + Musterprüfung).
+**How to apply (korrigiert 13.07.2026 — ersetzt die alte "intern mitzählen"-Anweisung, die zum verpassten 16:00-Tweet-Fetch führte; Schwelle 24.08.2026 auf 60 Min geändert, 25.08.2026 von Levi zurückrevidiert auf 10 Min; Modulo-Mechanismus ersetzt 25.08.2026, siehe Why unten):** ~~NICHT per eigener Zählung abwechseln — stattdessen die per Punkt 9a per `Bash date` ermittelte echte Minute nehmen: Minute % 60 == 0 → Tweet-Fetch einbauen.~~ ~~**Ersetzt durch die Delta-Prüfung (25.08.2026, alleinige verbindliche Fälligkeitsprüfung):**~~ *(28.08.2026 erneut ersetzt durch den Kerzenraster-Fix, siehe eigener Absatz unten — die folgende Delta-Beschreibung gilt nur noch für die Verpasst-Erkennung, nicht mehr als Fälligkeitsquelle:)* `x_last_fetch.json` lesen, Zeitstempel in Ortszeit umrechnen, Minuten-Delta seit dem letzten Fetch berechnen → bei ~~≥60 Min Delta~~ **≥10 Min Delta** Tweet-Fetch einbauen (Mechanismus identisch mit Punkt 9 "Struktureller Anti-Drift-Fix" (b), NICHT eine Minute-Modulo-Prüfung). ZUSÄTZLICH unabhängig vom ~~60-Min-Delta~~ **10-Min-Delta**: Liegt die aktuelle Uhrzeit innerhalb ±15 Min eines bekannten Kalender-Release (aus dem Session-Start-Kalender-Check, siehe [[feedback_session_update]]) → ebenfalls Tweet-Fetch einbauen, auch wenn das Delta gerade noch unter ~~60 Min~~ **10 Min** liegt. Sonst entfällt dieser Schritt (nur Screenshot + finale Kerze + MTF + Musterprüfung).
 
-**Why (Modulo-Ersatz, 25.08.2026):** Eine Minute-%60-Prüfung löst nur aus, wenn ein Voll-Check exakt auf Minute :00 fällt. Am Testtag 24.08.2026 lagen die Voll-Checks bei :13/:26/:31/:40/:51 — die Modulo-Variante hätte kein einziges Mal ausgelöst. Die bereits seit 27.07.2026 an anderer Stelle (Punkt 9, "Struktureller Anti-Drift-Fix" (b)) etablierte Delta-Prüfung gegen `x_last_fetch.json` ist unabhängig von der exakten Minute und wird hiermit als alleinige verbindliche Fälligkeitsprüfung festgeschrieben — beide Mechanismen standen bisher widersprüchlich nebeneinander im selben Dokument. Quelle: [[project_testtag_analyse_2026-08-24]] Abschnitt 9 (Opus-Review, Punkt "Tweet-Fetch-Zähler").
+**Why (Modulo-Ersatz, 25.08.2026 — durch den Kerzenraster-Fix unten überholt):** Eine Minute-%60-Prüfung löst nur aus, wenn ein Voll-Check exakt auf Minute :00 fällt. Am Testtag 24.08.2026 lagen die Voll-Checks bei :13/:26/:31/:40/:51 — die Modulo-Variante hätte kein einziges Mal ausgelöst. Die bereits seit 27.07.2026 an anderer Stelle (Punkt 9, "Struktureller Anti-Drift-Fix" (b)) etablierte Delta-Prüfung gegen `x_last_fetch.json` ist unabhängig von der exakten Minute und wird hiermit als alleinige verbindliche Fälligkeitsprüfung festgeschrieben — beide Mechanismen standen bisher widersprüchlich nebeneinander im selben Dokument. Quelle: [[project_testtag_analyse_2026-08-24]] Abschnitt 9 (Opus-Review, Punkt "Tweet-Fetch-Zähler").
+
+**Kerzenraster-Fix (28.08.2026, Levi-Vorgabe nach dem Opus-Review des Testtags 27.08.2026 — ab jetzt die ALLEINIGE verbindliche Fälligkeitsmechanik, ersetzt die Delta-Prüfung vom 25.08.2026):**
+
+**Root Cause (Levi-Diagnose):** Die Delta-Prüfung zählte die Minuten seit dem letzten TATSÄCHLICHEN Abruf (Ist-Zeit). Weil dieser Ist-Zeitpunkt selbst nie exakt im Raster liegt (Bearbeitungsdauer, verzögerte Fires, Session-Wechsel — und der Zeitstempel lag am 27.08. nachweislich bis zu 7 Minuten neben dem echten Schreibzeitpunkt), verschob sich mit jedem Abruf auch der Bezugspunkt für den nächsten. Genau diese Drift erzeugte am 27.08.2026 fünf versäumte Pflicht-Fetches und mehrere falsche Delta-Angaben (siehe [[project_testtag_analyse_2026-08-27]] Abschnitt 2). Der Bezugspunkt muss deshalb etwas sein, das sich NICHT verschieben kann: das Kerzenraster selbst.
+
+**Die Regel:** Der Tweet-Fetch ist fällig bei **jeder zweiten abgeschlossenen 5-Minuten-Kerze** — operativ: bei jedem Voll-Check, dessen echte Minute (per `Bash date`, Punkt 9a) **% 10 == 0** ist (Slots :00/:10/:20/:30/:40/:50). Da die Voll-Checks per CronCreate-Weiche (Punkt 2b) ohnehin auf Minute % 5 == 0 liegen, trifft das exakt jeden zweiten Voll-Check — verankert am Raster, nicht an der Zählung und nicht an der Ist-Zeit des letzten Abrufs.
+
+**Nachhol-Regel (Verpasst-Erkennung):** `x_last_fetch.json` wird bei jedem Fetch weiter aktualisiert, ist aber NICHT mehr die Fälligkeitsquelle — nur noch die Verpasst-Erkennung: Liegt der letzte Fetch-Zeitstempel (Ortszeit) VOR dem Beginn des letzten fälligen Raster-Slots, wurde ein Slot verpasst (verzögerter Fire, Unterbrechung, CDP-Neustart) → beim aktuellen Voll-Check sofort nachholen und in der Pflichtzeile als `ÜBERFÄLLIG ✗ — Slot HH:M0 verpasst, jetzt nachgeholt` ausweisen. Damit kann kein Slot still verloren gehen, und nichts driftet, egal wann der tatsächliche Abruf stattfand.
+
+**Abgrenzung zum Modulo-Einwand vom 25.08. (oben):** Der damalige Einwand galt einer %60-Prüfung an einem Tag, an dem die Voll-Checks NICHT auf runden Minuten lagen (:13/:26/…). Unter dem seit 25.08. verbindlichen CronCreate-Mechanismus liegen die Voll-Checks garantiert auf % 5 == 0, womit die %10-Raster-Prüfung strukturell jeden zweiten Voll-Check trifft; das Restrisiko (einzelner verzögerter/ausgefallener Fire) fängt die Nachhol-Regel. Der Einwand ist damit gegenstandslos — er bleibt oben als Historie dokumentiert.
+
+**Anlass-Trigger unverändert:** Der Kalender-Release-Trigger (±15 Min, unabhängig vom Raster) bleibt bestehen. Ausgabeformat der Pflichtzeile: siehe [[feedback_vollcheck_format]] (dort Kerzenraster-Fassung 28.08.2026).
 
 **How to apply:** Tweet-Fetch läuft parallel zu den anderen Voll-Check-Tools (Screenshot/MTF-Wechsel/Pattern-Check), nicht sequenziell danach. Nur bei echten marktbewegenden Inhalten eine Meldung im kompakten Format (siehe Punkt 4a: nur bei echten News, kein Fließtext) — bei "nichts Neues/nichts Relevantes" reicht ein sehr kurzer Vermerk oder gar keine explizite Erwähnung, keine Tweet-Liste ausgeben.
 
@@ -509,6 +556,8 @@ Diese Zeile steht IMMER unmittelbar vor der `Entry-Freigabe:`-Zeile, mit dem tat
 
 **Was:** Eine eigene Anzeigestufe (kein Gate, kein Sizing-Eingriff), die im Entry-Block sichtbar gemacht wird, wenn das erfüllte Dual-Gate bereits "stale" (veraltet) ist — d.h. der Markt hat sich seitdem gegen die Gate-Richtung weiterbewegt. Name: **"Stale-Short"** bzw. **"Stale-Long"**, je nach Richtung des erfüllten Gates.
 
+**Terminologie-Regel (ergänzt 28.08.2026, Opus-Vorschlag 6 aus [[project_testtag_analyse_2026-08-27]], Levi-Freigabe):** Das Wort **"stale" ist ausschließlich für diese 7b1c-Klasse reserviert** (altes Gate UND Markt läuft dagegen, 5-Bedingungs-Prüfung). Der davon verschiedene Trigger-Zustand "beide Instrumente stehen schon lange über/unter ihrer EMA50, kein frischer Cross verfügbar" heißt im Loop-Protokoll ab jetzt **"kein frischer Cross"** (oder "Gate nicht neu ausgelöst") — NIE "stale". **Why:** Am Testtag 27.08.2026 wurden beide Bedeutungen im selben Protokoll vermischt: Der Tagesabschluss behauptete "durchgehend stale im Sinne von 7b1c", obwohl die 7b1c-Prüfung um 19:10 nur 2/5 ergab (der Markt lief mit dem stärksten Momentum des Tages IN Gate-Richtung — das Gegenteil von stale). Ohne Trennung liefe die Kalibrierungs-Auswertung der Klasse (nach 10-15 Fällen, siehe Review-Pflicht unten) auf vermischtem Material. Zweite Lehre aus demselben Tag: Auch die Aussage "kein frischer Cross" ist eine prüfpflichtige Tatsachenbehauptung — am 27.08. war sie ab 18:00 falsch (NAS100 hatte um 17:55/18:00 einen frischen 8a2-Reclaim vollzogen, der nie als solcher erkannt wurde, siehe [[project_testtag_analyse_2026-08-27]] Abschnitt 3.1). Bei jedem "kein frischer Cross"-Vermerk gilt daher: gegen die tatsächlichen letzten Kerzenschlüsse BEIDER Instrumente prüfen, nicht aus dem vorherigen Tick fortschreiben.
+
 **Vorbedingung (BEIDE müssen zutreffen, sonst keine Stale-Klasse prüfen):**
 - Dual-Gate ist in die jeweilige Richtung (short/long) erfüllt
 - Der letzte NAS100-5min-Kerzenschluss auf der GEGENSEITE liegt ≥6 Kerzen zurück
@@ -524,6 +573,8 @@ Diese Zeile steht IMMER unmittelbar vor der `Entry-Freigabe:`-Zeile, mit dem tat
 
 **Ausgabe (präzisiert 27.08.2026, Paket 6b/K1):** Die Stale-Klasse erscheint als **eigene Zeile** im Entry-Block, direkt nach der 9b-Divergenz-Check-Zeile — aber **NUR, wenn die Vorbedingung oben erfüllt ist**. Ist die Vorbedingung nicht erfüllt, entfällt die Zeile ersatzlos (keine künstliche Checklisten-Verlängerung — exakt dieselbe Konvention wie bei der Basis-Reclaim-Klasse in Punkt 2b). Das deckt sich mit der Ursprungsanalyse ([[project_testtag_analyse_2026-08-24]] Abschnitt 11: "Pflichtzeile nur bei erfüllter Vorbedingung"); die frühere Ausgabevariante "keine Vorbedingung" ist gestrichen — sie widersprach dem Vorbedingungs-Absatz oben.
 `Stale-Check: [Vorbedingung erfüllt, <n>/5 Stale-Bedingungen erfüllt / STALE-SHORT bzw. STALE-LONG: alle 5 erfüllt]`
+
+*(Geltungsbereich erweitert 28.08.2026, Opus-Vorschlag 5 aus [[project_testtag_analyse_2026-08-27]]: Die Zeile erscheint nicht mehr nur im Entry-Block vor einer Order, sondern an jedem TRIGGER-MOMENT mit erfüllter Vorbedingung — Definition in Punkt 2b, Block "Bei jedem TRIGGER-MOMENT". Grund: Order-gebunden konnte die Klasse den Fall, für den sie gebaut wurde — altes Gate, KEIN Trade — strukturell nie erfassen; nach drei Testtagen stand die Messung bei n=0. Trigger-Momente zählen als Anwendungsfälle für die Review-Pflicht unten.)*
 
 **Konsequenz bei STALE: KEINE (Anzeige-Modus).** Kein Veto, kein Sizing-Flag, kein verändertes Timing — und ausdrücklich auch **keine Rückfrage an Levi**. *(Opus-Korrektur 27.08.2026, Paket 6a: Die Erstumsetzung sah bei 5/5 eine explizite Levi-Rückfrage vor — das war eine unzulässige Auftragsüberschreitung: Die Analyse legt fest "Konsequenz im Anzeige-Modus: KEINE", und eine Pflicht-Rückfrage wirkt im Solo-Loop (Punkt 15, Solo-Mandat) faktisch als vollständiges Veto, verändert also Trade-Menge/-Timing und kontaminiert das laufende Messfenster. Die Zeile ist reine Schattenmessung nach dem 8a4/B1/ADX/RVOL-Muster.)*
 
@@ -639,6 +690,8 @@ TP2: <NAS100-Kurs> (≈<Zert.-Preis>€) — Rest, mit laufenden Schutzsignalen
 
 **Offenlegungspflicht (neu, nicht verhandelbar):** Im Voll-Check-Output immer kurz kennzeichnen, was geprüft wurde und was bewusst ausgelassen wurde, z.B. "Voll-Check: Double-Top/Flag geprüft (kein Muster erkennbar), Fibonacci nicht berechnet (kein neuer Impuls)." Ein stillschweigendes Auslassen ohne diese Kennzeichnung gilt ab jetzt selbst als Regelbruch — unabhängig vom Ergebnis des Trades, analog zur bestehenden Regelbruch-Klassifizierung in [[trades/trade_log]].
 
+**Offenlegungspflicht für Protokoll-/Beobachtungsbrüche (ergänzt 28.08.2026, Opus-Vorschlag 7 aus [[project_testtag_analyse_2026-08-27]], Levi-Freigabe):** Jede Zustandsänderung an der Beobachtungskette SELBST wird mit einer Einzeiler-Notiz im Protokoll offengelegt, sobald sie eintritt oder bemerkt wird — auch rein technische/formatliche: Aussetzen oder Wiederaufnahme der Screenshot-Kadenz, Wechsel des Ausgabetemplates, ausgefallene oder nachgeholte Voll-Checks, Kontext-/Session-Wechsel, Tool-Ausfälle. Muster: `ab 19:17: keine Screenshots mehr, Grund: X` — analog zur vorbildlich dokumentierten CDP-Neustart-Meldung vom 27.08.2026 (18:05 Uhr). **Why:** Am 27.08.2026 änderte sich um 19:11-19:17 unbemerkt das komplette Ausgabetemplate, die Screenshot-Spur endete abrupt, und der 19:15-Voll-Check fiel aus — nichts davon wurde im Protokoll erwähnt, und die Lücke lag ausgerechnet direkt hinter dem Schlüsselereignis des Tages (19:10-Selbstkorrektur). Ohne Offenlegung ist im Nachhinein nicht unterscheidbar, ob eine Beobachtung ausblieb oder nur nicht aufgeschrieben wurde ([[project_testtag_analyse_2026-08-27]] Abschnitt 7).
+
 **Struktureller Anti-Drift-Fix nach zwei Prozessfehlern am 27.07.2026 (dritter Fable-Review, Tagesabschluss — siehe [[feedback_prozessfehler_27_07_fuer_fable]]):**
 
 Am 27.07.2026 liefen über 100 Ticks in einem einzigen langen 1-Min-Loop. Dabei sind zwei im Regelwerk längst stehende Pflichten wiederholt untergegangen — das Voll-Check-Ausgabeformat (Drift zur Tabelle statt Fließtext, siehe [[feedback_vollcheck_format]]) und der Minute%10-Tweet-Fetch (siehe unten, "How to apply" 13.07.2026), Letzterer musste der User zweimal (18:11 UND erneut 19:16 Uhr, nach dazwischenliegenden Voll-Checks) aktiv einfordern. **Root-Cause — beide Fehler teilen dieselbe Struktur, unabhängig vom jeweiligen Inhalt:**
@@ -650,7 +703,7 @@ Am 27.07.2026 liefen über 100 Ticks in einem einzigen langen 1-Min-Loop. Dabei 
 **Der Fix — wendet den bei Punkt 2b bereits bewährten Mechanismus auf beide Fehler an, statt ein neues Prinzip zu erfinden:**
 
 a) **Format wird Teil des Pflicht-Outputs selbst, nicht nur eine externe Stilregel.** Jeder Voll-Check-Output übernimmt ab jetzt die Vorlage aus [[feedback_vollcheck_format]] Zeile für Zeile (kopieren + befüllen, NIE aus dem Gedächtnis neu formulieren) und endet zwingend mit der Meta-Zeile `Format: Fließtext ✓` — eine Tabelle hat strukturell keinen natürlichen Platz für diese abschließende Prosa-Zeile, das Fehlen der Zeile ist selbst schon ein Warnsignal.
-b) **Tweet-Fetch-Fälligkeit wird aus dem persistierten `x_last_fetch.json`-Zeitstempel berechnet, nicht aus mentalem Minute%10-Mitzählen.** Bei JEDEM Voll-Check zuerst die Datei lesen, Zeitstempel in Ortszeit umrechnen (NIE roh/UTC übernehmen, siehe Zeitzonen-Fix 25.08.2026 unten), Differenz zur echten Systemzeit (`Bash date`, Punkt 9a) bilden. ~~≥10 Minuten → Fetch fällig~~ ~~— **korrigiert 25.08.2026: ≥60 Minuten → Fetch fällig** (die Schwelle wurde am 24.08.2026 projektweit von 10 auf 60 Min geändert, siehe oben "X-Tweets als Bestandteil des Voll-Checks"; diese Stelle war dabei versehentlich auf dem alten 10-Min-Wert stehengeblieben)~~ — **zurückkorrigiert 25.08.2026: ≥10 Minuten → Fetch fällig** (Levi hat die 60-Minuten-Schwelle vom 24.08.2026 noch am selben Tag der Zeitzonen-Korrektur explizit revidiert, siehe oben "X-Tweets als Bestandteil des Voll-Checks" und dortiges Why "60 Min → 10 Min, 25.08.2026 — Levi-Revision") — robuster als reine Modulo-Prüfung, die nach nur einem übersprungenen Voll-Check sofort verschieben kann. Ergebnis erscheint als PFLICHT-Zeile im Output, in JEDEM Fall, auch bei "nichts Neues" oder "noch nicht fällig", im aktuellen Format aus [[feedback_vollcheck_format]] (Delta immer nennen, Zeitstempel immer als Ortszeit kennzeichnen): `Tweet-Check: fällig+durchgeführt ✓, zuletzt vor Xmin (nichts Neues)` / `Tweet-Check: noch nicht fällig, zuletzt vor Xmin` / `Tweet-Check: ÜBERFÄLLIG ✗ → war Xmin überfällig, jetzt nachgeholt`. Eine fehlende Tweet-Check-Zeile gilt ab jetzt genauso als Regelbruch wie ein fehlender 1H-MTF-Schritt — das bisher erlaubte "bei nichts Neues reicht auch gar keine Erwähnung" (siehe unten, altes "How to apply") ist damit für den Fälligkeits-Status selbst aufgehoben; es gilt weiterhin NUR für den Tweet-Inhalt (keine Tweet-Liste bei Nicht-Relevanz), nicht mehr für die Statuszeile.
+b) *(28.08.2026: Fälligkeitsquelle erneut geändert — festes Kerzenraster statt Ist-Zeit-Delta, siehe "Kerzenraster-Fix" im Abschnitt "X-Tweets als Bestandteil des Voll-Checks" oben; der folgende Absatz gilt nur noch für die Pflicht-Ausgabezeile selbst und die Verpasst-Erkennung, nicht mehr als Fälligkeitsmechanik.)* ~~**Tweet-Fetch-Fälligkeit wird aus dem persistierten `x_last_fetch.json`-Zeitstempel berechnet, nicht aus mentalem Minute%10-Mitzählen.**~~ Bei JEDEM Voll-Check zuerst die Datei lesen, Zeitstempel in Ortszeit umrechnen (NIE roh/UTC übernehmen, siehe Zeitzonen-Fix 25.08.2026 unten), Differenz zur echten Systemzeit (`Bash date`, Punkt 9a) bilden. ~~≥10 Minuten → Fetch fällig~~ ~~— **korrigiert 25.08.2026: ≥60 Minuten → Fetch fällig** (die Schwelle wurde am 24.08.2026 projektweit von 10 auf 60 Min geändert, siehe oben "X-Tweets als Bestandteil des Voll-Checks"; diese Stelle war dabei versehentlich auf dem alten 10-Min-Wert stehengeblieben)~~ — **zurückkorrigiert 25.08.2026: ≥10 Minuten → Fetch fällig** (Levi hat die 60-Minuten-Schwelle vom 24.08.2026 noch am selben Tag der Zeitzonen-Korrektur explizit revidiert, siehe oben "X-Tweets als Bestandteil des Voll-Checks" und dortiges Why "60 Min → 10 Min, 25.08.2026 — Levi-Revision") — robuster als reine Modulo-Prüfung, die nach nur einem übersprungenen Voll-Check sofort verschieben kann. Ergebnis erscheint als PFLICHT-Zeile im Output, in JEDEM Fall, auch bei "nichts Neues" oder "noch nicht fällig", im aktuellen Format aus [[feedback_vollcheck_format]] (Delta immer nennen, Zeitstempel immer als Ortszeit kennzeichnen): `Tweet-Check: fällig+durchgeführt ✓, zuletzt vor Xmin (nichts Neues)` / `Tweet-Check: noch nicht fällig, zuletzt vor Xmin` / `Tweet-Check: ÜBERFÄLLIG ✗ → war Xmin überfällig, jetzt nachgeholt`. Eine fehlende Tweet-Check-Zeile gilt ab jetzt genauso als Regelbruch wie ein fehlender 1H-MTF-Schritt — das bisher erlaubte "bei nichts Neues reicht auch gar keine Erwähnung" (siehe unten, altes "How to apply") ist damit für den Fälligkeits-Status selbst aufgehoben; es gilt weiterhin NUR für den Tweet-Inhalt (keine Tweet-Liste bei Nicht-Relevanz), nicht mehr für die Statuszeile.
 c) **Beide Pflicht-Zeilen werden zusätzlich wörtlich in den CronCreate-Pflichtbaustein aus Punkt 2b aufgenommen** (siehe dort, aktualisierte Fassung) — derselbe Mechanismus, der das 1H-MTF-Vergessen seit 16.07.2026 nachweislich gelöst hat (kein Vorfall seither dokumentiert), wird hiermit auf die beiden neuen Fehlerquellen erweitert, statt eine dritte, unabhängige Lösung zu erfinden.
 
 **Ehrliche Einordnung (dem Auftrag entsprechend):** Ein Rest-Risiko bleibt — eine Pflicht-Zeile kann im Prinzip mechanisch mitgeschrieben werden, ohne dass die Prüfung dahinter ehrlich stattfand. Der Unterschied zum bisherigen Zustand: eine fehlende oder erkennbar falsch befüllte Pflicht-Zeile ist für den User ab jetzt sofort sichtbar und gegenprüfbar (z.B. "Tweet-Check: noch nicht fällig" lässt sich gegen die echte Uhrzeit checken) — vorher war der Fehler komplett unsichtbar, bis er zufällig nachfragte. Das verschiebt die Fehlerklasse von "unsichtbar, nur durch Zufall entdeckt" zu "sichtbar, prüfbar, aber theoretisch fälschbar" — eine echte Verbesserung, kein vollständiger Ausschluss. Falls sich in den nächsten Sessions zeigt, dass die Pflicht-Zeilen trotzdem mechanisch ohne echte Prüfung mitlaufen, ist das explizit als Fortbestehen des Problems zu benennen, nicht erneut nur als "ab jetzt besser aufpassen" zu verbuchen.
@@ -663,7 +716,7 @@ c) **Beide Pflicht-Zeilen werden zusätzlich wörtlich in den CronCreate-Pflicht
 
 Bei jedem `CronCreate`-Fire die tatsächliche Minute NICHT aus einer eigenen mitgeführten Zählung ("letzter Fire war 16:41, also ist das jetzt 16:42") ableiten — das driftet unbemerkt auseinander von der echten Uhrzeit, weil Cron-Jitter, Bearbeitungsdauer und gelegentliche Zwischenfragen die Zählung verschieben können, ohne dass ein Fire übersprungen wird.
 
-**How to apply (Tweet-Fetch-Teil korrigiert 25.08.2026):** Bei jedem Fire zuerst per `Bash date` (oder gleichwertig) die echte Systemzeit abfragen, daraus die Minute % 5 (Voll-Check) bestimmen. ~~bzw. % 10 (Tweet-Fetch)~~ — dieser Teil ist veraltet (Rest der alten 10-Minuten-Ära vor der 24.08.2026-Umstellung auf 60 Minuten, nie mitaktualisiert) und gilt nicht mehr: die Tweet-Fetch-Fälligkeit läuft ausschließlich über die Delta-Prüfung gegen `x_last_fetch.json` (Minuten-Delta ~~≥60~~ **≥10** [zurückrevidiert 25.08.2026, siehe Punkt 9 Why "60 Min → 10 Min"], Zeitstempel in Ortszeit, siehe Punkt 9 "Struktureller Anti-Drift-Fix" (b) und "Zeitzonen-Fix"), NICHT über eine Minuten-Modulo-Prüfung. Bar-Timestamps aus `data_get_ohlcv` sind ebenfalls eine verlässliche Realzeit-Quelle als Gegenprobe, falls `date` mal nicht verfügbar ist.
+**How to apply (Tweet-Fetch-Teil korrigiert 25.08.2026, erneut korrigiert 28.08.2026 — Kerzenraster-Fix):** Bei jedem Fire zuerst per `Bash date` (oder gleichwertig) die echte Systemzeit abfragen, daraus die Minute % 5 (Voll-Check) **und % 10 (Tweet-Fetch-Raster-Slot)** bestimmen. ~~die Tweet-Fetch-Fälligkeit läuft ausschließlich über die Delta-Prüfung gegen `x_last_fetch.json`~~ — 28.08.2026 ersetzt: die Fälligkeit läuft über das feste Kerzenraster (echte Minute % 10 == 0), `x_last_fetch.json` dient nur noch der Verpasst-Erkennung/Nachhol-Regel (siehe Punkt 9 "Kerzenraster-Fix"; die Delta-Ära 25.-27.08. produzierte am 27.08. fünf versäumte Fetches durch driftende Ist-Zeit-Bezugspunkte). Wichtig: die Minute kommt aus der ECHTEN Systemzeit, nie aus eigener Zählung — damit ist diese Modulo-Prüfung, anders als die 25.08. verworfene Variante, nicht von einer korrekten Selbstzählung abhängig. Bar-Timestamps aus `data_get_ohlcv` sind ebenfalls eine verlässliche Realzeit-Quelle als Gegenprobe, falls `date` mal nicht verfügbar ist.
 
 **Why:** Am 13.07.2026 driftete die selbst mitgeführte Minutenzählung während einer Live-Session unbemerkt vor die echte Uhrzeit (ein "16:41"-Voll-Check kam tatsächlich schon bei 16:44 dran) — der User musste das live korrigieren. Reine Selbstzählung ist strukturell unzuverlässig für einen Vorgang, bei dem die Minute selbst die Entscheidungsgrundlage ist (Voll-Check vs. Quick-Tick).
 
