@@ -4,9 +4,9 @@ description: "Levis Entscheidung zu den 10 Vorschlägen aus dem Opus-Review des 
 metadata:
   node_type: memory
   type: project
-  status: done
+  status: done_all
   originSessionId: session-2026-08-28
-  modified: 2026-08-28T08:28:05.219Z
+  modified: 2026-08-28T08:39:16.289Z
 ---
 
 # Levi-Entscheidung zu den Opus-Vorschlägen (27.08.2026-Review), 28.08.2026
@@ -39,9 +39,32 @@ Die drei order-gebundenen Anzeige-/Schattenmessungs-Klassen (`Basis-Reclaim-Klas
 - **Punkt 7:** Zustandsänderungen im Protokoll immer offenlegen, auch technische/formatliche (z.B. Aussetzen von Screenshots, Wechsel des Ausgabetemplates) — analog zur bereits vorbildlichen CDP-Abbruch-Meldung vom 27.08. 18:05 Uhr.
 - **Punkt 8:** Voll-Check-Nummerierung aus der Uhrzeit ableiten (z.B. Minuten seit Loop-Start / 5), nicht manuell mitzählen — damit Lücken (wie die ausgefallene 19:15-Marke am 27.08.) sofort auffallen statt durch eine falsche fortlaufende Zählung verdeckt zu werden.
 
-## Punkt 9 + 10 — zurückgestellt
+## Punkt 9 + 10 — von Levi am 28.08.2026 entschieden (nach Opus-Zweitklärung)
 
-Wird von Levi noch separat mit Opus geklärt (Testtag-Auswahlkriterium „mindestens eine Gate-Öffnung" bzw. Replay-Ansatz; Rollentrennung/Faktenprotokoll-Format im Tagesabschluss). **Nicht Teil dieses Fable-Auftrags.**
+Opus lieferte am 28.08.2026 auf Levis Bitte eine ausführliche Erklärung + Empfehlung zu beiden Punkten (Kombination Replay-Vorschaltung + Live-Testtag für Punkt 9; Faktenprotokoll-Format mit 5 festen Unterpunkten für Punkt 10). Levis Entscheidung dazu:
+
+### Punkt 9 — Opus-Empfehlung ABGELEHNT in Teil Replay, eigene Levi-Fassung
+
+**Levi-Entscheid (wörtlich sinngemäß):** Es wird weiter fiktiv LIVE getestet, bis alles getestet wurde und jeder Baustein einmal als echter Fall vorkam. Es geht direkt am 28.08. weiter, und es besteht KEIN Zeitdruck — notfalls wird auch nächste Woche noch fiktiv live getestet. **Replay wird NICHT genutzt**, Begründung Levi: Das gesamte Trading basiert als Kette auf frischen Daten — Session-Start mit "start update dich", daraus die Bias-Synthese, dann der Loop. Genau diese Kette (frische Daten → Briefing → Bias → Loop → Entry-Rechenkette) soll als Ganzes funktionieren und getestet werden; ein Replay-Trockenlauf würde die Kette zerschneiden und nur das hintere Ende isoliert prüfen.
+
+**Konsequenz für Fable:** KEINE Regeländerung an der Testtag-Auswahl, KEIN Replay-Baustein. Die fiktiven Live-Testtage laufen einfach weiter (heute 28.08. der nächste), bis die Entry-Rechenkette einmal real durchlaufen wurde. Opus' Hinweis, dass Kriterien 1/2/4 des Validierungstesttags einen echten Trigger brauchen, bleibt als bekannte Einschränkung stehen — gelöst durch Geduld statt durch Replay.
+
+### Punkt 10 — Opus-Empfehlung ANGENOMMEN, mit Rollen-Zusatz
+
+**Levi-Entscheid:** Genau wie von Opus empfohlen umsetzen — der letzte Protokollabschnitt jedes (Test-)Tages heißt künftig **„Faktenprotokoll-Abschluss <Datum>"** mit den 5 festen Unterpunkten:
+1. **Zahlenbilanz** (Loop-Fenster, Voll-Checks aus Uhrzeit berechnet + Lücken, Quick-Ticks, Screenshots inkl. Zeitpunkt des letzten, Tweet-Fetches mit Zeitstempeln, Trigger-Momente, Trades, neue `skipped_setups`-Zeilen)
+2. **Ereignisliste chronologisch** (Uhrzeit, gemessener Wert, was geschah, Entry/kein Entry, angeführte Regelnummer)
+3. **Skript-Aufrufe** (jeder mit wörtlicher Ausgabezeile)
+4. **Brüche und Unterlassungen** (ausgefallene Checks, Screenshot-Aussetzer, Template-/Session-Wechsel, fehlende Pflichtzeilen)
+5. **Offene/unklare Punkte** (ohne Auflösungsversuch)
+
+Verbotene Satztypen: Gewichtungen („wichtigster Vorfall"), Selbstbescheinigungen („regelkonform", „sauber gehandhabt"), Vorgaben an den Prüfer („zentraler Datenpunkt für das Review"), Lehren/Fazit, Ursachendeutungen. Selbst gefundene Prozessfehler bleiben ausdrücklich Pflicht-Fakt. Fester Schlusssatz: „Bewertung und Einordnung erfolgen durch Fable/Opus, nicht in diesem Protokoll."
+
+**Levis Rollen-Zusatz (mit ins Regelwerk aufnehmen):** **Opus macht immer die Analyse** (Testtag-/Tagesreviews), **Fable speichert und setzt um** (Korrekturen, Ergänzungen, Tagesprotokolle). Das präzisiert die bestehende Rollenteilung in [[feedback_modellwahl_trading]] — Opus ist damit für Testtag-Reviews fester Analyse-Part, nicht mehr nur punktueller Meilenstein-Check; Fable bleibt Autor/Umsetzer, Sonnet bleibt reine Ausführung ohne Selbstbewertung.
+
+**Umsetzungsstatus Punkt 10: ERLEDIGT (28.08.2026, Fable nach Levi-Go).** Umgesetzt in: `feedback_tagesabschluss.md` (neuer Abschnitt "Faktenprotokoll-Abschluss statt 'Tagesabschluss' im Loop-Protokoll" — 5 Unterpunkte, verbotene Satztypen, fester Schlusssatz, Abgrenzung: Fables analytische Tages-Zusammenfassung bleibt bewertend, Selbstoffenlegung von Prozessfehlern bleibt Pflicht-Fakt) und `feedback_modellwahl_trading.md` (Präzisierung 28.08.2026: Opus macht immer die Analyse, Fable speichert+setzt um, Sonnet reine Ausführung inkl. Faktenprotokoll-Abschluss; Frontmatter-Description aktualisiert).
+
+**Punkt 9: KEINE Umsetzung nötig (Levi-Entscheid, siehe oben)** — weiter fiktive Live-Testtage ohne Zeitdruck, kein Replay, keine Regeländerung an der Testtag-Auswahl. Damit sind alle 10 Punkte des Opus-Reviews vom 27.08.2026 abschließend behandelt.
 
 ---
 

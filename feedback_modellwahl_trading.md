@@ -1,10 +1,10 @@
 ---
 name: feedback-modellwahl-trading
-description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung, Fable 5 Regelwerk/Tagesabschluss/Analyse UND Skripte/Code, Opus 5 nur punktueller Meilenstein-Check. Seit 27.08.2026: Fable nicht mehr im Tarif enthalten, läuft aber über aufgeladenes Nutzungsguthaben ('Draws from usage credits')"
+description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung (seit 28.08. inkl. Faktenprotokoll-Abschluss ohne Bewertung), Fable 5 Regelwerk/Tagesabschluss/Umsetzung UND Skripte/Code, Opus 5 macht seit 28.08.2026 IMMER die Testtag-/Tagesanalysen (Fable speichert+setzt um) plus Meilenstein-Checks. Seit 27.08.2026: Fable läuft über aufgeladenes Nutzungsguthaben ('Draws from usage credits')"
 metadata:
   type: feedback
   originSessionId: session-2026-07-27
-  modified: 2026-08-27T08:53:23.591Z
+  modified: 2026-08-28T08:39:07.340Z
 ---
 
 ## STAND 27.08.2026: Fable-Verfügbarkeit — Deprecation-Risiko eingetreten, aber per Nutzungsguthaben gelöst
@@ -15,12 +15,14 @@ Levi meldete am 27.08.2026 zunächst, dass Fable 5 für seinen Tarif nicht mehr 
 
 ---
 
-## Modellwahl-Regel: Rollenteilung Sonnet/Fable/Opus (aktualisiert 24.08.2026, seit 27.08.2026 überholt s.o.)
+## Modellwahl-Regel: Rollenteilung Sonnet/Fable/Opus (aktualisiert 24.08.2026, Fable-Verfügbarkeit seit 27.08.2026 s.o., Analyse-Rolle präzisiert 28.08.2026 s.u.)
 
 **Regel (Stand 24.08.2026, ersetzt die Fassung vom 27.07.2026 unten):**
-- **Sonnet 5:** NUR noch Live-Trading-Ausführung — der 1-Minuten-Loop (Quick-Tick UND 5-Minuten-Voll-Check), Order-Entscheidungen in Echtzeit. Kein Regelwerk, keine Tagesabschlüsse, keine Skripte mehr.
+- **Sonnet 5:** NUR noch Live-Trading-Ausführung — der 1-Minuten-Loop (Quick-Tick UND 5-Minuten-Voll-Check), Order-Entscheidungen in Echtzeit. Kein Regelwerk, keine Tagesabschlüsse, keine Skripte mehr. Am Ende eines Loop-/Testtags liefert Sonnet nur den "Faktenprotokoll-Abschluss" (Fakten ohne Bewertung, siehe [[feedback_tagesabschluss]], ergänzt 28.08.2026).
 - **Fable 5 (ich):** Regelwerk-Autorschaft und -Änderungen, Tagesabschluss (Narrativ, Einordnung, Regime-Diagnose), laufende Fehler-/Tradinganalyse, UND jetzt explizit auch Skripte/Code (`scripts/*.cjs` etc.) — bisher lag Skript-Arbeit bei niemandem fest zugeordnet, das ist jetzt geschlossen.
 - **Opus 5:** kein fester, laufender Prozessbestandteil (nicht täglich/wöchentlich) — nur punktueller Cross-Check bei Phasenübergängen (z.B. #50-Review), größeren Regelreformen, oder als Quartals-Audit.
+
+**Präzisierung 28.08.2026 (Levi-Vorgabe bei der Umsetzung von Opus-Vorschlag 10, siehe [[project_regelwerk_entscheidung_2026-08-28]]):** Für Testtag-/Tagesreviews gilt die feste Aufgabenteilung **"Opus macht immer die Analyse, Fable speichert und setzt um"** — Opus ist damit für die (Test-)Tagesanalysen fester Analyse-Part (nicht mehr nur punktuell bei Meilensteinen; drei Testtag-Reviews 24./25./27.08. haben dieses Muster etabliert), Fable übernimmt daraus die Korrekturen, Ergänzungen und das Abspeichern der Tagesprotokolle/Regeländerungen, Sonnet bleibt reine Ausführung ohne Selbstbewertung. Die übrigen Opus-Zuständigkeiten (Phasenübergänge, Regelreformen, Quartals-Audit) bleiben unverändert bestehen.
 
 **Why:** Autor und Prüfer dürfen nicht dasselbe Modell sein, sonst entsteht ein Bestätigungsfehler-Risiko — demonstriert am 24.08.2026 an Fables eigenem Prüffehler bei Trade #38/#43 (SL/ATR-Mindestdistanz nicht nachgerechnet, RR-Gate fälschlich als ausreichend gewertet, obwohl SL nur ~1,18x ATR statt des Schock-Tier-Minimums 2,5-3x ATR betrug). Der frühere Zustand (Fable prüfte eigene/Sonnet-Trades nachträglich, ohne unabhängige Gegeninstanz) ließ genau diesen Fehlertyp zweimal unentdeckt durchrutschen. Zusätzlich: zahlenbasierte Pflichtzeilen (SL/ATR-Ratio, RR-Gate, TP-Realismus) sollen künftig nicht mehr von einem Modell "im Kopf" geprüft werden, sondern automatisiert über `scripts/gate_check.cjs` (siehe [[project_opus_vollpruefung_2026-08-24]] Phase 2). Auslöser der gesamten Neuordnung: der gemeinsame Opus+Fable-Vollcheck vom 24.08.2026, siehe [[project_opus_vollpruefung_2026-08-24]].
 
