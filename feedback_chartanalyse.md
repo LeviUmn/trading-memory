@@ -1,11 +1,11 @@
 ---
 name: feedback-chartanalyse
-description: "Vollständige Chartanalyse bei jeder Trade-Entscheidung — alle technischen Tools anwenden. 8d seit 31.08.2026 mit Einzelausweis aller drei Schock-Kriterien in der Pflichtzeile ('nicht gemessen' zulässig). 8a4 Bedingung 4 seit 31.08.2026 entschieden (Option ii): zwei AVWAP-Instanzen auf QQQ (Session/Ereignis), Bedingung 4 prüft immer die Session-Instanz. Opus-Zweitprüfung 31.08.2026 umgesetzt: 8b2-Quellenliste explizit (Pivots 7a1a/PDH/PDL via pine-Tools UND draw_list, study_count:0 ist KEIN 'kein Level'-Beleg), neue Anzeigeklasse 8a5 Level-Ping-Pong (GEMESSEN KEIN GATE), 8d-Frische-Pflicht (✓/✗ nur bei frisch/stundenaktuell erhobenem Wert, Range mit Zeitstempel), 8a4-Negativbestätigung mit Grund statt 'entfällt ersatzlos'"
+description: "Vollständige Chartanalyse bei jeder Trade-Entscheidung — alle technischen Tools anwenden. 8d seit 31.08.2026 mit Einzelausweis aller drei Schock-Kriterien in der Pflichtzeile ('nicht gemessen' zulässig). 8a4 Bedingung 4 seit 31.08.2026 entschieden (Option ii): zwei AVWAP-Instanzen auf QQQ (Session/Ereignis), Bedingung 4 prüft immer die Session-Instanz. Opus-Zweitprüfung 31.08.2026 umgesetzt: 8b2-Quellenliste explizit (Pivots 7a1a/PDH/PDL via pine-Tools UND draw_list, study_count:0 ist KEIN 'kein Level'-Beleg), neue Anzeigeklasse 8a5 Level-Ping-Pong (GEMESSEN KEIN GATE), 8d-Frische-Pflicht (✓/✗ nur bei frisch/stundenaktuell erhobenem Wert, Range mit Zeitstempel), 8a4-Negativbestätigung mit Grund statt 'entfällt ersatzlos'. Opus-Drittfix 31.08.2026 Abend: 8b2 Punkt 1 trägt jetzt die EINZIGE kanonische Levelliste (8 Levelarten × 3 Abrufwege, 8b1 Schritt 3 verweist nur noch), Level-Suche verlagert in scripts/level_register.json (geschrieben bei Session-Update + Voll-Check, im Trigger-Moment nur Nachschlagen, gate_check.cjs verifiziert ±2 Pkt)"
 metadata: 
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-31T19:17:30.691Z
+  modified: 2026-08-31T20:43:48.656Z
 ---
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
@@ -383,7 +383,7 @@ Wurde ein SL innerhalb derselben Handelssession bereits durch einen Wick/Spike (
 **Neuer, verbindlicher Ablauf (ersetzt Schritt 2 aus dem 8b-Ablauf, Rest von 8b bleibt unverändert; Schritte 4-6 umgebaut 24.08.2026, siehe Änderungsvermerk unten):**
 1. Setup/Trigger bestätigt (wie bisher).
 2. SL aus Struktur/Rauschkerzen bestimmen (7a/8c inkl. Schock-Tier) → definiert die Risikoeinheit R.
-3. TP-Kandidatenliste aus echten technischen Levels bilden (Fib-Extension, EMA-Konfluenz, Pivot, Struktur-Hoch/-Tief), aufsteigend nach Distanz sortiert.
+3. TP-Kandidatenliste aus echten technischen Levels bilden, aufsteigend nach Distanz sortiert. **Welche Levelarten dafür zählen und wie sie gelesen werden, steht AUSSCHLIESSLICH in der kanonischen Levelliste in 8b2 Punkt 1** (vereinheitlicht 31.08.2026 Abend — die frühere Teil-Aufzählung hier "Fib-Extension, EMA-Konfluenz, Pivot, Struktur-Hoch/-Tief" war eine zweite, leicht abweichende Liste neben 8b2 und ist bewusst gestrichen; keine Duplikat-Aufzählung mehr an dieser Stelle). Praktisch heißt das seit 31.08.2026 Abend: nicht live suchen, sondern in `scripts/level_register.json` nachschlagen (Befüllung beim Session-Update/Voll-Check, siehe 8b2 Punkt 1 und [[feedback_live_trading]] 7b1 Schritt 4b).
 4. **Drei-Zonen-Realismus-Filter (umgebaut 24.08.2026, ersetzt den binären Ausschluss):** Für jeden Kandidaten die Distanz in ATR(14) ausdrücken:
    - **≤2× ATR(14)** UND ≤2× Box-Breite (falls Box erkennbar) → **Zone 1**, voll gültig, normale Positionsgröße.
    - **>2× bis 3× ATR(14)** → **Zone 2**, weiterhin gültig, löst aber **halbe Positionsgröße** aus (Sizing-Signal statt Ausschluss).
@@ -416,7 +416,26 @@ Fehlt diese Zeile, gilt die Entry-Prüfung als nicht vollständig. Entspricht 1:
 **Warum diese Regel jetzt kommt:** Mit der D-1-Rücknahme oben (RR-Floor für die TP1-Kandidatenwahl zurück auf 1:1) reicht für einen freigegebenen Trade wieder das bloße 8b-Baseline-RR (TP1 ≥1:1 zum SL). Levi wollte sicherstellen, dass diese Erleichterung nicht dazu führt, dass Trades durchgehen, die zwar TP1 formal erreichen, aber keinen plausiblen Weg zu einem lohnenden TP2 haben — ein Trade, der strukturell nur die erste, kleine Etappe schafft.
 
 **Regel:** Zusätzlich zur bestehenden TP1-Prüfung (8b1) gilt ab jetzt für den TP2-Kandidaten:
-1. **TP2-Kandidat muss ein echtes Chart-Level sein** — dieselbe Quelle wie die bestehende TP1-Realismus-Prüfung. **Quellenliste explizit (präzisiert 31.08.2026, Opus-Zweitprüfung des Testtags 31.08. — dort wurde "kein TP2-Chart-Level verfügbar" behauptet, obwohl die berechneten Pivots S1 29.200,40 / S2 29.077,15 und PDL 29.221,0 im selben Absatz zitiert vorlagen):** die Quellen sind die berechneten Pivots aus 7a1a (PP/R1/R2/S1/S2), PDH/PDL, VWAP-/AVWAP-Bänder, Box-Kanten und Session-Extrema — abrufbar über `data_get_pine_lines`/`data_get_pine_labels`/`data_get_pine_boxes` für Pine-gezeichnete Level und über `draw_list` für selbst eingezeichnete Level (z.B. die per 7a1a-Pflichtschritt selbst gezeichneten Pivot-Linien); `study_count: 0` belegt ausschließlich, dass kein Pine-Indikator zeichnet, und ist KEIN zulässiger Beleg für "kein Chart-Level verfügbar". **Nicht** nur eine ATR-Rechnung (der Unterschied zur Zonen-Distanzprüfung in 8b1, die bewusst ATR-basiert bleibt, weil sie eine reine Plausibilitäts-Außengrenze ist, keine Levelsuche).
+1. **TP2-Kandidat muss ein echtes Chart-Level sein** — dieselbe Quelle wie die bestehende TP1-Realismus-Prüfung. **KANONISCHE LEVELLISTE (die EINZIGE gültige Level-Quellenliste im gesamten Regelwerk — vereinheitlicht 31.08.2026 Abend, Opus-Drittfix nach dem Testtag 31.08.):** Bis heute existierten zwei leicht unterschiedliche Listen (8b1 Schritt 3 und hier) — dieselbe Drift-Klasse wie die zwei divergierenden `gate_check`-CLI-Templates in [[feedback_live_trading]] 7b1 vor Paket 6b/K2. 8b1 Schritt 3 verweist ab jetzt nur noch hierher. Die Liste ist bewusst zweidimensional — **Levelart (WAS ist ein Level)** strikt getrennt vom **Abrufweg (WIE wird er gelesen)**, weil genau das Vermischen den Fehler vom 31.08. reproduziert (ein leeres Tool-Ergebnis las sich wie "Quelle nicht vorhanden": am 31.08. wurde "kein TP2-Chart-Level verfügbar" behauptet, obwohl die berechneten Pivots S1 29.200,40 / S2 29.077,15 und PDL 29.221,0 im selben Absatz zitiert vorlagen):
+
+   **Levelarten (WAS — vollständig, keine weitere Liste anderswo):**
+   1. **Pivots** (7a1a: PP/R1/R2/S1/S2)
+   2. **Vortageshoch/-tief** (PDH/PDL)
+   3. **VWAP-/AVWAP-Bänder** (Session-Instanz, `in_2=1`, auf QQQ — Achtung: QQQ-Preisraum, nicht NAS100-Punkte; im Level-Register mit `"symbol": "QQQ"` kennzeichnen, siehe unten)
+   4. **Box-Kanten** (bisher hier fehlend, aber in der Pine-Tool-Liste vorhanden)
+   5. **Session-Extrema** (Tageshoch/-tief der laufenden Session)
+   6. **Fibonacci-Extension / EMA-Konfluenz** (aus dem früheren 8b1-Schritt-3-Wortlaut, bisher hier nicht übernommen)
+   7. **Rundzahlen** (in 7a1 als "Magneten" geführt, bisher in keiner der beiden TP-Listen)
+   8. **Selbst eingezeichnete Level** (manuell per `draw_shape` gesetzt, inkl. der 7a1a-Pivot-Linien)
+
+   **Abrufwege (WIE — sagt NICHTS darüber, ob ein Level existiert):**
+   - `data_get_pine_lines`/`data_get_pine_labels`/`data_get_pine_boxes` — liest NUR Pine-Indikator-Zeichnungen. `study_count: 0` heißt ausschließlich "kein Pine-Indikator zeichnet", NIEMALS "kein Level vorhanden".
+   - `draw_list` — liest selbst per `draw_shape` gesetzte Level (Levelart 8, z.B. die 7a1a-Pivot-Linien).
+   - `data_get_ohlcv`/`data_get_study_values` — liefert die ROHWERTE für Pivots (Levelart 1, Formel 7a1a), PDH/PDL (2), VWAP-Bänder (3), Session-Extrema (5), die dann im Session-Update/Voll-Check berechnet bzw. abgelesen werden; Fib-Extensions (6) und Rundzahlen (7) werden aus denselben Rohdaten manuell abgeleitet.
+
+   **Level-Register statt Live-Suche im Trigger-Moment (ergänzt 31.08.2026 Abend):** Diese Liste wird NICHT im Trigger-Moment unter Zeitdruck abgesucht — sie wird bei jedem "start update dich" ([[feedback_session_update]] Schritt 6) und bei jedem Voll-Check ([[feedback_live_trading]] Punkt 9) vollständig als `scripts/level_register.json` geschrieben/aktualisiert. Im Trigger-Moment ist nur noch ein Nachschlagen in dieser Datei nötig ([[feedback_live_trading]] 7b1 Schritt 4b), und `gate_check.cjs` verifiziert `--tp1-level-price`/`--tp2-level-price` maschinell gegen das Register (±2 Punkte Toleranz, siehe Kopfkommentar des Skripts).
+
+   **Nicht** nur eine ATR-Rechnung (der Unterschied zur Zonen-Distanzprüfung in 8b1, die bewusst ATR-basiert bleibt, weil sie eine reine Plausibilitäts-Außengrenze ist, keine Levelsuche).
 2. **TP2-Kandidat muss RR≥2:1 von der Entry-Distanz (zur SL-Distanz) erreichen.**
 
 **Wenn TP1 realistisch ist (Zone 1 nach 8b1, RR≥1:1 erfüllt) ABER kein TP2-Kandidat mit RR≥2:1 auf einem echten Level existiert:** Das ist **kein Ausschlussgrund** — Levi hat sich explizit dagegen entschieden, den Trade deswegen komplett zu blocken. Stattdessen löst das **halbe Position** aus, genau wie die bestehende Zone-2-Behandlung in 8b1. Trifft gleichzeitig ein anderer Halbierungsgrund zu (z.B. 8b1-Zone-2 selbst, oder Q-Score-GELB aus [[feedback_live_trading]] 7b1a), wird trotzdem nur **einmal** halbiert, nicht kumulativ — dieselbe Stacking-/Kombinationslogik wie überall sonst im Regelwerk (siehe 7 "Stacking-Hinweis" und [[project_risikomanagement]]).
