@@ -1,11 +1,11 @@
 ---
 name: feedback-tagesabschluss
-description: "Am Ende jedes Trading-Tages \"Tag Zusammenfassung speichern\" — strukturiertes Speichern aller Trade-Details, Fehler und Learnings, danach Git-Backup nach GitHub"
+description: "Am Ende jedes Trading-Tages \"Tag Zusammenfassung speichern\" — strukturiertes Speichern aller Trade-Details, Fehler und Learnings, danach Git-Backup nach GitHub. Faktenprotokoll-Abschluss seit 31.08.2026 mit 6 Unterpunkten (neu: Pflicht-Abschlusszeilen, rein faktisch). Klarstellung 31.08.2026 (Opus-Zweitprüfung): B1-B3-Schattenmessung gilt auch an fiktiven Testtagen ohne separaten Tagesauftrag, sofern Rohdaten im Loop erhoben wurden"
 metadata: 
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-28T08:38:38.002Z
+  modified: 2026-08-31T18:39:37.347Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -126,6 +126,8 @@ Konkret pro Fall:
 
 **Pflicht-Abschlusszeile:** `B1-B3-Schattenmessung geprüft: JA (X Fälle nachgetragen/vervollständigt) / NEIN (kein Dual-Gate-Ablehnungsfall heute)`.
 
+**Geltung an fiktiven Testtagen — explizit geklärt (ergänzt 31.08.2026, Opus-Zweitprüfung des Testtags 31.08.):** B1-B3-Schattenmessung ist Teil JEDES Faktenprotokoll-Abschlusses, auch an fiktiven Testtagen, sofern die zugrunde liegenden Rohdaten im Loop erhoben wurden — kein separater Auftrag pro Tag nötig. Der Auftrag ist generisch hier im Regelwerk verankert; die Formulierung "kein B1-B3-Schattenmessungs-Auftrag für diesen spezifischen Testtag vorgegeben" (so am 31.08.2026 im Faktenprotokoll) ist damit keine gültige Begründung für das Auslassen. An fiktiven Testtagen entfällt nur das DB-SCHREIBEN (analog zur `DB-Sync: NEIN (fiktiv)`-Konvention) — die Prüfung selbst und die Pflicht-Abschlusszeile mit den erhobenen Werten bleiben Pflicht; sind Rohdaten tatsächlich nicht erhoben worden, ist das der zu nennende Grund, nicht ein fehlender Tagesauftrag.
+
 **Why:** Der gesamte Wert von B1-B3 hängt daran, dass die Daten bis zum Review nach Trade #50 vollständig vorliegen — siehe [[project_testtag_analyse_2026-08-24]] Abschnitt 10/10a. Ohne festen Prüfpunkt entsteht sonst dieselbe Art stiller Datenlücke wie beim vierten Pflichtpunkt (dort: unbefüllte `hypothetisches_ergebnis`-Werte), die dann erst beim #50-Review auffällt, wenn sie nicht mehr zu schließen ist.
 
 **Abgrenzung:** Kein Voll-Check-/1-Minuten-Loop-Schritt, ausschließlich Tagesabschluss. Eng verwandt mit, aber inhaltlich getrennt von "Skipped-Setups aufgelöst" oben: dort geht es um das hypothetische Ergebnis (TP1/TP2/SL/WEDER_NOCH) eines ausgelassenen Setups, hier um die Dual-Gate-Messwerte/Klassenzugehörigkeit (B1-B3) desselben Falls — beide Pflichtzeilen können für denselben Eintrag anfallen, sind aber unabhängig voneinander zu prüfen.
@@ -134,17 +136,18 @@ Konkret pro Fall:
 
 **Geltungsbereich:** Der letzte Abschnitt, den SONNET am Ende eines Loop-/Testtags ins Protokoll schreibt (bisher überschrieben mit "Tagesabschluss <Datum>"). NICHT betroffen ist die von Fable erstellte analytische Tages-Zusammenfassung (`trading_YYYY-MM-DD.md`, Struktur oben) — die bleibt bewertend, denn sie kommt vom Prüfer/Autor-Modell, nicht vom Ausführenden.
 
-**Die Regel:** Der Abschnitt heißt ab jetzt **"Faktenprotokoll-Abschluss <Datum>"** und enthält AUSSCHLIESSLICH Fakten in fünf festen Unterpunkten:
+**Die Regel:** Der Abschnitt heißt ab jetzt **"Faktenprotokoll-Abschluss <Datum>"** und enthält AUSSCHLIESSLICH Fakten in sechs festen Unterpunkten (bis 31.08.2026: fünf, siehe Ergänzung unten):
 
 1. **Zahlenbilanz** — Loop-Fenster, Anzahl Voll-Checks (aus der Uhrzeit berechnet, Lücken benannt), Quick-Ticks, Screenshots inkl. Zeitpunkt des letzten, Tweet-Fetches mit Zeitstempeln, Trigger-Momente, Trades, neue `skipped_setups`-Zeilen.
 2. **Ereignisliste, chronologisch** — Uhrzeit, gemessener Wert, was geschah, Entry/kein Entry, welche Regelnummer angeführt wurde.
 3. **Skript-Aufrufe** — jeder Aufruf mit wörtlicher Ausgabezeile (`gate_check.cjs`, `cooldown_check.cjs`, `add_skipped_setup.cjs`).
 4. **Brüche und Unterlassungen** — ausgefallene Checks, Screenshot-Aussetzer, Template-/Session-Wechsel, fehlende Pflichtzeilen (Umsetzung der Offenlegungspflicht für Protokollbrüche, [[feedback_live_trading]] Punkt 9).
 5. **Offene/unklare Punkte** — ohne Auflösungsversuch.
+6. **Pflicht-Abschlusszeilen** (ergänzt 31.08.2026, Opus-Vorschlag 5/Option i aus [[project_testtag_analyse_2026-08-28]], Levi-Entscheidung) — die sechs Tagesabschluss-Pflichtzeilen aus den Abschnitten oben, **rein faktisch befüllt**: `SL-Hit-Typ: Wick/Spike (kein Kerzenschluss) ODER bestätigter Kerzenschluss — Punkt-11-Kriterien zum SL-Zeitpunkt: X/4 erfüllt` (nur bei SL-Hit), `DB-Sync: JA/NEIN`, `Regelkonformität geprüft: JA — Verstoß: JA/NEIN`, `Skipped-Setups aufgelöst: JA (X von X)/NEIN`, `SQL-Dump aktualisiert: JA/NEIN`, `B1-B3-Schattenmessung geprüft: JA/NEIN`. Das ist mit der Wertungsfreiheit dieses Abschnitts vereinbar, weil es reine Messwerte/Zustandsangaben sind, keine Bewertungen — die JA/NEIN-Antworten benennen, WAS getan/gemessen wurde, nie ob es "gut" war. An fiktiven Testtagen lauten die DB-bezogenen Zeilen entsprechend faktisch (z.B. `DB-Sync: NEIN (fiktiver Testtag, kein trades.db-Schreibzugriff)`); der `add_trade.cjs`-Trockenlauf mit `--dry-run` gehört als Skript-Aufruf zusätzlich in Unterpunkt 3 (siehe [[feedback_live_trading]], "add_trade.cjs-Trockenlauf an fiktiven Testtagen"). **Why:** Die 28.08.-Umstellung auf den Faktenprotokoll-Abschluss ersetzte den alten "Tagesabschluss" im Loop-Protokoll, ohne diesen sechs Zeilen einen neuen Platz zu geben — sie waren seitdem heimatlos, und der Punkt-11-Zähler zum SL-Zeitpunkt (18:47 am 28.08.: wäre 0/4 gewesen) ist genau die Sorte Zahl, die sich später nicht mehr rekonstruieren lässt ([[project_testtag_analyse_2026-08-28]] Abschnitt 7.4).
 
 Fester Schlusssatz des Abschnitts: **"Bewertung und Einordnung erfolgen durch Fable/Opus, nicht in diesem Protokoll."**
 
-**Verbotene Satztypen (explizit):** Gewichtungen ("wichtigster/stärkster/sauberster Vorfall"), Selbstbescheinigungen ("regelkonform", "korrekt", "diszipliniert", "sauber gehandhabt"), Vorgaben an den Prüfer ("zentraler Datenpunkt für das Review", "besonders zu beachten"), Lehren/Fazit ("die Lehre des Tages ist …"), Ursachendeutungen ("weil das Dual-Gate funktioniert hat"). **Wichtige Abgrenzung:** Der Verweis auf eine Regel ist ein Fakt ("Entry unterlassen, Begründung im Protokoll: kein frischer 8a2-Cross, Punkt 7b1") — die Schlussfolgerung daraus ("war korrekt") ist ein Urteil und verboten. Und ausdrücklich: **Ein selbst gefundener Prozessfehler ist ein Fakt und bleibt Pflicht** — diese Regel darf die Selbstoffenlegung nicht reduzieren (am 27.08. lag sie ohnehin bei null).
+**Verbotene Satztypen (explizit — gelten unverändert für ALLE sechs Unterpunkte gleichermaßen, auch für die Pflicht-Abschlusszeilen in Unterpunkt 6):** Gewichtungen ("wichtigster/stärkster/sauberster Vorfall"), Selbstbescheinigungen ("regelkonform", "korrekt", "diszipliniert", "sauber gehandhabt"), Vorgaben an den Prüfer ("zentraler Datenpunkt für das Review", "besonders zu beachten"), Lehren/Fazit ("die Lehre des Tages ist …"), Ursachendeutungen ("weil das Dual-Gate funktioniert hat"). **Wichtige Abgrenzung:** Der Verweis auf eine Regel ist ein Fakt ("Entry unterlassen, Begründung im Protokoll: kein frischer 8a2-Cross, Punkt 7b1") — die Schlussfolgerung daraus ("war korrekt") ist ein Urteil und verboten. Und ausdrücklich: **Ein selbst gefundener Prozessfehler ist ein Fakt und bleibt Pflicht** — diese Regel darf die Selbstoffenlegung nicht reduzieren (am 27.08. lag sie ohnehin bei null).
 
 **Why:** Am Testtag 27.08.2026 enthielt Sonnets "Tagesabschluss" trotz Levis expliziter Vorgabe von 18:14 Uhr ("Sonnet bewertet den Tag NICHT selbst") drei Bewertungen: "Wichtigster Vorfall des Tages" (Gewichtung), "der zentrale Datenpunkt für das Opus-Review" (Prüfer-Steuerung) und "beide Situationen wurden regelkonform ohne Entry aufgelöst" (Selbstbescheinigung — die zudem unhaltbar war: 5 versäumte Pflicht-Fetches, Spike-Ausnahme 0/35). Die Rollentrennung ([[feedback_modellwahl_trading]]) existiert genau deshalb, weil Autor und Prüfer nicht dasselbe Modell sein dürfen — rahmt der Ausführende den Tag vorab als "regelkonform", muss der Prüfer diese Rahmung erst abräumen, statt neutral zu lesen. Quelle: [[project_testtag_analyse_2026-08-27]] Abschnitt 4.4 + 14 Vorschlag 10, Opus-Zweitklärung 28.08.2026.
 

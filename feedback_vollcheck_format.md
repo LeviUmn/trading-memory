@@ -1,11 +1,11 @@
 ---
 name: feedback-vollcheck-format
-description: "Voll-Check-Ausgabeformat: Fließtext mit ✓/✗ hinter jedem geprüften Punkt, keine Tabelle"
+description: "Voll-Check-Ausgabeformat: Fließtext mit ✓/✗ hinter jedem geprüften Punkt, keine Tabelle. Seit 31.08.2026: Voll-Check-Nr. mit ausgeschriebener Uhrzeit-Rechnung in der Kopfzeile, 8d-Zeile mit Einzelausweis aller drei Kriterien, QQQ-VWAP-Vergleich fest an die AVWAP-Session-Instanz gebunden (Erkennung in data_get_study_values über die Band-1-Breite, nie über Listenposition)"
 metadata:
   node_type: memory
   type: feedback
   originSessionId: 7128a95a-a9a6-42e6-8a59-8f22dec5c654
-  modified: 2026-08-28T08:27:35.472Z
+  modified: 2026-08-31T19:20:30.935Z
 ---
 
 Im Live-Loop-Voll-Check (siehe [[feedback_loop_ablauf_uebersicht]] Szenario 1, jede 5. Minute) das Ergebnis als **Fließtext mit ✓/✗ direkt hinter jedem geprüften Punkt** ausgeben — keine Markdown-Tabelle.
@@ -15,7 +15,7 @@ Im Live-Loop-Voll-Check (siehe [[feedback_loop_ablauf_uebersicht]] Szenario 1, j
 **How to apply:** Jeder Voll-Check-Output folgt diesem Muster — jede Ebene startet in eigener Zeile mit **fettem Label**, Inhalt bleibt Fließtext-Satz mit ✓/✗ (kein Tabellen-Raster, aber klar getrennt statt einem dichten Absatzblock, siehe Korrektur 28.07.2026):
 
 ```
-Voll-Check <Uhrzeit> (Nr. <aus Uhrzeit berechnet, siehe Nummern-Regel unten>) — <1-Satz-Einordnung>
+Voll-Check <Uhrzeit> (Nr. <N> = (<Minuten seit erstem Voll-Check>)/5+1) — <1-Satz-Einordnung>
 
 **1H NAS100:** RSI <x> ✓/✗ <bearish/bullish bestätigt>, MACD-H <x> ✓/✗, <EMA50/BB-Status> ✓/✗. Struktur: <HH-HL/LH-LL-Kurzfazit>.
 
@@ -23,9 +23,9 @@ Voll-Check <Uhrzeit> (Nr. <aus Uhrzeit berechnet, siehe Nummern-Regel unten>) �
 
 **5min NAS100:** RSI <x>, MACD-H <x> (Trigger-Ebene, meist noch → warten).
 
-**QQQ 15min:** <Kurs> unter/über EMA50 ✓/✗, unter/über VWAP ✓/✗, Volumen <erhöht/normal> ✓/✗.
+**QQQ 15min:** <Kurs> unter/über EMA50 ✓/✗, unter/über VWAP (Session-Instanz) ✓/✗, Volumen <erhöht/normal> ✓/✗.
 
-**Regime-Gate (8d):** Schock-Tag ✓/✗ (<Kriterien-Zahl>/3) | Regime: <Trend/Chop>.
+**Regime-Gate (8d):** Schock-Tag ✓/✗ (<Kriterien-Zahl>/3) [Range <X> Pkt / ATR-D <Y> = <Z>× (Stand HH:MM) ✗/✓ | Makro-Häufung ✗/✓ | VIX-Range <W>% ✗/✓ oder "nicht gemessen"] | Regime: <Trend/Chop>.
 
 **ADX(14, NAS100):** <Wert> (GEMESSEN, KEIN GATE).
 
@@ -37,6 +37,8 @@ Voll-Check <Uhrzeit> (Nr. <aus Uhrzeit berechnet, siehe Nummern-Regel unten>) �
 
 🟢/🔴/→warten <Fazit>
 ```
+
+**VWAP-Instanz-Bindung in der QQQ-Zeile (ergänzt 31.08.2026, Opus-Live-Prüfung nach der Zwei-Instanzen-Anlage, Levi-Freigabe):** Seit 31.08.2026 laufen auf QQQ ZWEI identisch benannte `Anchored VWAP (Remote)`-Instanzen (Session-Instanz `in_2=1`, dauerhaft `in_0=0`; Ereignis-Instanz `in_2=1.5` — siehe [[feedback_chart_layout]], Abschnitt "Zwei AVWAP-Instanzen"). Der "unter/über VWAP"-Vergleich in der QQQ-Zeile oben meint IMMER und AUSSCHLIESSLICH die **Session-Instanz** — nie die Ereignis-Instanz, nie "die VWAP-Studie" pauschal. Praktische Zuordnung, weil `data_get_study_values` (die Datenquelle dieser Zeile) beide Einträge mit identischem Namen und OHNE Entity-ID/`in_2`-Feld liefert: den Eintrag mit dem **schmaleren Band 1** nehmen (Abstand Band-1-Ober-/Unterlinie zur AVWAP-Mittellinie — bei der Ereignis-Instanz ist dieser Abstand durch `in_2=1.5` genau 1,5× so groß wie bei der Session-Instanz; Band 2 taugt NICHT als Merkmal, Multiplikator 2 bei beiden). NIE über die Listenposition zuordnen — `data_get_study_values` und `chart_get_state` listen die beiden Instanzen in UMGEKEHRTER Reihenfolge (siehe Reihenfolge-Falle in [[feedback_chart_layout]]). **Why gerade jetzt:** Solange kein Trade offen ist, zeigen beide Instanzen denselben VWAP-Wert (beide `in_0=0`) und der Fehler bleibt unsichtbar. Sobald aber eine Position offen ist und die Ereignis-Instanz einen echten Anker trägt, divergieren die beiden Werte — genau in dem Moment, in dem die Pflichtzeile am wichtigsten ist, würde eine unspezifizierte "VWAP" mehrdeutig. Bei divergierenden Werten (offener Anker) im Zweifel zusätzlich per `data_get_indicator` + `in_2` auf den Entity-IDs gegenprüfen, statt zu raten.
 
 Jedes ✓/✗ steht für eine ECHTE Einzelprüfung, nicht dekorativ — bei "ausgelassen" (z.B. kein Impuls für Fibonacci) explizit als "ausgelassen" kennzeichnen statt ✗ zu setzen (✗ = geprüft und nicht erfüllt, "ausgelassen" = gar nicht geprüft, das ist ein Unterschied).
 
@@ -56,4 +58,8 @@ Jedes ✓/✗ steht für eine ECHTE Einzelprüfung, nicht dekorativ — bei "aus
 
 **8d-Format-Fix + Rohwert-Pflicht (ergänzt 28.08.2026, Opus-Vorschlag 4 aus [[project_testtag_analyse_2026-08-27]], Levi-Freigabe):** (a) Der n/3-Zähler der 8d-Zeile ist Pflichtbestandteil und darf nie durch eine Trend/Chop-Einschätzung ERSETZT werden — die ist als Zusatz hinter dem "|" willkommen, beantwortet aber eine andere Frage (Trend vs. Chop statt Schock-Tag ja/nein). Am 27.08.2026 wechselten 9 Voll-Checks in Folge unbemerkt auf die zählerlose Trend/Chop-Fassung. (b) Jeder Zahlenwert in den Pflichtzeilen (ADX, RSI, MACD-H, EMA50) ist ein tatsächlich ABGELESENER Wert oder ein explizites "nicht gelesen" — nie "~X", "implizit", "unverändert niedrig" oder eine Spanne. Am 27.08. standen 3 ADX- und 3 RSI-Angaben ohne echten Ablesewert im Protokoll, und die wichtigste Boundary-Entscheidung des Tages (20:00-Kerzenschluss vs. EMA50) wurde gegen eine EMA50-*Spanne* statt einen abgelesenen Wert getroffen ([[project_testtag_analyse_2026-08-27]] Abschnitte 5+8).
 
+**8d-Einzelkriterien-Klammer (ergänzt 31.08.2026, Opus-Vorschlag 3 aus [[project_testtag_analyse_2026-08-28]], Levi-Freigabe):** Die 8d-Zeile im Template oben trägt seit 31.08.2026 zusätzlich die eckige Klammer mit der Einzelbewertung aller drei Kriterien (Range/ATR-D-Verhältnis mit Rohwerten, Makro-Häufung, VIX-Intraday-Range) — "nicht gemessen" ist für ein tatsächlich nicht geprüftes Kriterium die zulässige, ehrliche Angabe (v.a. VIX-Range) und zählt nicht als erfüllt. **Why:** Am 28.08.2026 stand der n/3-Zähler in 58/58 Checks formal korrekt da, beruhte aber den ganzen Tag auf nur einem tatsächlich gerechneten Kriterium — der Zähler ohne Aufschlüsselung suggeriert eine Prüfung, die zu zwei Dritteln nie stattfand. Volle Regel + Why: [[feedback_chartanalyse]] 8d.
+
 **Voll-Check-Nummer aus der Uhrzeit ableiten, nie mitzählen (ergänzt 28.08.2026, Opus-Vorschlag 8 aus [[project_testtag_analyse_2026-08-27]], Levi-Freigabe):** Die Nummer in der Kopfzeile wird bei jedem Voll-Check aus der echten Uhrzeit berechnet — **Nr. = (Minuten seit dem ersten Voll-Check der Session) / 5 + 1** — und nie als eigener Zähler fortgeschrieben. Fällt ein 5-Min-Slot aus, entsteht so automatisch eine sichtbare Nummernlücke, die im nächsten Voll-Check explizit benannt wird ("Nr. 27 ausgefallen, Grund: X" — siehe auch die Offenlegungspflicht für Protokollbrüche, [[feedback_live_trading]] Punkt 9). **Why:** Am 27.08.2026 sprang die mitgezählte Nummer von (3.) auf (5.) und meldete am Ende "36." bei real 35 Checks — der einzige echte Ausfall (19:15) blieb dadurch unsichtbar, während ein Phantom-Check mitgezählt wurde ([[project_testtag_analyse_2026-08-27]] Abschnitt 1).
+
+**Verschärfung 31.08.2026 — die Rechnung selbst gehört sichtbar in die Kopfzeile (Opus-Vorschlag 4 aus [[project_testtag_analyse_2026-08-28]], Levi-Freigabe):** Das reine Verbot des Mitzählens hat am 28.08.2026 nicht gereicht: Die Nummer wurde dort nicht "mitgezählt" (+1 pro Slot), sondern verschmolz ab 17:45 mit dem Tick-/Fire-Zähler (+2 bis +5 pro 5-Min-Slot — +5 ist die Zahl der Fires: 4 Quick-Ticks + 1 Voll-Check) und erreichte um 19:20 die Nr. 98 statt der formelkorrekten 52. Ein Verbot allein verhindert das nicht — die Nummer muss aus einer Quelle kommen, die nicht mitzählen KANN. Deshalb wird die Formel bei JEDEM Voll-Check neu aus der Uhrzeit gerechnet und **ausgeschrieben in der Kopfzeile mitgeführt**, nicht nur ihr Ergebnis (Template oben): `Voll-Check 18:35 (Nr. 43 = (210 Min seit 15:05)/5+1)`. Wer die Rechnung hinschreibt, kann nicht danebenliegen, und der Prüfer sieht die Herleitung. Positiv-Beleg für die Formel selbst: Nach der 12-Min-Lücke 17:27-17:38 am 28.08. stand der nächste Check formelkorrekt bei Nr. 32 mit sichtbar übersprungenen Nummern 30/31 — erst danach begann die Drift über den Fire-Zähler, den genau diese Verschärfung abschneidet.

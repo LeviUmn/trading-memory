@@ -1,10 +1,10 @@
 ---
 name: project-validierungstesttag-naechster-handelstag
-description: "Verbindlich beschlossener dritter fiktiver Testtag (nächster Handelstag nach 27.08.2026) mit 5 binären Pass-Kriterien — validiert die diese Woche gebauten Mechanismen (Paket 1-6c) unter echtem Zeitdruck, BEVOR wieder mit Echtgeld gehandelt wird (#44). Ergebnis entscheidet, ob #44 startet."
+description: "Verbindlich beschlossener dritter fiktiver Testtag (nächster Handelstag nach 27.08.2026) mit 5 binären Pass-Kriterien — validiert die diese Woche gebauten Mechanismen (Paket 1-6c) unter echtem Zeitdruck, BEVOR wieder mit Echtgeld gehandelt wird (#44). Ergebnis entscheidet, ob #44 startet. Kriterium 2 seit 31.08.2026 mit Öffnungsklausel (korrektes 'nicht einschlägig' zählt als Durchlauf, analog Kriterium 3) — gilt NUR für künftige Testtage, nicht rückwirkend; der 28.08.-GC-5-Lauf bleibt 'unentschieden' (Korrektur nach Opus-Gegencheck 31.08.)."
 metadata:
   type: project
   originSessionId: session-2026-08-27
-  modified: 2026-08-27T09:46:29.506Z
+  modified: 2026-08-31T19:20:38.261Z
 ---
 
 # Kontext
@@ -22,8 +22,8 @@ Nach der schlechten Handelswoche (#36-43, 17.-21.08.2026, siehe [[project_risiko
 ## Die 5 binären Pass-Kriterien (alle müssen erfüllt sein — kombiniert aus Fables und Opus' unabhängigen Vorschlägen, 27.08.2026)
 
 1. Bei JEDER Gate-Entscheidung steht der wörtliche `gate_check.cjs`-Konsolen-Output im Protokoll — kein einziges im Kopf gerechnetes RR (0 Ausnahmen).
-2. `zoneRrConsistencyGate` (GC-5) läuft mindestens einmal real durch.
-3. Die Stale-Short/Long-Klasse ([[feedback_live_trading]] 7b1c) wird mindestens einmal ausgewertet und korrekt ausgegeben — auch der Fall "Vorbedingung nicht erfüllt → Zeile entfällt ersatzlos" zählt als korrekt, wenn er tatsächlich eintritt.
+2. `zoneRrConsistencyGate` (GC-5) läuft mindestens einmal real durch. **Öffnungsklausel (ergänzt 31.08.2026, Opus-Vorschlag 6 aus [[project_testtag_analyse_2026-08-28]], Levi-Freigabe):** Auch die korrekte Ausgabe "nicht einschlägig" mit Begründung (z.B. Vorbedingung "SL-Floor bestanden UND TP-Zone 1" nicht erfüllt) zählt als bestandener Durchlauf — dieselbe Öffnung, die Kriterium 3 von Anfang an hatte. GC-5 hat konstruktionsbedingt nur bei "SL-Floor bestanden UND Zone 1" etwas zu tun, eine nach der aktuellen 8b1-Zonenlogik seltene Konstellation; ohne diese Klausel wäre Kriterium 2 an einem beliebigen Testtag nur mit Glück erfüllbar. **Die Klausel gilt NUR für künftige Testtage, nicht rückwirkend (Korrektur 31.08.2026 nach Opus-Gegencheck, [[project_gegencheck_fable_umsetzung_2026-08-31]]):** Der 28.08.2026-Lauf (GC-5 lief real durch und meldete korrekt "Nicht einschlaegig (SL-Floor bestanden, TP-Zone 2)") ist zwar genau die Sorte Durchlauf, die diese Klausel meint, behält aber seine ursprüngliche Einordnung "unentschieden" aus [[project_testtag_analyse_2026-08-28]] Abschnitt 15 — Opus' Originalempfehlung dort lautete ausdrücklich, die Öffnungsklausel nur "für einen künftigen Versuch" zu ergänzen; ein am 31.08. zunächst eingefügter "gilt rückwirkend"-Zusatz war nicht beauftragt und wurde zurückgenommen. Am Gesamtergebnis des 28.08.-Validierungstesttags ändert das nichts (kein Echtgeld-Go stand ohnehin fest, Kriterien 1/4/5 nicht bestanden).
+3. Die Stale-Short/Long-Klasse ([[feedback_live_trading]] 7b1c) wird mindestens einmal ausgewertet und korrekt ausgegeben — auch der Fall "Vorbedingung nicht erfüllt → einzeilige Negativbestätigung mit Grund genügt" zählt als korrekt, wenn er tatsächlich eintritt (Konvention angeglichen 31.08.2026 an die präzisierte Vorbedingungs-Abfrage in [[feedback_live_trading]] 7b1c und [[feedback_chartanalyse]] 8a4 — das frühere "Zeile entfällt ersatzlos" ist überholt; auditierbar ist nur die ausgeschriebene Negativbestätigung, nicht das stille Weglassen).
 4. Alle sieben neuen Pflicht-Messfelder werden nach jedem fiktiven Trade-Abschluss ohne Nachfrage vollständig erhoben — jetzt code-erzwungen über `add_trade.cjs` (s.o.). Ein sauberer Abbruch bei einem unvollständigen fiktiven `add_trade.cjs`-Testaufruf zählt als Beleg, nicht als Fehlschlag.
 5. Der neue Tick-Prompt (Punkt 2b in [[feedback_live_trading]]) läuft komplett durch, ohne dass ein Pflichtelement übersprungen wird.
 
