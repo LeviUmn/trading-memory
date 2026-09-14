@@ -1,10 +1,25 @@
 ---
 name: feedback-modellwahl-trading
-description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung (seit 28.08. inkl. Faktenprotokoll-Abschluss ohne Bewertung), Fable 5 Regelwerk/Tagesabschluss/Umsetzung UND Skripte/Code, Opus 5 macht seit 28.08.2026 IMMER die Testtag-/Tagesanalysen (Fable speichert+setzt um) plus Meilenstein-Checks. Seit 27.08.2026: Fable läuft über aufgeladenes Nutzungsguthaben ('Draws from usage credits')"
+description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung (seit 28.08. inkl. Faktenprotokoll-Abschluss ohne Bewertung), Fable 5 Regelwerk/Tagesabschluss/Umsetzung UND Skripte/Code, Opus 5 macht seit 28.08.2026 IMMER die Testtag-/Tagesanalysen (Fable speichert+setzt um) plus Meilenstein-Checks. Seit 27.08.2026: Fable läuft über aufgeladenes Nutzungsguthaben ('Draws from usage credits'). Levi hat die Rollenteilung + das Live-Gegencheck-Muster am 09.09.2026 unaufgefordert als 'gefällt mir' bestätigt."
 metadata:
   type: feedback
   originSessionId: session-2026-07-27
-  modified: 2026-08-28T08:39:07.340Z
+  modified: 2026-09-09T20:52:03.930Z
+---
+
+## STAND 14.09.2026: Hauptchat = Sonnet als Koordinator (Levi-Vorgabe)
+
+Levi: "der Agent hier im Chat soll immer Sonnet sein und Sonnet gibt dann den Auftrag an Opus und Opus würde dann den Auftrag für Fable schreiben, und Opus würde dann Fables Umsetzung wieder prüfen etc."
+
+- **Hauptchat (interaktive Session): immer Sonnet 5** — nimmt Levis Anliegen an, verteilt Aufträge, reicht Ergebnisse weiter, bewertet nicht selbst.
+- **Opus 5 (Subagent):** Analyse, Empfehlung, schreibt den Umsetzungsauftrag für Fable; prüft danach Fables Umsetzung (Gegencheck, live testen). Gegencheck bevorzugt durch einen FRISCHEN Opus-Agenten ohne den Kontext der Empfehlung, wenn eine verbindliche Regel geändert wird (Autor der Vorgabe ≠ Prüfer).
+- **Fable 5 (Subagent):** Umsetzung Regelwerk/Skripte/Tests, kein Commit (Levi committet).
+- Technischer Ablauf: Subagenten starten ggf. keine eigenen Subagenten → Sonnet übergibt den von Opus geschriebenen Fable-Auftrag wörtlich an Fable und startet danach den Opus-Gegencheck.
+- Live-Loop bleibt Sonnet (unverändert).
+
+**Why:** Kette Analyse → Auftrag → Umsetzung → Gegencheck soll klar getrennte Rollen haben; 14.09. lief der Hauptchat versehentlich auf Opus 5, das Empfehlung, Fable-Auftrag und geplanten Gegencheck in einer Hand bündelte.
+**How to apply:** Läuft der Hauptchat nicht auf Sonnet, Levi zu Beginn darauf hinweisen (`/model`). Aufträge an Opus/Fable immer als Subagent mit `model` opus/fable.
+
 ---
 
 ## STAND 27.08.2026: Fable-Verfügbarkeit — Deprecation-Risiko eingetreten, aber per Nutzungsguthaben gelöst
@@ -29,6 +44,8 @@ Levi meldete am 27.08.2026 zunächst, dass Fable 5 für seinen Tarif nicht mehr 
 **How to apply:** Bei jeder Anfrage zu Regelwerk-Änderungen, Tagesabschluss, Skript-Arbeit (Bugfixes, neue Tools wie `gate_check.cjs`) oder größeren Trading-Analysen künftig Fable einsetzen, nicht Sonnet. Sonnet bleibt ausschließlich für den operativen Live-Loop (Quick-Tick + 5-Min-Voll-Check). Opus wird nur gezielt angefragt (Meilenstein/Reform/Quartal), nicht routinemäßig.
 
 **Offener Punkt — Fable-Verfügbarkeit (unverändert seit 27.07.2026):** Fable 5 hat weiterhin kein angekündigtes Deprecation-Datum. Sollte Anthropic eine Fable-5-Deprecation ankündigen, muss diese Regel neu bewertet werden — bei jedem größeren Modell-Review (z.B. nächster Phasenübergang) kurz gegenchecken, ob eine Deprecation-Ankündigung für Fable oder Sonnet 5 vorliegt.
+
+**Bestätigung 09.09.2026 (Levi zum Tagesabschluss, unaufgefordert):** "Bin zufrieden wie der Testtag heute lief, der Ablauf wie unser System läuft gefällt mir." Bezog sich auf die volle Kette des Tages: Opus-Testtaganalyse → Fable-Umsetzung (TODO 1-11) → mehrere Opus-Gegencheck-Runden (G1/G2/G5-G9, jeweils mit Live-Tests/Missbrauchsversuchen statt nur Lesen) → von Sonnet ausgeführter Live-Trockenlauf (TODO 7, `save_path`-Pfad) → nochmaliger unabhängiger Opus-Gegencheck des Trockenlaufs → Commit. Bestätigt damit explizit: die Rollenteilung UND das Gegencheck-Muster (Autor ≠ Prüfer, Prüfer testet live statt zu glauben) trägt sich auch bei reiner Skript-/Prozessarbeit ohne echte Trades. Siehe [[project_gegencheck_fable_umsetzung_2026-09-09_f1_b1_b2]] für die Kette selbst.
 
 ---
 

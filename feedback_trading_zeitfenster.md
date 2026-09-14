@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-12T09:58:57.734Z
+  modified: 2026-09-03T09:44:09.591Z
 ---
 
 Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
@@ -34,7 +34,7 @@ Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 
 **Neue Regel (Kompromiss, nicht volle Übernahme von Levis Vorschlag):** Die Grundsorge (Open-Volatilität = mehr Fakeouts) ist real und wird nicht ignoriert, aber nicht mehr mit einem starren Handelsverbot behandelt, sondern mit demselben Sizing-Mechanismus wie Chop (Punkt 8d) und Chasing (Punkt 13):
 1. Ab 15:00: Vorbereitung/Loop-Start, Kontext aufbauen (Levi ist ohnehin ab ~14:30 vorbörslich am Rechner)
-2. Ab 15:30: aktive Setup-Suche, Entry bei voller Regelbestätigung erlaubt — **Position dabei zwingend halbiert**, unabhängig davon ob Chop/Chasing zusätzlich vorliegen (Stacking-Hinweis: liegt zusätzlich Chop ODER Chasing vor, bleibt es bei der einen Halbierung, kein Multiplizieren — zentrale Regel siehe [[project_risikomanagement]], Abschnitt "Stacking-Regel für gleichzeitige Halbierungs-Gründe")
+2. Ab 15:30: aktive Setup-Suche, Entry bei voller Regelbestätigung erlaubt — **Position dabei zwingend halbiert** (seit 03.09.2026 wird das Fenster in jeder Format-Zeile zwischen 15:30 und 16:00 als "Halbierungsfenster 15:30–16:00 aktiv" mitgeführt und der Ablauf beim ersten Voll-Check ab 16:00 explizit markiert — siehe [[feedback_vollcheck_format]], "Sperr-/Halbierungsfenster in der Format-Zeile"; am 02.09.2026 war das Fenster nach der Vorbereitung in keinem einzigen Voll-Check mehr präsent), unabhängig davon ob Chop/Chasing zusätzlich vorliegen (Stacking-Hinweis: liegt zusätzlich Chop ODER Chasing vor, bleibt es bei der einen Halbierung, kein Multiplizieren — zentrale Regel siehe [[project_risikomanagement]], Abschnitt "Stacking-Regel für gleichzeitige Halbierungs-Gründe")
 3. Ab 16:00: volle Positionsgröße bei bestätigtem Setup, wie bisher
 
 **Review-Pflicht (analog 7a1/Punkt 12):** Nach den nächsten 5 Entries im 15:30-16:00-Fenster explizit auswerten, ob diese öfter/stärker ausgestoppt wurden als 16:00+-Entries. Bestätigt sich die Fakeout-Sorge nicht, Halbierungs-Pflicht für dieses Fenster wieder streichen und rein regelbasiert ohne Uhrzeit-Faktor behandeln — Basis: n=0 bei Einführung, bewusst noch nicht abgesichert.

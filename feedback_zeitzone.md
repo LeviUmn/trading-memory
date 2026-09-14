@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: b9585154-6b19-4cde-b4d2-f0df64bb9338
-  modified: 2026-07-27T12:55:05.089Z
+  modified: 2026-09-03T09:44:05.082Z
 ---
 
 Ab 22.07.2026: Alle Uhrzeiten in Claude-Ausgaben (Loop-Ticks, Voll-Checks, Session-Updates, Trade-Notizen) in deutscher Ortszeit angeben, nicht UTC.
@@ -21,3 +21,10 @@ Ab 22.07.2026: Alle Uhrzeiten in Claude-Ausgaben (Loop-Ticks, Voll-Checks, Sessi
 - Winterzeit-Umstellung (letzter Oktober-Sonntag CEST→CET): danach erneut gegen `date -u` verifizieren, ob die Differenz noch stimmt (+1h statt +2h)
 
 ~~Alte, überholte Annahme (bis 27.07.2026 fälschlich angewendet):~~ "Sandbox hat keine Zeitzonendatenbank, `date` liefert immer UTC, manueller Offset per `date -u -d '+2 hours'` nötig" — diese Annahme war Stand 27.07.2026 nicht mehr zutreffend und führte zu einem realen Fehler.
+
+## Zeitbasen-Konvention (ergänzt 03.09.2026, Punkt 24 aus [[project_fable_auftragsliste_2026-09-03]])
+
+Zwei feste Zeitbasen, nie vermischt:
+- **Protokolle/Ausgaben** (Loop-Ticks, Voll-Checks, Ereignislisten, Tages-Dateien): durchgehend **DE-Ortszeit** — wie oben seit 22.07.2026, jetzt ausdrücklich auch für jede Ereignisliste im Faktenprotokoll.
+- **Statusdateien** (`x_last_fetch.json`, `level_register.json` `updated`, alle maschinenlesbaren Zeitstempel): durchgehend **UTC mit `Z`-Suffix** — nie DE-Ortszeit mit `Z` (exakt dieser Mix schob am 01.09.2026 den Tweet-Wasserstand ~2 h in die Zukunft; `x_fetch_stamp.cjs` und der `gate_check.cjs`-Frische-Guard lehnen das seit 03.09.2026 hart ab).
+- **Jede Angabe, die von ihrer Grundkonvention abweicht, wird ausdrücklich gekennzeichnet UND mit DE-Umrechnung ergänzt** — z.B. "14:35Z (= 16:35 DE)". Eine unkommentierte Fremdzeitbasis mitten in einer DE-basierten Liste ("Bis ~14:35 Uhr (Registerzeit)" am 02.09.2026, real 16:35 DE) ist ein Protokollbruch.

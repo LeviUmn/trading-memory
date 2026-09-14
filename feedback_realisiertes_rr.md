@@ -1,11 +1,11 @@
 ---
 name: feedback-realisiertes-rr
-description: "Realisiertes Chancen-Risiko-Verhältnis liegt bei ~0,78:1 statt geplanter 1:2 — 0 von 12 Trades hat je ein TP erreicht. Wichtigste Kennzahl, die vor Trade #13 fehlte (Fable-5-Review 04.07.2026)"
+description: "Realisiertes Payoff-Ratio (Ø-Gewinn/Ø-Verlust, ALLE Exit-Arten — kein TP1/TP2-Blend): Stand 10.09.2026 über 43 Trades 0,94:1 auf Phasen-Kapitalbasis (1,12:1 auf Positionsbasis); echtes R-Multiple (8/43 Trades) Ø -0,51R. Historie: 0,78:1 (04.07., 12 Trades) → 1,16:1 (28.07., 27 Trades). Wichtigste Kennzahl, die vor Trade #13 fehlte (Fable-5-Review 04.07.2026)"
 metadata:
   node_type: memory
   type: feedback
   originSessionId: fable-review-2026-07-04
-  modified: 2026-07-28T16:40:39.919Z
+  modified: 2026-09-10T11:00:04.901Z
 ---
 
 Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je ein Take-Profit erreicht**. Jeder Gewinn war ein vorzeitiger manueller Exit (Divergenz-Erkennung, 3h-Regel, Session-Ende, Quarter-End), jeder Verlust lief bis zum SL (bzw. Breakeven-Stop). Realisiert: Ø-Gewinn ~9,70€ vs. Ø-Verlust ~12,50€ → **realisiertes RR ≈ 0,78:1**, obwohl die Regel in [[project_risikomanagement]] mindestens 1:2 vorschreibt.
@@ -41,3 +41,11 @@ Die RR-Verbesserung kommt in Phase 2 überwiegend aus deutlich kleineren, diszip
 **Fortschreibung 28.07.2026 (Fable-Tagesabschluss-Review, nach Trade #26/#27, erste 2 Phase-3-Trades):** Blended Lifetime über alle 27 Trades: Win-Sum 20,96% (15 Wins bis #25) + 1,81% (Trade #27) = 22,77% bei 16 Wins → **Ø-Gewinn ≈1,42%/Win-Trade**. Loss-Sum 8,815% (8 Losses bis #25) + 2,235% (Trade #26) = 11,05% bei 9 Losses → **Ø-Verlust ≈1,23%/Loss-Trade**. **Realisiertes RR blended jetzt ≈1,16:1** — leichter Rückgang gegenüber 1,27:1 vom 23.07., weil Trade #26 (RR-Grenzfall 1,0:1, SL griff voll) größer war als der bisherige Ø-Verlust und Trade #27 (+1,81%) kleiner als der bisherige Ø-Gewinn. Kein Alarmsignal bei n=2 — einzelne Trades bewegen die Blended-Zahl bei diesem Sample-Umfang noch spürbar, siehe [[project_robustheit_monte_carlo]] (Schwelle für belastbare Aussagen liegt bei ~50 Trades, aktuell 27).
 
 **Phase 3 isoliert (Trades #26-27, n=2, laut how-to-apply oben separat zu führen):** Ø-Gewinn 1,81% (1 Win), Ø-Verlust 2,235% (1 Loss) → **RR Phase 3 bislang ≈0,81:1** (bestätigt durch `trade_stats.cjs --phase 3`). Bei n=2 nicht überinterpretieren — Phase 3 ist gerade erst gestartet (gestaffelter Einstieg, siehe [[project_risikomanagement]]), diese Zahl wird sich mit jedem weiteren Trade stark bewegen. Weiter mitführen, aber noch keine Rückschlüsse auf die Qualität der Phase-3-Reform (RR-Entkopplung TP1/TP2 vom 27.07.) ziehen.
+
+**Fortschreibung + Begriffskorrektur 10.09.2026 (Fable, nach Levis RR-Klärung; Bugs B-2/B-3 aus dem Opus-Meilensteincheck):**
+
+1. **Bezeichnung korrigiert:** Die oben "Blend"/"blended" genannte Zahl war nie ein TP1/TP2-Blend. Sie ist das **realisierte Payoff-Ratio = |Ø-Gewinn| / |Ø-Verlust| über ALLE Exit-Arten**. Laut `trades.db` (42/43 Exits dokumentiert) sind 31/42 = 73,8 % **Nicht-TP-Exits** (SL 16, manuell 7, BE 4, Reversal 2, Stall 2), nur 11/42 = 26,2 % TP-Exits (TP1 8, TP2 3). "Blend" suggeriert eine TP1/TP2-Mischung, die es empirisch kaum gibt — ab jetzt heißt die Kennzahl im Regelwerk und in `trade_stats.cjs`/`abschluss.cjs` **"Payoff-Ratio"**. RR bleibt die TP1-Zahl am Entry (Hard Gate ≥1:1, [[feedback_live_trading]] 7b1 P7), kein Blend-RR.
+2. **Zahl aktualisiert (veraltet war "1,16:1 über 27 Trades"):** Über alle 43 Trades (23 Win / 3 BE / 17 Loss): Ø-Gewinn 1,418 % / Ø-Verlust −1,266 % **der Position** → 1,12:1; auf der seit 10.09.2026 gültigen **Phasen-Kapitalbasis** (Phase 1 1.500 € / 2 3.000 € / 3 5.000 €, rückwirkend): Ø-Gewinn +0,91 % / Ø-Verlust −0,97 % der Kapitalbasis → **Payoff-Ratio 0,94:1**. Phase 3 isoliert (18 Trades): 0,98:1 (Kapitalbasis). **Warum die Kapitalbasis-Zahl schlechter ist:** Verluste liefen häufiger auf vollen Positionen (≈5.000 €), Gewinne häufiger auf halbierten (≈2.500 €) — die Positionsbasis versteckt das, die Kapitalbasis zeigt es. Beide Kennzahlen (Payoff-Ratio und Kapitalrendite) rechnen seit 10.09.2026 auf derselben Basis (B-1-Fix in `stats_common.cjs`).
+3. **Neu: echtes R-Multiple** (`trade_stats.cjs` Zeile "R-Multiple (real)"): Ergebnis / geplantes Entry-Risiko (position_eur × Hebel × sl_distance / Entry). Nur für die 8 Trades mit befüllten Messfeldern (#36-#43), Rest n/a — nicht geschätzt: **Ø −0,51R, Summe −4,06R.** SL-Exits landen sauber bei ≈ −1R (#38 −1,08 · #40 −0,97 · #42 −0,99 · #43 −1,07; #36 −0,58 nach SL-Nachzug), die Gewinne nur bei **+0,15R (#37, Stall) und +0,49R (#39, TP1)**, #41 0R. Das ist der eigentliche Befund in R-Sprache: Verluste voll, Gewinne zu klein — und mit n=8 noch nicht belastbar.
+
+**How to apply (ersetzt die früheren Blend-Formulierungen):** Bei jedem Review "Payoff-Ratio (Kapitalbasis)" + "R-Multiple (real, n=…)" aus `trade_stats.cjs` zitieren, nie mehr "RR-Blend". Zahlen vor dem 10.09.2026 sind Positionsbasis und nicht direkt vergleichbar.

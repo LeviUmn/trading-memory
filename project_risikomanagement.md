@@ -1,12 +1,26 @@
 ---
 name: project-risikomanagement
-description: "Festgelegtes Risikomanagement-System — 15.000€ Kapital, Ziel ~3.000€/Monat (20%)"
+description: "Festgelegtes Risikomanagement-System — Kapitalbasis PHASENABHÄNGIG (Levi 10.09.2026): = Positions-Obergrenze der Phase (1.500/3.000/5.000/10.000€), Phase 3 aktuell 5.000€ × 1,5% = 75€ Risiko; Tagesverlust-Limit 2×Risiko (Ph.3 150€); Notbremse Stufe 1 phasenbasiert 10%/20% (Ph.3 500/1.000€, notbremse_check.cjs), Stufe 2 bewusst zurückgestellt; 50.000€ erst NACH allen Phasen; 8-Schritt-Positionsgrößen-Formel, size.cjs ohne --kapital"
 metadata: 
   node_type: memory
   type: project
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-08-24T12:58:57.949Z
+  modified: 2026-09-10T11:22:12.964Z
 ---
+
+**KAPITALMODELL — KORRIGIERT 10.09.2026 (Levi, zweimal bestätigt; ersetzt den 04.09.-Absatz darunter):** Die Kapitalbasis für JEDE laufende Rechnung (Risiko-Limit €, Kapitalrendite, Tagesverlust, Notbremse) ist **kein Kontostand, sondern wächst pro Phase — exakt auf die Positions-Obergrenze der jeweiligen Phase:**
+
+| Phase | Positions-Spanne | Kapitalbasis | Risiko-% | Risiko-Limit € |
+|---|---|---|---|---|
+| 1 — Bewährung | ~500-1.500€ | **1.500€** | 1% | 15€ |
+| 2 — Aufbau | ~2.000-3.000€ | **3.000€** | 1,5% | 45€ |
+| 3 — Skalierung (AKTUELL seit 24.07., verlängert bis #50) | ~4.000-5.000€ | **5.000€** | **1,5%** (10.09. von 2% gesenkt) | **75€** |
+| 4 — Datenerweiterung | ~10.000€ | **10.000€** | 2% | 200€ |
+| Danach — kein Phasensystem | frei | **50.000€** | offen (nicht relevant, solange Phasen laufen) | — |
+
+Das 15-Trade-Testfenster (Phase 3 posMax temporär 2.500€) ändert die Kapitalbasis 5.000€ NICHT — nur die Positions-Obergrenze ist testweise kleiner. Die 50.000€ sind ausschließlich der Zielwert nach dem #50-Gate-Review und dürfen in keiner laufenden Rechnung als Basis stehen. **Code:** `scripts/kapital_constants.cjs` (`kapitalFor(phase)`, `RISIKO_PCT_PHASE`, `KAPITAL_NACH_PHASEN`) ist die einzige Quelle; `size.cjs` wird für NAS100 **ohne `--kapital`** aufgerufen (Basis folgt aus `--phase`, wird in der Ausgabe ausgewiesen; `--kapital` nur noch als expliziter DAX-/Test-Override, kein Hard-Exit mehr); `trade_stats.cjs`/`abschluss.cjs` rechnen die Kapitalrendite **rückwirkend für alle 43 Trades** auf der Phasenbasis (Fable-Entscheidung: das Modell ist per Definition phasenbasiert und jeder Trade trägt seine Phase — keine Datumsweiche; Prozentzahlen vor dem 10.09. waren auf 15.000€ gerechnet und sind nicht vergleichbar). **Folge für Opus' Befund "Risiko-Limit dekorativ":** ~~behoben~~ **abgemildert, nicht vollständig behoben (Opus-Gegencheck 10.09.2026):** 75€ binden in Phase 3 jetzt, sobald SL-Abstand% × Hebel > 3% (Testfenster 2.500€) bzw. > 1,5% (regulär 5.000€), z.B. 10x/0,34% oder 6x/0,5%. Der Opus-Gegencheck hat aber nachgerechnet: Bei **typischer** Trade-Geometrie (Hebel 5-6, SL 50-120 Punkte) bindet das Risiko-Limit im aktuellen 15-Trade-Testfenster weiterhin meist NICHT — bei 7 von 8 historischen Trades mit vollständigen Feldern (#36-#43) hätte weiterhin das Positions-Limit gebunden, nicht das Risiko-Limit. **Risiko-Limit bindet jetzt in Grenzfällen (weite SL/hoher Hebel), ist aber bei typischer Trade-Geometrie im Testfenster weiterhin nicht die bindende Grenze — abgemildert, nicht vollständig behoben (Opus-Gegencheck 10.09.2026).** ~~Die 20%-Notbremse (Tabelle "Erweiterte Regeln", "15.000€ → 12.000€") ist noch in 15k-Zeit formuliert und nicht auf das Phasenmodell übertragen — offener Punkt, keine Regel erfunden.~~ *(Erledigt 10.09.2026 abends: Notbremse Stufe 1 phasenbasiert + Tagesverlust-Limit phasenbasiert, siehe Abschnitt "Notbremse Stufe 1" unten und Tabelle "Risiko-Regeln"; Code `scripts/notbremse_check.cjs`, Schwellen in `kapital_constants.cjs`.)*
+
+~~**KAPITAL-UPDATE (04.09.2026, Levi):** Gesamtkapital ist von 15.000€ auf aktuell **50.000€** gestiegen.~~ *(ÜBERHOLT 10.09.2026 — Fehlannahme, siehe Kapitalmodell oben; Absatz bleibt als Zeitdokument:)* Dies ersetzt ab sofort die 15.000€-Basis, die unten und in der Phasen-/Positionsgrößen-Historie durchgängig verwendet wird — historische Rechnungen/Zitate bleiben als Zeitdokument stehen, aber jede NEUE Positionsgrößen-/Risiko-Berechnung (`size.cjs --kapital`, Rendite-%-Rechnungen, Drawdown-Notbremse etc.) muss ab jetzt mit 50.000€ statt 15.000€ rechnen. Die Phasen-1-4-€-Bandbreiten (z.B. Phase 3: 4.000-5.000€) waren ursprünglich an die 15k-Basis gekoppelt — ob/wie sie mit dem neuen Kapital neu skaliert werden, ist noch nicht entschieden und separat mit Levi zu klären, bevor sie in einer Order angewendet werden. Risiko-%-Regeln (1-2% je Phase) bleiben unverändert in Prozent, nur die Euro-Beträge dahinter ändern sich (z.B. 1,5%-Risiko: 225€→750€). **Code-Stand (04.09.2026, nachgezogen 10.09.2026):** `size.cjs --kapital` bleibt Pflichtparameter und ist mit 50000 aufzurufen. Seit 10.09.2026 (Opus-Meilensteincheck Punkt 1) liest `size.cjs` den Betrag aus `scripts/kapital_constants.cjs` (Fehlermeldung/Beispiel nennen 50000), weist in der Ausgabe aus, dass die Phasen-Positions-Limits weiterhin auf 15k-Basis kalibriert sind (Levi-Entscheidung: nicht mitskaliert), und fängt `--kapital 15000` mit Exit 1 ab (Ausnahme nur mit `--kapital-alt-grund "<...>"`). `gate_check.cjs` rechnet BEWUSST keine Rendite-/Risiko-€-Zeile (P7 am 04.09. eingeführt und nach Levis Klarstellung wieder entfernt: das Renditeziel ist kein Entry-Kriterium, siehe [[feedback_live_trading]] 7b1 "P7"); gemessen wird es nachgelagert in `trade_stats.cjs` (Kapitalrendite-Block seit 04.09.2026: `--monat YYYY-MM`, Bezugskapital datumsabhängig — bis 03.09.2026 15.000 €, ab 04.09.2026 50.000 €, nicht rückwirkend umbasiert). Die Phasen-€-Bandbreiten sind nirgends neu verdrahtet (offene Entscheidung, siehe oben).
 
 Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
 
@@ -15,7 +29,7 @@ Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
 **How to apply:** Dieses System bei jeder Positionsgrößen-Entscheidung anwenden.
 
 ### Kapital & Ziele
-- **Gesamtkapital:** 15.000€
+- **Kapitalbasis:** phasenabhängig (Kapitalmodell 10.09.2026 oben) — aktuell Phase 3 = **5.000€**; 50.000€ erst nach Abschluss aller Phasen. ~~Gesamtkapital: 50.000€ (seit 04.09.2026)~~ (die Zielrendite-/Bandbreiten-Zeilen darunter stammen aus der 15k-Zeit und bleiben als Zeitdokument)
 - **Zielrendite:** ~15-20% / Monat (Ziel: ~3.000€, Bestfall ~3.900€)
 - **Realistische Bandbreite:** 2.100€ (schwacher Monat) bis 3.900€ (guter Monat)
 
@@ -25,10 +39,10 @@ Risikomanagement-System am 22.06.2026 gemeinsam festgelegt.
 | Regel | Wert |
 |---|---|
 | Risiko pro Trade | 2% = 300€ max. Verlust (Phase-4-Zielwert, siehe Hinweis oben) |
-| Max. Positionsgröße | ~40% des Kapitals = 5.000-6.500€ |
+| Max. Positionsgröße | ~~~40% des Kapitals = 5.000-6.500€~~ *(im Phasenmodell gegenstandslos, Opus-Gegencheck D-6 10.09.2026: die Phasen-Kapitalbasis IST per Definition die Positions-Obergrenze — eine volle Position = 100% der Basis, Phase 3 = 5.000€ bzw. 2.500€ im Testfenster; eine "40%"-Angabe ist darauf nicht mehr definierbar. Zeile bleibt als Zeitdokument der 15k-Zeit.)* |
 | Hebel | Situationsabhängig 5-10x, siehe VIX-Staffelung unten |
 | Min. Risk-Reward | TP1 ≥1:1 (hart, Auswahlfilter), TP2 offen ohne RR-Mindestpflicht (kein Deckel) — Teilverkauf-Standard seit 04.07.2026, RR-Entkopplung von TP2 seit 27.07.2026 (Fable-Review), siehe [[feedback_chartanalyse]] Punkt 8b |
-| Max. Tagesverlust | 4% = 600€ → Trading-Stopp für den Tag |
+| Max. Tagesverlust | ~~4% = 600€ → Trading-Stopp für den Tag~~ *(Zeitdokument 15k-Basis; Opus-Gegencheck D-4 10.09.2026: strukturell unerreichbar — max. 3 Trades/Tag × 75€ Phase-3-Risiko = 225€ theoretisches Maximum, ein 600€-Limit konnte nie greifen.)* **Seit 10.09.2026: Tagesverlust-Limit = 2 × Risiko-Limit der aktuellen Phase → Phase 1 = 30€, Phase 2 = 90€, Phase 3 = 150€, Phase 4 = 400€ → Trading-Stopp für den Tag.** Greift nach zwei vollen Verlusten an einem Tag, also noch vor dem dritten regulär erlaubten Trade. Code: `kapital_constants.cjs` (`tagesverlustLimitFor(phase)`), nachrichtlich ausgewiesen in `node scripts/notbremse_check.cjs` (Tagessumme aus `trades.db` gegen das Limit). Enforcer für den Tages-Stopp bleibt unverändert `cooldown_check.cjs` (2 Verluste in Folge am selben Tag) — kein neues Hard-Gate. |
 | Max. gleichzeitige Positionen | 1-2 |
 | Trades pro Tag | **Bis zu 3 Trades regulär erlaubt** (geändert 23.06.2026, ersetzt frühere "1 Haupttrade"-Regel). 4. Trade nur nach vorheriger Prüfung + wirklich starkem technischem Signal (Ausnahme, nicht Standard). 5. Trade an einem Tag generell nicht erlaubt. |
 
@@ -60,12 +74,14 @@ Ziel ist NICHT dauerhaft aggressive Monatsrenditen (15-20%) zu fahren, sondern d
 ### Skalierungs-Fahrplan (festgelegt 22.06.2026) — AKTUELLER STATUS: Phase 3 gestartet (24.07.2026, Fable-GO mit Bedingungen), gestaffelter Einstieg für Trades #26-#30
 Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand echter Trade-Daten.
 
-| Phase | Trades | Positionsgröße | Risiko/Trade | Ziel |
-|---|---|---|---|---|
-| 1 — Bewährung | 1-15 (verlängert von ursprünglich 1-10) | ~500-1.500€ | 1% vom Gesamtkapital (150€) | Win-Rate & Erwartungswert ermitteln |
-| 2 — Aufbau | 16-25 | ~2.000-3.000€ | 1,5% (225€) | Konstanz über mehr Trades beweisen |
-| 3 — Skalierung | 26-35 | ~4.000-5.000€ | 2% (300€) | Näher ans Vollsystem |
-| 4 — Datenerweiterung | 36-40 (5 Trades) | ~10.000€ pro Trade | 2% vom gewachsenen Kapital | UnusualWhales-Integration (konditional) unter echten Live-Bedingungen testen, bevor der Kapital-Sprung auf 50.000€ kommt |
+| Phase | Trades | Positionsgröße | Kapitalbasis (korrigiert 10.09.2026) | Risiko/Trade (korrigiert 10.09.2026) | Ziel |
+|---|---|---|---|---|---|
+| 1 — Bewährung | 1-15 (verlängert von ursprünglich 1-10) | ~500-1.500€ | 1.500€ | 1% = 15€ ~~(150€ auf 15k-Konto)~~ | Win-Rate & Erwartungswert ermitteln |
+| 2 — Aufbau | 16-25 | ~2.000-3.000€ | 3.000€ | 1,5% = 45€ ~~(225€)~~ | Konstanz über mehr Trades beweisen |
+| 3 — Skalierung | 26-35 (verlängert bis #50, s.u.) | ~4.000-5.000€ | 5.000€ | 1,5% = 75€ ~~(2% = 300€)~~ | Näher ans Vollsystem |
+| 4 — Datenerweiterung | 36-40 (5 Trades) | ~10.000€ pro Trade | 10.000€ | 2% = 200€ | UnusualWhales-Integration (konditional) unter echten Live-Bedingungen testen, bevor der Kapital-Sprung auf 50.000€ kommt |
+
+*(Spalten "Kapitalbasis" und Risiko-€ am 10.09.2026 auf das phasenabhängige Kapitalmodell korrigiert — siehe Kasten ganz oben; die durchgestrichenen €-Werte bezogen sich auf ein 15.000€-Konto und sind Zeitdokument.)*
 
 **Phase 4 neu definiert (ergänzt 31.07.2026, User-Entscheidung; Trade-Anzahl korrigiert 31.07.2026 nach User-Korrektur — Phase 4 hat wie die anderen Phasen eine feste Trade-Range, 5 Trades):** Ersetzt die alte "Vollsystem ab Trade 36"-Zeile. Phase 4 startet erst NACH Phase-3-Abschluss (#35) UND einem großen, mehrfach hinterfragten Gesamt-Review über alle bisherigen Phasen (siehe [[project_vision]] für den bereits dokumentierten Review-Fahrplan vor UnusualWhales). Zwei Bedingungen für Phase 4:
 1. **UnusualWhales erfolgreich angebunden** (konditional — siehe [[project_vision]] Priorisierung GEX/Max Pain zuerst; falls die Integration technisch/inhaltlich scheitert, wird Phase 4 ohne UW mit reinem 10k€-Kapitaltest fortgesetzt, kein Blocker für den Kapital-Fortschritt)
@@ -85,7 +101,7 @@ Statt sofort mit vollem 15.000€-System zu starten, schrittweiser Aufbau anhand
 - Der ursprünglich für Phase 4 vorgesehene **10.000€-Positionstest + konditionale UnusualWhales-Integration wird auf einen eigenen, späteren Schritt verschoben** — erst nach einem bestandenen #50-Review, nicht mehr innerhalb von #36-50.
 - Das #50-Review entscheidet über den 10k€/50k-Übergang anhand von sechs vorab festgelegten, numerischen Gates (Regelbrüche, RR, EV, Win-Rate, DB-Sync, Monte-Carlo-Ergebnis) — alle sechs müssen erfüllt sein, keine Einzelkriterien-Freigabe. Volle Kriterien, Begründungen und vier explizit offenzuhaltende blinde Flecken in [[project_phase4_gates_2026-08-12]], nicht hier dupliziert. **Die "sechs Gates" werden EINMALIG bei Trade #50 über die gesamte verlängerte Phase 3 ausgewertet, nicht laufend ab #41 geprüft** (siehe Korrektur oben und in [[project_phase4_gates_2026-08-12]]).
 
-**Danach: Übergang ins normale Trading (kein Phasensystem mehr), 50.000€ Kapital.** Sobald Phase 4 erfolgreich abgeschlossen ist, endet die Phasen-Logik komplett — kein "Phase 5", sondern der eigentliche Übergang zum regulären Trading mit voller Motivation und vollem Kapital. **Harte Vorbedingung für diesen Übergang:** Vor dem Wechsel auf 50.000€ muss die Tracking-Infrastruktur erweitert werden — bisher gibt es nur Tagesabschlüsse ([[feedback_tagesabschluss]]), für die 50k-Stufe braucht es zusätzlich **Wochenabschlüsse und Monatsabschlüsse**, damit die Performance auf dieser Kapitalstufe ehrlich und greifbar trackbar ist (Win-Rate/Expectancy/Drawdown nicht nur pro Tag, sondern aggregiert über Woche/Monat, analog zum bestehenden Phasen-Review-Muster). Diese Wochen-/Monats-Abschluss-Struktur muss VOR dem 50k-Start stehen, nicht erst währenddessen nachgebaut werden.
+**Danach: Übergang ins normale Trading (kein Phasensystem mehr), 50.000€ Kapital.** Sobald Phase 4 erfolgreich abgeschlossen ist, endet die Phasen-Logik komplett — kein "Phase 5", sondern der eigentliche Übergang zum regulären Trading mit voller Motivation und vollem Kapital. **Harte Vorbedingung für diesen Übergang:** Vor dem Wechsel auf 50.000€ muss die Tracking-Infrastruktur erweitert werden — bisher gibt es nur Tagesabschlüsse ([[feedback_tagesabschluss]]), für die 50k-Stufe braucht es zusätzlich **Wochenabschlüsse und Monatsabschlüsse**, damit die Performance auf dieser Kapitalstufe ehrlich und greifbar trackbar ist (Win-Rate/Expectancy/Drawdown nicht nur pro Tag, sondern aggregiert über Woche/Monat, analog zum bestehenden Phasen-Review-Muster). Diese Wochen-/Monats-Abschluss-Struktur muss VOR dem 50k-Start stehen, nicht erst währenddessen nachgebaut werden. **Umgesetzt 10.09.2026 als Skript (Opus-Meilensteincheck Punkt 2):** `node scripts/abschluss.cjs --woche [YYYY-Www] --monat [YYYY-MM]` liefert den fertigen Abschlussblock (Trades, WR, realisiertes RR, EV, Summe €, Kapitalrendite, Drawdown, Regelbrüche, TP1-/TP2-Quote, Vorperiode) aus `trades.db` — kein neuer Fließtext-Pflichtblock, der Aufruf ersetzt das manuelle Zusammenrechnen beim Montags-Wochenreview.
 
 **Why:** User-Zitat 31.07.2026: "Weil dann müssen wir alles ehrlich tracken, damit wir eine greifbare Performance hinbekommen." Bei 50.000€ Kapital sind die Beträge pro Trade groß genug, dass ungenaues/lückenhaftes Tracking echte Konsequenzen hätte — die bisherige Tagesabschluss-Granularität reicht für diese Stufe nicht mehr aus.
 
@@ -147,9 +163,9 @@ Mathematische Brücke von Chart-Level zur konkreten Stückzahl — verhindert Ba
 Beispiel: Entry Nasdaq 29.400, SL 29.200 (200 Pkt = 0,68%), Hebel 5x → SL-Abstand Zertifikat 3,4%, Entry-Preis 6,50€ → SL-Preis 6,28€ → SL-Abstand/Stück 0,22€. Phase 1: Risiko-Limit 150€ → 681 Stück; Positions-Limit 1.500€ → 230 Stück. Finale Wahl: 230 Stück (konservativer).
 
 ### Workflow Trade-Ausführung (festgelegt 22.06.2026, Schritte 0 + 2 ergänzt 04.07.2026 nach Fable-5-Review)
-0. **Vor jedem neuen Entry-Entscheid:** `node scripts/cooldown_check.cjs` ausführen. Bei Exit-Code 2 / roter Status ist kein neuer Trade erlaubt, unabhängig vom Setup — nicht mehr nur aus dem Gedächtnis prüfen (siehe Trade #12, 02.07.2026, wo der Cooldown-Bruch übersehen wurde).
+0. **Vor jedem neuen Entry-Entscheid:** Cooldown-Check über den seit 31.08.2026 einheitlichen Aufrufweg ausführen (Datei-Mitschnitt + Exit-Code-Zeile im SELBEN Befehl, kein `| tee` — siehe [[feedback_live_trading]] Punkt 2b Item (7)): Bash-Tool `node scripts/cooldown_check.cjs > scripts/last_cooldown_check.txt 2>&1; echo "Exit-Code: $?"`, PowerShell `node scripts/cooldown_check.cjs > scripts/last_cooldown_check.txt; Write-Output "Exit-Code: $LASTEXITCODE"`; zitiert wird der per Read/cat gelesene Inhalt von `scripts/last_cooldown_check.txt`. Bei Exit-Code 2 / roter Status ist kein neuer Trade erlaubt, unabhängig vom Setup — nicht mehr nur aus dem Gedächtnis prüfen (siehe Trade #12, 02.07.2026, wo der Cooldown-Bruch übersehen wurde).
 1. Claude findet Setup im Chart (Support/Resistance, Entry-Level, SL-Level)
-2. Claude berechnet die Positionsgröße über `node scripts/size.cjs --entry <NAS100> --sl <NAS100> --dir long|short --hebel <x> --zert <Stückpreis> --phase <1|2|3> --kapital 15000` statt Kopfrechnen — liefert Stückzahl, SL-Preis fürs Produkt und einen Formel-Gegencheck der €/Punkt-Ratio (siehe [[feedback_zertifikat_pnl]]). **`--kapital` ist seit 07.08.2026 Pflichtparameter (kein stiller 15000-Default mehr, siehe [[project_dax_erweiterung]] Fable-Trennungsaudit)** — für NAS100 immer explizit `--kapital 15000` mitgeben, für DAX-Trades den dann gültigen DAX-Betrag (siehe [[project_risikomanagement_dax]]).
+2. Claude berechnet die Positionsgröße über `node scripts/size.cjs --entry <NAS100> --sl <NAS100> --dir long|short --hebel <x> --zert <Stückpreis> --phase <1|2|3|4>` statt Kopfrechnen — liefert Stückzahl, SL-Preis fürs Produkt und einen Formel-Gegencheck der €/Punkt-Ratio (siehe [[feedback_zertifikat_pnl]]). **Seit 10.09.2026 (Kapitalmodell oben) OHNE `--kapital` für NAS100:** die Kapitalbasis folgt aus `--phase` (Phase 3 = 5.000€, Risiko 1,5% = 75€) und wird in der Ausgabe ausgewiesen (`Kapitalbasis : 5.000€ (Phase 3, …)`); die Ausgabezeile `bindend: Risiko-Limit|Positions-Limit` zeigt, welche Grenze gegriffen hat. ~~`--kapital` Pflichtparameter seit 07.08.2026 / `--kapital 50000` seit 04.09.2026 / Altwert-Guard~~ (überholt 10.09.2026). `--kapital <Betrag>` bleibt nur als expliziter Override für DAX-Trades (dann gültiger DAX-Betrag, siehe [[project_risikomanagement_dax]]) oder Testrechnungen — das Skript kennzeichnet ihn als "EXPLIZIT".
 3. User sucht passendes Produkt auf Scalable Capital (Faktor-Zertifikat Nasdaq, passender Hebel) und meldet aktuellen Stückpreis an Claude
 4. Claude berechnet finale Stückzahl = berechnete Positionsgröße ÷ Stückpreis, plus SL/TP in € fürs konkrete Produkt
 5. User führt Order aus
@@ -169,7 +185,7 @@ Siehe auch [[feedback_live_trading]] Punkt 8 für das Anzeigeformat (Positions-K
 | Regel | Wert |
 |---|---|
 | News-Blackout | Keine neuen Entries 30 Min vor/nach FOMC, CPI, NFP — bestehende Positionen nur absichern |
-| Verlustserien-Cooldown | 2 Verluste in Folge am selben Tag → Trading-Stopp für den Rest des Tages (auch wenn 4%-Tageslimit noch nicht erreicht) — Schutz vor Revenge-Trading |
+| Verlustserien-Cooldown | 2 Verluste in Folge am selben Tag → Trading-Stopp für den Rest des Tages (auch wenn das ~~4%-~~Tagesverlust-Limit — seit 10.09.2026 phasenabhängig 2×Risiko, siehe Tabelle "Risiko-Regeln" — noch nicht erreicht ist) — Schutz vor Revenge-Trading |
 | Spread-Sanity-Check | Spread darf max. 10-15% des geplanten SL-Risikos ausmachen, sonst Trade auslassen |
 | Overnight-Politik | Grundsätzlich keine Overnight-Positionen mit Faktor-Zertifikaten (Mo-So) — Finanzierungskosten + Event-Risiko. Ausnahme: sehr klarer Trend mit engem nachgezogenem SL |
 | Steuer-Rücklage | Nicht nötig — keine separate Rücklage gewünscht (Stand 22.06.2026) |
@@ -263,8 +279,29 @@ Zusätzlich Setup-Qualität beachten — oberer Hebel-Bereich nur bei Top-Setup 
 | Order-Typ | Limit-Order für Entry (kein schlechter Fill bei Spikes), Market-Order nur für SL-Ausführung (Sicherheit vor Preis beim Ausstieg) |
 | Max. Haltedauer | Nach 3 Stunden ohne TP/SL-Treffer bei seitwärts dümpelndem Markt → manuell raus, kein "Hoffen" |
 | Markt-Regime-Filter | Keine klare Struktur (kein Trend, keine sauberen Levels, enge Range ohne Ausbruchsversuch) → kein Trade an dem Tag |
-| Gesamt-Drawdown-Notbremse | Gesamtkapital fällt um 20% (15.000€ → 12.000€) → komplette Trading-Pause + vollständiges Strategie-Review, unabhängig von Phase |
+| Gesamt-Drawdown-Notbremse | ~~Gesamtkapital fällt um 20% (15.000€ → 12.000€) → komplette Trading-Pause + vollständiges Strategie-Review, unabhängig von Phase~~ *(Zeitdokument 15k-Basis, ersetzt 10.09.2026 durch die phasenbasierte **Notbremse Stufe 1**, siehe eigener Abschnitt direkt unter dieser Tabelle)* |
 | Daten-Sanity-Check | TradingView zeigt "?" oder klar veraltete Kurse → kein Trade bis verifiziert |
+
+### Notbremse Stufe 1 — Strategie-Notbremse, phasenbasiert (festgelegt 10.09.2026, Opus-Vorschlag, Levi-Entscheidung: NUR Stufe 1)
+
+Ersetzt die alte "20% Gesamtkapital (15.000€ → 12.000€)"-Zeile oben, die noch in 15k-Zeit formuliert war und mit dem phasenabhängigen Kapitalmodell (Kasten ganz oben) keine Bezugsgröße mehr hatte.
+
+**Messgröße:** kumulierter Drawdown vom höchsten je erreichten Equity-Stand der **laufenden Phase** (aus den realisierten Trade-Ergebnissen in `trades.db`, Summe `result_eur` der Phasen-Trades in Trade-Reihenfolge, Phasenstart = 0€), in Euro, gegen Anteile der **Phasen-Kapitalbasis**:
+
+| Phase | Kapitalbasis | Warnstufe (10%) | Stufe-1-Auslöser (20%) |
+|---|---|---|---|
+| 1 — Bewährung | 1.500€ | 150€ | 300€ |
+| 2 — Aufbau | 3.000€ | 300€ | 600€ |
+| **3 — Skalierung (AKTUELL)** | **5.000€** | **500€** | **1.000€** |
+| 4 — Datenerweiterung | 10.000€ | 1.000€ | 2.000€ |
+
+- **Warnstufe (≥10%):** Empfehlung "Positionsgröße halbieren (50% der Phasen-Positionsgröße), bis ein neues Equity-Hoch der Phase erreicht ist".
+- **Auslöser (≥20%):** Empfehlung "komplette Trading-Pause + vollständiges Strategie-Review", bevor ein neuer Trade in der Phase eröffnet wird.
+- **Charakter:** Empfehlung/Reminder wie `cooldown_check.cjs`, kein Automat — die Entscheidung trifft Levi. Kein neues Hard-Gate in `gate_check.cjs`.
+- **Code:** `node scripts/notbremse_check.cjs` (Default: Phase des letzten DB-Trades; `--phase <1-4>`, `--alle`, `--datum YYYY-MM-DD` für den Tagesverlust-Block, `--json`). Ausgabe: Drawdown in € und %, Equity-Hoch mit Trade-Nr., Status **OK / WARNSTUFE / AUSGELOEST** mit Hinweistext, plus Tagesverlust des Stichtags gegen das phasenabhängige Limit. Exit-Codes 0 / 2 / 3, 1 = Fehler. Schwellen zentral in `kapital_constants.cjs` (`notbremseSchwellenFor(phase)`, `NOTBREMSE_WARN_PCT` 0,10, `NOTBREMSE_STUFE1_PCT` 0,20). Regressionstests in `tests/trading_scripts.test.js`.
+- **Erstmessung 10.09.2026 (Phase 3, #26-#43):** Equity-Hoch +222,98€ nach #32 (05.08.), aktuell −57,77€ → Drawdown **280,75€ = 5,6%** der 5.000€-Basis → **Status OK**, 219,25€ bis zur Warnstufe, 719,25€ bis zum Auslöser. (Zur Einordnung: bezogen auf den alten 15k-Maßstab wäre derselbe Drawdown 1,9% gewesen — die Notbremse ist mit der Phasenbasis also spürbar schärfer, und das ist gewollt.)
+
+**BEWUSST ZURÜCKGESTELLT, NICHT VERGESSEN (Levi-Entscheidung 10.09.2026):** Opus hatte zusätzlich eine **"Stufe 2" — Kapitalschutz-Notbremse auf Basis des echten Broker-Kontostands** vorgeschlagen (Schutz des realen Depotwerts unabhängig von der Phasenrechnung). Levi hat entschieden, Stufe 2 **erst dann** einzuführen, wenn (a) alle Phasen abgeschlossen sind und (b) ein reines Kapitalkonto beim Broker existiert, das ausschließlich für die Trades genutzt wird — vorher gibt es keinen sauber messbaren "Kontostand für das Trading" und jede Stufe-2-Regel würde auf einer vermischten Zahl rechnen. Das Fehlen von Stufe 2 in `notbremse_check.cjs`/`kapital_constants.cjs` ist also **kein Versehen** und darf nicht stillschweigend "nachgeholt" werden; Wiedervorlage beim Übergang ins normale Trading nach dem #50-Gate-Review (siehe "Danach: Übergang ins normale Trading" oben).
 
 ### Broker
 Scalable Capital (Börse München/gettex) — bereits bewährt am 12.06.2026, bleibt erste Wahl für Faktor-Zertifikate.

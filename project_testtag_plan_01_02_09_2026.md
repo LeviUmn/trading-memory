@@ -4,7 +4,7 @@ description: "Fertige, sofort ausführbare Standing Instructions für die zwei u
 metadata: 
   node_type: memory
   type: project
-  modified: 2026-08-31T21:49:45.322Z
+  modified: 2026-09-03T10:47:11.638Z
   originSessionId: e40d2c87-d383-4377-a725-334d9fa865f3
 ---
 
@@ -33,6 +33,8 @@ Zwei fiktive NAS100-Solo-Testtage, während Levi unterwegs und nicht erreichbar 
 FIKTIVER Testtag 01.09.2026, Solo-Loop bis 22:00 Uhr (Levi unterwegs, nicht im Chat, keine Rückfrage möglich). ZUERST vollständiges "start update dich" durchführen (voller 6-Schritt-Ablauf, siehe [[feedback_session_update]]) — dabei explizit prüfen, ob heute (erster Handelstag des Monats) ISM Manufacturing PMI ansteht (üblicher Slot 16:00 DE-Zeit) und als Blackout-relevantes Ereignis vermerken falls ja; Chart-Zustand prüfen (Indikatoren-Set komplett, RVOL nach ggf. nächtlichem TV-Neustart neu hinzufügen falls fehlt); offene Positionen checken (sollte keine geben); Pivots (7a1a) berechnen UND per `draw_shape` einzeichnen; Tweet-Watchlist-Check; `x_last_fetch.json` Ausgangsstand lesen. **Schritt 6 (Erhebungs-Fahrplan) ist PFLICHT und schreibt `scripts/level_register.json` vollständig — inkl. der Mindestbelegungs-Regel (Pivots/PDH-PDL/Session-Extrema/Rundzahlen dürfen dort nie fehlen).** Alles wie gewohnt protokollieren.
 
 DANACH ab 15:00 Uhr: CronCreate für einen minütlichen Loop (`*/1 * * * *`) aufsetzen, der diese komplette Standing Instruction als Prompt bekommt, bis 22:00 Uhr. Jeden Fire als neuen Abschnitt in `memory/testtag/testtag_2026-09-01.md` protokollieren (anhängen, nicht überschreiben). KEIN echter Trade — nie `trades.db` beschreiben, `add_trade.cjs` nur mit `--dry-run`.
+
+**ORDER-SPERRE 15:00–15:30 Uhr (ergänzt 01.09.2026 08:xx, Levi vor Abfahrt):** Ab 15:00 Uhr läuft der volle Loop inkl. Voll-Checks/Quick-Ticks/Setup-Suche wie gewohnt — aber JEDE Order-Ausführung (7b1-5-Schritte-Ablauf bis zum tatsächlichen Trade) ist bis 15:30 Uhr gesperrt, auch bei vollständigem Dual-Gate (2/2). Bei einem 2/2-Trigger vor 15:30 Uhr: Protokollzeile "Trigger erkannt, Order-Ausführung wegen 15:00–15:30-Sperre ausgesetzt" — kein `cooldown_check.cjs`/`gate_check.cjs`-Aufruf. Ab 15:30 Uhr gilt der normale Ablauf ohne Einschränkung.
 
 ### ZIEL DES TAGES
 
@@ -119,3 +121,28 @@ Wie Tag 1 (6 Abschnitte + die zwei Pflichtzeilen zu Dual-Gate-2/2-Momenten und G
 2. Starte einen NEUEN, unabhängigen Subagenten (Agent-Tool, model: "opus", explizit KEIN "fork") mit dem Auftrag: `memory/testtag/testtag_2026-09-02.md` UND `memory/project_testtag_analyse_2026-09-01.md` (Vortagesanalyse) vollständig lesen und eine Analyse für den 02.09. erstellen — inkl. Vergleich zu Tag 1 (wurde ein am 01.09. gefundenes Problem am 02.09. wiederholt? Griff das Abbruch-Gate korrekt, falls ausgelöst?).
 3. Die Analyse als ENTWURF speichern unter `memory/project_testtag_analyse_2026-09-02.md`, Frontmatter `status: draft`. KEINE Regeländerung, KEIN MEMORY.md-Index-Eintrag, KEIN Fable-Auftrag.
 4. Danach NICHT weitermachen, NICHT eigenständig einen neuen Loop starten. Der Loop für diese beiden fiktiven Testtage ist damit beendet. Levi bespricht beide Analysen am 03.09. persönlich und geht die Ergebnisse dann mit Fable durch.
+
+---
+
+## ABBRUCH-GATE v2 — verbindlich für ALLE künftigen Testtage (ergänzt 03.09.2026, Fable-Finalentscheidung #12 nach Opus-Gegencheck, siehe [[project_fable_finalentscheidung_2026-09-03]])
+
+**Die Fassung der Kriterien (c)/(d) im Tag-2-Abschnitt oben ist damit HISTORISCH** (sie galt für den 02.09. und bleibt dort unverändert dokumentiert). Jeder künftige Testtag-Plan übernimmt die Kriterien aus DIESEM Abschnitt. Dringlichkeitsgrund: Die am 03.09. umgesetzten Skript-Fixes #1/#2/#20 schaffen neue UNKNOWN- und Exit-1-Pfade, die im alten Wortlaut von (c)/(d) landen — ein einzelner vergessener `--cluster-level`-Parameter an einem 2/2-Moment hätte buchstabengetreu Kriterium (c) erfüllt und den Folgetag in den Beobachtungsmodus geschickt, wegen eines fehlenden Kommandozeilenparameters.
+
+**(a) und (b): unverändert** (vorzeitiges/unvollständiges Ende ohne Faktenprotokoll-Abschluss; >10 % der fälligen Voll-Checks ausgefallen und nicht nachgeholt).
+
+**(c) NEU:** Wurde ein 2/2-Dual-Gate-Moment mit GESAMTSTATUS UNKNOWN abgelehnt, OBWOHL das Session-Levelregister nachweislich korrekt geschrieben und die Levelsuche-Pflichtzeile vollständig befolgt wurde, UND stammt das UNKNOWN aus einem **strukturellen Verifikationsfehler** (ein korrekt registriertes Level wurde vom Registerabgleich nicht getroffen — die 31.08.-Fehlerklasse, die das Register beheben sollte)? **Klarstellung (i):** Ein UNKNOWN, das allein aus einer fehlenden oder per `--grund-<feld>` ersetzten Messfeld-Angabe stammt (z.B. `--cluster-level` mit Grund weggelassen → 8c2 UNKNOWN), ist ein **Dokumentationsmangel des Aufrufs, KEIN struktureller Fehler** — es zählt für (c) NICHT, wird aber im Faktenprotokoll (UNKNOWN-Aufschlüsselung) ausgewiesen.
+
+**(d) NEU:** Trat wiederholt (≥2×) ein **registerbezogener Exit-Code 1** auf? Registerbezogen sind: Register fehlt/unlesbar (bisherige Ursache 3), `updated`-Zeitstempel in der Zukunft, Registeralter über der harten 90-Min-Obergrenze (beide Punkt-2-Fix 03.09.2026). **Klarstellung (ii):** Ein Exit 1 — gleich welcher Ursache —, der nach der EXIT-CODE-1-KLAUSEL sofort korrigiert und **im selben Trigger-Moment erfolgreich wiederholt** wurde, zählt für (d) NICHT; er erscheint nur in der Faktenprotokoll-Bilanzzeile "Exit-1-Abbrüche". **Klarstellung (iii):** Nicht-registerbezogene Exit-1-Fälle (fehlendes A3-Messfeld, Preisformat) zählen für (d) generell nicht — sie sind im Trigger-Moment behebbare CLI-Fehler, keine Session-Strukturfehler.
+
+**(e) NEU — Prüfer-Feld (stille Defekte):** Die Opus-Vortagesanalyse trägt ab jetzt ein **Pflichtfeld in ihrem Kopf- oder Schlussabschnitt**: `Abbruch-Empfehlung: KEIN EINWAND / EINGESCHRÄNKT (<konkret defekter Mechanismus>) / ABBRUCH (<Begründung>)`. Das Abbruch-Gate übernimmt es 1:1 maschinell, ohne eigene Interpretation der Analyse:
+- **ABBRUCH** → Beobachtungsmodus (wie bisher bei (a)-(d)).
+- **EINGESCHRÄNKT** → Tag läuft normal, ABER der benannte Mechanismus muss VOR dem ersten 7b1-Order-Ablauf einmal nachweislich funktionieren (Testlauf/Protokollbeleg, als eigene Zeile im Protokoll) — die mittlere Antwort verhindert den Alarmanlagen-Effekt eines rein binären Felds (ein Gate, dessen einzige Reaktion maximal ist, wird zurückhaltend ausgelöst).
+- **KEIN EINWAND** → normaler Ablauf.
+- **Fail-Closed:** Fehlt das Feld, ist es unklar formuliert ODER existiert die Analyse-Datei gar nicht → wie ABBRUCH behandeln. ("Analyse fehlt" war schon in v1 selbst ein Abbruch-Kriterium — diese Logik wird hier verallgemeinert.)
+- **Geltungsbereich:** (e) gilt NUR für Testtage OHNE frisches Levi-Go zwischen Vortagesanalyse und Tagesstart (Cron-Folgetage). Liegt ein frisches Go vor, ersetzt Levis Kenntnisnahme der Analyse das Kriterium — der Mensch ist das Gate für Tag 1, die Maschine für Folgetage (Opus-Option D, übernommen).
+
+**Prüfer-Auftrag im selben Zug geändert (zwingende Folgeänderung — sonst widerspricht das Feld der Rolleninstruktion):** Jeder künftige Analyse-Auftrag an die Opus-Instanz (Schritt 2 im Abschnitt "NACH DEM FAKTENPROTOKOLL-ABSCHLUSS") enthält ab jetzt den Satz: *"Zusätzlich PFLICHT: eine Zeile `Abbruch-Empfehlung: KEIN EINWAND / EINGESCHRÄNKT (<Mechanismus>) / ABBRUCH (<Begründung>)` — dieses eine Urteil ist ausdrücklich Teil deiner Zuständigkeit und kein Verstoß gegen die Regel, keine Lösungsvorschläge zu machen; ein stiller Defekt (nachweislich falsche Faktenprotokoll-Aussage, still deaktiviertes Hard-Gate, korrumpierte Statusdatei) rechtfertigt mindestens EINGESCHRÄNKT."* Die bisherigen Analysen formulierten das Gegenteil ("ich schlage nichts vor") — ohne diese Auftragsänderung würde jeder künftige Prüfer das Feld weglassen und Fail-Closed bei jedem Lauf greifen.
+
+**Warum Prüfer-Feld statt Loop-Selbstprüfung (Option A abgelehnt, mit korrigierter Begründung):** Fables ursprüngliches Argument ("stille Defekte sind vom Ausführenden nicht erkennbar") trägt für das Gate nicht — beim Abbruch-Gate LIEST der Loop eine fremde, fertige Analyse, das ist eine Lese-, keine Detektionsaufgabe (Opus-Einwand, akzeptiert). Option A scheitert stattdessen an der Auslegungsbreite von "stiller Defekt" (welcher Befund ist gravierend genug?) — ein Ermessensproblem, das das binäre/dreiwertige Prüfer-Feld beseitigt, indem der Prüfer das Ermessen ausübt, der die Sachlage kennt.
+
+**Register-Zeitstempel-Konvention für künftige (auch fiktive) Testtage (Folge aus Finalentscheidung #22):** `level_register.json` wird IMMER mit echter UTC geschrieben (`updated` = Zeit des gerade ABGESCHLOSSENEN Voll-Checks), nie mit Simulationsdatum oder DE-Ortszeit-mit-Z — seit dem Punkt-2-Fix bricht sonst jeder Gate-Aufruf hart ab (Zukunfts-Zeitstempel bzw. 90-Min-Obergrenze). Details: [[feedback_session_update]] Schritt 6.

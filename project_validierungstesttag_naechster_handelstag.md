@@ -4,7 +4,7 @@ description: "Verbindlich beschlossener dritter fiktiver Testtag (nächster Hand
 metadata:
   type: project
   originSessionId: session-2026-08-27
-  modified: 2026-08-31T19:20:38.261Z
+  modified: 2026-09-10T10:08:59.563Z
 ---
 
 # Kontext
@@ -26,6 +26,8 @@ Nach der schlechten Handelswoche (#36-43, 17.-21.08.2026, siehe [[project_risiko
 3. Die Stale-Short/Long-Klasse ([[feedback_live_trading]] 7b1c) wird mindestens einmal ausgewertet und korrekt ausgegeben — auch der Fall "Vorbedingung nicht erfüllt → einzeilige Negativbestätigung mit Grund genügt" zählt als korrekt, wenn er tatsächlich eintritt (Konvention angeglichen 31.08.2026 an die präzisierte Vorbedingungs-Abfrage in [[feedback_live_trading]] 7b1c und [[feedback_chartanalyse]] 8a4 — das frühere "Zeile entfällt ersatzlos" ist überholt; auditierbar ist nur die ausgeschriebene Negativbestätigung, nicht das stille Weglassen).
 4. Alle sieben neuen Pflicht-Messfelder werden nach jedem fiktiven Trade-Abschluss ohne Nachfrage vollständig erhoben — jetzt code-erzwungen über `add_trade.cjs` (s.o.). Ein sauberer Abbruch bei einem unvollständigen fiktiven `add_trade.cjs`-Testaufruf zählt als Beleg, nicht als Fehlschlag.
 5. Der neue Tick-Prompt (Punkt 2b in [[feedback_live_trading]]) läuft komplett durch, ohne dass ein Pflichtelement übersprungen wird.
+
+**Maschinelle Auswertung (seit 10.09.2026, Opus-Meilensteincheck Punkt 3):** `node scripts/validierung_check.cjs --protokoll memory/testtag/testtag_YYYY-MM-DD.md` bewertet die 5 Kriterien gegen Protokoll, `gate_check_log.jsonl` (Wörtlichkeit je Live-Lauf via `quote_check.cjs --gate-log`), `protokoll_bilanz.cjs --nur-zaehlung` und `trades.db` und gibt je Kriterium PASS / FAIL / NICHT BEWERTBAR mit Beleg aus — kein manuelles Nachschlagen mehr; das Skript entscheidet nicht über das Gate. Erstlauf 10.09. gegen die Protokolle 28.08./08.09./09.09.: an keinem Tag alle 5 bestanden (09.09.: K1/K2/K3/K5 FAIL, K4 nicht bewertbar — kein fiktiver Trade).
 
 ## Konsequenz
 
