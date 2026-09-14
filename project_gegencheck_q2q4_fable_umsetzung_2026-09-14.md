@@ -319,3 +319,52 @@ Nichts an `trades.db`, kein Commit, kein Push. **Tests: 73/73 grün.**
 2. **Register-Pflege ist ab jetzt sizing-relevant**: ein nicht nachgeführtes 50er-Band kostet einen Q-Punkt (halbe statt volle Position). Das ist gewollt, sollte aber am nächsten Testtag bewusst beobachtet werden — zusammen mit I1 (wie oft entsteht überhaupt noch ein 4/4 GRÜN?) und dem Prüfkriterium (Datenbasis startet bei 0/15, I2).
 
 Nach beiden Runden gilt: Q2/Q4 sind für den nächsten **Testtag** reif. Für Echtgeld fehlen weiter die Daten, nicht die Regeln — ≥15 Q-bewertete Momente mit vollständigem Nachtrag, dann die Auswertung nach 7b1a.
+
+## N1b — Wirkung auf Trade-Qualität, Nachrechnung 14.09.2026 (Levi-Rückfrage)
+
+**Levis Frage:** „Warum macht es grün spürbar seltener? Sind die Trades dadurch erfolgreicher oder sind wir jetzt zu ängstlich? Nicht dass wir dadurch so viele gute Trades liegen lassen."
+
+**Methode:** `runwayFromRegister()` aus einer Sandbox-Kopie von `gate_check.cjs` (echte Funktion, nicht nachgebaut) gegen alle 51 Live-Gate-Aufrufe aus `scripts/gate_check_log.jsonl` (= 37 unabhängige Setup-Momente, 10.09. + 11.09.; ältere Tage sind nicht geloggt). Register pro Tag rekonstruiert: 11.09. ab 14:21 UTC = die reale `level_register.json`, davor ohne 29.550; 10.09./11.09.-Vormittag aus den Log-Ausgaben rekonstruiert (Rundzahl-Band 28.950–29.200, Pivot S2 29.149,97, Session-Tief 29.125,8, 2 Fib-Extensions). Kontrolle: VC#42 liefert reproduzierbar 0,35 — identisch zum Runde-1-Echtlauf. Zusätzlich `skipped_setups_fiktiv.jsonl` (12 Zeilen), 09.09.-Protokoll (4 Q4-Bewertungen) und die 11.09.-Kursverläufe.
+
+### Befund 1 — N1b hätte an keinem einzigen realen Moment etwas geändert: **0 von 37**
+
+| Zweig | Momente | Q4 |
+|---|---|---|
+| Gegenlevel **vor** TP1 (Register deckt ab) | **35** | NICHT ERFÜLLT (Ratio 0,07–0,78) |
+| Gegenlevel **jenseits** TP1, Abdeckung belegt | **2** (11.09. 18:36 / 18:51 DE) | ERFÜLLT → bleibt ERFÜLLT |
+| „kein Gegenlevel" / „jenseits TP1" **mit** 50er-Lücke (N1/N1b-Fall) | **0** | — |
+
+Grund: das 50er-Band war an beiden Tagen tatsächlich gepflegt (`register_touch.cjs --rundzahlen`: 10.09. Band [28.950;29.200], 11.09. Band [29.300;29.550]), und jedes TP1 lag innerhalb des Bandes. Auch die vier Q4-Bewertungen vom 09.09. (VC#1 0,75, VC#9 0,48, VC#10 0,47, VC#12 0,53 — die Ablehnungen, die ~2,9R vermieden haben) liegen sämtlich im Zweig „Rundzahl **vor** TP1", den N1b nicht anfasst. **Der bewiesene Nutzen von Q4 stammt komplett aus einem Zweig, den N1b nicht berührt.**
+
+### Befund 2 — wenn N1b feuert, ersetzt es ein FALSCHES ERFÜLLT, kein richtiges
+
+Simulation an denselben 33 Momenten des 11.09. mit künstlich veraltetem Rundzahl-Band (alle Rundzahl-Einträge entfernt = Worst case):
+
+| | ohne N1b | mit N1b | bei gepflegtem Register (Wahrheit) |
+|---|---|---|---|
+| ERFÜLLT | **7** | 2 | **2** |
+| UNKLAR | 0 | 5 | 0 |
+| NICHT ERFÜLLT | 26 | 26 | **31** |
+
+Die **5** Momente, die N1b auf UNKLAR zieht, sind **exakt** die 5, die ein korrekt gepflegtes Register mit NICHT ERFÜLLT bewertet hätte — Trefferquote 5/5, keine einzige Fehl-Abwertung. Die 2 echten ERFÜLLT (18:36 / 18:51) überstehen N1b unangetastet.
+
+Das ist kein Zufall, sondern strukturell beweisbar: N1b feuert nur, wenn (i) **kein** Registerlevel zwischen Entry und TP1 liegt **und** (ii) dort eine arithmetische 50er **fehlt**. Trägt man diese 50er nach, wird sie zum Level vor TP1 → Ratio < 1 → NICHT ERFÜLLT. **Es gibt keinen Fall, in dem Registerpflege ein ERFÜLLT ergäbe, das N1b auf UNKLAR zieht.** N1b ist damit sogar *milder* als die korrekte Antwort.
+
+### Befund 3 — Levis Fall (b) („Struktur da, nur keine 50er") kann N1b gar nicht auslösen
+
+Ein Pivot / Fib / Session-Extremum zwischen Entry und TP1 steht im Register, erzeugt `vorTp1.length > 0` und schaltet die Lücken-Prüfung ab (Code: `registerLuecke = !vorTp1.length && rzFehlend.length > 0`). N1b prüft ausschließlich, ob das Register die Strecke abdeckt — nicht, ob der Markt dort strukturlos ist. Ein reines Erfassungsproblem wird also nicht als Marktrisiko bestraft; bestraft wird ein **unvollständiges Register**, und das Gegenmittel steht daneben (`register_touch.cjs --rundzahlen`).
+
+### Befund 4 — das eigentliche „zu ängstlich"-Risiko sitzt nicht bei N1b, sondern bei Q4-a selbst (I1)
+
+Über die 37 Momente: **2 ERFÜLLT / 35 NICHT ERFÜLLT (5,4 %)** — und zwar *ohne* jede N1b-Wirkung. Ursache ist die Kombination 8c (SL ≥ 1,5× ATR) + 8b (RR ≥ 1) + 50er-Raster: ab **ATR ≥ 33,3 Pkt** ist die TP1-Distanz zwangsläufig ≥ 50 Pkt, also liegt immer eine 50er dazwischen → Q4 = ERFÜLLT ist **arithmetisch unmöglich**. Das traf **15 der 37 Momente** (41 %); ATR-Spanne 16,6–47,0, Median 32,2 — die Schwelle liegt mitten in der Verteilung. Dass 4/4 GRÜN selten ist, ist zu ~100 % Q4-a (I1) und zu 0 % N1b.
+Gegenbefund zur Qualität der 50er als Hindernis: am 11.09. (Trendtag +460 Pkt) lief der Kurs durch 29.400 / 29.450 glatt hindurch (29.450,85 um 19:25) — die 50er, die vier Setups das Q4 kosteten, waren real keine Hürde.
+
+### Was wäre an den betroffenen Momenten passiert
+
+Die zwei Q4-ERFÜLLT-Momente (11.09. 18:36 Long 29.400,95→29.450 und 18:51 Long 29.401,35→29.450) hätten TP1 um 19:25 erreicht (29.450,85) und laut 11.09.-Analyse nie den SL getroffen. Beide bleiben mit N1b **4/4 GRÜN (volle Position)** — genau die zwei Gewinner behält die Regel. Der einzige real entstandene Trade (VC#35, 18:31, ~+0,6R) war schon vor N1b GELB/halbe Position (Q4 = 0,12, Rundzahl 29.400 vor TP1) und ist von N1b nicht betroffen.
+
+### Einordnung: **(a) gut kalibriert** — keine Nachbesserung an N1b empfohlen
+
+N1b trifft in 0 von 37 realen Momenten, und in der Simulation 5/5 mal genau das, was ein gepflegtes Register ergeben hätte. Es ist keine zusätzliche Ängstlichkeit, sondern das Schließen einer Hintertür, durch die eine Datenlücke volle Positionsgröße gerechtfertigt hätte. **Datenlage ehrlich:** n = 2 geloggte Tage, 0 tatsächliche Auslösungen — die Aussage stützt sich nicht auf die Stichprobe, sondern auf die Bedingung selbst (Beweis in Befund 2), deshalb (a) und nicht (c).
+
+**Offen bleibt I1 als echte Kalibrierungsfrage** (Q4-a, nicht N1b): wenn nach ≥15 Q-bewerteten Momenten weiter <10 % 4/4 GRÜN entstehen, sind zwei Stellschrauben zu prüfen — (1) nur *bestätigte* Level (per Wick/Kerzenschluss getestet, `register_touch.cjs` Touch-Historie) als Q4-Gegenlevel zählen statt jeder generierten 50er, oder (2) Q4-Schwelle von 1,0 auf ~0,8 senken. Beides ist eine Levi-Entscheidung, nichts davon umgesetzt.
