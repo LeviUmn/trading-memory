@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: session-2026-07-21
-  modified: 2026-09-14T19:27:29.830Z
+  modified: 2026-09-14T21:09:24.000Z
 ---
 
 Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine zusammenhängende Referenz gespeichert, damit sich künftige Sessions konsistent daran halten — bündelt Regeln, die sonst über mehrere Dateien verteilt sind.
@@ -19,6 +19,7 @@ Auf User-Wunsch (21.07.2026, nach zwei Fable-Audit-Runden zu Trade #23) als eine
 ## Szenario 1: 1-Min-Loop OHNE Position (Setup-Suche)
 
 ### Einmalig bei Session-Start (vor dem ersten Loop-Tick, ergänzt 23.07.2026)
+0. **Zeitanker T0** — bare `date` als allererster Call, siehe [[feedback_session_update]] Schritt 0. Entspricht auf Session-Ebene der Zeitanker-Pflicht aus [[feedback_live_trading]] Punkt 9a. (Ergänzt 14.09.2026.)
 1. **Pivot-Level berechnen** (kein Chart-Indikator mehr seit 23.07.2026, siehe [[feedback_chartanalyse]] Punkt 7a1a): `data_get_ohlcv` Tages-Timeframe (letzter abgeschlossener Handelstag) → PP=(H+L+C)/3, R1=2PP-L, S1=2PP-H, R2=PP+(H-L), S2=PP-(H-L). Die 1-2 kursnächsten Level per `draw_shape(horizontal_line)` einzeichnen. Gültig bis zum nächsten Session-Start, kein erneutes Berechnen im Loop selbst.
 2. **Zeit-Gate prüfen** (siehe [[feedback_trading_zeitfenster]]): Vorbereitung ab 15:00, aktive Setup-Suche + Entry-Erlaubnis ab 15:30 **mit Pflicht-Halbierung** der Position, volle Größe erst ab 16:00. Bis dahin läuft der Loop unten wie beschrieben, aber jede Positionsgrößen-Berechnung im 15:30-16:00-Fenster nimmt automatisch die halbierte Phasen-Größe. Review-Pflicht nach 5 Anwendungsfällen in diesem Fenster (siehe dortige Notiz in [[feedback_trading_zeitfenster]]).
 

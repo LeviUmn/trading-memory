@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-09-14T19:27:10.998Z
+  modified: 2026-09-14T21:45:23.793Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -856,7 +856,11 @@ QQQ (Pane 1) liefert nur während der US-Handelszeiten Daten, NAS100 (CFD) läuf
 - **10:00-15:30 und 22:00-02:00 (Pre-/Post-Market, nur falls Extended Hours am QQQ-Chart aktiviert):** eingeschränkt — VWAP-Richtung als Kontext ja, Volumen-Spike-Kriterium nein (zu dünn). Kein hartes Gate.
 - **02:00-10:00 und Wochenende/US-Feiertage:** kein QQQ-Gate verfügbar.
 
+*Ergänzt 14.09.2026 (Teil B des Folgeauftrags [[project_fable_auftrag_kalendercheck_dst_2026-09-14]]): Der Klammerzusatz „bei US-Winterzeit je +1h prüfen" war richtig, aber ohne Termin und ohne Zuständigen. Konkret: In den EU/US-Sommerzeit-Divergenz-Fenstern nach [[feedback_zeitzone]] (kanonische Tabelle dort, nächstes Mo 26.10.–Fr 30.10.2026) liegen alle drei Zonen eine Stunde früher in DE-Zeit (reguläre Session 14:30–21:00 DE); ob ein Fenster aktiv ist, steht im DST-Suffix der T0-Kopfzeile aus [[feedback_session_update]] Schritt 0. **Das ändert nichts an der Rangfolge: Die Delta-Messung unten bleibt die verbindliche Prüfung, die Uhrzeit-Zonen bleiben reine Planungshilfe** — genau deshalb ist die Divergenz hier kein Sicherheitsloch, sondern ein Planungs-/Kommunikationsfehler, und diese Ergänzung ist keine neue Gate-Logik.*
+
 **Praktische Erkennung im Loop — Zeitstempel-Vergleich, nicht Uhrzeit-Raten:** Bei jedem QQQ-Check den Zeitstempel des neuesten QQQ-Bars (`data_get_ohlcv` → `time`) gegen den neuesten NAS100-Bar prüfen (dasselbe Verfahren wie beim NQ1!-Lag, [[feedback_nq1_feed_lag]]). **Differenz ≤ 1 Kerze (5 Min) → Gate gültig. Differenz > 1 Kerze → Gate NICHT verfügbar** — egal ob Ursache "Markt zu", "Feiertag/Half-Day" oder ein Feed-Problem ist; die Behandlung ist identisch. Die Uhrzeit-Zonen oben dienen nur der Vorab-Planung, der Zeitstempel-Check ist die verbindliche Prüfung (fängt US-Feiertage und verkürzte Handelstage automatisch mit). Wichtig: Bars von der Pane lesen (`data_get_ohlcv`), nicht `quote_get` — der liefert bei geschlossenem Markt kommentarlos den letzten Schlusskurs (vgl. [[feedback_datenquelle_nas100]]).
+
+*Ergänzt 14.09.2026: Die „Jetzt-Zeit", gegen die das Bar-Delta gerechnet wird, ist nie geschätzt: im Loop kommt sie aus der Zeitanker-Pflicht (Punkt 9a), beim Session-Update aus Schritt 0/T6 ([[feedback_session_update]]). 7e misst den Gate-Zustand, Schritt 0 liefert die Grundannahme „welcher Tag, welche Uhrzeit" — beides ist nötig, keins ersetzt das andere.*
 
 **Umgesetzt 15.07.2026:** Extended Hours auf der QQQ-Pane aktiviert (Sitzung-Menü, Button unten rechts im Chart: "RTH" → "Verlängerte Handelszeit"/ETH). Bestätigt per Screenshot (Anzeige wechselte RTH→ETH, Volumen stieg sichtbar durch den erweiterten Bereich). Damit haben auch die Vormittags-Updates (~14:30 MESZ, US-Pre-Market) einen QQQ-Kontext statt komplett eingefrorener Daten — Zeitstempel-Check aus diesem Punkt bleibt trotzdem Pflicht, weil ETH dünner/volatiler ist als RTH.
 

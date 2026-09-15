@@ -1,11 +1,11 @@
 ---
 name: feedback-session-update-dax
-description: "Trigger 'start update dich dax' (umbenannt 07.08.2026, vorher '#1') → DAX-Pendant zu feedback_session_update.md (NAS100 bleibt schlicht 'start update dich'). Eigener 6-Schritt-Ablauf, physisch getrennte Datenquellen."
+description: "Trigger 'start update dich dax' (umbenannt 07.08.2026, vorher '#1') → DAX-Pendant zu feedback_session_update.md (NAS100 bleibt schlicht 'start update dich'). Eigener 6-Schritt-Ablauf, physisch getrennte Datenquellen. Seit 14.09.2026 vorgeschalteter Schritt 0 (Zeitanker Session, Pflicht-`date` als allererster Call, T0/T6 als verbindliche Referenzzeit) — per Verweis auf feedback_session_update, nicht als Kopie."
 metadata: 
   node_type: memory
   type: feedback
   originSessionId: 51fca406-b869-4659-8541-11810063992f
-  modified: 2026-08-07T11:53:12.416Z
+  modified: 2026-09-14T21:19:21.908Z
 ---
 
 ## KRITISCH: Vollständiger Ablauf bei "start update dich dax"
@@ -14,11 +14,15 @@ metadata:
 
 **Mechanik 1:1 von NAS100 übernommen** (Struktur, Reihenfolge, "warum jeder Schritt Pflicht ist"). **Inhaltliche Schwellen/Zeiten für Deutschland/Euroraum sind unverifiziert, in Bewährung** — siehe [[project_dax_erweiterung]] Architektur-Entscheidung. Bei jedem Live-Einsatz aktiv gegenchecken, nicht blind übernehmen.
 
-**How to apply:** Alle 6 Schritte in dieser Reihenfolge, so viel wie möglich parallel ausführen.
+**How to apply:** Alle 6 Schritte in dieser Reihenfolge, nach dem vorgeschalteten Schritt 0 (Zeitanker, seit 14.09.2026), so viel wie möglich parallel ausführen.
 
 ---
 
 ## Der 6-Schritt-Ablauf
+
+### Schritt 0 — Zeitanker Session (PFLICHT, vor allem anderen)
+
+Wortgleich zu [[feedback_session_update]] Schritt 0, inklusive Pflicht-Kopfzeile `Zeitanker T0: …`, T0/T6-Bindung (T6 zu Beginn von Schritt 6, hier also vor `chart_get_state` auf `IG:DAX`), Sperre für jede Wochentags-/Datums-/Marktstatus-Aussage vor dem `date`-Aufruf und Plausibilitäts-Gegencheck (Bar-Zeitstempel schlägt Wochentags-Ableitung) — dort nachschlagen, nicht hier neu formulieren. Bewusst per Verweis statt per Kopie (ergänzt 14.09.2026): doppelte Volltexte driften auseinander, das hat dieses Regelwerk schon mehrfach erlebt.
 
 ### Schritt 1 — Memory lesen
 - MEMORY.md + letzte Datei aus `memory/dax_trades/` (sobald vorhanden — aktuell noch leer, siehe [[project_dax_erweiterung]])
@@ -175,6 +179,7 @@ DAX: <aktueller Kurs>
 
 Gleiche Reihenfolge wie NAS100 (siehe [[feedback_session_update]]):
 
+0. **Kopfzeile `Zeitanker T0: …`** (Schritt 0, seit 14.09.2026 — Format und Pflichtwirkung siehe [[feedback_session_update]], hier bewusst nur als Verweis; fehlt sie, gilt das Update als nicht durchgeführt)
 1. **Twitter-Accounts** (kurz auflisten, dann Digest: Bullisch / Bärisch)
 2. **EZB/Euroraum-Makrodaten** (Tabelle mit aktuellen Werten)
 3. **Wirtschaftskalender heute** (Deutschland/Euroraum + relevante US-Termine)

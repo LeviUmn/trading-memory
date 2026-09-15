@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-03T09:44:09.591Z
+  modified: 2026-09-14T21:45:34.831Z
 ---
 
 Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
@@ -27,6 +27,8 @@ Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 | 15:30-16:00 | **Aktive Setup-Suche erlaubt, Entry möglich — aber Pflicht-Halbierung der Position** (vorher: nur beobachten, kein Entry) |
 | 16:00-18:00 | **Beste Entry-Zone** — volle Positionsgröße bei bestätigtem Setup |
 | 20:00-22:00 | Zweites Fenster, aber enger werden (Tagesende) |
+
+*Ergänzt 14.09.2026: Alle Uhrzeiten dieser Tabelle gelten für den Normalfall (EU und USA in derselben Sommerzeitlage). In den EU/US-Sommerzeit-Divergenz-Fenstern nach [[feedback_zeitzone]] (kanonische Tabelle dort, nächstes Mo 26.10.–Fr 30.10.2026) verschiebt sich die gesamte Tabelle ab der Zeile 15:00-15:30 um eine Stunde nach vorn (Vorbereitung 14:00-14:30, Halbierungsfenster 14:30-15:00, beste Entry-Zone 15:00-17:00, zweites Fenster 19:00-21:00), weil sie am US-Open verankert ist — das Morgen-Briefing wandert nicht. Ob ein Fenster aktiv ist, steht im DST-Suffix der T0-Kopfzeile ([[feedback_session_update]] Schritt 0). Die Regeln selbst (Halbierung, Vollgröße ab Open+30 Min) ändern sich nicht — nur ihre DE-Uhrzeit; das Mitwandern der sessionverankerten Fenster ist in [[feedback_zeitzone]] als Auslegung markiert.*
 
 ### Korrektur 23.07.2026 (Fable-Review, nach Levis Late-Entry-Beobachtung/Trade #24)
 
@@ -57,5 +59,5 @@ Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 **Verdikt: Sample zu klein für eine belastbare Entscheidung — weder Beibehaltung noch Streichung ist durch die Daten gedeckt.** n=3 verfehlt die selbst gesetzte Schwelle (5) klar; die eigentlich fällige Review kann inhaltlich nicht abschließend beantwortet werden, nur ehrlich dokumentiert. Die vorhandene Evidenz zeigt in dieser kleinen Stichprobe eine leichte Tendenz GEGEN den Netto-Nutzen der Regel (mehr Gewinn beschnitten als Verlust vermieden), aber das kippt bei einem einzigen weiteren Fall in die andere Richtung — kein Grund für eine Änderung. **Entscheidung:** Regel bleibt unverändert in Kraft (kein Eingriff in ein laufendes System ohne robuste Evidenz, siehe [[feedback_dont_change_running_system]]). Diese Review gilt NICHT als abgeschlossen, sondern wird vertagt, bis 2 weitere echte Fenster-Entries vorliegen (dann n=5, ursprüngliche Schwelle erreicht) — erst dann erneut prüfen.
 
 ### Wichtig
-- US-Börsenöffnung = 15:30 Uhr deutscher Sommerzeit (vorher fälschlich 17:00 angenommen — korrigiert am 22.06.2026)
+- US-Börsenöffnung = 15:30 Uhr deutscher Zeit (vorher fälschlich 17:00 angenommen — korrigiert am 22.06.2026) — **gilt nur, solange EU und USA dieselbe Sommerzeitlage haben; in den Divergenz-Fenstern nach [[feedback_zeitzone]] (≈5 bzw. 10 Handelstage pro Umstellung, nächstes 26.10.–30.10.2026) öffnet die US-Börse um 14:30 DE** (ergänzt 14.09.2026 — die frühere unbedingte Formulierung war an rund vier Wochen im Jahr schlicht falsch)
 - ~~Gleiche Logik wie SpaceX-Strategie: erste 30 Min nach Open nur beobachten~~ — ersetzt 23.07.2026, siehe Korrektur oben. Der SpaceX-Vergleich war eine unkalibrierte Analogie aus einem anderen Instrumenten-Kontext (Einzelaktie/IPO), nicht aus eigenen NAS100/QQQ-Daten abgeleitet.
