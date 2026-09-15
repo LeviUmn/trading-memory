@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 7128a95a-a9a6-42e6-8a59-8f22dec5c654
-  modified: 2026-09-14T21:45:41.503Z
+  modified: 2026-09-15T10:00:32.253Z
 ---
 
 Im Live-Loop-Voll-Check (siehe [[feedback_loop_ablauf_uebersicht]] Szenario 1, jede 5. Minute) das Ergebnis als **Fließtext mit ✓/✗ direkt hinter jedem geprüften Punkt** ausgeben — keine Markdown-Tabelle.
@@ -35,7 +35,9 @@ Voll-Check <HH:MM:SS, echte Systemzeit per `date`> (Nr. <N> = (<Minuten seit ers
 
 **Chartmuster/Fibonacci:** <geprüft, Ergebnis> ODER <ausgelassen, Grund — "ausgelassen" nur, wenn KEIN Impuls ≥2×ATR mit Korrektur vorliegt; sonst Extension 1.272/1.618 = <X>/<Y>, ins Register eingetragen ✓>.
 
-**Chasing-Status (13):** <n> gerichtete Kerzen seit letzter Konsolidierung | Kriterien erfüllt ✓/✗ | Voll-Checks ohne Punkt-11-Signal: <k>/2 | 13.1-Konsequenz: <keine / beobachten / 50 %-Einstieg AKTIV vorschlagen>.
+**Chasing-Status (13):** <n> gerichtete Kerzen seit letzter Konsolidierung | Kriterien erfüllt ✓/✗ | Voll-Checks ohne Punkt-11-Signal: <k>/2 | 13.1-Konsequenz: <keine / beobachten / 50 %-Einstieg AKTIV vorschlagen>. *(seit 15.09.2026, Option D + b1: k zählt nur bei vollständigem Dual-Gate — bei Bruch "keine — Dual-Gate x/2 unvollständig, k-Zähler zurückgesetzt"; bei Q-ROT aus dem letzten Gate-Lauf "beobachten — Q-ROT geht vor (Option D)")*
+
+[**13.1 × Q-Score-Kollision:** Chasing-Kriterien seit <k>/2 erfüllt → 50% Einstieg | Q-Score <n>/4 ROT (Q<x>/Q<y> ✗) → Auslassen empfohlen | Regel (Option D): <Q-ROT geht vor, 13.1 = beobachten | 13.1 greift regulär (ROT nur aus Q2)>] *(Pflicht-Kombizeile nur bei erkannter Kollision = 13.1-Kriterien mit BEKANNTEM k ≥ 2 UND Q-ROT/UNBEKANNT — `vollcheck.cjs` druckt sie bei k ≥ 2 (Kerzen + volles Dual-Gate) mit Q-ROT/UNBEKANNT aus dem letzten Gate-Lauf des Tages gleicher Richtung, `gate_check.cjs` bei `--chasing yes` + PASS + ROT/UNBEKANNT + übergebenem `--k-ohne-signal` ≥ 2. Fehlt k bei `gate_check.cjs` oder ist k < 2, druckt es stattdessen `13.1 × Q-Score-Kollision: NICHT bewertet — k nicht uebergeben bzw. k<2/2 (…); keine 13.1-Praezedenz angewandt, kein Schattenmessungs-Eintrag` (kein Solo-Default, kein Marker, Q-ROT dort kein Veto) plus Plausibilitäts-Warnung; Levi-Entscheidung 15.09.2026 + N1 des Opus-Gegenchecks 15.09.2026 (Option b verschärft), Regeltext [[feedback_live_trading]] 7b1a "Präzedenz gegenüber Punkt 13.1". Im Deckel-Fall nach PASS+UNBEKANNT verweist die Konsequenz auf "neuer Trigger" statt auf die Retest-Zeitbox, die nur nach PASS+ROT startet (N6).)*
 
 [**Retest-Zeitbox:** VC+<1|2>/2 nach Gate-<FAIL|UNKNOWN|PASS+Q-ROT> (VC#<N>) — Bedingung <aus RETEST-ZEITBOX-Skriptzeile> <erfüllt/nicht erfüllt> → <Neu-Aufruf jetzt / warten / VERFALLEN> ODER (bei `--position offen`) `n.a. (Position offen — Zeitbox informativ)`.] *(nur in den zwei Voll-Checks nach einem gate_check.cjs-FAIL/UNKNOWN — seit 09.09.2026 Abend auch nach PASS mit Q-Score ROT [TODO 9]; die Pflichtprüfung/A3-Feld `--retest-bedingung` gilt dabei nur, solange keine Position offen ist [G5-Fix, Option (d), 09.09.2026] — der Grundtext behauptet nie retrospektiv "ausgelassen", da `gate_check.cjs` das zum Gate-Zeitpunkt strukturell nicht wissen kann; der VERFALLEN-Baustein wird von `vollcheck.cjs` beim ersten Voll-Check nach Ablauf der Wanduhr-Deadline erzwungen und genau einmal ausgewiesen, unabhängig von `--position`)*
 

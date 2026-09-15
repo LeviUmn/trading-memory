@@ -4,9 +4,9 @@ description: "TO-DO fuer 15.09.2026 (Opus): Praezedenzregel zwischen Punkt 13.1 
 metadata:
   node_type: memory
   type: project
-  status: "TO-DO fuer 15.09.2026, noch nicht begonnen"
+  status: "ERLEDIGT 15.09.2026 -- Opus-Entscheidungsvorlage fertig, siehe [[project_praezedenz_13_1_vs_qrot_entscheidungsvorlage_2026-09-15]]; Levi-Entscheidung dort noch offen"
   originSessionId: a2b3dbfe-4ee4-466f-855e-65c519af6e1f
-  modified: 2026-09-14T21:50:00.000Z
+  modified: 2026-09-15T08:25:12.628Z
 ---
 
 # TO-DO 15.09.2026 (Opus): Praezedenz 13.1 (Chasing) vs. 7b1a Q-Score-ROT
