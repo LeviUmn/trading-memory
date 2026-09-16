@@ -3,7 +3,7 @@
 > Index-Konvention (S3, 16.09.2026): eine Zeile pro Memory, max. 200 Zeichen; bei Updates die Zeile ERSETZEN, nicht anhängen. Abgeschlossenes wandert komprimiert (max. 120 Zeichen) in ## Archiv am Dateiende.
 
 - [Testtag 15.09.2026 (fiktiv) — Faktenprotokoll, TEILWEISE WIDERLEGT durch Opus-Analyse](testtag/testtag_2026-09-15.md) — Rohbasis; siehe [[project_testtag_analyse_2026-09-15]] für verifizierte Zahlen
-- [Opus-Analyse Testtag 15.09. + V1-V7, 4 Gegencheck-Runden ABGESCHLOSSEN](project_testtag_analyse_2026-09-15.md) — zuletzt [[project_gegencheck_v1_v7_runde4_2026-09-16]] FREIGEGEBEN OHNE AUFLAGE, 104/104, commit-reif, Code wartet auf Levi
+- [Opus-Analyse Testtag 15.09. + V1-V7 COMMITTET+GEPUSHT 16.09. (79573f5)](project_testtag_analyse_2026-09-15.md) — 4 Gegencheck-Runden, zuletzt [[project_gegencheck_v1_v7_runde4_2026-09-16]] FREIGEGEBEN OHNE AUFLAGE, 104/104
 - [Gegencheck V1-V7 Runde 1-3 (alle Auflagen behoben)](project_gegencheck_v1_v7_fable_umsetzung_2026-09-16.md) — R1: V3 schluckte PASS-Freigaben, V1-Sperrtext falsch. R2: [[project_gegencheck_v1_v7_runde2_2026-09-16]] Dry-Run-Lücken A/B. R3: [[project_gegencheck_v1_v7_runde3_2026-09-16]] fehlender Regressionstest C1
 - [Gegencheck V1-V7 Runde 4 16.09. (FREIGEGEBEN OHNE AUFLAGE, commit-reif)](project_gegencheck_v1_v7_runde4_2026-09-16.md) — C1-Tests per Mutationsprobe als scharf bewiesen (4/4 Guards gefangen). 5 nicht blockierende Restpunkte (N4-N7, B-Rest) für spätere Aufräumrunde
 - [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Order-Sperre/Halbierung hart auf 15/15:30/16 DE verdrahtet, im DST-Fenster 26.-30.10. 1h falsch; kein akuter Blocker
