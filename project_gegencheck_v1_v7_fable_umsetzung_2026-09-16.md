@@ -4,7 +4,7 @@ description: "Opus-Gegencheck 16.09.2026 der Fable-Umsetzung von V1-V7 aus der T
 metadata:
   node_type: memory
   type: project
-  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- 2 Auflagen vor naechstem fiktiven Testtag noetig, 4 Nachbesserungen ohne Zeitdruck; Code-Diff weiterhin unkommittiert, Commit-Entscheidung bei Levi"
+  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflagen 1+2 UND Nachbesserungen 3-6 von Fable umgesetzt (16.09., Tests 102/102), Code-Diff weiterhin unkommittiert, Commit-Entscheidung bei Levi"
   originSessionId: session_current
   modified: 2026-09-16T09:52:07.242Z
 ---
@@ -44,3 +44,13 @@ metadata:
 **Stand:** Code-Diff weiterhin unkommittiert (`scripts/gate_check.cjs`, `scripts/vollcheck.cjs`, `tests/trading_scripts.test.js`). Commit-Entscheidung bei Levi — Opus sieht nichts, das GEGEN einen Commit spricht, empfiehlt aber Auflage 1+2 vor dem nächsten fiktiven Testtag umzusetzen, weil sie sonst live Schaden anrichten (Auflage 1 verfälscht die Echtgeld-Freigabe-Messung, Auflage 2 kann ein reales PASS fälschlich sperren).
 
 Vorgänger: [[project_testtag_analyse_2026-09-15]] (V1-V7-Ursprung), [[project_gegencheck_memory_aufraeumen_s2s3_w1w4_2026-09-16]] (vorheriger Gegencheck desselben Tages).
+
+## Umsetzung der Auflagen (Fable, 16.09.2026 — Tests 102/102 gruen, Code unkommittiert)
+
+- **Auflage 1:** PASS-Dedupe schliesst V3-FAIL-Zeilen jetzt aus (`!(e.ablehnungsgrund startsWith "FAIL")`, symmetrisch zum V3-Filter) — eine Q-GELB/GRUEN-Freigabe nach automatisch erfasstem FAIL desselben Setups bekommt ihre eigene Zeile mit q_ampel/q2_anker. Neuer Testfall stellt das Opus-Szenario nach (clusterGate-FAIL → PASS+Freigabe → 2 Zeilen, FAIL-Zeile wiederholungen=0).
+- **Auflage 2:** (a) V1-Sperrtext differenziert: `unsolvable` (ohne leeres Entry-Fenster) nutzt jetzt die V5-Formulierung ("mit DIESER Entry-Geometrie tot, Weg ist der Retest = naeherer Entry"), nur `entryFenster.leer` behaelt die "kein Entry heilt"-Aussage. (b) ATR steht jetzt im Sperr-Fingerabdruck (Audit), und die Sperr-Zeile verlangt zusaetzlich, dass der AKTUELLE Lauf weiterhin aussichtslos ist (`result.aussichtslos`) — die Neuberechnung ist die Wahrheit, ein veraenderter ATR/naeherer Entry hebt die Sperre automatisch auf. Neuer Testfall: gleicher Anker/SL/TP1, ATR 30→80 → keine Sperr-Zeile mehr, normaler WIEDERHOLUNGSAUFRUF.
+- **Nachbesserung 3:** V4-stderr-Mitschnitt sammelt jetzt ALLE console.error-Zeilen (je 400, gesamt 2000 Zeichen, ` | `-getrennt) statt nur der letzten.
+- **Nachbesserung 4:** V3-Auto-Erfassung ausgenommen bei `--dry-run` (Konsistenz mit gate_check_log.jsonl).
+- **Nachbesserung 5:** `feedback_tagesabschluss.md` haelt fest: V3-Zeilen sind nachtragspflichtig, `protokoll_bilanz.cjs` endet deshalb kuenftig oefter mit Exit 1 (gewollt).
+- **Nachbesserung 6:** V5-Schwellendarstellung ("UEBER der 4x-ATR-Diagnose-Schwelle (X Pkt)" statt "4x ATR > 4x ATR"), #6b-Wortlaut praezisiert ("Drift innerhalb der 0,5x-ATR-Toleranz zaehlt als unveraendert"), V4-Schreibfehler schreibt jetzt eine sichtbare stderr-WARNUNG (V7-Primaerquelle) statt still zu bleiben.
+- V2/V5/V6/V7 unveraendert (vom Gegencheck ohne Einschraenkung bestaetigt).
