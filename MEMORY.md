@@ -116,8 +116,8 @@
 Einzeleinträge in `trades/trading_YYYY-MM-DD.md`, u.a.: 21.08. #42+#43 Loss (Opex/PMI, -83,53€) · 20.08. #40 Loss+#41 BE · 19.08. #39 Win RR-Verstoß · 18.08. #37 Win+#38 Loss (Iran/Golf) · 17.08. #36 Loss · 07.08. #34 Loss+#35 Win (NFP-Miss) · 06.08. #33 Loss · 05.08. #31 Loss+#32 Win · 04.08. #30 Win → GO Phase-3 · 03.08. #29 Win (Stop-Hunt+ISM) · 31.07. #28 Win · 28.07. #26 Loss+#27 Win · 23.07. #25 Win (25 Trades: +138,86€, 65,2% WR) · 22.07. #24 Loss (Chasing) · 21.07. #23 Win · 20.07. #22 Win · 16.07. #21 Loss · 15.07. #19 Loss+#20 Win · 14.07. #18 Win · 13.07. #17 Win (RR-Bruch) · 09.07. #16 Win (Phase-2-Start) · 08.07. #14 Loss+#15 Win · 02.07. #10-12 alle Loss · 01.07. 2x Loss · 30.06. 3 Trades +9,72€ · 23.06. 3 Trades +28,12€ · 12.06. #1 Win +20,32€ · Kein Trade: 30.07., 18.07., 17.07., 25.06., 22.06., 06.07.
 
 ## Archiv (abgeschlossen — Details in Datei + Git-Historie)
-- [vollcheck.cjs/position_tick.cjs Bau 09.09. (ABGESCHLOSSEN)](project_gegencheck_fable_umsetzung_2026-09-09_runde4.md) — D5-Endlosschleife gefixt
-- [07.09. Studien+Umsetzung (ABGESCHLOSSEN, c72a836)](project_gegencheck_fable_umsetzung_2026-09-07.md) — SL-Anker-Vorprüfung bindend
+- [vollcheck.cjs-Bau 09.09. (ABGESCHLOSSEN)](project_gegencheck_fable_umsetzung_2026-09-09_runde4.md) — D5-Fix
+- [07.09. Studien (ABGESCHLOSSEN, c72a836)](project_gegencheck_fable_umsetzung_2026-09-07.md) — SL-Anker bindend
 - [CME-FedWatch-API-Idee (kein GO)](project_cme_fedwatch_api_idee.md) — kostenlose Alternative notiert
 - [DAX-Layout-Tools (GELÖST)](feedback_layout_tools_unzuverlaessig.md) — layout_switch-Risiko behoben
 - [draw_list getChartApi-Bug (GEFIXT)](feedback_draw_list_getchartapi_bug.md) — Root-Cause in drawing.js behoben
@@ -125,7 +125,7 @@ Einzeleinträge in `trades/trading_YYYY-MM-DD.md`, u.a.: 21.08. #42+#43 Loss (Op
 - [FOMC 29.07.2026](project_fomc_29_07_2026.md) — Sperrfrist-Präzedenz für Zinsentscheide
 - [size.cjs Short-SL-Bug (GEFIXT)](feedback_size_script_short_bug.md) — Vorzeichenfehler behoben
 - [Prozessfehler 27.07. (GELÖST)](feedback_prozessfehler_27_07_fuer_fable.md) — Pflicht-Ausgabezeilen etabliert
-- [Phase-2-Abschluss-Review 24.07. (GO Phase 3)](project_phase2_abschluss_review_2026-07-24.md)
+- [Phase-2-Review 24.07. (GO Phase 3 mit Bedingungen 1-6)](project_phase2_abschluss_review_2026-07-24.md)
 - [Fable-Tiefendiagnose 15.07. (ABGESCHLOSSEN)](project_fable_tiefendiagnose_2026-07-15.md) — alle 8 Fixes verifiziert
 - [NQ1!-Feed-Lag (GELÖST)](feedback_nq1_feed_lag.md) — Wechsel auf QQQ
 - [Backtest-Ergebnis 03.07. (einmalig)](feedback_backtest_ergebnis_2026-07-03.md) — hypothetisch ≈+60€ statt −4,22€
