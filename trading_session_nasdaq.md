@@ -70,7 +70,7 @@ Nasdaq ist seit dem 12.06. (Entry 29.400) um +1000 Punkte auf ~30.400 gelaufen �
 **Bias 22.06.2026:** Übergeordneter Trend stark bullisch, aber Tageskerze zeigt scharfe Abweisung von 30.673 mit hohem Volumen (124K, höchstes Volumen der letzten Stunden) — möglicher Bull-Trap oder gesunde Konsolidierung. RSI 1H neutral (53,5), MACD noch bullisch aber Momentum lässt nach (Histogram nur noch +15,4). Letzte 15min-Kerze zeigt Bounce von 30.358 zurück auf 30.434 — Support hält bisher.
 
 ### Update 23.06.2026 — DeepSeek-/AI-Ausverkauf bricht alle Levels vom 22.06.
-Globaler Tech-Sell-off (DeepSeek-News, China-AI-Modell) drückt Nasdaq über Nacht von ~30.380 auf 29.547 (-2,74%, vom Hoch 30.674 sogar -3,85%). Details siehe [[trade-2026-06-23]].
+Globaler Tech-Sell-off (DeepSeek-News, China-AI-Modell) drückt Nasdaq über Nacht von ~30.380 auf 29.547 (-2,74%, vom Hoch 30.674 sogar -3,85%). Details siehe [[trades/trading_2026-06-23]].
 
 **Alle Bear-Trigger-Levels vom 22.06. gebrochen:** 30.255 ❌, 30.045 ❌, 29.605 ❌ — Kurs notiert jetzt unter allen dreien.
 
@@ -79,7 +79,7 @@ Globaler Tech-Sell-off (DeepSeek-News, China-AI-Modell) drückt Nasdaq über Nac
 - Support: 29.494 (frisches Tagestief), darunter psychologisch 29.000
 - Aktueller Kurs: ~29.547
 
-**VIX 19,79** (manuell geprüft, siehe Bug-Notiz in [[trade-2026-06-23]]) — noch "Normal"-Zone (15-20), kein Risk-Off-Crash trotz scharfem Move. Spricht für geordnete Korrektur statt Trendwende.
+**VIX 19,79** (manuell geprüft, siehe Bug-Notiz in [[trades/trading_2026-06-23]]) — noch "Normal"-Zone (15-20), kein Risk-Off-Crash trotz scharfem Move. Spricht für geordnete Korrektur statt Trendwende.
 
 **Bias 23.06.2026:** Bearish kurzfristig, übergeordneter 60-Tage-Aufwärtstrend erstmals ernsthaft angeschlagen. RSI 5min 37,4 (Richtung überverkauft, nicht extrem), MACD bärisch aber Histogram flacht ab. Kein Entry im Morgen-Briefing-Fenster — abwarten auf Reaktion nach US-Open (15:30) bzw. beste Entry-Zone 16:00-18:00.
 

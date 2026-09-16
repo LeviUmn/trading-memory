@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-14T10:25:12.492Z
+  modified: 2026-09-16T08:55:47.103Z
 ---
 
 Wenn der User "Tag Zusammenfassung speichern" sagt, immer eine vollständige Tages-Zusammenfassung in einer neuen Memory-Datei speichern.
@@ -169,3 +169,7 @@ git commit -m "<kurze Zusammenfassung des Tages, z.B. 'Session 23.07.2026 — AT
 git push
 ```
 Falls an dem Tag keine echten Trades liefen, aber Regel-/Memory-Änderungen gemacht wurden (wie am 23.07.2026), gilt derselbe Rhythmus — der Trigger ist der Tagesabschluss selbst, nicht ob ein Trade stattfand.
+
+**Erweiterung auf BEIDE Repos (ergänzt 16.09.2026, Memory-Aufräumen S2 — Nachzug zu E1 aus [[project_memory_gesamtbericht_2026-09-14]]):** Der Backup-Schritt umfasst ab jetzt ausdrücklich beide Repositories, nicht nur den `memory/`-Ordner:
+1. **Memory-Repo** (`memory/` → `github.com/LeviUmn/trading-memory`) — wie oben, unverändert.
+2. **Code-Repo** (`C:\Users\umnus\tradingview-mcp` → GitHub): Liegen am Tagesende uncommittete Änderungen an `scripts/*.cjs` oder anderen Projektdateien vor (`git status` prüfen), diese ebenfalls committen und pushen — **Commit nur nach Levis Freigabe**, wie bei allen Code-Änderungen üblich; liegt keine Freigabe vor, den offenen Stand explizit im Tagesabschluss benennen statt ihn stillschweigend liegen zu lassen. Hintergrund: Regeländerungen entstehen regelmäßig paarweise (Regeltext im Memory-Repo + Skript-Gegenstück im Code-Repo, z.B. df60a5a ↔ 5c87bd4); ein Backup, das nur eine Hälfte sichert, lässt die andere ungesichert zurück.

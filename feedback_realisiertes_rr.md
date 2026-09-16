@@ -14,7 +14,7 @@ Nach 12 abgeschlossenen Trades (Stand 04.07.2026) hat **kein einziger Trade je e
 
 **Entschieden 04.07.2026:** Teilverkauf-Standard eingeführt — TP1 (näheres Level, RR ≥1:1) + TP2 (Fernziel, RR ≥1:2), 50% bei TP1 realisieren, Rest mit Breakeven-SL und allen bisherigen Schutzsignalen (Divergenz, Chartmuster, 3h-Regel) weiterlaufen lassen. Details siehe [[feedback_chartanalyse]] Punkt 8b, Kasten-Format in [[feedback_live_trading]] Punkt 8.
 
-**How to apply:** Ab Trade #13 den Teilverkauf-Standard anwenden und danach erneut Ø-Win, Ø-Loss, realisiertes RR und Expectancy aus [[trade_log]] berechnen (nicht nur Win-Rate) — prüfen, ob sich das realisierte RR durch die neue Regel tatsächlich Richtung 1:1,5-2 bewegt oder ob weitere Anpassung nötig ist. Diese Kennzahl bei jedem künftigen Phasen-Review verpflichtend mit ausweisen, nicht nur Win-Rate/Drawdown.
+**How to apply:** Ab Trade #13 den Teilverkauf-Standard anwenden und danach erneut Ø-Win, Ø-Loss, realisiertes RR und Expectancy aus [[trades/trade_log]] berechnen (nicht nur Win-Rate) — prüfen, ob sich das realisierte RR durch die neue Regel tatsächlich Richtung 1:1,5-2 bewegt oder ob weitere Anpassung nötig ist. Diese Kennzahl bei jedem künftigen Phasen-Review verpflichtend mit ausweisen, nicht nur Win-Rate/Drawdown.
 
 **Verwandte Befunde aus demselben Review, bereits in andere Dateien eingearbeitet:** Trade #12 war ein übersehener Cooldown-Verstoß (siehe [[feedback_regime_wechsel]]), es fehlt eine automatische Cooldown-Durchsetzung (kein Skript, nur Memory-Erinnerung — Ursache für den #12-Verstoß), und die Stichprobengröße (n=12-15) ist zu klein, um Win-Rate-Schwankungen (86%→50%) als echtes Signal statt Rauschen zu werten.
 

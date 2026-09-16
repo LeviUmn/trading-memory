@@ -11,7 +11,7 @@ metadata:
 
 ## Auslöser und Prüfumfang
 
-Erster Live-Testtag nach der Regelwerksrunde vom 04.09. (P1-P7, siehe [[project_testtag_analyse_2026-09-03]]). Geprüft wurde `memory/testtag/testtag_2026-09-04.md` vollständig (2.353 Zeilen, Sessionstart 15:00, Faktenprotokoll-Abschluss 20:00) im Vergleich zur Vortagesanalyse. Kernfrage laut Auftrag: Haben die neuen Mechanismen in der Praxis getragen, und was blockierte heute die 4 Dual-Gate-2/2-Trigger?
+Erster Live-Testtag nach der Regelwerksrunde vom 04.09. (P1-P7, siehe [[project_testtag_analyse_2026-09-03]]). Geprüft wurde [[testtag/testtag_2026-09-04]] (`memory/testtag/testtag_2026-09-04.md`) vollständig (2.353 Zeilen, Sessionstart 15:00, Faktenprotokoll-Abschluss 20:00) im Vergleich zur Vortagesanalyse. Kernfrage laut Auftrag: Haben die neuen Mechanismen in der Praxis getragen, und was blockierte heute die 4 Dual-Gate-2/2-Trigger?
 
 Vorweg das Wichtigste: **Der Tag ist prozessual der bislang sauberste der Serie** — die vier am 03.09. diagnostizierten Prozessfehler sind nachweisbar behoben, nicht wiederholt. Gleichzeitig hat der Tag drei Dinge sichtbar gemacht, die vorher unter dem RR-Gate verdeckt lagen: eine strukturelle Spannung zwischen 8c2 und der TP1-Fenster-Arithmetik, ein asymmetrisch wirkendes 1H-Kriterium, und drei nachweislich falsche Zahlen im eigenen Faktenprotokoll-Abschluss.
 
