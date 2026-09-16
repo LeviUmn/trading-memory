@@ -4,7 +4,7 @@ description: "Opus-Analyse Testtag 15.09.2026 (fiktiv), ausschliesslich gegen Sk
 metadata:
   node_type: memory
   type: project
-  status: "Analyse abgeschlossen (Opus, gegen Rohdateien verifiziert), 7 Vorschlaege offen (Levi-Entscheidung), kein Gegencheck/Umsetzung bisher"
+  status: "Analyse abgeschlossen; V1-V7 von Levi freigegeben und von Fable umgesetzt (16.09.2026, Tests 100/100, Code-Repo unkommittiert) — Opus-Gegencheck ausstehend"
   originSessionId: session_current
   modified: 2026-09-16T08:58:36.837Z
 ---
@@ -80,3 +80,15 @@ Weitere Zahlen: 122→32 Einträge in `trigger_kandidaten_log.jsonl` (29× FAIL/
 - **V7 (hoch, Prozess):** Faktenprotokoll künftig primär aus den Skript-Logs erstellen, Chat-Transkript nur als Ergänzung für Freitext — Beleg: Transkript-Rekonstruktion hatte 3 Zahlen falsch und 4 fälschlich aufgegeben, alle waren aus den Skript-Logs exakt rekonstruierbar.
 
 Vorgänger: [[testtag/testtag_2026-09-15]] (Faktenprotokoll, teilweise widerlegt/präzisiert), [[project_gegencheck_praezedenz_13_1_vs_qrot_fable_umsetzung_2026-09-15]] (Regeländerung desselben Tages), [[project_testtag_analyse_2026-09-11]] (Vorgänger-Analyse, V9-Ankerwechsel-Fix). Rohdaten: `scripts/vollcheck_state.json`, `gate_check_log.jsonl`, `oneh_shadow_log.jsonl`, `register_touch_log.jsonl`, `trigger_kandidaten_log.jsonl`, `skipped_setups_fiktiv.jsonl`, `sl_anker_wechsel_log.jsonl`, `trades.db`, `screenshots/tv_full_2026-09-15T*.png`.
+
+## 7. Umsetzung V1-V7 (Fable, 16.09.2026 — Levi-Freigabe via Sonnet-Hauptchat; NICHT gegengecheckt, Opus-Gegencheck ausstehend)
+
+Alle sieben Vorschläge umgesetzt. Tests: bestehende Suite + 5 neue Testfälle = **100/100 grün** (`node --test tests/trading_scripts.test.js`). Code-Repo-Änderungen (`scripts/gate_check.cjs`, `scripts/vollcheck.cjs`, `tests/trading_scripts.test.js`) **unkommittiert** — Commit erst nach Levi-Freigabe. Details je Punkt:
+
+- **V1:** Neue `AUSSICHTSLOS (V1)`-Zeile im Retest-Zeitbox-Block, sobald `fenster.unsolvable` oder `entryFenster.leer` (nur live). Der Zustand wandert als `aussichtslos`-Flag in den Fingerabdruck von `last_gate_fail.json`; ein Wiederholungsaufruf mit unverändertem SL-Anker+TP1-Level druckt `AUSSICHTSLOS-SPERRE VERLETZT (V1)` — gleiche Konsequenz-Klasse wie #6b (Anzeige, kein Exit-Einfluss, wie dort etabliert).
+- **V2:** Fingerabdruck der Retest-Zeitbox umgestellt auf `{sl_anker, tp1_level_price, cluster, dir}`; der SL-Wert unterscheidet nur noch mit Toleranz ±0,5×ATR (SL-Drift ≤ Toleranz = derselbe Trigger, echter Anker-Wechsel = neuer Trigger). failGates bleiben im Fingerabdruck für die #6b-Detailmeldung, entscheiden aber nicht mehr über die Identität. Alt-Format-Dateien zählen einmalig als anderer Trigger (dokumentiert, kein Migrationscode).
+- **V3:** An fiktiven Testtagen (vollcheck_state testtag_modus=fiktiv, heutiges Datum) wird jeder Live-FAIL automatisch nach `skipped_setups_fiktiv.jsonl` geschrieben; unverändertes `{dir, sl_anker, tp1_level}` am selben DE-Tag → `wiederholungen++` (atomischer Rewrite). An echten Tagen bleibt die manuelle Pflicht unverändert (bewusste Abweichung/Präzisierung: Automatik nur für die fiktive Messreihe — Levi-Auftrag nannte die fiktiv-Datei explizit).
+- **V4:** `vollcheck.cjs` schreibt jeden Lauf selbst nach `scripts/vollcheck_log.jsonl` (Nr., ts, Lücken-Liste, vollständig, Fazit, Konsequenz; bei Hard-Exit 1 den Grund aus einem stderr-Mitschnitt, 400 Zeichen). Greift über `process.on('exit')` auf ALLEN Exit-Pfaden; Dry-Runs werden markiert statt verschluckt; Schreibfehler kippen nie den Lauf.
+- **V5:** Reine Anzeige-Zeile `SL-DISTANZ-DIAGNOSE (V5)` bei SL-Distanz > 4×ATR ("Setup bis zum Retest tot, keine Gate-Aufrufe; SL NICHT verengen") — Konstante `SL_DISTANZ_DIAGNOSE_ATR_MULT = 4`, kein Gate, keine Sizing-/Ampel-Wirkung, erscheint in den TP1-Fenster-Diagnosezeilen des Gate-Outputs (und damit im Voll-Check-Zitat).
+- **V6:** `slAnkerWechselGuard` loggt Richtungswechsel jetzt ebenfalls nach `sl_anker_wechsel_log.jsonl` (Feld `richtungswechsel: "long->short"`, Vermerk statt Begründungspflicht, `gegen_richtung: null`) mit eigener Ausgabezeile `SL-ANKER-RICHTUNGSWECHSEL (V6)`. Bestehender V9-Test an die neue Semantik angepasst (5 statt 3 Log-Zeilen).
+- **V7:** Prozessregel in `feedback_tagesabschluss.md` (Abschnitt Faktenprotokoll-Abschluss): Skript-Logs sind die PRIMÄRQUELLE jeder Rekonstruktion, das Chat-Transkript nur Ergänzung für Freitext; bei Widerspruch gilt das Log, Abweichung in Unterpunkt 4 ausweisen.
