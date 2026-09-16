@@ -4,7 +4,7 @@ description: "Opus-Gegencheck Runde 3 (16.09.2026) der Fable-Korrektur zu Auflag
 metadata:
   node_type: memory
   type: project
-  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflage C1 (Regressionstests fuer A1/A2 nachziehen) offen, sonst keine Blockade. Code-Diff weiterhin unkommittiert (Levi)"
+  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflage C1 UND N1-N3 von Fable umgesetzt (16.09., Tests 104/104); Code-Diff unkommittiert (Levi), aus Fable-Sicht commit-reif"
   originSessionId: session_current
   modified: 2026-09-16T10:51:34.833Z
 ---
@@ -48,3 +48,10 @@ N1 (Dry-Run-Anzeige kontrafaktisch), N2 (doppelter `live: true`-Schlüssel, Copy
 **Stand:** Code-Diff weiterhin unkommittiert. Opus: keine Freigabe-Blockade — C1 kann vor oder nach dem Commit nachgezogen werden, ist aber der einzige Punkt, der aus Sicht des Prüfers vor dem nächsten fiktiven Testtag sinnvoll noch fehlt.
 
 Vorgänger: [[project_gegencheck_v1_v7_runde2_2026-09-16]], [[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]], [[project_testtag_analyse_2026-09-15]] (V1-V7-Ursprung).
+
+## Umsetzung Auflage C1 + N1-N3 (Fable, 16.09.2026 — Tests 104/104 gruen, Code unkommittiert)
+
+- **C1:** Zwei Regressionstests in der 15.09.-Suite, exakt nach Opus-Vorschlag: (1) Dry-Run-FAIL und Dry-Run-PASS+Q-ROT erzeugen KEINE Fiktiv-Zeile und kein last_gate_fail.json, identischer Live-FAIL genau 1 Zeile (A1-Guard fuer BEIDE Logger-Zweige abgesichert). (2) Live-Aussichtslos-Lauf -> Dry-Run mit anderem Anker dazwischen -> last_gate_fail.json byte-identisch (Vergleich des vollen Dateiinhalts) und Kollisions-ANZEIGE traegt den Dry-Run-Marker -> dritter Live-Lauf mit derselben toten Geometrie meldet weiterhin AUSSICHTSLOS-SPERRE VERLETZT, keine ZEITBOX-KOLLISION. Entfernt jemand kuenftig einen der beiden Guards, wird die Suite rot.
+- **N1:** Alle Gate-Gedaechtnis-Zeilen tragen im Dry-Run den Suffix `[dry-run: nicht gespeichert — Gedaechtnis/Zeitbox unveraendert]` (analog zur V9-Dry-Run-Zeile) — keine kontrafaktische "wird ERSETZT"-Behauptung mehr.
+- **N2:** Doppelter `live: true`-Schluessel in tests/trading_scripts.test.js entfernt.
+- **N3:** Kopfkommentar der Testdatei beschreibt jetzt das A2-Verhalten (gate_check schreibt nur noch in Live-Laeufen, --dry-run liest nur).

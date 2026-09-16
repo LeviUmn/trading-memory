@@ -3,7 +3,7 @@
 > Index-Konvention (S3, 16.09.2026): eine Zeile pro Memory, max. 200 Zeichen; bei Updates die Zeile ERSETZEN, nicht anhängen. Abgeschlossenes wandert komprimiert (max. 120 Zeichen) in ## Archiv am Dateiende.
 
 - [Testtag 15.09.2026 (fiktiv) — Faktenprotokoll, TEILWEISE WIDERLEGT durch Opus-Analyse](testtag/testtag_2026-09-15.md) — Rohbasis; siehe [[project_testtag_analyse_2026-09-15]] für verifizierte Zahlen
-- [Opus-Analyse Testtag 15.09. + V1-V7 + Gegencheck-Auflagen erledigt](project_testtag_analyse_2026-09-15.md) — Auflagen 1+2 & Nachbess. 3-6 umgesetzt 16.09. ([[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]]), Tests 102/102, Code-Commit wartet auf Levi
+- [Opus-Analyse Testtag 15.09. + V1-V7 + Gegencheck-Auflagen erledigt](project_testtag_analyse_2026-09-15.md) — 3 Gegencheck-Runden erledigt (zuletzt [[project_gegencheck_v1_v7_runde3_2026-09-16]] C1+N1-N3), Tests 104/104, Code-Commit wartet auf Levi
 - [Gegencheck V1-V7-Umsetzung 16.09. Runde 1 (Auflagen 1+2 behoben)](project_gegencheck_v1_v7_fable_umsetzung_2026-09-16.md) — 102/102 Tests. Auflage 1: V3 schluckte PASS-Freigaben. Auflage 2: V1-Sperrtext falsch + ATR fehlte im Fingerabdruck
 - [Gegencheck V1-V7 Runde 2 16.09. (Auflagen A+B behoben)](project_gegencheck_v1_v7_runde2_2026-09-16.md) — Auflagen 1+2 live bestätigt. Auflage A (Dry-Run schützte Freigaben/last_gate_fail.json nicht), B (V4-Kappung zu aggressiv)
 - [Gegencheck V1-V7 Runde 3 16.09. (FREIGEG. M. AUFLAGE C1, unkommittiert)](project_gegencheck_v1_v7_runde3_2026-09-16.md) — A1/A2/B live bestätigt, 7 Alt-Test-Umstellungen als erzwungen+korrekt verifiziert (HEAD-Gegenprobe). Einzige Auflage C1: kein Regressionstest für A1/A2 selbst — Guards könnten unbemerkt wieder entfernt werden
