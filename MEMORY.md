@@ -9,9 +9,9 @@
 - [N1 Tweet-Fälligkeit + F-B FREIGEGEBEN MIT AUFLAGEN 14.09.](project_n1_tweet_faelligkeit_klaerung_2026-09-14.md) — x_last_fetch.json: last_fetch (Wasserstand) + last_poll (Abruf), Bedingung/Nachholen gegen last_poll. Offen N-2/N-3/N-4. Tests 90/90
 - [Cron-Automatisierung P1+P2 (FREIGEGEBEN MIT AUFLAGEN)](project_cron_automatisierung_einschaetzung_2026-09-14.md) — 8a5+9b korrekt; O-1 `--anlass` gegen ±15 Min. 84/84
 - [Punkt 11 + N5 (Option C, FREIGEGEBEN MIT AUFLAGEN 14.09.)](project_punkt11_sl_empfehlung_2026-09-14.md) — Dreh 3/4; position_tick.cjs-Blocker gefixt. 74/74
-- [Memory-Aufräumen GESAMTBERICHT 14.09. (offen)](project_memory_gesamtbericht_2026-09-14.md) — 4 Risikoklassen, 7 Schritte; W1/W2 zuerst, E7 abgelehnt
+- [Memory-Aufräumen GESAMTBERICHT 14.09.](project_memory_gesamtbericht_2026-09-14.md) — S1 erledigt 14.09. (df60a5a), S2+S3 erledigt 16.09. (46caa09); S4/S5 warten auf Levi-Freigabe, S6 zurückgestellt, E7 abgelehnt
 - [feedback_live_trading 14.09.: W1-W4 fix, Gegencheck FREIGEG. M. AUFLAGEN](project_pruefung_feedback_live_trading_2026-09-14.md) — W5/N1-N5 umgesetzt; offen K1-K30
-- [Memory-Aufräumen: Bericht 14.09. (offen)](project_memory_aufraeumen_2026-09-14.md) — 179 Dateien/4,62 MB; 7 Empfehlungen, E1 Git-Backup offen
+- [Memory-Aufräumen: Bericht 14.09.](project_memory_aufraeumen_2026-09-14.md) — 179 Dateien/4,62 MB; E1 Git-Backup + E4 tote Links/verwaiste Dateien erledigt (16.09.)
 - [Opus-Gegencheck Q2/Q4-Umsetzung 14.09. (FREIGEGEBEN MIT AUFLAGEN, **unkommittiert**)](project_gegencheck_q2q4_fable_umsetzung_2026-09-14.md) — Option A+Q4-a live bestätigt. **Offene Auflage: N1b bestätigen** vor nächstem Testtag
 - [Opus-Analyse Testtag 11.09. (EINGESCHRÄNKT; committet e4f8c77)](project_testtag_analyse_2026-09-11.md) — 51 VC, 0 Trades; Q2-Formel unerfüllbar; `--testtag fiktiv|echt` Pflicht. 60/60. Offen V1/V10/V5-V8
 - [Q2/Q4-Kalibrierung: ENTSCHIEDEN+UMGESETZT 14.09. (Option A+Q4-a)](project_q2_kalibrierung_entscheidungsvorlage_2026-09-11.md) — Q2 = |Entry−EMA50(5min)|/ATR; Q4 aus level_register.json
