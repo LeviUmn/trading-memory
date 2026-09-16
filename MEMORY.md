@@ -2,6 +2,7 @@
 
 > Index-Konvention (S3, 16.09.2026): eine Zeile pro Memory, max. 200 Zeichen; bei Updates die Zeile ERSETZEN, nicht anhängen. Abgeschlossenes wandert komprimiert (max. 120 Zeichen) in ## Archiv am Dateiende.
 
+- [TODO 17.09.: Voll-Check-Ausgabeformat nutzerfreundlicher](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — nur Kerndaten (Markt short/long+Indikatoren, was fehlt, Entry-Moment, 10-Min-Tweets) für Levi sichtbar, Rest System-intern. Nur notiert, morgen mit Opus+Fable
 - [Testtag 15.09.2026 (fiktiv) — Faktenprotokoll, TEILWEISE WIDERLEGT durch Opus-Analyse](testtag/testtag_2026-09-15.md) — Rohbasis; siehe [[project_testtag_analyse_2026-09-15]] für verifizierte Zahlen
 - [Opus-Analyse Testtag 15.09. + V1-V7 COMMITTET+GEPUSHT 16.09. (79573f5)](project_testtag_analyse_2026-09-15.md) — 4 Gegencheck-Runden, zuletzt [[project_gegencheck_v1_v7_runde4_2026-09-16]] FREIGEGEBEN OHNE AUFLAGE, 104/104
 - [Gegencheck V1-V7 Runde 1-3 (alle Auflagen behoben)](project_gegencheck_v1_v7_fable_umsetzung_2026-09-16.md) — R1: V3 schluckte PASS-Freigaben, V1-Sperrtext falsch. R2: [[project_gegencheck_v1_v7_runde2_2026-09-16]] Dry-Run-Lücken A/B. R3: [[project_gegencheck_v1_v7_runde3_2026-09-16]] fehlender Regressionstest C1
