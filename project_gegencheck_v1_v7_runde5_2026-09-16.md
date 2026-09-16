@@ -4,7 +4,7 @@ description: "Opus-Gegencheck Runde 5 (16.09.2026) der Fable-Korrektur zu den 5 
 metadata:
   node_type: memory
   type: project
-  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflage 1 (B-Rest-Notfallpfad, echte Regression ggu. bereits gepushtem 79573f5) MUSS vor Commit behoben werden. Auflage 2 (N4-Trigger-Log-Luecke, Levi-Entscheidung ob Code oder nur Doku) + Auflage 3 (N6-Formulierung) koennen in Folge-Commit. Diff weiterhin unkommittiert."
+  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflagen 1-3 von Fable umgesetzt (16.09., Tests 104/104, inkl. neuem Notfallpfad-Regressionstest). GEZIELTE OPUS-NACHRUNDE VOR COMMIT AUSSTEHEND (wegen der realen Regression in Auflage 1); Diff unkommittiert. Trigger-Log-Verhaltensfrage (Auflage 2) weiter offene Levi-Entscheidung."
   originSessionId: session_current
   modified: 2026-09-16T11:41:58.962Z
 ---
@@ -62,3 +62,9 @@ Zwei kleinere Nebenbefunde an derselben Stelle: ein verwaistes `" | … | "`-Tre
 Auflage 1 ist der einzige echte Blocker — sie macht `vollcheck_log.jsonl` in einem realistischen Fall (Ein-Zeilen-Hard-Exit) schlechter als der bereits gepushte Stand. N5 und N7 sind sauber und brauchen keine Nacharbeit. Auflage 2+3 sind reine Konsistenzpunkte ohne Dringlichkeit.
 
 Vorgänger: [[project_gegencheck_v1_v7_runde4_2026-09-16]], [[project_gegencheck_v1_v7_runde3_2026-09-16]], [[project_gegencheck_v1_v7_runde2_2026-09-16]], [[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]], [[project_testtag_analyse_2026-09-15]] (V1-V7-Ursprung).
+
+## Umsetzung Auflagen 1-3 (Fable, 16.09.2026 — Tests 104/104, NICHT abgeschlossen: gezielte Opus-Nachrunde vor Commit vereinbart)
+
+- **Auflage 1 (B-Rest-Regression):** Notfallpfad neu gebaut — bleibt kein Kopf uebrig oder passt selbst der Tail nicht, faellt die Kappung auf den zeichenweisen Schnitt des GESAMTstrings zurueck (`full.slice(...)`), mit unterscheidbarem Marker "[gekappt mitten in der Zeile, N Zeichen gesamt]" statt "an Zeilengrenzen"; bei leerem Kopf und mehreren Zeilen wird das verwaiste " | … | "-Praefix unterdrueckt ("… | letzte"). Neuer Regressionstest im V4-Testfall: EINE einzelne stderr-Zeile > 2000 Zeichen (--position mit 2500 Zeichen, echoender Fehlertext) -> Log enthaelt den Zeilenanfang, den Mitten-Marker und bleibt <= 2000 Zeichen.
+- **Auflage 2 (nur Doku):** N4-Nutzungshinweis stellt jetzt klar, dass "kein Trigger-Kandidaten-Eintrag" NUR im --sl-vorpruefung-Modus gilt und appendTriggerKandidat() im Gate-Modus einen Beinahe-Trigger auch im Dry-Run weiterhin zaehlt — Verhaltensaenderung (Nenner der Trigger-Statistik) ausdruecklich NICHT vorgenommen, liegt bei Levi.
+- **Auflage 3:** dryRunAnzeige (N6-Suffix) wird nur noch gesetzt, wenn die V3-Auto-Erfassung tatsaechlich gegriffen haette (fiktivModus fiktiv UND Status FAIL) — kein "uebersprungen"-Hinweis mehr fuer Laeufe, die ohnehin nie geschrieben haetten.
