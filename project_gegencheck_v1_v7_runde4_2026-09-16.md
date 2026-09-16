@@ -4,7 +4,7 @@ description: "Opus-Gegencheck Runde 4 (16.09.2026), letzte Runde der V1-V7-Fix-K
 metadata:
   node_type: memory
   type: project
-  status: "FREIGEGEBEN OHNE AUFLAGE 16.09.2026 -- Diff commit-reif, 5 nicht blockierende Restpunkte fuer eine spaetere Aufraeumrunde notiert. Code-Diff weiterhin unkommittiert (Levi). Hinweis: untracked Dateien unter scripts/ vor Commit auf .gitignore pruefen"
+  status: "FREIGEGEBEN OHNE AUFLAGE 16.09.2026; V1-V7-Diff committet (79573f5). Restpunkte N4-N7 + B-Rest von Fable umgesetzt (16.09., Tests 104/104) -- neuer kleiner Folge-Diff unkommittiert (Levi)"
   originSessionId: session_current
   modified: 2026-09-16T11:09:03.305Z
 ---
@@ -69,3 +69,11 @@ Keiner dieser Punkte betrifft Gate-, Sizing- oder Exit-Verhalten — reine Anzei
 **Hinweis am Rande (kein Blocker):** die untracked Dateien unter `scripts/` (`last_*.txt`, `sl_anker_wechsel_log.jsonl`) lagen schon vor dieser Prüfrunde so vor — vor dem Commit kurz prüfen, ob sie in `.gitignore` gehören.
 
 Vorgänger: [[project_gegencheck_v1_v7_runde3_2026-09-16]], [[project_gegencheck_v1_v7_runde2_2026-09-16]], [[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]], [[project_testtag_analyse_2026-09-15]] (V1-V7-Ursprung).
+
+## Umsetzung der 5 Restpunkte (Fable, 16.09.2026, nach dem 79573f5-Commit — Tests 104/104 gruen, Folge-Diff unkommittiert)
+
+- **N4:** Der `[--dry-run]`-Nutzungshinweis in `gate_check.cjs` nennt jetzt alle drei Dry-Run-Wirkungen: C4 (kein Trigger-Kandidaten-Eintrag, last_sl_vorpruefung unberuehrt), A1 (kein Fiktiv-Log-Eintrag, weder Freigabe-Logger noch V3) und A2 (last_gate_fail.json nur lesen).
+- **N5:** Der Test "V2 + V1: SL-Drift ..." hat einen eigenen Vorlauf-Lauf (clean() + aussichtsloser Live-FAIL) und laeuft isoliert gruen — keine Intra-Suite-Kopplung mehr an den V5/V1-Test (isoliert per --test-name-pattern verifiziert).
+- **N6:** Die "SKIPPED-SETUP erfassen (#8...)"-Aufforderung traegt im Dry-Run den Zusatz "(--dry-run: keine Fiktiv-Zeile erfasst — V3-Auto-Erfassung uebersprungen, N6)".
+- **N7:** Die V1-AUSSICHTSLOS-Zeile im Retest-Zeitbox-Block traegt im Dry-Run den Suffix "[dry-run: nicht gespeichert — Sperre wird NICHT scharf]" (Umsetzung in main() nach evaluateTrade, weil die Engine selbst das Flag nicht kennt).
+- **B-Rest:** `vollcheck.cjs` kappt den hard_exit_grund jetzt an ZEILENGRENZEN, behaelt bevorzugt die letzte Zeile (typische Abbruchmeldung) und haengt bei Kappung "… [gekappt an Zeilengrenzen, N Zeichen gesamt]" an; Notfallpfad fuer eine einzelne Budget-sprengende Zeile bleibt.
