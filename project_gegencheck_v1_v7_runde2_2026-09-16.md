@@ -4,7 +4,7 @@ description: "Opus-Gegencheck Runde 2 (16.09.2026) der Fable-Korrektur zu Auflag
 metadata:
   node_type: memory
   type: project
-  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflage A+B offen (Levi-Entscheidung: an Fable geben oder jetzt committen und spaeter nachziehen), Code-Diff weiterhin unkommittiert"
+  status: "FREIGEGEBEN MIT AUFLAGEN 16.09.2026 -- Auflage A+B von Fable umgesetzt (16.09., Tests 102/102), Kosmetik v4.ts erledigt, GATE_BASE-Test-Smell bewusst offen; Code-Diff weiterhin unkommittiert (Levi)"
   originSessionId: session_current
   modified: 2026-09-16T10:19:10.791Z
 ---
@@ -53,3 +53,11 @@ Der stderr-Mitschnitt in `vollcheck.cjs` kappt jede einzelne Zeile bei 400 Zeich
 **Stand:** Code-Diff weiterhin unkommittiert. Aus Opus-Sicht spricht nichts gegen den Commit — Auflage A+B können vor dem nächsten fiktiven Testtag nachgezogen werden, sind aber kein Grund, den Commit selbst zurückzuhalten.
 
 Vorgänger: [[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]] (Runde 1), [[project_testtag_analyse_2026-09-15]] (V1-V7-Ursprung).
+
+## Umsetzung Auflage A+B (Fable, 16.09.2026 — Tests 102/102 gruen, Code unkommittiert)
+
+- **A1:** Der komplette ROT/UNBEKANNT/Freigabe-Logger traegt jetzt denselben `--dry-run`-Schutz wie die V3-FAIL-Erfassung (ein Probelauf ist kein Setup-Moment, egal mit welchem Ausgang) — die 7b1a-Messreihe kann nicht mehr permissiv verzerrt werden.
+- **A2:** `last_gate_fail.json` wird bei `--dry-run` nur noch GELESEN, nie geschrieben — ein Probelauf kann die V1-Sperre nicht mehr still entschaerfen oder eine ZEITBOX-KOLLISION vortaeuschen. Anzeige-Zeilen bleiben auch im Dry-Run erhalten.
+- **B:** vollcheck.cjs-stderr-Mitschnitt ohne Zeilenkappung, nur noch das 2000-Zeichen-Gesamtbudget — die A3-Feldliste kommt vollstaendig ins Log.
+- **Kosmetik:** `vollcheck_log.jsonl` trennt jetzt `ts` (--jetzt-Zeitanker, null bei fruehem Hard-Exit) von `geschrieben` (echte Schreibzeit). MEMORY.md-Zahl war bereits auf 102/102 aktualisiert. Der GATE_BASE/parseArgs-Test-Smell (angehaengte Parameter ueberschreiben Basiswerte) bleibt bewusst offen — nicht zeitkritisch laut Bericht.
+- **Folgeanpassung Tests:** 7 Alt-Tests der Suiten 11.09./Q2-Q4/Option-D verliessen sich auf das alte Verhalten "dry-run schreibt fiktiv-Log/Gedaechtnis" — 21 GATE_BASE-Aufrufe dieser Tests auf `live: true` umgestellt (Testabsicht war das Logging selbst, nicht der Dry-Run) plus 4 Aufraeumzeilen fuer V9-Altreferenzen (`last_sl_vorpruefung.json` aus frueheren Suiten traf jetzt auf den Live-V9-Guard).
