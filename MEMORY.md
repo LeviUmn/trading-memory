@@ -3,7 +3,7 @@
 > Index-Konvention (S3, 16.09.2026): eine Zeile pro Memory, max. 200 Zeichen; bei Updates die Zeile ERSETZEN, nicht anhängen. Abgeschlossenes wandert komprimiert (max. 120 Zeichen) in ## Archiv am Dateiende.
 
 - [Testtag 15.09.2026 (fiktiv) — Faktenprotokoll, TEILWEISE WIDERLEGT durch Opus-Analyse](testtag/testtag_2026-09-15.md) — Rohbasis; siehe [[project_testtag_analyse_2026-09-15]] für verifizierte Zahlen
-- [Opus-Analyse Testtag 15.09. (EINGESCHRÄNKT) + V1-V7 umgesetzt 16.09.](project_testtag_analyse_2026-09-15.md) — Wiederhol-Zirkel (30/31 leeres Fenster, 24× Zeitbox-Reset durch SL-Drift). V1-V7-Gegencheck: [[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]]
+- [Opus-Analyse Testtag 15.09. + V1-V7 + Gegencheck-Auflagen erledigt](project_testtag_analyse_2026-09-15.md) — Auflagen 1+2 & Nachbess. 3-6 umgesetzt 16.09. ([[project_gegencheck_v1_v7_fable_umsetzung_2026-09-16]]), Tests 102/102, Code-Commit wartet auf Levi
 - [Gegencheck V1-V7-Umsetzung 16.09. (FREIGEG. M. AUFLAGEN, unkommittiert)](project_gegencheck_v1_v7_fable_umsetzung_2026-09-16.md) — 100/100 Tests eigenständig bestätigt. Auflage 1: V3 schluckt PASS-Freigaben live nachgewiesen. Auflage 2: V1-Sperrtext sachlich falsch + ATR fehlt im Fingerabdruck
 - [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Order-Sperre/Halbierung hart auf 15/15:30/16 DE verdrahtet, im DST-Fenster 26.-30.10. 1h falsch; kein akuter Blocker
 - [Präzedenz 13.1 vs. Q-ROT: Option D+b1 UMGESETZT+COMMITTET 15.09. (cc680a4)](project_gegencheck_praezedenz_13_1_vs_qrot_fable_umsetzung_2026-09-15.md) — Q-ROT vor 13.1 wenn Q1/Q4 tragen, k/2 nur bei vollem Dual-Gate; 95/95 Tests. Vorlage: [[project_praezedenz_13_1_vs_qrot_entscheidungsvorlage_2026-09-15]]
