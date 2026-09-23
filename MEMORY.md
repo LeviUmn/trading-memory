@@ -4,10 +4,13 @@
 
 ## Offen / aktuell relevant
 
-- [Opus-Analyse Testtag 17.09. (EINGESCHRÄNKT, X1-X8 offen)](project_testtag_analyse_2026-09-17.md) — 0 Trades/0 Regelbruch; SL-Anker nach neuem Tageshoch 19:00 DE 11 VCs nicht zurueckgesetzt (ohne Geldfolge); Q4 22/22 nie erfuellt, deckelte Q-Score ab 15:50 DE
-- [Testtag 17.09. — TODO Montag 21.09.: X1-X8 umsetzen (Prio X1+X3, GETRENNT von W1-W8)](project_testtag_2026-09-17_besprechung_ausstehend.md) — X1 SL-Anker-Reset nach Impuls-Extrem, X3 Q4-Frage vor naechstem Validierungstag klaeren
+- [Opus-Analyse Testtag 21.09. (EINGESCHRÄNKT, Y4+Paket1(Y5+Y1-b) umgesetzt 22.09., Rest Y2/Y3/Y6-Y8 in Arbeit)](project_testtag_analyse_2026-09-21.md) — X1-Fix wirkt (11 VCs Fehlanker→1), aber Totzone+Ursprungsanker-Bug neu; Q2 (nicht Q4!) jetzt Deckel, 9/9 NEIN; X3 durch Q4-Schatten WIDERLEGT (6/9 erfuellt)→Y4; alle 7 Skipped-Setups haetten TP1 erreicht; 5 Sonnet-Eigenbehauptungen korrigiert
+- [Y4-a+b UMGESETZT+COMMITTET 22.09. (9819ce0): Trendtag-Modus (Q2 Schatten ab ADX>=45), 3x Opus-Gegencheck FREIGEGEBEN, A1-A4+Backlog#1-4 erledigt](project_testtag_2026-09-21_besprechung_ausstehend.md) — Schwelle 45 kalibrieren, Y4-c offen
+- [Y1-Y8-Restpunkte-Liste ABGESCHLOSSEN 22.09.: alle 20/20 Skipped-Nachtraege + 4 Code-Pakete committet+gegengeprueft FREIGEGEBEN](project_restpunkte_y1y3y5y8_2026-09-22.md) — Backlog: Z28(21.09.) hat dieselbe TP1/SL-Horizont-Asymmetrie wie die korrigierten 11.09.-Faelle, noch nicht nachgezogen
+- [Opus-Analyse Testtag 17.09. (EINGESCHRÄNKT, X1-X8 teils erledigt/widerlegt, s. 21.09.-Analyse)](project_testtag_analyse_2026-09-17.md) — 0 Trades/0 Regelbruch; SL-Anker nach neuem Tageshoch 19:00 DE 11 VCs nicht zurueckgesetzt (ohne Geldfolge); Q4-These 22/22 seit 21.09. widerlegt
+- [X1/X2/X4/X6/X7 UMGESETZT+COMMITTET 21.09. (a969767) — WIRKSAM BELEGT (21.09.-Testtag); X3 WIDERLEGT→Y4; X8 offen, Backlog auf 20 gewachsen](project_testtag_2026-09-17_besprechung_ausstehend.md) — Details+Zahlen in der Datei + project_testtag_analyse_2026-09-21.md
 - [Opus-Analyse Testtag 16.09. FOMC (EINGESCHRÄNKT, W1-W8 offen)](project_testtag_analyse_2026-09-16.md) — beide Trades im FOMC-Blackout = Regelbruch (−75,28 €); Fenster 15:30-17:17 (CDP-Bug) valider Long verpasst ~+1,2R
-- [Testtag 16.09. besprochen 17.09. — TODO Montag 21.09.: W1-W8 umsetzen (Prio W1+W2)](project_testtag_2026-09-16_besprechung_ausstehend.md) — FOMC-Blackout-Gate + Rundzahl-Band-Fix zuerst; Fable-Budget heute aufgebraucht, Levi 18.-20.09. nicht da
+- [W1-W7 (Testtag 16.09., FOMC) UMGESETZT+COMMITTET 21.09. (7cb915e)](project_testtag_2026-09-16_besprechung_ausstehend.md) — 4 Opus-Runden, Fail-Open-Bug im Sperrfrist-Gate gefunden+gefixt. Offen: B5/B7/B8 (klein), 16.09.-Batch-Nachanalyse ggf. neu laufen lassen
 - [TODO: Voll-Check-Ausgabeformat nutzerfreundlicher — NOCH AUSSTEHEND](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — nur Kerndaten für Levi sichtbar, Rest System-intern. Mit Opus+Fable besprechen
 - [CDP-Tab-Bug-Fixes VOLLSTAENDIG ABGESCHLOSSEN 17.09. (ff1dd3b+f81d818)](project_cdp_tab_fixes_committet_2026-09-17.md) — Self-Heal/Session-Leak/Cooldown/rAF+replay_stop-Root-Cause, 4x unabh. Opus-Gegencheck. 4 kleine Restpunkte offen, nicht dringend
 - [npm test destruktiv gegen Live-Chart (Incident 17.09., BEHOBEN f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — hideReplayToolbar war Ursache, e2e.test.js entkoppelt; vor test:e2e weiterhin immer Levi vorwarnen
@@ -21,7 +24,7 @@
 - [Loop-Tick-Kadenz: CronCreate, nicht ScheduleWakeup](feedback_loop_tick_kadenz.md) — 1-Min = Quick-Tick, 5-Min = Voll-Check
 - [Validierungstesttag (nächster Handelstag)](project_validierungstesttag_naechster_handelstag.md) — 5 binäre Pass-Kriterien für Echtgeld-Start #44
 - [Chart-Layout / Indikatoren](feedback_chart_layout.md) — 2-Pane NAS100+QQQ, RVOL übersteht Neustart nicht
-- [Rollenteilung Sonnet/Fable/Opus](feedback_modellwahl_trading.md) — Hauptchat IMMER Sonnet → Opus analysiert/beauftragt → Fable setzt um → frischer Opus prüft
+- [Rollenteilung Sonnet/Fable/Opus (23.09. von allen 3 Modellen selbst bestätigt +4 Verfeinerungen)](feedback_modellwahl_trading.md) — Opus-Mengenbremse, Vorab-Kriterien, Determinismus-Fokus, Opus vor Fable-Narrativ analysieren
 - [Chartanalyse-Regelwerk (mehrere Reformen, konsolidiert)](feedback_chartanalyse.md) — Whipsaw-EMA+VWAP statt Reversal-Trigger; SL-Cluster 8c2 (+0,5×ATR); TP-Realismus 8b1 (≤2×ATR); SL/TP-Reform 27.07 (8b/8c); volle TA am Voll-Check-Rhythmus
 - [Ehrlichkeit wie von einem Trainer](feedback_coaching_ehrlichkeit.md) — Levi will ungefilterte Ehrlichkeit + warme Grundhaltung
 - [Live-Trading-Protokoll (mehrere Regeln, konsolidiert)](feedback_live_trading.md) — 1-Min-Loop/Entscheidungsbaum/Voll-Check-Rhythmus; Regeländerungs-Tempo-Bremse; Entry-Gate 7b1 (Dual-Gate+RR/TP-Realismus-PASS); Stall-Exit 12.1a; Punkt-12 SL-Nachzug≠Teilgewinn
@@ -72,6 +75,7 @@
 - [Dual-Gate-Bestätigung](feedback_dual_gate_confirmation.md) — Bei Multi-Instrument-Setups gleichen Bestätigungsgrad prüfen
 - [Positions-Status-Format](feedback_positions_status_pflicht.md) — SL+TP1+TP2 in jedem Positions-Update
 - [Bewährter Live-Trading-Workflow](feedback_live_trading_workflow_bewaehrt.md) — 7 bestätigte Prozesselemente
+- [Sonnets Eigenbericht am Testtag-Ende unzuverlaessig](feedback_sonnet_eigenbericht_unzuverlaessig.md) — 5 Fehlbehauptungen 21.09. (UTC/DE, Zaehlungen, Ursachen), immer aus Logs rechnen statt Chat-Gedaechtnis
 
 ## Ältere Trade-Sessions (2026-06-12 bis 2026-08-21)
 Einzeleinträge in `trades/trading_YYYY-MM-DD.md`, u.a.: 21.08. #42+#43 Loss (Opex/PMI, -83,53€) · 20.08. #40 Loss+#41 BE · 19.08. #39 Win RR-Verstoß · 18.08. #37 Win+#38 Loss (Iran/Golf) · 17.08. #36 Loss · 07.08. #34 Loss+#35 Win (NFP-Miss) · 06.08. #33 Loss · 05.08. #31 Loss+#32 Win · 04.08. #30 Win → GO Phase-3 · 03.08. #29 Win (Stop-Hunt+ISM) · 31.07. #28 Win · 28.07. #26 Loss+#27 Win · 23.07. #25 Win (25 Trades: +138,86€, 65,2% WR) · 22.07. #24 Loss (Chasing) · 21.07. #23 Win · 20.07. #22 Win · 16.07. #21 Loss · 15.07. #19 Loss+#20 Win · 14.07. #18 Win · 13.07. #17 Win (RR-Bruch) · 09.07. #16 Win (Phase-2-Start) · 08.07. #14 Loss+#15 Win · 02.07. #10-12 alle Loss · 01.07. 2x Loss · 30.06. 3 Trades +9,72€ · 23.06. 3 Trades +28,12€ · 12.06. #1 Win +20,32€ · Kein Trade: 30.07., 18.07., 17.07., 25.06., 22.06., 06.07.

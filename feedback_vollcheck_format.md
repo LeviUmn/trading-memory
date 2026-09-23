@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 7128a95a-a9a6-42e6-8a59-8f22dec5c654
-  modified: 2026-09-15T10:00:32.253Z
+  modified: 2026-09-22T14:43:09.810Z
 ---
 
 Im Live-Loop-Voll-Check (siehe [[feedback_loop_ablauf_uebersicht]] Szenario 1, jede 5. Minute) das Ergebnis als **Fließtext mit ✓/✗ direkt hinter jedem geprüften Punkt** ausgeben — keine Markdown-Tabelle.
@@ -29,7 +29,7 @@ Voll-Check <HH:MM:SS, echte Systemzeit per `date`> (Nr. <N> = (<Minuten seit ers
 
 **Regime-Gate (8d):** Schock-Tag ✓/✗ (<Kriterien-Zahl>/3) [Range <X> Pkt / ATR-D <Y> = <Z>× (Stand HH:MM) ✗/✓ | Makro-Häufung ✗/✓ (<m> qualifizierende Events: <Name Ist/Konsens, …> oder "keine") | VIX-Range <W>% & VIX <akt> vs. VT-Schluss <VS> → ✗/✓ oder "nicht gemessen"] [K3-Schatten (GEMESSEN, KEIN GATE): VIX≥20? ✗/✓ | Δ VT-Schluss <x>% ≥+10%? ✗/✓ → K3-neu ✗/✓] | Regime: <Trend/Chop>.
 
-**ADX(14, NAS100):** <Wert> (GEMESSEN, KEIN GATE).
+**ADX(14, NAS100):** <Wert> (GEMESSEN, KEIN GATE). *(Bewusste Ausnahme seit 22.09.2026, Y4-b [[feedback_chartanalyse]] 8d "Trendtag-Definition": ADX ≥ 45 hat im `gate_check.cjs`-Live-Lauf zusammen mit Dual-Gate 2/2 + 1H-Bias erstmals eine Rechtsfolge — Q2 wird dort zum Schattenfaktor, Q-Score aus Q1/Q3/Q4. Kein Entry-Gate; für jeden anderen Zweck bleibt "GEMESSEN, KEIN GATE" unverändert. Der Ausweis erfolgt im `gate_check.cjs`-Output als Block `TRENDTAG-MODUS AKTIV (Y4-b, …)`, nicht in dieser Zeile.)*
 
 **Zählstände:** 8a5-Zyklus <n> (Level: <X>) | Kerzen seit Gegenseite NAS100(5min) <n> / QQQ(15min) <n> — fortlaufend, aus Vorcheck +Delta.
 
@@ -129,7 +129,12 @@ Situative Pflichtblöcke — anhängen, wenn die Bedingung zutrifft (sonst Exit 
 … --qqq-kerze-bestaetigt nein:
     --spike-b1 <ja|nein> --spike-b2 <ja|nein> --spike-b3 <ja|nein>
 … --impuls-pkt ≥ 2×ATR:
-    --fib-1272 <X> --fib-1618 <X> --fib-im-register <ja|nein>
+    --impuls-korrektur <Preis des Korrektur-Extrems>   (EINE Zahl, einmal pro Impuls — vollcheck.cjs rechnet
+    1.272/1.618 selbst und trägt sie ins Register nach; Y8-b 22.09.2026, vorher drei handgetippte Zahlen und
+    45/45 "Fib LUECKE" am 21.09.2026)
+    [--impuls-extrem <Preis>]   (nur wenn das Impuls-Extrem ein DOCHT ist, also --impuls-pkt manuell gesetzt wurde)
+    [--fib-1272 <X> --fib-1618 <X> --fib-im-register <ja|nein>]   (Altweg, nur noch nötig, wenn kein
+    --impuls-ursprung vorliegt; bei vorhandener Ableitung gewinnt die Rechnung, Abweichung = Warnzeile)
 … Dual-Gate 2/2 in --richtung, 1H-Override nicht dagegen UND --kerzen-nas100 ≥ 6:
     --stale-n <0-5>
 … in den 2 Voll-Checks nach einem Gate-FAIL/UNKNOWN sowie nach Gate-PASS mit Q-Score ROT (Erweiterung 09.09.2026) — NICHT bei --position offen (dort Zeitbox nur informativ "n.a.", Verfall läuft weiter; G5-Fix Option d, 09.09.2026):
@@ -155,7 +160,8 @@ Situative Pflichtblöcke — anhängen, wenn die Bedingung zutrifft (sonst Exit 
     --terminal-geprueft <ja|nein>
 … mit --state (Pflicht) UND Chasing-Kriterium erfüllt (kerzen-nas100 ≥ 4):
     --punkt11-signal <ja|nein>   (ja = mindestens EIN Punkt-11-Kriterium erfüllt, NICHT die Dreh-Schwelle 3/4 — 14.09.2026; ja → k-ohne-signal 0, nein → Vorwert + 1; TODO 2)
-… neuer Impuls beginnt (Ursprung am Chart bestätigt):  --impuls-ursprung <Preis>   (danach läuft impuls-pkt aus --kurs mit)
+… neuer Impuls beginnt (Ursprung am Chart bestätigt):  --impuls-ursprung <Preis>   (danach läuft impuls-pkt aus --kurs mit;
+    ein neuer Ursprung setzt die gespeicherte --impuls-korrektur zurück — neuer Impuls = neue Korrektur, Y8-b 22.09.2026)
 … manuell vom State-Wert abweichender Zähler (z.B. Gegenseiten-Schluss, der im Referenz-Delta nicht sichtbar war):
     --<feld> <Wert> --<feld>-reset-grund "<Begründung>"   (feld = kerzen-nas100 | kerzen-qqq | zyklus-8a5 | zyklus-8a5-level | k-ohne-signal | erster-vollcheck)
 … --qqq-gate zu:  die acht --qqq-*-Felder, --ref-qqq und --kerzen-qqq entfallen ersatzlos

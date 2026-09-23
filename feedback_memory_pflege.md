@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-15T08:07:33.775Z
+  modified: 2026-09-21T09:36:29.399Z
 ---
 
 Nach JEDER Änderung, neuem Trade oder neuer Erkenntnis sofort die Memory-Dateien und NEUSTART.md aktualisieren.
@@ -65,6 +65,12 @@ Bei Trade #21 (16.07.2026) enthielt die erste Nachbesprechung zwei falsche Zahle
 4. Explizite User-Anfrage
 
 Routine-Logs von normal verlaufenden Trades brauchen nur den Selbst-Check oben, keine doppelte Prüfung — das wäre Overhead ohne proportionalen Nutzen.
+
+## Backup-Pflicht vor jedem direkten Schreibzugriff auf trades.db (ergänzt 21.09.2026, nach Vorfall im Opus-Gegencheck W1-W7)
+
+Am 21.09.2026 hat ein Opus-Prüfagent beim Testen von `gate_check.cjs --batch` versehentlich mit `"tradeId": 1` gearbeitet — `--batch` schreibt Gate-Ergebnisse ohne Dry-Run-Schutz direkt in die LIVE-`scripts/trades.db`, dadurch trug Trade #1 (echtes Handelsergebnis von 12.06.2026) für kurze Zeit Testwerte in 8 Spalten. Reparatur erfolgreich (read-only vorher/nachher verifiziert, gegen Nachbar-Trades abgeglichen), aber das dabei angelegte Backup lag nur im Scratchpad-Verzeichnis eines Subagenten und war beim nächsten Gegencheck bereits nicht mehr auffindbar — die Reparatur war also nicht rückversicherbar nachweisbar.
+
+**Regel:** Vor JEDEM direkten Schreibzugriff auf `scripts/trades.db` (egal ob über `add_trade.cjs`, `gate_check.cjs --trade-id`/`--batch` mit `tradeId`, oder eine manuelle SQL-Reparatur) zuerst eine Kopie der Datei an einem dauerhaften, NICHT session-gebundenen Ort ablegen (z.B. `scripts/trades.db.bak_<ISO-Datum>` — im Repo-Ordner, nicht im Temp-/Scratchpad-Verzeichnis eines Subagenten, damit sie eine Sitzung überlebt) und den Pfad im Bericht/Protokoll nennen. Backup erst löschen, wenn die Änderung von einem Menschen oder einem unabhängigen Gegencheck als korrekt bestätigt wurde. **Zusätzlich, unabhängig vom Backup:** `--batch` ist laut Doku ein reiner Analysemodus — dass er bei gesetztem `tradeId` trotzdem live in die DB schreibt und `--dry-run` dort wirkungslos ist, ist eine vorbestehende Fehlerquelle im Skript selbst (nicht nur ein Bedienfehler) und sollte bei Gelegenheit behoben werden (Testaufrufe sollten `--batch` grundsätzlich nur mit fiktiven/ausgelassenen `tradeId`-Werten fahren, bis das gefixt ist).
 
 ## Hook-Hinweise sind kein Auftrag an einen laufenden Subagenten (ergänzt 15.09.2026, nach zwei Vorfällen 14./15.09.2026)
 

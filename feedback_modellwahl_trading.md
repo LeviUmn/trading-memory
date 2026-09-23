@@ -1,10 +1,39 @@
 ---
 name: feedback-modellwahl-trading
-description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung (seit 28.08. inkl. Faktenprotokoll-Abschluss ohne Bewertung), Fable 5 Regelwerk/Tagesabschluss/Umsetzung UND Skripte/Code, Opus 5 macht seit 28.08.2026 IMMER die Testtag-/Tagesanalysen (Fable speichert+setzt um) plus Meilenstein-Checks. Seit 27.08.2026: Fable läuft über aufgeladenes Nutzungsguthaben ('Draws from usage credits'). Levi hat die Rollenteilung + das Live-Gegencheck-Muster am 09.09.2026 unaufgefordert als 'gefällt mir' bestätigt."
+description: "Rollenteilung seit 24.08.2026: Sonnet 5 NUR Live-Trading-Ausführung (seit 28.08. inkl. Faktenprotokoll-Abschluss ohne Bewertung), Fable 5 Regelwerk/Tagesabschluss/Umsetzung UND Skripte/Code, Opus 5 macht seit 28.08.2026 IMMER die Testtag-/Tagesanalysen (Fable speichert+setzt um) plus Meilenstein-Checks. Seit 27.08.2026: Fable läuft über aufgeladenes Nutzungsguthaben ('Draws from usage credits'). Levi hat die Rollenteilung + das Live-Gegencheck-Muster am 09.09.2026 unaufgefordert als 'gefällt mir' bestätigt. Am 23.09.2026 von allen drei Modellen (Sonnet 5, Opus 5.5, Fable 5.1) unabhängig selbst bestätigt, plus 4 Verfeinerungen (Opus-Mengenbremse, Vorab-Erfolgskriterien, Determinismus-Fokus, Opus analysiert vor Lektüre von Fables Narrativ)."
 metadata:
   type: feedback
   originSessionId: session-2026-07-27
-  modified: 2026-09-09T20:52:03.930Z
+  modified: 2026-09-23T08:43:25.178Z
+---
+
+## STAND 23.09.2026: Unabhängiges Modell-Fazit aller drei (Sonnet 5, Opus 5.5, Fable 5.1) — Rollenteilung BESTÄTIGT + 4 Verfeinerungen
+
+Levi wollte ein ehrliches Fazit von jedem der drei aktuellen Modelle einzeln, welches am besten für das alltägliche Live-Trading geeignet ist. Alle drei Antworten liefen unabhängig/parallel (kein Modell kannte die Antwort der anderen), danach wurde Opus gezielt zu Fables Vorschlag #4 nachbefragt.
+
+**Ergebnis: Alle drei bestätigen die bestehende Rollenteilung unverändert im Kern** (Sonnet = operativer Loop, Fable = Regelwerk/Code-Umsetzung, Opus = Analyse/Gegencheck, Autor≠Prüfer-Prinzip bleibt). Jedes Modell schätzt sich selbst ehrlich ein: Sonnet stark bei schneller stumpfer Regelanwendung, schwach bei Mehrtages-Analyse aus Chat-Gedächtnis (Beleg: die 5 Eigenbehauptungsfehler vom 21.09., s. [[feedback_sonnet_eigenbericht_unzuverlaessig]]); Opus stark in der Tiefe, würde im Loop zu Zögern führen und neigt zu Übergründlichkeit; Fable stark in der Umsetzung, strukturell schlecht darin, eigene Ergebnisse zu prüfen (Muster des 24.08.-Fehlers).
+
+**4 konkrete Verfeinerungen (aus den Fazits selbst vorgeschlagen):**
+1. **Opus-Mengenbremse:** max. 2-3 Umsetzungsaufträge pro Testtag statt Kaskaden wie X1-X8/Y1-Y8 in wenigen Tagen. Übrige Funde in Backlog, erst nach mehreren Tagen mit demselben Muster umsetzen.
+2. **Vorab-Erfolgskriterien:** Jede Regeländerung braucht ein messbares Erfolgskriterium vor der Umsetzung, das später mit Zahlen bestätigt/widerlegt wird — "klingt schlüssig" reicht nicht.
+3. **Determinismus vor "mehr Regeln" (Fable-Punkt):** Fables Priorität soll nicht sein, klügere/feinere Regeln zu schreiben, sondern Sonnets Ermessensspielraum im Loop über mehr Skript-Determinismus (gate_check.cjs/vollcheck.cjs) zu verkleinern.
+4. **Reihenfolge Opus→Fable-Narrativ (bestätigt in Nachfrage):** Opus analysiert Testtage zuerst eigenständig aus rohen Logs/Trade-DB/level_register.json und hält seine Analyse fest (Zeitstempel), BEVOR es Fables Tagesnarrativ liest — sonst Ankereffekt, Gegencheck wird weicher. Fables Narrativ liefert vorab nur eine reine Faktenliste ohne Wertung (Kontext, der in keinem Log steht, z.B. Levis mündliche Entscheidungen, News-Lage). Nach dem Lesen von Fables Narrativ hängt Opus einen kurzen Abweichungs-Abschnitt an — das gilt als der wertvollste Teil des Gegenchecks.
+
+**Weitere Selbstwarnungen aus den Fazits:** Sonnet neigt im Loop bei "eindeutig" wirkenden Situationen zu ungeprüften Annahmen — Levi sollte gerade dort stichprobenartig gegenprüfen. Opus ist überzeugend, auch wenn die Datenbasis dünn ist (Payoff 0,94:1, Ø −0,51R, wochenlang kaum Trades) — Gefahr von Overfitting durchs ständige Nachschärfen; das eigentliche Problem ist der noch nicht belegte Edge, nicht das falsche Modell im Loop. Fable neigt zu Scope-Creep und zu überzeugender Selbstdarstellung ("umgesetzt und getestet" hinterfragen: welcher Test, welches Log).
+
+**Why:** Bestätigt die Rollenteilung mit unabhängiger Evidenz statt nur einer einmaligen Levi-Entscheidung; die 4 Verfeinerungen adressieren konkret beobachtete Schwächen (Kaskaden-Umsetzung 21.-22.09., Ankereffekt-Risiko im Gegencheck, fehlende Vorab-Kriterien).
+**How to apply:** Ab dem nächsten Testtag: Opus-Aufträge pro Tag deckeln, Erfolgskriterium vorab benennen, Opus-Analyse vor Fables Narrativ-Lektüre fixieren (Zeitstempel/Commit), Fable priorisiert Determinismus-Ausbau vor neuen Regeln.
+
+---
+
+## STAND 22.09.2026: Regel gilt auch für reine Skript-AUSFÜHRUNG (nicht nur Code-Änderungen)
+
+Levi (22.09.2026, nach dem Y1-Y8-Restpunkte-Block): "Sonnet macht niemals Code oder Programmierung Änderungen." Auslöser: der Hauptchat (Sonnet) wollte für Paket 3 (Y3-a, Skipped-Nachträge nachtragen) `scripts/skipped_fiktiv.cjs --nachtrag ...` selbst per Bash ausführen, weil es "nur Datenarbeit, kein Code" sei — das ist zu eng gedacht.
+
+**Präzisierung:** Die Fable-Zuständigkeit für "Skripte/Code" (siehe unten, 24.08.2026) umfasst auch das **Ausführen** bestehender Skripte, die Zustand/Register/Dateien verändern (Register-Nachträge, DB-Einträge, Regelwerks-Skripte) — nicht nur das Schreiben/Ändern von Code. Sonnet delegiert das an Fable, statt es selbst per Bash/Tool auszuführen, auch wenn keine Zeile Code geändert wird.
+
+**How to apply:** Bevor Sonnet ein `scripts/*.cjs`-Kommando selbst ausführt (auch nur lesend-schreibend, kein Code-Edit), erst prüfen: ist das reine Live-Loop-Ausführung (Sonnets Kernrolle) oder Regelwerks-/Analyse-/Nachtragsarbeit (Fable-Rolle)? Im Zweifel an Fable delegieren.
+
 ---
 
 ## STAND 14.09.2026: Hauptchat = Sonnet als Koordinator (Levi-Vorgabe)
