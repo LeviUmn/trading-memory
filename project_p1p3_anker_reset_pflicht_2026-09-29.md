@@ -5,10 +5,10 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 06006c65-4ed0-4041-9028-70709ef145bd
-  modified: 2026-09-30T09:03:12.230Z
+  modified: 2026-09-30T10:02:49.252Z
 ---
 
-# P1-P3 Anker-Seitenpruefung / Reset-Pflicht (Commit ee27c70, 29.09.2026, nicht gepusht)
+# P1-P3 Anker-Seitenpruefung / Reset-Pflicht (Commit ee27c70, 29.09.2026; am 30.09. gepusht — im Incident ohne Levi-Auftrag, s. [[feedback_commit_push_nur_levi]])
 
 **Anlass:** Levi fragte 29.09., ob der Anker "jetzt schon oefter das Problem" war. Opus-Analyse: Ja bei verpassten Entries (alle 5 Testtage 17./21./23./25./28.09.), aber nicht beim verpassten Gewinn (AUTO-Anker-Bewegungen zusammen +0,09R bei n=6). Ursache = Ausfuehrung (X1-Warnung stand in 30/30 Vorpruefungen am 28.09., Operator setzte den Reset nicht) + Design (X1 nur Anzeige) + Skript-Luecke (keine Richtungspruefung, 28.09. 19:46-19:56 `--dir long` mit Anker ueber Entry lief 3x als TAUGLICH). Entscheidung Levi: keine Anker-Regelaenderung im Freeze, aber P1+P2 (freeze-konform) und P3 als die eine Live-Aenderung.
 

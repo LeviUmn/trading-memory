@@ -1,12 +1,12 @@
 ---
 name: project-testtag-2026-09-17-besprechung-ausstehend
-description: "X1,X2,X4,X6a-c,X7 UMGESETZT+COMMITTET 21.09.2026 (Commit a969767, 2 Opus-Gegenchecks). X5 durch W5 (7cb915e) bereits abgedeckt. X3 (Q4-Kalibrierung) analysiert, Opus empfiehlt Q4_MODUS='schwelle' mit 0,35 -- bewusst zurueckgestellt bis mehr Daten aus der W4-Schattenmessung da sind. X8 (13 historische Nachtraege) separat offen, braucht echte Kursdaten + den jetzt fertigen X4-Bars-Parameter."
+description: "X1,X2,X4,X6a-c,X7 UMGESETZT+COMMITTET 21.09.2026 (Commit a969767, 2 Opus-Gegenchecks). X5 durch W5 (7cb915e) bereits abgedeckt. X3 (Q4-Kalibrierung) analysiert, Opus empfiehlt Q4_MODUS='schwelle' mit 0,35 -- bewusst zurueckgestellt bis mehr Daten aus der W4-Schattenmessung da sind. X8 (13 historische Nachtraege) war separat offen — seit 23.09.2026 obsolet (durch Y3-a miterledigt, s. project_restpunkte_y1y3y5y8_2026-09-22); X3 seit 22.09. durch Q4-Schatten widerlegt -> Y4."
 metadata:
   node_type: memory
   type: project
-  status: "X1/X2/X4/X6/X7 UMGESETZT+COMMITTET 21.09.2026 (a969767); X3 bewusst zurueckgestellt; X8 offen"
+  status: "X1/X2/X4/X6/X7 UMGESETZT+COMMITTET 21.09.2026 (a969767); X3 durch Q4-Schatten widerlegt -> Y4 (22.09.); X8 obsolet (durch Y3-a miterledigt, 23.09.) — Statuszeile nachgezogen 30.09.2026"
   originSessionId: dba6a9d3-1e4e-49d5-b8aa-69d27ac1a2f2
-  modified: 2026-09-21T13:30:57.220Z
+  modified: 2026-09-30T10:04:18.284Z
 ---
 
 # TODO Montag 21.09.2026 — Opus-Vorschläge X1-X8 (Testtag 17.09.2026)
@@ -57,4 +57,4 @@ Ablauf: Fable implementiert (durch ein Rate-Limit unterbrochen, nach Reset per S
 - **X6c:** Nummernlücken im Voll-Check-Log tragen jetzt eine Begründung statt einer stillen Lücke.
 - **X7:** neue Logs `scripts/quick_tick_log.jsonl` und `scripts/tweet_fetch_log.jsonl`/`_dax.jsonl`, neues Skript `scripts/quick_tick.cjs`.
 
-**Offen bleibt:** X3 (s.o., zurückgestellt) und X8 (13 historische Nachträge, braucht echte Kursdaten — separater Arbeitsschritt, X4 liefert jetzt das nötige `--bars`-Format).
+**Offen bleibt:** X3 (s.o., zurückgestellt) und X8 (13 historische Nachträge, braucht echte Kursdaten — separater Arbeitsschritt, X4 liefert jetzt das nötige `--bars`-Format). **Nachtrag 30.09.2026: beides nicht mehr offen** — X3 durch den Q4-Schatten widerlegt und in Y4 (Trendtag-Modus, 22.09.) aufgegangen ([[project_testtag_analyse_2026-09-21]]); X8 durch Y3-a miterledigt (20/20 Nachträge, 23.09., [[project_restpunkte_y1y3y5y8_2026-09-22]]).

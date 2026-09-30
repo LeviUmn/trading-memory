@@ -4,32 +4,36 @@
 
 ## Offen / aktuell relevant
 
+- [Commit UND Push beauftragt NUR Levi (Incident 30.09.: Push ohne Auftrag); Subagenten nie committen/pushen](feedback_commit_push_nur_levi.md) — nach Umsetzung "bereit zum Commit" melden, warten
 - [Opus-Pruefung+Spezifikation 30.09.: Levi-Entscheide a-d, IBF-Definition, Auftraege 0/A/B, Lueckencheck](opus_vorschlag_2026-09-30.md) — 0+A umgesetzt 30.09., B nach Loop-Stopp
 - [IBF (1H-Intrabar-Freigabe, halbe Position): NUR Schatten ibf_schatten.cjs, Vorab-Kriterien 1-5, Stand n=1 AUTO](project_ibf_schatten_2026-09-30.md) — Live erst nach Freeze-Ende
 - [Opus-Analyse Testtag 29.09. (0 Trades) + Levi-Entscheide 30.09. a-d/P3/Protokoll; 29.09. zaehlt (43 %), Freeze 3/5, AUTO 6/20](project_testtag_analyse_2026-09-29.md) — offen: Auftrag B
 - [P1-P3 UMGESETZT 29.09. (ee27c70); P3-Verlaengerung (Levi 30.09.): Urteil nur mit >=1 impuls-faelligem Fall, sonst +2 Tage](project_p1p3_anker_reset_pflicht_2026-09-29.md) — Tag 1/3, 0 Faelle
-- [Opus-Analyse Testtag 28.09.26 (EINGESCHRAENKT, 0 Trades, Anker-Reset verpasst; A2 erledigt 29.09.; Q3-auto+Tagesende-Regel offen)](project_testtag_analyse_2026-09-28.md) — Freeze-Stand 2/5 Tage, AUTO 5/20
-- [Testtag-Start scheitert 24.+25.09.: offene Rückfrage blockiert Session (nicht idle) → Cron feuert nicht](feedback_testtag_start_verlaesslichkeit.md) — Levi: Remote Control vorher an; Log-Frische gegenchecken
-- [Opus-Analyse Testtag 25.09. (0 Trades, Backtest 15:30-17:40 bestätigt veralteter-Anker-Muster, 2 neue GAP-Befunde: loop_archiv fehlt, protokoll_bilanz.cjs ohne Protokolldatei nicht lauffähig)](project_testtag_analyse_2026-09-25.md) — Besprechung mit Levi ausstehend (Montag)
-- [Opus-Analyse Testtag 23.09. (FESTGEFAHREN-Urteil, nicht kalibriert)](project_testtag_analyse_2026-09-23.md) — 0 Trades/0 Live-Gate-Läufe, SL-Anker 47/47 nie nachgezogen, Q4/Q2 strukturell fast unerfüllbar; Vorschläge V1-V6
-- [Freeze-Ende 28.09.: tagesmomente.cjs, ≥5 Testtage ab 25.09. + AUTO ≥20 unabh. Bewegungen (max. 10 Tage); Stand 30.09.: 3/5, AUTO 6/20, Teiltage zaehlen](project_testtag_2026-09-23_besprechung_ausstehend.md) — vor Regelwerk-Arbeit lesen
-- [Voll-Check-Kurzblock-Konzept: Bewährungstag 23.09. GESCHEITERT (3/5), RÜCKBAU auf main durchgeführt](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — Fable-Reparaturliste für 24.09., danach neuer Bewährungstag; Branch kurzblock-bewaehrung bleibt als Referenz
-- [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Order-Sperre/Halbierung hart auf 15/15:30/16 DE verdrahtet, im DST-Fenster 26.-30.10. 1h falsch
+- [Opus-Analyse Testtag 28.09. (EINGESCHRAENKT, 0 Trades, Anker-Reset verpasst; A2 erledigt 29.09., Tagesende erledigt 30.09.)](project_testtag_analyse_2026-09-28.md) — Q3-auto offen (Auftrag B)
+- [Testtag-Start scheitert 24.+25.09.: offene Rückfrage blockiert Session → Cron feuert nicht](feedback_testtag_start_verlaesslichkeit.md) — Levi: Remote Control vorher an; Log-Frische gegenchecken
+- [Opus-Analyse Testtag 25.09. (0 Trades; GAPs: loop_archiv → manuell seit 30.09., protokoll_bilanz --datum per A1)](project_testtag_analyse_2026-09-25.md) — Anker-Muster bestaetigt
+- [Opus-Analyse Testtag 23.09. (FESTGEFAHREN, nicht kalibriert)](project_testtag_analyse_2026-09-23.md) — 0 Trades/0 Live-Gate, SL-Anker 47/47 nie nachgezogen, Q4/Q2 fast unerfüllbar; V1-V6
+- [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 Bewegungen (max. 10 Tage); 30.09.: 3/5, AUTO 6/20, Teiltage zaehlen](project_testtag_2026-09-23_besprechung_ausstehend.md) — vor Regelwerk lesen
+- [Dauerregel: test:e2e NIE ohne Levi-Vorwarnung (Incident 17.09., Guard f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — settings.local.json Z.95/96 erlaubt Tests weiter pauschal
+- Offene Kleinauflagen 1/2: N1b bestaetigen (q2q4 14.09.) · N-2/N-3/N-4 (N1 Tweet; N-3 = Mindestpause slot-basiert (b), Levi-Schwelle, project_n1 Z. ~510) · Auflage 2+3, K1-K30 (W1-W4 16.09.)
+- Offene Kleinauflagen 2/2: B5/B7/B8 + 16.09.-Batch-Nachanalyse ggf. mit gueltigem jetzt neu laufen (project_testtag_2026-09-16_besprechung Z. 45) · Y4-c, Schwelle 45 (21.09.) · 4 CDP-Restpunkte
+- [Kurzblock: Bewährungstag 23.09. GESCHEITERT 3/5, RÜCKBAU](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — Reparaturliste → neuer Bewährungstag; Branch kurzblock-bewaehrung
+- [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Order-Sperre/Halbierung hart auf 15/15:30/16 DE, im DST-Fenster 26.-30.10. 1h falsch
 - [Memory-Aufräumen GESAMTBERICHT 14.09.](project_memory_gesamtbericht_2026-09-14.md) — S1-S3 erledigt (df60a5a, 46caa09), S4-S7 zurückgestellt, E7 abgelehnt
 - Memory-Repo LeviUmn/trading-memory ist OEFFENTLICH (Pruefung 30.09., HTTP 200 ohne Auth): bis Levi es privat stellt NUR lokal committen, KEIN git push (Trading-Daten!)
 - [Kapitalbasis phasenabhängig + RR-Decke (UMGESETZT, ENTSCHIEDEN Option A)](project_risikomanagement.md) — Ph.3 5.000€×1,5%=75€; RR = TP1-Zahl; Payoff 0,94:1, Ø −0,51R
 - [Loop-Tick-Kadenz: CronCreate, nicht ScheduleWakeup](feedback_loop_tick_kadenz.md) — 1-Min = Quick-Tick, 5-Min = Voll-Check
 - [Validierungstesttag (nächster Handelstag)](project_validierungstesttag_naechster_handelstag.md) — 5 binäre Pass-Kriterien für Echtgeld-Start #44
 - [Chart-Layout / Indikatoren](feedback_chart_layout.md) — 2-Pane NAS100+QQQ, RVOL übersteht Neustart nicht
-- [Rollenteilung Sonnet/Fable/Opus (23.09. von allen 3 Modellen selbst bestätigt +4 Verfeinerungen)](feedback_modellwahl_trading.md) — Opus-Mengenbremse, Vorab-Kriterien, Determinismus-Fokus, Opus vor Fable-Narrativ analysieren
-- [Chartanalyse-Regelwerk (mehrere Reformen, konsolidiert)](feedback_chartanalyse.md) — Whipsaw-EMA+VWAP statt Reversal-Trigger; SL-Cluster 8c2 (+0,5×ATR); TP-Realismus 8b1 (≤2×ATR); SL/TP-Reform 27.07 (8b/8c); volle TA am Voll-Check-Rhythmus
+- [Rollenteilung Sonnet/Fable/Opus (23.09. von allen 3 bestätigt, +4 Verfeinerungen)](feedback_modellwahl_trading.md) — Opus-Mengenbremse, Vorab-Kriterien, Determinismus, Opus vor Fable-Narrativ
+- [Chartanalyse-Regelwerk (konsolidiert)](feedback_chartanalyse.md) — Whipsaw-EMA+VWAP (statt Reversal); SL-Cluster 8c2 (+0,5×ATR); TP-Realismus 8b1 (≤2×ATR); SL/TP-Reform 27.07; TA je Voll-Check
 - [Ehrlichkeit wie von einem Trainer](feedback_coaching_ehrlichkeit.md) — Levi will ungefilterte Ehrlichkeit + warme Grundhaltung
-- [Live-Trading-Protokoll (mehrere Regeln, konsolidiert)](feedback_live_trading.md) — 1-Min-Loop/Entscheidungsbaum/Voll-Check-Rhythmus; Regeländerungs-Tempo-Bremse; Entry-Gate 7b1 (Dual-Gate+RR/TP-Realismus-PASS); Stall-Exit 12.1a; Punkt-12 SL-Nachzug≠Teilgewinn
+- [Live-Trading-Protokoll](feedback_live_trading.md) — 1-Min-Loop/Entscheidungsbaum/VC-Rhythmus; Tempo-Bremse; 7b1 Entry-Gate (Dual-Gate+RR/TP-PASS); 12.1a Stall-Exit; P12 SL-Nachzug≠Teilgewinn
 - [Positionsfokus bei offener Position](feedback_positionsfokus_bei_offener_position.md) — Reversal-Check zielt auf Risikoschutz, nicht neue Setups
 - [Mac-Umzug AKTIV (Levi meldet 28.09.: Mac Mini da, Setup steht)](project_mac_umzug.md) — Vorbereitung parallel, Cutover erst nach Testtag 28.09.; trades.db nur lokal → sichern!
 - [X-Account @AITraderLog](project_x_account_idee.md) — schrittweiser Reveal statt vollem Profil
 - [TradingEconomics-API-Idee](project_tradingeconomics_api_idee.md) — 149$/Monat erwogen, noch nicht entschieden
-- [Vision & Fahrplan (konsolidiert)](project_vision.md) — Bloomberg/GS-Niveau als Ziel, Phase 4 = UnusualWhales (konditional, erst nach Phase-3-Abschluss+Review) + 10.000€/Trade, danach 50.000€; IBKR nur Fill-Rückabgleich
+- [Vision & Fahrplan](project_vision.md) — Ziel Bloomberg/GS-Niveau; Phase 4 = UnusualWhales (erst nach Phase-3-Abschluss+Review) + 10.000€/Trade, danach 50.000€; IBKR nur Fill-Rückabgleich
 - [Demo-Loop für Dritte](feedback_demo_trades.md) — voller Regelsatz gilt auch im Demo, keine DB-Eintragung
 - [Voll-Check-Format](feedback_vollcheck_format.md) — Fließtext mit ✓/✗ pro Punkt, keine Tabelle
 - [Trade-DB (SQLite)](feedback_memory_pflege.md) — trade_db.cjs+trade_stats.cjs+add_trade.cjs, nach jedem Trade
@@ -72,46 +76,46 @@
 - [Dual-Gate-Bestätigung](feedback_dual_gate_confirmation.md) — Bei Multi-Instrument-Setups gleichen Bestätigungsgrad prüfen
 - [Positions-Status-Format](feedback_positions_status_pflicht.md) — SL+TP1+TP2 in jedem Positions-Update
 - [Bewährter Live-Trading-Workflow](feedback_live_trading_workflow_bewaehrt.md) — 7 bestätigte Prozesselemente
-- [Sonnets Eigenbericht am Testtag-Ende unzuverlaessig](feedback_sonnet_eigenbericht_unzuverlaessig.md) — 5 Fehlbehauptungen 21.09. (UTC/DE, Zaehlungen, Ursachen), immer aus Logs rechnen statt Chat-Gedaechtnis
+- [Sonnets Eigenbericht am Testtag-Ende unzuverlaessig](feedback_sonnet_eigenbericht_unzuverlaessig.md) — 5 Fehlbehauptungen 21.09. (UTC/DE, Zaehlungen, Ursachen); immer aus Logs rechnen, nie aus Chat
 
 ## Ältere Trade-Sessions (2026-06-12 bis 2026-08-21)
 Einzeleinträge in `trades/trading_YYYY-MM-DD.md`, u.a.: 21.08. #42+#43 Loss (Opex/PMI, -83,53€) · 20.08. #40 Loss+#41 BE · 19.08. #39 Win RR-Verstoß · 18.08. #37 Win+#38 Loss (Iran/Golf) · 17.08. #36 Loss · 07.08. #34 Loss+#35 Win (NFP-Miss) · 06.08. #33 Loss · 05.08. #31 Loss+#32 Win · 04.08. #30 Win → GO Phase-3 · 03.08. #29 Win (Stop-Hunt+ISM) · 31.07. #28 Win · 28.07. #26 Loss+#27 Win · 23.07. #25 Win (25 Trades: +138,86€, 65,2% WR) · 22.07. #24 Loss (Chasing) · 21.07. #23 Win · 20.07. #22 Win · 16.07. #21 Loss · 15.07. #19 Loss+#20 Win · 14.07. #18 Win · 13.07. #17 Win (RR-Bruch) · 09.07. #16 Win (Phase-2-Start) · 08.07. #14 Loss+#15 Win · 02.07. #10-12 alle Loss · 01.07. 2x Loss · 30.06. 3 Trades +9,72€ · 23.06. 3 Trades +28,12€ · 12.06. #1 Win +20,32€ · Kein Trade: 30.07., 18.07., 17.07., 25.06., 22.06., 06.07.
 
 ## Archiv (abgeschlossen — Details in Datei + Git-Historie)
-- [1H-Override-Analyseliste 29.09. (ERLEDIGT)](project_opus_analyseliste_2026-09-29_1h_override.md) — unveraendert, neu pruefen ab >=20 Episoden
-- [Opus-Analyse Testtag 21.09. (Y1-Y8 alle umgesetzt)](project_testtag_analyse_2026-09-21.md) — X1-Fix wirkt, 7 Skipped haetten TP1 erreicht
-- [Y4-a+b Trendtag-Modus UMGESETZT 22.09. (9819ce0), FREIGEGEBEN](project_testtag_2026-09-21_besprechung_ausstehend.md) — Schwelle 45 kalibrieren, Y4-c offen
-- [Y1-Y8-Restpunkte ABGESCHLOSSEN 22./23.09.](project_restpunkte_y1y3y5y8_2026-09-22.md) — 20/20 Nachtraege, mfe_r-Bug gefixt (941a221)
-- [Opus-Analyse Testtag 17.09. (X1-X8 erledigt/widerlegt)](project_testtag_analyse_2026-09-17.md) — 0 Trades, Q4-These widerlegt
-- [X1/X2/X4/X6/X7 UMGESETZT 21.09. (a969767), X3 widerlegt](project_testtag_2026-09-17_besprechung_ausstehend.md) — X8 offen
-- [Opus-Analyse Testtag 16.09. FOMC (W1-W7 umgesetzt)](project_testtag_analyse_2026-09-16.md) — 2 Trades im Blackout = Regelbruch (-75,28 EUR)
-- [W1-W7 UMGESETZT 21.09. (7cb915e), Fail-Open-Bug Sperrfrist gefixt](project_testtag_2026-09-16_besprechung_ausstehend.md) — B5/B7/B8 klein offen
-- [CDP-Tab-Bug-Fixes ABGESCHLOSSEN 17.09. (ff1dd3b+f81d818), 4x Opus](project_cdp_tab_fixes_committet_2026-09-17.md) — 4 Restpunkte, nicht dringend
-- [npm test destruktiv (Incident 17.09., BEHOBEN f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — test:e2e NIE ohne Levi-Vorwarnung
-- [N1 Tweet-Faelligkeit FREIGEGEBEN 14.09.](project_n1_tweet_faelligkeit_klaerung_2026-09-14.md) — last_fetch/last_poll getrennt; N-2/N-3/N-4 offen
-- [W1-W4 feedback_live_trading Reverifikation 16.09. FREIGEG. m. Auflagen](project_gegencheck_memory_aufraeumen_s2s3_w1w4_2026-09-16.md) — Auflage 2+3, K1-K30 offen
-- [Q2/Q4-Umsetzung Gegencheck 14.09. FREIGEGEBEN (Option A+Q4-a)](project_gegencheck_q2q4_fable_umsetzung_2026-09-14.md) — N1b vor Testtag bestaetigen
-- [Zeitanker-Pflicht Schritt 0 + DST-Check UMGESETZT 14.09.](project_fable_auftrag_schritt0_datumsverifikation_2026-09-14.md) — bare date zuerst; DST-Fenster 26.-30.10.
-- [Testtag 15.09.+V1-V7+Gegencheck-Runden 1-6 (COMMITTET 79573f5, Restpunkte c7b2077)](project_testtag_analyse_2026-09-15.md) — FOMC-Analyse, Aussichtslos-Sperre, Zeitbox-Fingerabdruck, Dry-Run-Konsistenz; alle Auflagen über 6 Runden behoben, 104/104
-- [Präzedenz 13.1 vs. Q-ROT: Option D+b1 UMGESETZT+COMMITTET (cc680a4)](project_gegencheck_praezedenz_13_1_vs_qrot_fable_umsetzung_2026-09-15.md) — Q-ROT vor 13.1 wenn Q1/Q4 tragen; 95/95
-- [Rückblick Handelstag 14.09., 15:30-22:00 (nachgerechnet)](project_rueckblick_handelstag_2026-09-14_1530-2200.md) — 0 Trades war beste Variante; Register-Session-Hoch war falsch (Nebenbefund behoben)
-- [Cron-Automatisierung P1+P2 (FREIGEGEBEN MIT AUFLAGEN)](project_cron_automatisierung_einschaetzung_2026-09-14.md) — 8a5+9b korrekt; O-1 `--anlass` gegen ±15 Min. 84/84
-- [Punkt 11 + N5 (Option C, FREIGEGEBEN MIT AUFLAGEN)](project_punkt11_sl_empfehlung_2026-09-14.md) — Dreh 3/4; position_tick.cjs-Blocker gefixt. 74/74
-- [Memory-Aufräumen Bericht 14.09.](project_memory_aufraeumen_2026-09-14.md) — 179 Dateien/4,62 MB; E1 Git-Backup + E4 tote Links erledigt
-- [Opus-Analyse Testtag 11.09. (EINGESCHRÄNKT; committet e4f8c77)](project_testtag_analyse_2026-09-11.md) — 51 VC, 0 Trades; Q2-Formel unerfüllbar. 60/60
-- [Q2/Q4-Kalibrierung: ENTSCHIEDEN+UMGESETZT (Option A+Q4-a)](project_q2_kalibrierung_entscheidungsvorlage_2026-09-11.md) — Q2 = |Entry−EMA50(5min)|/ATR; Q4 aus level_register.json
-- [Testtag 10.09. Bilanz (EINGESCHRÄNKT)](project_testtag_bilanz_2026-09-10.md) — 0 Trades, 51 VC; `--sl-auto` = MAX(Anker,Cluster-Kante,8c-Floor). 48/48
-- [Opus-Meilensteincheck 24.08.-10.09. (GEMISCHT, seither durch neuere Testtag-Analysen überholt)](project_opus_meilensteincheck_2026-09-10.md) — Regelwerk besser, Disziplin nicht
-- [09.09. Gesamtkette (FREIGEGEBEN)](project_gegencheck_fable_umsetzung_2026-09-09_f1_b1_b2.md) — 18 VC/0 Trades → 11 TODOs
-- [Opus-Analyse Testtag 08.09. (ENTWURF, durch spätere Testtage überholt)](project_testtag_analyse_2026-09-08.md) — 2 Trades, erstmals Gate-PASS
-- [Datums-/Wochentags-Verifikation (Fehler 14.09., Root Cause behoben)](feedback_datum_verifikation_fehler_2026-09-14.md) — Briefing nahm falschen Wochentag an ohne date-Aufruf
-- [Testtage 01.-04.09.2026 (fiktiv, alle analysiert)](testtag/testtag_2026-09-03.md) — 03.09: 58VC/2Trigger/0Trades; 02.09: 84VC/1Moment/0Trades; 01.09: 84VC/4Momente/0Trades, Levelregister-Erstpraxis; 04.09: 0/4Trigger PASS
-- [Testtag-Zyklus + Regelwerk-Überarbeitung 01.-03.09.](project_testtag_regelwerk_ueberarbeitung_2026-09-03.md) — 25 Punkte → Commit 72ec8f6
-- [1H-Kriterium — ENTSCHIEDEN](project_1h_kriterium_offene_frage_2026-09-03.md) — Override = Bias des zuletzt geschlossenen 1H-Bars
+- [Opus-Vollbericht Testtag 29.09. (21 KB)](opus_bericht_testtag_2026-09-29.md) — Kurzfassung s. Offen (29.09.)
+- [1H-Override-Liste 29.09. ERLEDIGT](project_opus_analyseliste_2026-09-29_1h_override.md) — neu ab >=20 Episoden
+- [Opus-Analyse Testtag 21.09. (Y1-Y8 alle umgesetzt)](project_testtag_analyse_2026-09-21.md) — X1-Fix wirkt
+- [Y4-a+b Trendtag UMGESETZT 22.09.](project_testtag_2026-09-21_besprechung_ausstehend.md) — Rest: Kleinauflagen
+- [Y1-Y8-Restpunkte ABGESCHLOSSEN 23.09.](project_restpunkte_y1y3y5y8_2026-09-22.md) — 20/20 Nachtraege, X8 obsolet
+- [Opus-Analyse Testtag 17.09. (X1-X8 erledigt)](project_testtag_analyse_2026-09-17.md) — Q4-These widerlegt
+- [X1/X2/X4/X6/X7 UMGESETZT 21.09.](project_testtag_2026-09-17_besprechung_ausstehend.md) — X3 widerlegt, X8 obsolet
+- [Opus-Analyse Testtag 16.09. FOMC, W1-W8 erledigt](project_testtag_analyse_2026-09-16.md) — 2 Trades im Blackout
+- [W1-W7 UMGESETZT 21.09. (7cb915e)](project_testtag_2026-09-16_besprechung_ausstehend.md) — B5/7/8 s. Kleinauflagen
+- [CDP-Tab-Fixes ABGESCHLOSSEN 17.09.](project_cdp_tab_fixes_committet_2026-09-17.md) — Restpunkte s. Kleinauflagen
+- [N1 Tweet-Faelligkeit 14.09. FREIGEG.](project_n1_tweet_faelligkeit_klaerung_2026-09-14.md) — Rest: Kleinauflagen
+- [W1-W4 Reverifikation 16.09.](project_gegencheck_memory_aufraeumen_s2s3_w1w4_2026-09-16.md) — Rest: Kleinauflagen
+- [Q2/Q4-Gegencheck 14.09. FREIGEGEBEN](project_gegencheck_q2q4_fable_umsetzung_2026-09-14.md) — N1b s. Kleinauflagen
+- [Zeitanker-Pflicht Schritt 0 UMGESETZT 14.09.](project_fable_auftrag_schritt0_datumsverifikation_2026-09-14.md)
+- [Testtag 15.09.+V1-V7 (79573f5)](project_testtag_analyse_2026-09-15.md) — Aussichtslos-Sperre, Zeitbox; 104/104
+- [13.1×Q-ROT D+b1](project_gegencheck_praezedenz_13_1_vs_qrot_fable_umsetzung_2026-09-15.md) — cc680a4, Q-ROT zuerst
+- [Rückblick 14.09. (nachgerechnet)](project_rueckblick_handelstag_2026-09-14_1530-2200.md) — 0 Trades = beste Variante
+- [Cron P1+P2 FREIGEG. M. AUFL.](project_cron_automatisierung_einschaetzung_2026-09-14.md) — 8a5+9b ok, O-1, 84/84
+- [Punkt 11 + N5 (Opt. C, FREIGEG.)](project_punkt11_sl_empfehlung_2026-09-14.md) — Dreh 3/4, Blocker gefixt, 74/74
+- [Memory-Aufräumen Bericht 14.09.](project_memory_aufraeumen_2026-09-14.md) — 179 Dateien/4,62 MB; E1+E4 erledigt
+- [Analyse Testtag 11.09. (e4f8c77)](project_testtag_analyse_2026-09-11.md) — 51 VC, 0 Trades; Q2 unerfüllbar; 60/60
+- [Q2/Q4-Kalibrierung (A+Q4-a)](project_q2_kalibrierung_entscheidungsvorlage_2026-09-11.md) — Q2=|Entry−EMA50|/ATR
+- [Testtag 10.09. Bilanz](project_testtag_bilanz_2026-09-10.md) — 0 Trades/51 VC; --sl-auto=MAX(Anker,Cluster,8c); 48/48
+- [Meilensteincheck 24.08.-10.09. (überholt)](project_opus_meilensteincheck_2026-09-10.md) — Regelwerk ✓, Disziplin ✗
+- [09.09. Gesamtkette (FREIGEG.)](project_gegencheck_fable_umsetzung_2026-09-09_f1_b1_b2.md) — 18 VC/0 Trades → 11 TODOs
+- [Analyse Testtag 08.09. (ENTWURF, überholt)](project_testtag_analyse_2026-09-08.md) — 2 Trades, erstmals Gate-PASS
+- [Datumsverifikation (14.09., behoben)](feedback_datum_verifikation_fehler_2026-09-14.md) — Wochentag ohne date-Aufruf
+- [Testtage 01.-04.09. (fiktiv)](testtag/testtag_2026-09-03.md) — alle 0 Trades (58-84 VC); 04.09. 0/4 Trigger PASS
+- [Regelwerk-Überarbeitung 01.-03.09.](project_testtag_regelwerk_ueberarbeitung_2026-09-03.md) — 25 Punkte → 72ec8f6
+- [1H-Kriterium ENTSCHIEDEN](project_1h_kriterium_offene_frage_2026-09-03.md) — Override = Bias letzter geschl. 1H-Bar
 - [Opus+Fable-Analyse Testtag 03.09. (P1-P6 umgesetzt)](project_testtag_analyse_2026-09-03.md) — 0 Trades trotz Trendtag
-- [Studie Volumenprofil/Meta-Indikatoren (31.08.)](project_studie_volumenprofil_sonnet_2026-08-31.md) — VP bedingtes Ja, Meta-Indikatoren/Renko/Kagi nein
-- [Testtage 25.-28.08.2026 (fiktiv) + Regelwerk-Überarbeitungen 26.-31.08.](testtag/testtag_2026-08-28.md) — 28.08: 1Trade netto Gewinn; 27.08: 0Trades "stale" fälschlich behauptet; 25.08: T1 TP1+BE, T2 gecancelt; RR-Konsistenz-Gate, Solo-Mandat, Stale-Klasse, Kerzenraster-Fix
-- [Studie "bessere Trades" 24.08.](project_studie_bessere_trades_2026-08-24.md) — TP1-Breakeven 29,8%, Q-Score in gate_check.cjs
+- [Studie VP/Meta (31.08.)](project_studie_volumenprofil_sonnet_2026-08-31.md) — VP bedingt ja; Meta/Renko/Kagi nein
+- [Testtage 25.-28.08. (fiktiv)](testtag/testtag_2026-08-28.md) — 28.08. 1 Trade +; RR-Gate, Solo-Mandat, Stale
+- [Studie "bessere Trades" 24.08.](project_studie_bessere_trades_2026-08-24.md) — TP1-BE 29,8 %, Q-Score in gate_check
 - [Opus+Fable-Vollcheck 24.08.2026](project_opus_vollpruefung_2026-08-24.md) — N-1..N-22 umgesetzt
 - [Regelwerk-Audit 07.08.2026](project_regelwerk_audit_2026-08-07.md) — 2 offene DAX-Lücken
 - [Nasdaq-Official-Feed-Idee](project_nasdaq_official_feed_idee.md) — Schatten-Test statt Sofort-Umstellung

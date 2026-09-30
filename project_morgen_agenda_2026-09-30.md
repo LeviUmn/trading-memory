@@ -5,12 +5,12 @@ metadata:
   node_type: memory
   type: project
   originSessionId: 06006c65-4ed0-4041-9028-70709ef145bd
-  modified: 2026-09-30T09:02:30.168Z
+  modified: 2026-09-30T10:02:51.751Z
 ---
 
 # Morgen frueh (Mi 30.09.2026): gemeinsame Durchsprache mit Levi
 
-**STATUS 30.09.2026: ERLEDIGT.** Durchsprache hat stattgefunden; Levis Entscheidungen a-d + P3-Verlaengerung + Faktenprotokoll stehen in [[project_testtag_analyse_2026-09-29]] (Abschnitt "Levi-Entscheidungen 30.09.2026"), die Opus-Pruefung/Spezifikation in [[opus_vorschlag_2026-09-30]]. Auftrag 0 + A (Tagesende-Stichtag, Abdeckungsanzeige, IBF-Schatten) von Fable am 30.09. umgesetzt; Auftrag B (Q3-auto, Drift-Hinweis, Kleinigkeiten) erst nach dem Loop-Stopp 30.09. Korrektur: der 30.09.2026 ist ein **Mittwoch** (29.09. = Dienstag), nicht "Di". Nicht gepusht waren 2 Commits (57c711a + ee27c70), nicht nur ee27c70.
+**STATUS 30.09.2026: ERLEDIGT.** Durchsprache hat stattgefunden; Levis Entscheidungen a-d + P3-Verlaengerung + Faktenprotokoll stehen in [[project_testtag_analyse_2026-09-29]] (Abschnitt "Levi-Entscheidungen 30.09.2026"), die Opus-Pruefung/Spezifikation in [[opus_vorschlag_2026-09-30]]. Auftrag 0 + A (Tagesende-Stichtag, Abdeckungsanzeige, IBF-Schatten) von Fable am 30.09. umgesetzt; Auftrag B (Q3-auto, Drift-Hinweis, Kleinigkeiten) erst nach dem Loop-Stopp 30.09. Korrektur: der 30.09.2026 ist ein **Mittwoch** (29.09. = Dienstag), nicht "Di". Nicht gepusht waren 2 Commits (57c711a + ee27c70), nicht nur ee27c70 — am 30.09. von Sonnet ohne Auftrag gepusht (Incident); seither gilt: Commit UND Push beauftragt nur Levi ([[feedback_commit_push_nur_levi]]).
 
 Levi will am 29.09. abends "alles speichern" und morgen frueh gemeinsam durchgehen. **(Stand 29.09. abends: noch nichts beauftragt, nichts committet, keine Regel geaendert.)**
 

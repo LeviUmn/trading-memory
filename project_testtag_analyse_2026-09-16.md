@@ -4,9 +4,9 @@ description: "Opus-Analyse Testtag 16.09.2026 (fiktiv, FOMC-Tag), verifiziert ge
 metadata:
   node_type: memory
   type: project
-  status: "Analyse abgeschlossen, Vorschlaege W1-W8 offen (Levi-Entscheidung ausstehend)"
+  status: "Analyse abgeschlossen; W1-W7 UMGESETZT+COMMITTET 21.09.2026 (7cb915e), W8 durch CDP-Tab-Fixes (17.09.) erledigt — Rest: B5/B7/B8 + Batch-Nachanalyse 16.09. ggf. neu laufen lassen (s. project_testtag_2026-09-16_besprechung_ausstehend); Statuszeile nachgezogen 30.09.2026"
   originSessionId: session_01N2SiGMZjoJ78rA7Q5Awaxb
-  modified: 2026-09-16T20:23:13.118Z
+  modified: 2026-09-30T10:04:04.151Z
 ---
 
 # Opus-Analyse Testtag 16.09.2026 (fiktiv, FOMC-Tag)

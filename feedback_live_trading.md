@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-09-23T10:10:35.505Z
+  modified: 2026-09-30T09:37:52.270Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -141,6 +141,8 @@ exakt dieselbe Behandlung wie beim fehlenden 1H-/QQQ-Schritt oben.
     bleibt unveraendert Beleg (gate_check_log.jsonl).
 ```
 <!-- CRON-BAUSTEIN-FORMAT-TWEET-ENDE -->
+
+**ZURÜCKGEBAUT 23.09.2026 — Punkte (3) KURZBLOCK und (4) ENTRY-KASTEN im Baustein oben (Nachtrag 30.09.2026, Opus-Gegencheck-Auflage M2):** Beide Punkte beschreiben den Stand des Branches `kurzblock-bewaehrung`, dessen Bewährungstag am 23.09. gescheitert ist (3/5) und der auf `main` zurückgebaut wurde ([[project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16]]). Auf `main` gilt seither und bis zu einem neuen Bewährungstag: `vollcheck.cjs` druckt NUR den Vollblock (kein Kurzblock, keine `=== VC#… · Kurz ===`-Marker, kein `--zeige`), `gate_check.cjs` druckt KEINEN `=== ENTRY-KASTEN …`-Kasten, und **kein Produktivskript schreibt automatisch nach `scripts/loop_archiv/<datum>.txt`** — die Aussage „geht bei JEDEM Lauf automatisch ins Tagesarchiv“ ist auf `main` falsch (Beleg 30.09.: `grep -c loop_archiv` in vollcheck.cjs/gate_check.cjs/loop_prompt.cjs/position_tick.cjs = 0/0/0/0; `grep -ci kurzblock` vollcheck.cjs = 0; `grep -c ENTRY-KASTEN` gate_check.cjs = 0; `grep -c -- --zeige` vollcheck.cjs = 0). Das Tagesprotokoll `loop_archiv/<datum>.txt` wird deshalb manuell zusammengesetzt, Ablauf in [[feedback_tagesabschluss]] Abschnitt „Tagesprotokoll“, Punkt 1a. In der Antwort steht bis auf Weiteres der Vollblock (Stand vor dem 23.09.). Der Wortlaut von (3)/(4) INNERHALB der Fence wurde am 30.09. bewusst NICHT angefasst: die Fence ist der Cron-Baustein, den `loop_prompt.cjs` wörtlich in den Loop-Prompt injiziert — eine Änderung dort ändert den laufenden Loop und gehört in Auftrag B (nach dem Loop-Stopp 30.09.).
 
 Diese Formulierung wurde am 15.07.2026 live erarbeitet (Cron-Job-Korrektur 16:26 UTC während Trade #19), am 16.07.2026 um den QQQ-Schritt erweitert (siehe Punkt 3a), und ist ab jetzt der Standard — nicht in jeder Session neu erfinden.
 

@@ -235,7 +235,7 @@ Diese beiden adressieren die belegten Engpässe (Anker, Q1/Q4). Beim Freeze-Revi
    - Agenda-Datei als erledigt markieren, Wochentag korrigieren
    - MEMORY.md-Zeilen **ersetzen**, nicht anhängen (Index-Konvention)
    - IBF-Entscheidung mit den Vorab-Kriterien aus 2.3 als eigene Projekt-Datei
-3. **Memory-Git-Backup:** Der letzte Commit im Memory-Repo ist `922fafe` vom **23.09. 11:16**. Seitdem sind 9 geänderte und 10 ungetrackte Dateien ungesichert, darunter die Freeze-Definition und alle Analysen vom 23. bis 29.09. Commit + Push wie bei früheren Memory-Backups.
+3. **Memory-Git-Backup:** Der letzte Commit im Memory-Repo ist `922fafe` vom **23.09. 11:16**. Seitdem sind 9 geänderte und 10 ungetrackte Dateien ungesichert, darunter die Freeze-Definition und alle Analysen vom 23. bis 29.09. Commit + Push wie bei früheren Memory-Backups. *[Nachtrag 30.09.: KEINE Handlungsanweisung an Sonnet/Fable — Commit und Push beauftragt nur Levi, Memory-Repo ist öffentlich → kein Push; siehe [[feedback_commit_push_nur_levi]].]*
 
 ### Auftrag A: Auswertung am Tagesende (Tagesende-Regel, Abdeckung, IBF-Schatten)
 
@@ -427,4 +427,4 @@ Diese beiden adressieren die belegten Engpässe (Anker, Q1/Q4). Beim Freeze-Revi
 3. **c)** Override bleibt live unverändert bis zum Freeze-Ende, die IBF wird nur schattengemessen, Vorab-Kriterien wie in 2.3: ja oder nein.
 4. **P3-Verlängerung:** 3-Tage-Urteil nur mit ≥ 1 impuls-fälligem Fall, sonst bis +2 Tage.
 5. **Protokoll-Ersatz:** Faktenprotokoll nachholen oder `loop_archiv` als Tagesprotokoll festlegen.
-6. **Push** der 2 Commits, **Memory-Backup**, **Daten-Backup** vor dem Mac-Cutover.
+6. **Push** der 2 Commits, **Memory-Backup**, **Daten-Backup** vor dem Mac-Cutover. *[Nachtrag 30.09.: Push/Commit ausschließlich auf Levis Befehl, nicht durch Sonnet/Fable — [[feedback_commit_push_nur_levi]]; die 2 Commits wurden am 30.09. im Incident ohne Auftrag gepusht.]*

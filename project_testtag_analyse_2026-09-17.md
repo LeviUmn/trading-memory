@@ -4,9 +4,9 @@ description: "Opus-Analyse Testtag 17.09.2026 (fiktiv, EINGESCHRAENKT): 0 Trades
 metadata:
   node_type: memory
   type: project
-  status: "Analyse abgeschlossen (EINGESCHRAENKT), Vorschlaege X1-X8 offen (Levi-Entscheidung ausstehend)"
+  status: "Analyse abgeschlossen (EINGESCHRAENKT); X1/X2/X4/X6/X7 UMGESETZT+COMMITTET 21.09.2026 (a969767), X5 durch W5 abgedeckt, X3 durch Q4-Schatten widerlegt -> Y4 (22.09.), X8 durch Y3-a obsolet (23.09., s. project_restpunkte_y1y3y5y8_2026-09-22); Statuszeile nachgezogen 30.09.2026"
   originSessionId: dba6a9d3-1e4e-49d5-b8aa-69d27ac1a2f2
-  modified: 2026-09-17T18:28:17.440Z
+  modified: 2026-09-30T10:04:07.959Z
 ---
 
 # Opus-Analyse Testtag 17.09.2026 (fiktiv)
