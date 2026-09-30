@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-14T21:45:34.831Z
+  modified: 2026-09-24T08:48:21.737Z
 ---
 
 Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
@@ -57,6 +57,16 @@ Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 **Fakeout-Grundsorge der Regel:** Win-Rate im Fenster (2/3 ≈ 66,7%) liegt NICHT unter der Gesamt-Win-Rate aller 35 DB-Trades (21 Win / 33 ohne BE ≈ 63,6%) — kein Hinweis, dass Fenster-Entries öfter ausgestoppt werden als der Rest. Auch das ist bei n=3 nicht belastbar.
 
 **Verdikt: Sample zu klein für eine belastbare Entscheidung — weder Beibehaltung noch Streichung ist durch die Daten gedeckt.** n=3 verfehlt die selbst gesetzte Schwelle (5) klar; die eigentlich fällige Review kann inhaltlich nicht abschließend beantwortet werden, nur ehrlich dokumentiert. Die vorhandene Evidenz zeigt in dieser kleinen Stichprobe eine leichte Tendenz GEGEN den Netto-Nutzen der Regel (mehr Gewinn beschnitten als Verlust vermieden), aber das kippt bei einem einzigen weiteren Fall in die andere Richtung — kein Grund für eine Änderung. **Entscheidung:** Regel bleibt unverändert in Kraft (kein Eingriff in ein laufendes System ohne robuste Evidenz, siehe [[feedback_dont_change_running_system]]). Diese Review gilt NICHT als abgeschlossen, sondern wird vertagt, bis 2 weitere echte Fenster-Entries vorliegen (dann n=5, ursprüngliche Schwelle erreicht) — erst dann erneut prüfen.
+
+### Tagesablauf-Fixpunkte für Sonnet (ergänzt 24.09.2026, Levi-Vorgabe)
+
+Für fiktive Testtage gilt ein fester Drei-Punkte-Rahmen, den Sonnet (Hauptchat-Koordinator) von sich aus im Blick behält:
+- **15:10 DE:** Trigger "start update dich" (6-Schritt-Ablauf, siehe [[feedback_session_update]])
+- **15:30 DE:** Beginn des fiktiven Testtags (Loop startet, Halbierungsfenster bis 16:00 wie oben)
+- **20:00 DE:** Terminalzeit/Ende des Testtags, danach Opus-Analyse des Tages (siehe z.B. [[project_testtag_analyse_2026-09-21]] als Vorlage für den Ablauf Opus-Analyse → Fable-Umsetzungsauftrag → Gegencheck)
+
+**Why:** Levi nannte diesen Rahmen explizit als "Tagesablauf für dich Sonnet" — eine feste zeitliche Erwartung an den Ablauf, nicht nur die schon dokumentierte Zeitfenster-Logik unten.
+**How to apply:** An Testtagen diese drei Anker proaktiv mitführen (Start-Update nicht vergessen, Terminalzeit 20:00 als Loop-Ende erkennen, danach unaufgefordert die Opus-Analyse anstoßen, wie im Prozess [[feedback_modellwahl_trading]] vorgesehen).
 
 ### Wichtig
 - US-Börsenöffnung = 15:30 Uhr deutscher Zeit (vorher fälschlich 17:00 angenommen — korrigiert am 22.06.2026) — **gilt nur, solange EU und USA dieselbe Sommerzeitlage haben; in den Divergenz-Fenstern nach [[feedback_zeitzone]] (≈5 bzw. 10 Handelstage pro Umstellung, nächstes 26.10.–30.10.2026) öffnet die US-Börse um 14:30 DE** (ergänzt 14.09.2026 — die frühere unbedingte Formulierung war an rund vier Wochen im Jahr schlicht falsch)

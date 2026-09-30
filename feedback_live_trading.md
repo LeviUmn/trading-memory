@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-09-22T09:07:27.795Z
+  modified: 2026-09-23T10:10:35.505Z
 ---
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
@@ -113,6 +113,32 @@ Am Ende JEDES Voll-Checks zusätzlich zwingend:
     "nicht fällig", nie stillschweigend weglassen.
 Fehlt eine der beiden Zeilen im Output, gilt der Voll-Check als NICHT durchgeführt —
 exakt dieselbe Behandlung wie beim fehlenden 1H-/QQQ-Schritt oben.
+(3) KURZBLOCK STATT VOLLBLOCK IN DER ANTWORT (Anzeige vs. Beleg, Opus-Konzept + zwei
+    Revisionsrunden, Levi-Freigabe 23.09.2026): vollcheck.cjs druckt den vollen Block
+    (Beleg — geht bei JEDEM Lauf, auch Hard-Exit, automatisch ins Tagesarchiv
+    scripts/loop_archiv/<DE-Datum>.txt) und danach den Kurzblock zwischen den Markern
+    "=== VC#<N> · <HH:MM:SS> · Kurz ===" und "=== /VC#<N> ===". In die Chat-Antwort kommt
+    NUR der Kurzblock — WOERTLICH von Marker bis Marker, inkl. aller ⚠-Zeilen; den
+    Vollblock NICHT mehr in die Antwort kopieren, NIE von Hand verdichten oder kuerzen
+    (der Kurzblock kommt vom Skript aus denselben Variablen; die Pruefung dahinter ist
+    unveraendert die volle Format-Zeilen-Logik). Voll-Check gilt als durchgefuehrt =
+    Exit 0 + Archiveintrag + Kurzblock woertlich in der Antwort; fehlt die Zeile
+    "System: n/m ✓ ...", gilt er als NICHT durchgefuehrt (wie bisher bei der Format-
+    Zeile). Hard-Exit: kein Kurzblock — stderr-Zeilen vollstaendig + "Voll-Check NICHT
+    durchgefuehrt" in die Antwort. Die "News HH:M0:"-Zeile steht in JEDEM Voll-Check mit
+    Tweet-Abruf (auch "nichts Neues"). Auf Zuruf "voll #N": node scripts/vollcheck.cjs
+    --zeige <N> druckt den archivierten Vollblock. Quick-Tick bleibt EINE Zeile (jetzt
+    mit Delta/Pfeilen und "Leiter VC#<N>: fehlt ..."), Positions-Tick = Kurzblock
+    zwischen "=== PT <HH:MM:SS> · Kurz ===" und "=== /PT ===" (SL 🔴 / TP1+TP2 🟢,
+    HANDLUNG/Exit-Vorschlag IMMER als ⚠-Zeile darin).
+(4) ENTRY-KASTEN IM TRIGGER-MOMENT (E2, revidiert nach Levi-Einwand 23.09.2026): beim
+    gate_check.cjs-Live-Lauf (2/2-Dual-Gate, unmittelbar vor Entry) wird NICHT der
+    Voll-Check-Vollblock gezeigt. Sonnet uebernimmt WOERTLICH den Kasten am Ende der
+    Gate-Ausgabe ("=== ENTRY-KASTEN · <HH:MM:SS> · gate_check live ===" bis
+    "=== /ENTRY-KASTEN ===": GESAMTSTATUS PASS/FAIL/UNKLAR, Entry/SL/TP1/TP2 mit
+    Zertifikatspreis falls uebergeben, Groesse, Q-Score, Halbierung, Chasing) plus die
+    aktuell aktiven ⚠-Zeilen aus dem letzten Voll-Check-Kurzblock. Die volle Gate-Ausgabe
+    bleibt unveraendert Beleg (gate_check_log.jsonl).
 ```
 <!-- CRON-BAUSTEIN-FORMAT-TWEET-ENDE -->
 

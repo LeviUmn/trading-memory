@@ -6,7 +6,7 @@ metadata:
   type: project
   status: "TO-DO, faellig vor 26.10.2026, noch nicht begonnen"
   originSessionId: a2b3dbfe-4ee4-466f-855e-65c519af6e1f
-  modified: 2026-09-15T02:00:00.000Z
+  modified: 2026-09-28T10:52:35.813Z
 ---
 
 # TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachruesten
@@ -37,3 +37,9 @@ Saubere Variante passend zum Projektprinzip "gemessen statt geschaetzt": Offset 
 ## Naechster Schritt
 
 Wenn faellig (spaetestens Anfang/Mitte Oktober 2026, rechtzeitig vor dem 26.10.): Opus schreibt einen praezisen Fable-Auftrag (analog zum Stil der bisherigen Schritt-0-/Kalendercheck-Auftraege), Fable setzt um, Opus-Gegencheck, dann Levi-Freigabe zum Commit/Push. Keine Umsetzung vor dieser Kette.
+
+## Ergänzung 28.09.2026 (Opus-Gegencheck A1/A2, Auflage 9): Session-Start 15:30 in tagesmomente.cjs / vollcheck.cjs --nas-bars-5m
+
+Zweiter Fundort derselben Fehlerklasse (hart verdrahtete DE-Uhrzeit): Der AUTO-Anker (`scripts/anker_auto.cjs` `autoAnker()`, Impuls-Extrem ab Session-Start) rechnet mit Session-Start **15:30 DE**.
+- `scripts/tagesmomente.cjs` (Tagesabschluss): Session-Start ist ein CLI-Parameter — im Divergenzfenster **26.–30.10.2026** `--session-start 14:30` verwenden (das Bars-Pflichtfenster beginnt dann 13:30 DE). Die Auswertung verlangt 14:30 GENAU an den Divergenztagen der Tabelle aus [[feedback_zeitzone]] (im Skript als `DIVERGENZ_FENSTER` bis Herbst 2028 hinterlegt — bei Verlängerung der Tabelle dort nachziehen) und 15:30 an allen anderen Tagen; ein anderer Wert macht den Tag nicht bewertbar (Opus-Restauflage R1, 28.09.2026).
+- `scripts/vollcheck.cjs --nas-bars-5m` (A2-Schatten, Branch `a2-auto-anker-schatten`): `sessionStartDe: '15:30'` ist **fest im Aufruf von autoAnker eingebaut** — im Divergenzfenster liefert die Schatten-Zeile deshalb das Impuls-Extrem eine Stunde zu spät (reine Messzeile, kein Gate, kein Urteil). Beim DST-Fix (oben) mit erledigen: Session-Start aus demselben Offset-Messwert ableiten statt Konstante. Bis dahin **keine Code-Änderung an der 15:30-Konstante** (Opus-Auflage 9, nur Memory-Doku).

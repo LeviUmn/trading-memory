@@ -4,8 +4,21 @@ description: "ABGESCHLOSSEN 22.09.2026: gesamte Y1-Y8-Restpunkte-Liste aus der T
 metadata:
   node_type: memory
   type: project
-  modified: 2026-09-22T16:33:01.293Z
+  modified: 2026-09-23T09:28:59.244Z
   originSessionId: 9aca5bf5-bdfc-4bb6-922b-17583cc90312
+---
+
+## Nachtrag 23.09.2026: Z28-Backlog nachgezogen + mfe_r-Bug gefunden und gefixt
+
+Opus hat die 7 damals offenen Restpunkte (u.a. Y4-c, X8, Z28) erneut geprüft (Auftrag von Levi im Hauptchat). Ergebnis u.a.: X8 war bereits durch Y3-a miterledigt (obsolet), Z28 war noch offen.
+
+Fable hat Z28 nachgezogen: Horizont-Hinweis ergänzt (SL 30341,25 bis zur letzten verfügbaren Bar 21:05-21:10 DE nicht getroffen, Tiefstwert ab 20:00 DE = 30414,35 selbst aus `scripts/nas100_5m.json` gerechnet), plus zwei bereits bekannte Altfehler vom 17.09. korrigiert (MFE 14,75/0,00 Pkt statt falscher 40,55/44,50 Pkt, Quelle: [[project_testtag_analyse_2026-09-17]] Z64-65). Summe R über alle 29 Einträge unverändert bei +8,99 R.
+
+Dabei fand Fable einen strukturellen Bug: `scripts/skipped_fiktiv.cjs` berechnete das abgeleitete Feld `mfe_r` bei manuellem `--mfe-pkt`-Nachtrag nicht korrekt neu (blieb stale oder kam fälschlich aus `calc` statt dem manuellen Wert). Opus bestätigte den Fund, stellte fest dass kein anderes Skript `mfe_r` konsumiert (keine Geldfolge/Statistikverzerrung), und schrieb den Fix-Auftrag. Fable setzte um (Z. 299-303, manueller Wert → `mfe_r = mfe/|entry-sl|`, Risiko 0 → null), ergänzte einen strengen Regressionstest (6 Teilfälle), `npm test` 337/337 grün. Ein frischer Opus-Agent (ohne Kontext der eigenen Empfehlung) hat live am Code, an den Tests und an den Daten gegengeprüft — **FREIGEGEBEN, keine Auflagen**.
+
+**Why:** Zeigt, dass das Autor≠Prüfer-Prinzip auch bei reiner Datenpflege greift — der Bug wäre ohne die Z28-Nacharbeit nicht aufgefallen, weil er nur bei manuellen Nachträgen mit vorherigem `calc`-Lauf sichtbar wird.
+**How to apply:** Code-Fix (`scripts/skipped_fiktiv.cjs` + `tests/trading_scripts.test.js`) liegt Stand 23.09. noch ungecommittet im Haupt-Repo — Levi committet. Kein weiterer Handlungsbedarf, Z28 und der mfe_r-Bug sind beide abgeschlossen.
+
 ---
 
 # Restpunkte Y1-Y3/Y5-Y8 nach Abschluss Y4 (22.09.2026)
