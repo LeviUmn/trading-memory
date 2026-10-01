@@ -4,6 +4,10 @@
 
 ## Offen / aktuell relevant
 
+- [Kleinmaengel H1-Skript/-Datei (B1 Zeilenzahl, H-a Kopf+try/finally) + DST-Hinweis, fuer Fable am 02.10.](project_h1_kleinmaengel_offen_2026-10-01.md) — Quelle Opus-Gegencheck 4, nicht blockierend
+- [H1 (Q2 ✗ im Trendkontext) festgeschrieben 01.10., K1-K10 verbindlich; Zaehlung ab 01.10., Auswertung nach Freeze](project_h1_q2_trendkontext_vorabkriterium_2026-10-01.md) — Quelle: opus_antwort_d
+- [Opus-Bericht Testtag 30.09. (nachgeholt 01.10.): GUELTIG, P3 2/3 mit Fall, Register-Luecke, Entscheide a-d fuer Levi](opus_bericht_testtag_2026-09-30.md) — Auftrag B+B6 offen
+- [Testtag 30.09. BEENDET: 56 VC, 0 echte Trades, 1 Kombi +0,40 R, Freeze 4/5, AUTO 9/20; 7 offene Punkte fuer Besprechung 01.10.](project_testtag_2026-09-30_abschluss.md) — nichts committet; /tmp/vc_* nicht loeschen
 - [Commit UND Push beauftragt NUR Levi (Incident 30.09.: Push ohne Auftrag); Subagenten nie committen/pushen](feedback_commit_push_nur_levi.md) — nach Umsetzung "bereit zum Commit" melden, warten
 - [Opus-Pruefung+Spezifikation 30.09.: Levi-Entscheide a-d, IBF-Definition, Auftraege 0/A/B, Lueckencheck](opus_vorschlag_2026-09-30.md) — 0+A umgesetzt 30.09., B nach Loop-Stopp
 - [IBF (1H-Intrabar-Freigabe, halbe Position): NUR Schatten ibf_schatten.cjs, Vorab-Kriterien 1-5, Stand n=1 AUTO](project_ibf_schatten_2026-09-30.md) — Live erst nach Freeze-Ende
@@ -13,7 +17,7 @@
 - [Testtag-Start scheitert 24.+25.09.: offene Rückfrage blockiert Session → Cron feuert nicht](feedback_testtag_start_verlaesslichkeit.md) — Levi: Remote Control vorher an; Log-Frische gegenchecken
 - [Opus-Analyse Testtag 25.09. (0 Trades; GAPs: loop_archiv → manuell seit 30.09., protokoll_bilanz --datum per A1)](project_testtag_analyse_2026-09-25.md) — Anker-Muster bestaetigt
 - [Opus-Analyse Testtag 23.09. (FESTGEFAHREN, nicht kalibriert)](project_testtag_analyse_2026-09-23.md) — 0 Trades/0 Live-Gate, SL-Anker 47/47 nie nachgezogen, Q4/Q2 fast unerfüllbar; V1-V6
-- [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 Bewegungen (max. 10 Tage); 30.09.: 3/5, AUTO 6/20, Teiltage zaehlen](project_testtag_2026-09-23_besprechung_ausstehend.md) — vor Regelwerk lesen
+- [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 Bewegungen (max. 10 Tage); Stand 30.09. abends: 4/5, AUTO 9/20, Teiltage zaehlen](project_testtag_2026-09-23_besprechung_ausstehend.md) — vor Regelwerk lesen
 - [Dauerregel: test:e2e NIE ohne Levi-Vorwarnung (Incident 17.09., Guard f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — settings.local.json Z.95/96 erlaubt Tests weiter pauschal
 - Offene Kleinauflagen 1/2: N1b bestaetigen (q2q4 14.09.) · N-2/N-3/N-4 (N1 Tweet; N-3 = Mindestpause slot-basiert (b), Levi-Schwelle, project_n1 Z. ~510) · Auflage 2+3, K1-K30 (W1-W4 16.09.)
 - Offene Kleinauflagen 2/2: B5/B7/B8 + 16.09.-Batch-Nachanalyse ggf. mit gueltigem jetzt neu laufen (project_testtag_2026-09-16_besprechung Z. 45) · Y4-c, Schwelle 45 (21.09.) · 4 CDP-Restpunkte
