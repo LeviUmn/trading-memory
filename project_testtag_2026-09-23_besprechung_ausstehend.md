@@ -4,7 +4,7 @@ description: "Umsetzungskette aus der 23.09.-Analyse ABGESCHLOSSEN + COMMITTET (
 metadata:
   type: project
   originSessionId: session_2026-09-24
-  modified: 2026-09-30T09:03:02.367Z
+  modified: 2026-10-02T08:47:33.856Z
 ---
 
 ## STAND 24.09.2026 Abend — WICHTIG FÜR JEDE KÜNFTIGE SESSION: hier lesen, bevor am Regelwerk weitergearbeitet wird
@@ -61,6 +61,7 @@ Levi war zwischen 15:10 und 18:51 DE nicht am Rechner, Sonnet hat nur erinnert (
 - **Darf parallel laufen (reine Messung):** V5 (1H-Override über `oneh_shadow_log.jsonl`) — Umsetzung erst nach dem Freeze.
 - **Wartet bis nach dem Freeze:** V6 (Loop-Warnung X1), Anker-Nachführungsregel aus E1 (Kandidat: max. Anker-Lebensdauer / Pflichterneuerung nach neuem Impuls-Extrem, NICHT einfach V-JUENG — dünner Rand), Code-Filter für veraltete Register-Level.
 - **Pflicht an jedem Testtag-Abend:** 5-Min-Bars sichern (dated Datei).
+- **02.10.2026 (Levi): Endauswertung auf 08.10.2026 vorgezogen; Schwellen unveraendert; Ausgabe-Block ENDAUSWERTUNG in `tagesmomente --auswertung`** (fester Kalendertag — gilt auch bei < 10 bewertbaren Tagen, Lesart R-1; Variantenurteile dann „unter Vorbehalt“; Stand 02.10. vormittags: 5/5 bewertbare Tage, AUTO 10/20, Abbruchregel 5/10; Details [[project_endauswertung_08_10_vorgezogen_2026-10-02]], [[fable_umsetzung_2026-10-02_endauswertung_08_10]]).
 
 ## 6. Offene To-dos für die nächste Session
 

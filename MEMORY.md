@@ -4,8 +4,14 @@
 
 ## Offen / aktuell relevant
 
-- [Kleinmaengel H1-Skript/-Datei (B1 Zeilenzahl, H-a Kopf+try/finally) + DST-Hinweis, fuer Fable am 02.10.](project_h1_kleinmaengel_offen_2026-10-01.md) — Quelle Opus-Gegencheck 4, nicht blockierend
-- [H1 (Q2 ✗ im Trendkontext) festgeschrieben 01.10., K1-K10 verbindlich; Zaehlung ab 01.10., Auswertung nach Freeze](project_h1_q2_trendkontext_vorabkriterium_2026-10-01.md) — Quelle: opus_antwort_d
+- [Fable-Umsetzung 02.10.: Endauswertung 08.10. (A/B/C1-C3/C5-C7 umgesetzt, C4+C5-Prompt als Vorschlag, DST C8 zurueckgestellt), + Auflagen 1-5, Opus abgenommen, bereit zum Commit (nur Levi)](fable_umsetzung_2026-10-02_endauswertung_08_10.md) — Commit-Auftrag offen
+- [Vorschlag C4/C5 loop_prompt.cjs (VC#1-Block, Redirect-Pflicht, loop_archiv im LOOP-STOPP) — NICHT aktiv, Levi: gilt ab Testtag 05.10. (R-3)](fable_vorschlag_c4_c5_loop_prompt_2026-10-02.md) — vorher Opus-Kurzcheck
+- [Kleinmaengel H1 B1 + H-a ERLEDIGT 02.10. (Fable-Umsetzung); Rest: DST-Fix vor 26.10. als eigener Opus-Auftrag bis 19.10.](project_h1_kleinmaengel_offen_2026-10-01.md) — nicht blockierend
+- [H1 (Q2 ✗ im Trendkontext) K1-K10 verbindlich; ENDSTICHTAG Do 08.10.2026 20:05 DE (Levi 02.10., vorgezogen von 30.10., Abschnitt 8); Zaehlung ab 01.10.; end-Lauf genau einmal](project_h1_q2_trendkontext_vorabkriterium_2026-10-01.md)
+- [Endauswertung 08.10.: Fable umgesetzt + Opus-Gegencheck 02.10. abgenommen; Auflagen 1-5 erledigt; R-1..R-4 bestaetigt (C4/C5 ab 05.10.)](project_endauswertung_08_10_vorgezogen_2026-10-02.md)
+- [Testtag 01.10.: 44 VC, 0 echte Trades, 2 Kombi; Bars bis 20:00 nachgeholt 02.10., Tag zaehlt (5/5, AUTO 10/20)](project_testtag_2026-10-01_abschluss.md) — nichts committet
+- [Opus-Nachtrag 19-20 Uhr 01.10.: KEIN Gate-PASS/Trade (1H-Override blockt long); Q-ROT-Netto +1,11 -> +0,13 R (17:06 jetzt SL); Zahlen bestaetigt](opus_nachtrag_testtag_2026-10-01_1900-2000.md) — ersetzt Q-ROT-Zahlen im Vorbericht
+- [Opus-Bericht Testtag 01.10. (02.10.): Horizont 19:00 (durch Nachtrag ueberholt), Technik sauber, Punkt-11 regelkonform; 6 Levi-Entscheide](opus_bericht_testtag_2026-10-01.md) — 1 Fable-Auftrag offen
 - [Opus-Bericht Testtag 30.09. (nachgeholt 01.10.): GUELTIG, P3 2/3 mit Fall, Register-Luecke, Entscheide a-d fuer Levi](opus_bericht_testtag_2026-09-30.md) — Auftrag B+B6 offen
 - [Testtag 30.09. BEENDET: 56 VC, 0 echte Trades, 1 Kombi +0,40 R, Freeze 4/5, AUTO 9/20; 7 offene Punkte fuer Besprechung 01.10.](project_testtag_2026-09-30_abschluss.md) — nichts committet; /tmp/vc_* nicht loeschen
 - [Commit UND Push beauftragt NUR Levi (Incident 30.09.: Push ohne Auftrag); Subagenten nie committen/pushen](feedback_commit_push_nur_levi.md) — nach Umsetzung "bereit zum Commit" melden, warten
@@ -17,14 +23,14 @@
 - [Testtag-Start scheitert 24.+25.09.: offene Rückfrage blockiert Session → Cron feuert nicht](feedback_testtag_start_verlaesslichkeit.md) — Levi: Remote Control vorher an; Log-Frische gegenchecken
 - [Opus-Analyse Testtag 25.09. (0 Trades; GAPs: loop_archiv → manuell seit 30.09., protokoll_bilanz --datum per A1)](project_testtag_analyse_2026-09-25.md) — Anker-Muster bestaetigt
 - [Opus-Analyse Testtag 23.09. (FESTGEFAHREN, nicht kalibriert)](project_testtag_analyse_2026-09-23.md) — 0 Trades/0 Live-Gate, SL-Anker 47/47 nie nachgezogen, Q4/Q2 fast unerfüllbar; V1-V6
-- [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 Bewegungen (max. 10 Tage); Stand 30.09. abends: 4/5, AUTO 9/20, Teiltage zaehlen](project_testtag_2026-09-23_besprechung_ausstehend.md) — vor Regelwerk lesen
+- [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 (max. 10 Tage); Stand 02.10.: 5/5, AUTO 10/20; ENDAUSWERTUNG fest 08.10.2026 (Levi 02.10.), Block in tagesmomente --auswertung](project_testtag_2026-09-23_besprechung_ausstehend.md)
 - [Dauerregel: test:e2e NIE ohne Levi-Vorwarnung (Incident 17.09., Guard f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — settings.local.json Z.95/96 erlaubt Tests weiter pauschal
 - Offene Kleinauflagen 1/2: N1b bestaetigen (q2q4 14.09.) · N-2/N-3/N-4 (N1 Tweet; N-3 = Mindestpause slot-basiert (b), Levi-Schwelle, project_n1 Z. ~510) · Auflage 2+3, K1-K30 (W1-W4 16.09.)
 - Offene Kleinauflagen 2/2: B5/B7/B8 + 16.09.-Batch-Nachanalyse ggf. mit gueltigem jetzt neu laufen (project_testtag_2026-09-16_besprechung Z. 45) · Y4-c, Schwelle 45 (21.09.) · 4 CDP-Restpunkte
 - [Kurzblock: Bewährungstag 23.09. GESCHEITERT 3/5, RÜCKBAU](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — Reparaturliste → neuer Bewährungstag; Branch kurzblock-bewaehrung
 - [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Order-Sperre/Halbierung hart auf 15/15:30/16 DE, im DST-Fenster 26.-30.10. 1h falsch
 - [Memory-Aufräumen GESAMTBERICHT 14.09.](project_memory_gesamtbericht_2026-09-14.md) — S1-S3 erledigt (df60a5a, 46caa09), S4-S7 zurückgestellt, E7 abgelehnt
-- Memory-Repo LeviUmn/trading-memory ist OEFFENTLICH (Pruefung 30.09., HTTP 200 ohne Auth): bis Levi es privat stellt NUR lokal committen, KEIN git push (Trading-Daten!)
+- Memory-Repo LeviUmn/trading-memory ist OEFFENTLICH; Levi 01.10.2026: Commit+Push ist OK, kein Problem (nur auf Levis Auftrag, siehe feedback_commit_push_nur_levi)
 - [Kapitalbasis phasenabhängig + RR-Decke (UMGESETZT, ENTSCHIEDEN Option A)](project_risikomanagement.md) — Ph.3 5.000€×1,5%=75€; RR = TP1-Zahl; Payoff 0,94:1, Ø −0,51R
 - [Loop-Tick-Kadenz: CronCreate, nicht ScheduleWakeup](feedback_loop_tick_kadenz.md) — 1-Min = Quick-Tick, 5-Min = Voll-Check
 - [Validierungstesttag (nächster Handelstag)](project_validierungstesttag_naechster_handelstag.md) — 5 binäre Pass-Kriterien für Echtgeld-Start #44
