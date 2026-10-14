@@ -5,8 +5,10 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-24T08:48:21.737Z
+  modified: 2026-10-14T11:32:07.923Z
 ---
+
+> **Kopfvermerk (Fable, 14.10.2026, Auftrag K9):** Gilt nicht im Kern-Testbetrieb ab dem ersten Kern-Fiktivtag (Termin legt Levi nach dem Opus-Gegencheck fest), siehe [[regelwerk_kern_2026-10]] (Entry-Fenster dort 15:35-19:00 DE, DST 14:35-19:00, Zeit-Exit 19:58-20:00). Inhalt unveraendert.
 
 Festgelegter Tagesablauf und Zeitfenster-Strategie, besprochen am 22.06.2026.
 

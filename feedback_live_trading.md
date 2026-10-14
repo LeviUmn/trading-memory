@@ -5,8 +5,10 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: trading-session-2026-06-26
-  modified: 2026-10-01T09:45:55.636Z
+  modified: 2026-10-14T11:32:07.886Z
 ---
+
+> **Kopfvermerk (Fable, 14.10.2026, Auftrag K9):** Gilt nicht im Kern-Testbetrieb ab dem ersten Kern-Fiktivtag (Termin legt Levi nach dem Opus-Gegencheck fest), siehe [[regelwerk_kern_2026-10]]. Inhalt unveraendert (Rollback-Grundlage fuer `node scripts/loop_prompt.cjs`).
 
 Beim Live-Trading auf maximale Geschwindigkeit optimieren ohne auf Fähigkeiten zu verzichten.
 

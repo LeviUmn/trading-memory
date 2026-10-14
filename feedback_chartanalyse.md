@@ -5,8 +5,10 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 607aa8f6-9958-4c1c-9c75-4afabcffb717
-  modified: 2026-09-22T09:08:00.300Z
+  modified: 2026-10-14T11:32:07.906Z
 ---
+
+> **Kopfvermerk (Fable, 14.10.2026, Auftrag K9):** Gilt nicht im Kern-Testbetrieb ab dem ersten Kern-Fiktivtag (Termin legt Levi nach dem Opus-Gegencheck fest), siehe [[regelwerk_kern_2026-10]]. Inhalt unveraendert.
 
 Bei JEDER Trade-Entscheidung immer eine vollständige Chartanalyse durchführen — nie nur auf einen Faktor schauen.
 

@@ -4,25 +4,23 @@
 
 ## Offen / aktuell relevant
 
-- [Fable-Auftrag 03.10. Prio 1 (13.1-Diagnosezeile) + Prio 2 (loop_prompt-Paket); Opus: freigegeben m. Auflagen, eingearbeitet; Aktivierung 05.10.](fable_auftrag_2026-10-03_prio1_prio2.md) — UMGESETZT 03.10. (Fable, 424/424), Opus freigegeben, kosm. K1-K4 offen; bereit zum Commit (nur Levi)
-- [Opus-Bericht Testtag 02.10.: GUELTIG; 17:36-Gate = 13.1-Richtungsartefakt; 6 Levi-Entscheide](opus_bericht_testtag_2026-10-02.md) — Fable-Auftraege Prio 1+2
-- [Testtag 02.10. BEENDET: 55 VC, 0 echte Trades, 5 Gate-Events, 3 Kombi +0,39 R; 6/10 Tage, AUTO 11/20](project_testtag_2026-10-02_abschluss.md) — nichts committet
-- [Fable-Umsetzung 02.10. Endauswertung 08.10.: Opus abgenommen, bereit zum Commit (nur Levi)](fable_umsetzung_2026-10-02_endauswertung_08_10.md) — Commit-Auftrag offen
-- [Vorschlag C4/C5 loop_prompt.cjs — NICHT aktiv, gilt ab Testtag 05.10. (R-3); jetzt Teil von Auftrag 03.10.](fable_vorschlag_c4_c5_loop_prompt_2026-10-02.md) — vorher Opus-Kurzcheck
-- [Kleinmaengel H1 (B1, H-a erledigt 02.10.); Rest DST-Fix bis 19.10.](project_h1_kleinmaengel_offen_2026-10-01.md) — nicht blockierend
-- [H1 (Q2 ✗ im Trendkontext) K1-K10 verbindlich; ENDSTICHTAG Do 08.10.2026 20:05 DE; end-Lauf genau einmal](project_h1_q2_trendkontext_vorabkriterium_2026-10-01.md)
-- [Endauswertung 08.10. vorgezogen (Levi 02.10.), R-1..R-4 bestaetigt, C4/C5 ab 05.10.](project_endauswertung_08_10_vorgezogen_2026-10-02.md)
-- [Commit UND Push beauftragt NUR Levi (Incident 30.09.: Push ohne Auftrag); Subagenten nie committen/pushen](feedback_commit_push_nur_levi.md) — nach Umsetzung "bereit zum Commit" melden, warten
+- [Kern-Regelwerk 14.10.: umgesetzt (kern_*, 302/302 Tests), Opus FREIGEGEBEN (2 Kurzchecks, Hinweise R5/R6); NICHT committet; kein Echtgeld ohne Levi-GO; Commit+Termin wartet auf Levi](regelwerk_kern_2026-10.md) — opus_gegencheck_kern_regelwerk_2026-10-14, fable_auftrag_/opus_endurteil_ 14.10.
+- [Testtag 13.10. BEENDET (10. Tag, zaehlt): 57 VC, 7 Gates (6 FAIL, 1 PASS), 0 Trades; 20:00 Dual-Gate 2/2 = Nach-Stichtag-Grenzfall](project_testtag_2026-10-13_abschluss.md) — Opus 20:30
+- [Opus-Bericht 13.10.: GUELTIG, 10/10 Tage -> Freeze-Ende (AUTO 16/20); ALT knapp belegt; B5-Hoch fehlt, 5 Gates ohne --jetzt; N1-N10](opus_bericht_testtag_2026-10-13.md) — Besprechung ab Mi 14.10.
+- [Testtage 02.-08.10. BEENDET: 0 echte Trades; 08.10. Teiltag 67 % (9/10, AUTO 16/20), 06.10. ausgefallen](project_testtag_2026-10-08_abschluss.md) — auch project_testtag_2026-10-07/-05/-02_abschluss
+- [Opus-Berichte 02.-08.10. alle GUELTIG (08.10. Teiltag; 18:16-Nachtrag falsch +0,15 statt +2,26 R)](opus_bericht_testtag_2026-10-08.md) — auch opus_bericht_testtag_2026-10-07/-05/-02, opus_backtest_2026-10-06
+- [Levi-Entscheide E1-E9 (06./08.10.): Gate nach Buchstabe, Q3 per EMA-Seite, Endauswertung erst 12.10.](levi_entscheide_opus_bericht_2026-10-07.md) — auch levi_entscheide_opus_bericht_2026-10-05
+- [Fable-Auftraege 03.+05.10. (Prio 1+2, A1/A4) UMGESETZT+FREIGEGEBEN; Commit nur Levi](fable_auftrag_2026-10-03_prio1_prio2.md) — auch fable_auftrag_2026-10-05_auflagen_a1_a4
+- [H1 (Q2 im Trendkontext) K1-K10, end-Lauf 08.10. einmalig gelaufen; Kleinmaengel Rest: DST-Fix bis 19.10.](project_h1_q2_trendkontext_vorabkriterium_2026-10-01.md) — auch project_h1_kleinmaengel_offen_2026-10-01
+- [Commit UND Push beauftragt NUR Levi (Incident 30.09.); Subagenten nie committen/pushen; Memory-Repo LeviUmn/trading-memory ist OEFFENTLICH](feedback_commit_push_nur_levi.md) — nach Umsetzung "bereit zum Commit" melden, warten
 - [IBF (1H-Intrabar-Freigabe, halbe Position): NUR Schatten ibf_schatten.cjs, Vorab-Kriterien 1-5, Stand n=1 AUTO](project_ibf_schatten_2026-09-30.md) — Live erst nach Freeze-Ende
 - [Testtag-Start scheitert 24.+25.09.: offene Rückfrage blockiert Session → Cron feuert nicht](feedback_testtag_start_verlaesslichkeit.md) — Levi: Remote Control vorher an; Log-Frische gegenchecken
 - [Freeze-Ende: >=5 Testtage ab 25.09. + AUTO >=20 (max. 10 Tage); Stand 02.10. 20:02: 6/10 Tage, AUTO 11/20; ENDAUSWERTUNG fest 08.10.2026 (Levi 02.10.), Block in tagesmomente --auswertung](project_testtag_2026-09-23_besprechung_ausstehend.md)
 - [Dauerregel: test:e2e NIE ohne Levi-Vorwarnung (Incident 17.09., Guard f81d818)](feedback_npm_test_destruktiv_incident_2026-09-17.md) — settings.local.json Z.95/96 erlaubt Tests weiter pauschal
-- Offene Kleinauflagen 1/2: N1b (q2q4 14.09.) · N-2/N-3/N-4 (N-3 Mindestpause slot-basiert, Levi-Schwelle, project_n1 Z. ~510) · Auflage 2+3, K1-K30 (W1-W4 16.09.)
-- Offene Kleinauflagen 2/2: B5/B7/B8 + 16.09.-Batch-Nachanalyse (project_testtag_2026-09-16_besprechung Z. 45) · Y4-c, Schwelle 45 · 4 CDP-Restpunkte
+- Offene Kleinauflagen: N1b (q2q4 14.09.) · N-2/N-3/N-4 (project_n1 Z. ~510) · Auflage 2+3, K1-K30 (W1-W4) · B5/B7/B8 + 16.09.-Batch (project_testtag_2026-09-16_besprechung Z. 45) · Y4-c, Schwelle 45 · 4 CDP-Restpunkte
 - [Kurzblock: Bewährungstag 23.09. GESCHEITERT 3/5, RÜCKBAU](project_vollcheck_ausgabeformat_vereinfachung_todo_2026-09-16.md) — Branch kurzblock-bewaehrung
 - [TO-DO vor 26.10.2026: vollcheck.cjs DST-Fenster nachrüsten](project_vollcheck_dst_fix_todo_2026-10.md) — Sperre/Halbierung hart 15/15:30/16 DE
 - [Memory-Aufräumen GESAMTBERICHT 14.09.](project_memory_gesamtbericht_2026-09-14.md) — S1-S3 erledigt, S4-S7 zurückgestellt
-- Memory-Repo LeviUmn/trading-memory ist OEFFENTLICH; Commit+Push OK, nur auf Levis Auftrag (feedback_commit_push_nur_levi)
 - [Kapitalbasis phasenabhängig + RR-Decke (UMGESETZT, ENTSCHIEDEN Option A)](project_risikomanagement.md) — Ph.3 5.000€×1,5%=75€; RR = TP1-Zahl; Payoff 0,94:1, Ø −0,51R
 - [Loop-Tick-Kadenz: CronCreate, nicht ScheduleWakeup](feedback_loop_tick_kadenz.md) — 1-Min = Quick-Tick, 5-Min = Voll-Check
 - [Validierungstesttag (nächster Handelstag)](project_validierungstesttag_naechster_handelstag.md) — 5 binäre Pass-Kriterien für Echtgeld-Start #44
@@ -84,17 +82,9 @@
 43 Trades #1-#43 (12.06.-21.08.): Einzeleinträge in `trades/trading_YYYY-MM-DD.md`, Übersicht `trades/trade_log.md`; Meilensteine: 23.07. 25 Trades +138,86€ (65,2 % WR) · 04.08. #30 → GO Phase-3 · 21.08. #42+#43 Loss (Opex/PMI, −83,53€), letzter Trade.
 
 ## Archiv (abgeschlossen — Details in Datei + Git-Historie)
-- [Testtag 01.10. Abschluss (44 VC, 0 Trades, 2 Kombi)](project_testtag_2026-10-01_abschluss.md) — zaehlt, 5/5
-- [Opus-Nachtrag 01.10. 19-20 Uhr](opus_nachtrag_testtag_2026-10-01_1900-2000.md) — kein Gate-PASS, Q-ROT +0,13 R
-- [Opus-Bericht Testtag 01.10.](opus_bericht_testtag_2026-10-01.md) — Technik sauber, 6 Entscheide
-- [Opus-Bericht Testtag 30.09.](opus_bericht_testtag_2026-09-30.md) — gueltig, P3 2/3
-- [Testtag 30.09. Abschluss (56 VC, 1 Kombi +0,40 R)](project_testtag_2026-09-30_abschluss.md) — /tmp/vc_* nicht loeschen
-- [Opus-Spezifikation 30.09. (Entscheide a-d, IBF, Auftraege 0/A/B)](opus_vorschlag_2026-09-30.md) — umgesetzt
-- [Opus-Analyse Testtag 29.09.](project_testtag_analyse_2026-09-29.md) — 0 Trades, Teiltag zaehlt
-- [P1-P3 Anker-Reset UMGESETZT 29.09. (ee27c70)](project_p1p3_anker_reset_pflicht_2026-09-29.md) — P3 laeuft
-- [Opus-Analyse Testtag 28.09.](project_testtag_analyse_2026-09-28.md) — eingeschraenkt, 0 Trades
-- [Opus-Analyse Testtag 25.09.](project_testtag_analyse_2026-09-25.md) — Anker-Muster bestaetigt
-- [Opus-Analyse Testtag 23.09. (festgefahren)](project_testtag_analyse_2026-09-23.md) — V1-V6
+- [Testtag 01.10. Abschluss+Opus-Bericht+Nachtrag (44 VC, 0 Trades, 2 Kombi, zaehlt 5/5)](project_testtag_2026-10-01_abschluss.md) — auch opus_bericht_testtag_2026-10-01, opus_nachtrag_testtag_2026-10-01_1900-2000
+- [Testtag 30.09. Abschluss (56 VC, 1 Kombi +0,40 R; /tmp/vc_* nicht loeschen), Opus-Bericht gueltig](project_testtag_2026-09-30_abschluss.md) — auch opus_bericht_testtag_2026-09-30, opus_vorschlag_2026-09-30 (umgesetzt)
+- [Opus-Analysen Testtag 29.09. (Teiltag zaehlt), 28.09. (eingeschraenkt), 25.09., 23.09.; P1-P3 Anker-Reset ee27c70](project_testtag_analyse_2026-09-29.md) — auch -28/-25/-23, project_p1p3_anker_reset_pflicht_2026-09-29
 - [Opus-Vollbericht Testtag 29.09. (21 KB)](opus_bericht_testtag_2026-09-29.md) — Kurzfassung s. Offen (29.09.)
 - [1H-Override-Liste 29.09. ERLEDIGT](project_opus_analyseliste_2026-09-29_1h_override.md) — neu ab >=20 Episoden
 - [Opus-Analyse Testtag 21.09. (Y1-Y8 alle umgesetzt)](project_testtag_analyse_2026-09-21.md) — X1-Fix wirkt
