@@ -4,7 +4,10 @@
 
 ## Offen / aktuell relevant
 
-- [Kern-Regelwerk 14.10.: umgesetzt (kern_*, 302/302 Tests), Opus FREIGEGEBEN (2 Kurzchecks, Hinweise R5/R6); NICHT committet; kein Echtgeld ohne Levi-GO; Commit+Termin wartet auf Levi](regelwerk_kern_2026-10.md) — opus_gegencheck_kern_regelwerk_2026-10-14, fable_auftrag_/opus_endurteil_ 14.10.
+- [Kern-Regelwerk 1.0 (b7fa673, Freeze 14.10.): A1 + Opus-Auflagen erledigt 16.10., Commit nur Levi; kein Echtgeld ohne Levi-GO; 1m-Test bis 23.10., DST 26.-30.10.](regelwerk_kern_2026-10.md)
+- [Kern-Fiktivtag 1 15.10. GUELTIG (-0,5 R, Technik ok); 16.10.: A1 + Opus-Check + Nachpruefung erledigt; offen: Commit (Levi), 1m-Test bis 23.10.](project_kern_fiktivtag1_2026-10-15_ablauf.md)
+- [Opus-Bericht Fiktivtag 1 (15.10.): GUELTIG 1/5, -0,5 R; Opus-Kurzcheck A1 + Nachpruefung 16.10. erledigt, A2/A3 offen, Backlog angelegt](opus_bericht_kern_fiktivtag1_2026-10-15.md)
+- [Kern-Backlog (Regel-Freeze, nur Ideen, nichts umgesetzt): 9 Eintraege vom 15.10. aus dem Opus-Bericht Fiktivtag 1; Format Datum | Idee | Beobachtung | Fundstelle](kern_backlog.md)
 - [Testtag 13.10. BEENDET (10. Tag, zaehlt): 57 VC, 7 Gates (6 FAIL, 1 PASS), 0 Trades; 20:00 Dual-Gate 2/2 = Nach-Stichtag-Grenzfall](project_testtag_2026-10-13_abschluss.md) — Opus 20:30
 - [Opus-Bericht 13.10.: GUELTIG, 10/10 Tage -> Freeze-Ende (AUTO 16/20); ALT knapp belegt; B5-Hoch fehlt, 5 Gates ohne --jetzt; N1-N10](opus_bericht_testtag_2026-10-13.md) — Besprechung ab Mi 14.10.
 - [Testtage 02.-08.10. BEENDET: 0 echte Trades; 08.10. Teiltag 67 % (9/10, AUTO 16/20), 06.10. ausgefallen](project_testtag_2026-10-08_abschluss.md) — auch project_testtag_2026-10-07/-05/-02_abschluss
